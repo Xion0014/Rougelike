@@ -53,6 +53,9 @@ public class RoguelikeRun {
     /// <summary>Seconds spent on the current street. Only counts while the wizard is online.</summary>
     public int StreetSeconds { get; set; }
 
+    /// <summary>The highest tier whose street quests were handed out, so each tier's quests come once.</summary>
+    public int QuestsGrantedTier { get; set; }
+
     /// <summary>Creatures defeated during the whole run.</summary>
     public int Kills { get; set; }
 

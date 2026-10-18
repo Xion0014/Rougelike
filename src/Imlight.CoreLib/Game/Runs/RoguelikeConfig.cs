@@ -29,7 +29,12 @@ namespace Imlight.CoreLib.Game.Runs;
 /// <summary>
 /// One tier of a roguelike run: the street the wizard fights on, then the boss that ends it.
 /// </summary>
-internal sealed record RoguelikeTier(int Number, string Street, string Boss);
+internal sealed record RoguelikeTier(int Number, string Street, string Boss) {
+
+    /// <summary>Quests handed to the wizard when they reach this tier's street (TierNQuests).</summary>
+    public IReadOnlyList<string> Quests { get; init; } = [];
+
+}
 
 /// <summary>
 /// Reads the [Roguelike] section of Imlight.ini.
@@ -74,7 +79,9 @@ internal static class RoguelikeConfig {
                 break;
             }
 
-            tiers.Add(new RoguelikeTier(i, parts[0], parts[1]));
+            tiers.Add(new RoguelikeTier(i, parts[0], parts[1]) {
+                Quests = SplitList(ConfigurationManager.GetValue($"Roguelike.Tier{i}Quests", "")),
+            });
         }
 
         if (tiers.Count > 0) {

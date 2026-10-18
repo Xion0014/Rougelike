@@ -89,6 +89,31 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
 
         if (wizard.Roguelike.Phase == RoguelikePhase.Street) {
             StartTickTimer();
+            GrantStreetQuests(wizard);
+        }
+    }
+
+    /// <summary>
+    /// Hands out the tier's quests the first time the wizard stands on the tier's street. The run skips the
+    /// Commons, so the quests the street's NPCs would expect (such as Ambrose's) are granted here instead,
+    /// with their requirements skipped. Each quest's chain then carries on through the street's NPCs.
+    /// </summary>
+    private void GrantStreetQuests(Wizard wizard) {
+        var run = wizard.Roguelike;
+        var tier = RoguelikeConfig.GetTier(run.Tier);
+        if (tier is null || run.QuestsGrantedTier >= run.Tier
+            || !string.Equals(wizard.Zone, RoguelikeConfig.ResolveZone(tier.Street), StringComparison.OrdinalIgnoreCase)) {
+            return;
+        }
+
+        run.QuestsGrantedTier = run.Tier;
+        WizardCollection.UpdateCharacterRoguelike(wizard);
+
+        foreach (var quest in tier.Quests) {
+            TellOtherServices(new CHARACTER_103_PROTOCOL.MSG_QUESTCOMMAND {
+                Action = "forcegrant",
+                QuestName = quest,
+            });
         }
     }
 
@@ -213,6 +238,7 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
 
         if (!SendToPhaseZone(wizard)) {
             StartTickTimer();
+            GrantStreetQuests(wizard);
         }
     }
 
@@ -276,6 +302,7 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         InformGameClient($"Tier {run.Tier} begins. Survive {FormatTime(RoguelikeConfig.StreetSeconds)}!");
         if (!SendToPhaseZone(wizard)) {
             StartTickTimer();
+            GrantStreetQuests(wizard);
         }
     }
 
