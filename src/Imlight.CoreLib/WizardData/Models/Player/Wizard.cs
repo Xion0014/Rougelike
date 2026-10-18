@@ -73,6 +73,8 @@ public class Wizard {
     public bool StartingCrownsGiven { get; set; }
     // .overdose: every battle starts with Quickening already cast on this wizard.
     public bool Overdose { get; set; }
+    // The roguelike run, when [Roguelike] Enabled is on. Null until the run starts.
+    public RoguelikeRun Roguelike { get; set; }
     // Badges earned by older fork builds. BadgeService moves them into BadgeBehavior at login.
     public List<uint> Badges { get; set; } = [];
     public string MarkedZone { get; set; }

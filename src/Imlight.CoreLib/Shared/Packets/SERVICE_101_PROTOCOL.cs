@@ -270,4 +270,28 @@ internal sealed class SERVICE_101_PROTOCOL : IServerProtocol {
         public byte ServiceID { get; } = 101;
         public Mail Mail;
     }
+
+    /// <summary>
+    /// Timer signal for the roguelike street timer.
+    /// </summary>
+    public class MSG_ROGUELIKE_TICK : IServerMessage {
+
+        public byte MessageOrder { get; } = 24;
+        public byte ServiceID { get; } = 101;
+
+    }
+
+    /// <summary>
+    /// Sent by the .run command to the player's RoguelikeService.
+    /// </summary>
+    public class MSG_ROGUELIKE_COMMAND : IServerMessage {
+
+        public byte MessageOrder { get; } = 25;
+        public byte ServiceID { get; } = 101;
+
+        /// <summary>"status", "next" or "zones".</summary>
+        public string Action;
+        public string Argument;
+
+    }
 }

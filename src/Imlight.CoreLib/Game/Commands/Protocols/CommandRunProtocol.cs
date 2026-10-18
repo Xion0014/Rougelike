@@ -1,0 +1,56 @@
+/*
+ * Imlight
+ * Copyright (C) 2025 Revive101
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+using Akka.Actor;
+using Imlight.CoreLib.Shared.Packets;
+using Imlight.CoreLib.WizardData.Models.Player;
+
+namespace Imlight.CoreLib.Game.Commands.Protocols;
+
+/// <summary>
+/// Roguelike run commands, for every player. The work is done by the player's RoguelikeService.
+///   .run status        Tier, time left and kills.
+///   .run next          Leave the shops and start the next tier.
+///   .run here          Show the current zone's full name.
+///   .run zones &lt;text&gt;  List zone names containing the text (staff only), for filling in [Roguelike].
+/// </summary>
+internal class CommandRunProtocol : CommandProtocol {
+
+    internal override string Group { get; set; } = "run";
+
+    [Command("status")]
+    [Alias("s")]
+    private void StatusCommand() => Send("status");
+
+    [Command("next")]
+    private void NextCommand() => Send("next");
+
+    [Command("here")]
+    private void HereCommand() => Send("here");
+
+    [Command("zones")]
+    [AuthRequired(AuthLevel.QualityAssurance)]
+    private void ZonesCommand([Remainder] string filter) => Send("zones", filter);
+
+    private void Send(string action, string argument = "")
+        => Context.SessionActor.Tell(new SERVICE_101_PROTOCOL.MSG_ROGUELIKE_COMMAND {
+            Action = action,
+            Argument = argument,
+        }, null);
+
+}

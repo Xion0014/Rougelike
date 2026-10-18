@@ -435,6 +435,13 @@ public static class WizardCollection {
     }
 
     /// <summary>
+    /// Persists <see cref="Wizard.Roguelike"/>.
+    /// </summary>
+    public static void UpdateCharacterRoguelike(Wizard wizard) {
+        UpdateCharacter(wizard.CharId, existingCharacter => existingCharacter.Roguelike = wizard.Roguelike);
+    }
+
+    /// <summary>
     /// Persists <see cref="Wizard.Overdose"/>.
     /// </summary>
     public static void UpdateCharacterOverdose(Wizard wizard) {

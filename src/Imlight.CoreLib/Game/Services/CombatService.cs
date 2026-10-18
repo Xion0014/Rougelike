@@ -67,7 +67,9 @@ internal class CombatService(SessionActor sessionActor) : MessageService(session
     /// <summary>
     /// Die = Delete mode: a character that is still dead when its battle ends is deleted.
     /// </summary>
-    private static readonly bool s_dieDelete = ConfigurationManager.GetValue("Die Delete.Enabled", false);
+    // Die = Delete, or a roguelike run with permadeath on.
+    private static readonly bool s_dieDelete = ConfigurationManager.GetValue("Die Delete.Enabled", false)
+        || (Runs.RoguelikeConfig.Enabled && Runs.RoguelikeConfig.Permadeath);
 
     private readonly CoreObjectSerializer _effectSerializer = new(
         behaviors: SerializerFlags.None

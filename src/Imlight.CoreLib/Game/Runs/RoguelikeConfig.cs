@@ -1,0 +1,102 @@
+/*
+ * Imlight
+ * Copyright (C) 2025 Revive101
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Imcodec.ObjectProperty.TypeCache;
+using Imlight.Common;
+using Imlight.CoreLib.Game.World;
+using Imlight.CoreLib.Shared.Resources;
+
+namespace Imlight.CoreLib.Game.Runs;
+
+/// <summary>
+/// One tier of a roguelike run: the street the wizard fights on, then the boss that ends it.
+/// </summary>
+internal sealed record RoguelikeTier(int Number, string Street, string Boss);
+
+/// <summary>
+/// Reads the [Roguelike] section of Imlight.ini.
+/// </summary>
+internal static class RoguelikeConfig {
+
+    internal static readonly bool Enabled = ConfigurationManager.GetValue("Roguelike.Enabled", false);
+
+    /// <summary>A wizard that dies in battle is deleted, the same as [Die Delete] Enabled.</summary>
+    internal static readonly bool Permadeath = ConfigurationManager.GetValue("Roguelike.Permadeath", true);
+
+    /// <summary>How long the wizard fights on each street before the boss, in seconds.</summary>
+    internal static readonly int StreetSeconds
+        = Math.Max(1, ConfigurationManager.GetValue("Roguelike.StreetMinutes", 10)) * 60;
+
+    internal static readonly string ShopZone = ConfigurationManager.GetValue("Roguelike.ShopZone", "WC_Shopping_District");
+
+    internal static readonly IReadOnlyList<RoguelikeTier> Tiers = ReadTiers();
+
+    internal static int TierCount => Tiers.Count;
+
+    internal static RoguelikeTier GetTier(int number)
+        => Tiers.Count == 0 ? null : Tiers[Math.Clamp(number, 1, Tiers.Count) - 1];
+
+    private static List<RoguelikeTier> ReadTiers() {
+        var streets = SplitList(ConfigurationManager.GetValue("Roguelike.Streets", "WC_Unicorn"));
+        var bosses = SplitList(ConfigurationManager.GetValue("Roguelike.Bosses", "Haunted_Cave"));
+        if (streets.Length != bosses.Length) {
+            Logger.Warning("[Roguelike] Streets has {0} entries but Bosses has {1}. Extra entries are ignored.",
+                Logger.Args(streets.Length, bosses.Length));
+        }
+
+        var count = Math.Min(streets.Length, bosses.Length);
+
+        return [.. Enumerable.Range(0, count).Select(i => new RoguelikeTier(i + 1, streets[i], bosses[i]))];
+    }
+
+    private static string[] SplitList(string value)
+        => (value ?? "").Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+    /// <summary>
+    /// Turns a zone name from the config into a full zone path the client knows. Takes an exact path, the
+    /// end of one ("WC_Unicorn"), or any part of one. Returns null when nothing matches.
+    /// </summary>
+    internal static string ResolveZone(string configured) {
+        if (string.IsNullOrWhiteSpace(configured)) {
+            return null;
+        }
+
+        var zones = AccessPassManager.Zones;
+
+        return zones.FirstOrDefault(z => z.Equals(configured, StringComparison.OrdinalIgnoreCase))
+            ?? zones.FirstOrDefault(z => z.EndsWith("/" + configured, StringComparison.OrdinalIgnoreCase))
+            ?? zones.FirstOrDefault(z => z.Contains(configured, StringComparison.OrdinalIgnoreCase));
+    }
+
+    /// <summary>Every zone path containing <paramref name="filter"/>, for finding names to put in the config.</summary>
+    internal static IEnumerable<string> FindZones(string filter)
+        => AccessPassManager.Zones.Where(z => string.IsNullOrEmpty(filter)
+                                              || z.Contains(filter, StringComparison.OrdinalIgnoreCase));
+
+    /// <summary>True when the creature template is flagged as a boss.</summary>
+    internal static bool IsBossMob(ulong mobTemplateId) {
+        var template = CoreObjectFactory.GetCoreTemplate(mobTemplateId) as GameObjectTemplate;
+        var npc = template?.m_behaviors?.OfType<NPCBehaviorTemplate>().FirstOrDefault();
+
+        return npc?.m_bossMob == true;
+    }
+
+}
