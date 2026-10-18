@@ -45,7 +45,7 @@ internal static class RoguelikeConfig {
     internal static readonly int StreetSeconds
         = Math.Max(1, ConfigurationManager.GetValue("Roguelike.StreetMinutes", 10)) * 60;
 
-    internal static readonly string ShopZone = ConfigurationManager.GetValue("Roguelike.ShopZone", "WC_Shopping_District");
+    internal static readonly string ShopZone = ConfigurationManager.GetValue("Roguelike.ShopZone", "WizardCity/WC_Shop_Area");
 
     internal static readonly IReadOnlyList<RoguelikeTier> Tiers = ReadTiers();
 
@@ -54,9 +54,35 @@ internal static class RoguelikeConfig {
     internal static RoguelikeTier GetTier(int number)
         => Tiers.Count == 0 ? null : Tiers[Math.Clamp(number, 1, Tiers.Count) - 1];
 
+    private const int MAX_TIERS = 99;
+
+    /// <summary>
+    /// Reads Tier1, Tier2, ... ("street zone, boss zone") until one is missing. Without any, falls back to the
+    /// Streets and Bosses lists, then to Unicorn Way and the Haunted Cave.
+    /// </summary>
     private static List<RoguelikeTier> ReadTiers() {
-        var streets = SplitList(ConfigurationManager.GetValue("Roguelike.Streets", "WC_Unicorn"));
-        var bosses = SplitList(ConfigurationManager.GetValue("Roguelike.Bosses", "Haunted_Cave"));
+        var tiers = new List<RoguelikeTier>();
+        for (var i = 1; i <= MAX_TIERS; i++) {
+            var parts = SplitList(ConfigurationManager.GetValue($"Roguelike.Tier{i}", ""));
+            if (parts.Length == 0) {
+                break;
+            }
+
+            if (parts.Length != 2) {
+                Logger.Warning("[Roguelike] Tier{0} needs a street and a boss zone separated by a comma. Tiers stop here.",
+                    Logger.Args(i));
+                break;
+            }
+
+            tiers.Add(new RoguelikeTier(i, parts[0], parts[1]));
+        }
+
+        if (tiers.Count > 0) {
+            return tiers;
+        }
+
+        var streets = SplitList(ConfigurationManager.GetValue("Roguelike.Streets", "WizardCity/WC_Streets/WC_Unicorn"));
+        var bosses = SplitList(ConfigurationManager.GetValue("Roguelike.Bosses", "WizardCity/WC_Streets/WC_HauntedCave"));
         if (streets.Length != bosses.Length) {
             Logger.Warning("[Roguelike] Streets has {0} entries but Bosses has {1}. Extra entries are ignored.",
                 Logger.Args(streets.Length, bosses.Length));
