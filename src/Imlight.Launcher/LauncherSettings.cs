@@ -28,7 +28,7 @@ namespace Imlight.Launcher;
 internal sealed class LauncherSettings {
 
     /// <summary>The public GitHub repository (owner/repo) whose releases are installed.</summary>
-    public string Repository { get; set; } = "Niduus/Imlight";
+    public string Repository { get; set; } = "Xion0014/Rougelike";
 
     /// <summary>If true, pre-releases count as updates too.</summary>
     public bool IncludePrereleases { get; set; }

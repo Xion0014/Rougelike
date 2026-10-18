@@ -37,7 +37,7 @@ namespace Imlight.Setup;
 internal static class SelfUpdate {
 
     /// <summary>Where ImlightSetup.exe is released.</summary>
-    internal const string RELEASE_REPOSITORY = "Niduus/Imlight";
+    internal const string RELEASE_REPOSITORY = Edition.RELEASE_REPOSITORY;
 
     private const string ASSET = Edition.RELEASE_ASSET;
 

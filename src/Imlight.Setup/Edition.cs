@@ -16,19 +16,36 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.Linq;
+
 namespace Imlight.Setup;
 
 /// <summary>
 /// The two builds of this program. ImlightSetup installs original Imlight; ImlightManager (built with
-/// -p:ImlightEdition=Manager) installs the Niduus/Imlight fork, which adds the randomizer and ID lookup.
-/// They install side by side under different names.
+/// -p:ImlightEdition=Manager) installs the Xion0014/Rougelike fork, which adds roguelike mode, the
+/// randomizer and ID lookup. They install side by side under different names.
 /// </summary>
 internal static class Edition {
+
+    /// <summary>
+    /// The repository whose GitHub releases update this program and the launcher.
+    /// </summary>
+    internal const string RELEASE_REPOSITORY = "Xion0014/Rougelike";
+
+    /// <summary>
+    /// The branch installed and updated by default. The release workflow bakes in the branch it built
+    /// from (-p:ImlightBranch=...); a local build falls back to quality-assurance.
+    /// </summary>
+    internal static string DefaultBranch { get; } = typeof(Edition).Assembly
+        .GetCustomAttributes(typeof(System.Reflection.AssemblyMetadataAttribute), false)
+        .OfType<System.Reflection.AssemblyMetadataAttribute>()
+        .FirstOrDefault(a => a.Key == "ImlightBranch" && !string.IsNullOrWhiteSpace(a.Value))?.Value
+        ?? "quality-assurance";
 
 #if MANAGER_EDITION
     internal const bool IS_MANAGER = true;
     internal const string NAME = "Imlight Manager";
-    internal const string DEFAULT_REPOSITORY = "Niduus/Imlight";
+    internal const string DEFAULT_REPOSITORY = "Xion0014/Rougelike";
     internal const string INSTALL_FOLDER_NAME = "ImlightManager";
     internal const string RELEASE_ASSET = "ImlightManager.exe";
     internal const string REGISTRY_KEY = "ImlightManager";

@@ -38,7 +38,7 @@ internal sealed class SetupOptions {
     public string Repository { get; private set; } = Edition.DEFAULT_REPOSITORY;
 
     /// <summary>The branch to build.</summary>
-    public string Branch { get; private set; } = "quality-assurance";
+    public string Branch { get; private set; } = Edition.DefaultBranch;
 
     /// <summary>Where Imlight is installed.</summary>
     public string InstallFolder { get; private set; } = DefaultInstallFolder();
@@ -64,8 +64,8 @@ internal sealed class SetupOptions {
           --dir <folder>             Where to install. Default: %LOCALAPPDATA%\ImlightServer
           --game <folder>            Your Wizard101 folder, if setup cannot find it.
           --type-dump <file>         A wiztype type dump to use instead of the bundled one.
-          --repo <owner/repo>        Build from another GitHub repository. Default: Revive101/Imlight (Niduus/Imlight for Imlight Manager)
-          --branch <name>            Build another branch. Default: quality-assurance
+          --repo <owner/repo>        Build from another GitHub repository. Default: Revive101/Imlight (Xion0014/Rougelike for Imlight Manager)
+          --branch <name>            Build another branch. Default: the branch this release was built from
           --admin-password <text>    The admin password, for --yes installs.
           --yes                      Do not ask anything; use the defaults.
 

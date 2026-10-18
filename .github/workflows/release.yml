@@ -1,4 +1,6 @@
-# Publishes a GitHub release when a version tag (v1.2.3) is pushed.
+# Publishes a GitHub release on every push to the roguelike branch (versions 1.0.<run number>),
+# and when a version tag (v1.2.3) is pushed. Installed ImlightManager.exe and launchers update
+# themselves from the newest release here, so every push reaches every install.
 #
 # ImlightManager.exe is always built and attached. It installs this fork on a PC, building it
 # from that PC's own Wizard101 files, and adds the Control Panel.
@@ -17,6 +19,7 @@ name: Release
 
 on:
   push:
+    branches: ['roguelike/run-loop']
     tags: ['v*']
   workflow_dispatch:
     inputs:
@@ -27,11 +30,18 @@ on:
 permissions:
   contents: write
 
+# One release at a time, so versions come out in order.
+concurrency:
+  group: release
+  cancel-in-progress: false
+
 jobs:
   release:
     runs-on: windows-latest
     env:
       GENERATOR_INPUTS: ${{ secrets.IMCODEC_GENERATOR_INPUTS }}
+      # The branch ImlightManager.exe installs and updates when built from a tag or by hand.
+      DEFAULT_INSTALL_BRANCH: roguelike/run-loop
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -47,10 +57,21 @@ jobs:
         id: version
         shell: pwsh
         run: |
-          $version = if ("${{ github.event_name }}" -eq "workflow_dispatch") { "${{ inputs.version }}" } else { "${{ github.ref_name }}" }
+          if ("${{ github.event_name }}" -eq "workflow_dispatch") {
+            $version = "${{ inputs.version }}"
+            $branch = $env:DEFAULT_INSTALL_BRANCH
+          } elseif ("${{ github.ref_type }}" -eq "tag") {
+            $version = "${{ github.ref_name }}"
+            $branch = $env:DEFAULT_INSTALL_BRANCH
+          } else {
+            # A branch push: number the release by this workflow's run count.
+            $version = "1.0.${{ github.run_number }}"
+            $branch = "${{ github.ref_name }}"
+          }
           $version = $version.TrimStart('v')
           "version=$version" >> $env:GITHUB_OUTPUT
           "tag=v$version" >> $env:GITHUB_OUTPUT
+          "branch=$branch" >> $env:GITHUB_OUTPUT
 
       - name: Build the launcher
         shell: pwsh
@@ -69,7 +90,8 @@ jobs:
           New-Item -ItemType Directory -Force $typeInput | Out-Null
           Copy-Item submodule/Imcodec/test/CodeGen/Inputs/*.json $typeInput/
           dotnet publish src/Imlight.Setup/Imlight.Setup.csproj -c Release -r win-x64 --self-contained true `
-            -p:PublishSingleFile=true -p:Version=${{ steps.version.outputs.version }} -p:ImlightEdition=Manager -o out/manager
+            -p:PublishSingleFile=true -p:Version=${{ steps.version.outputs.version }} -p:ImlightEdition=Manager `
+            -p:ImlightBranch=${{ steps.version.outputs.branch }} -o out/manager
           Copy-Item out/manager/ImlightManager.exe release/
 
       - name: Add the generator inputs
@@ -108,6 +130,12 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           $tag = "${{ steps.version.outputs.tag }}"
-          $notes = if ($env:GENERATOR_INPUTS) { "ImlightManager.exe installs this build with its Control Panel. ImlightLauncherSetup.exe installs this build; existing installs update through the launcher." } `
-                   else { "ImlightManager.exe installs this build with its Control Panel. Launcher only for this build: attach ImlightServer-win-x64.zip so launchers can update the server." }
-          gh release create $tag (Get-ChildItem release/*).FullName --title $tag --notes $notes --target "${{ github.sha }}"
+          $branch = "${{ steps.version.outputs.branch }}"
+          $commit = "${{ github.sha }}".Substring(0, 7)
+          $notes = "Built from $branch at $commit. Download ImlightManager.exe and run it: it installs the roguelike server " +
+                   "from the $branch branch, and updates itself and the server whenever a newer release is published here."
+          if (-not $env:GENERATOR_INPUTS) {
+            $notes += " The launcher in this release cannot update the server by itself; use ImlightManager.exe."
+          }
+          gh release create $tag (Get-ChildItem release/*).FullName --title "$tag (roguelike)" --notes $notes `
+            --target "${{ github.sha }}" --latest

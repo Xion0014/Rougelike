@@ -21,6 +21,11 @@
     <DefineConstants>$(DefineConstants);MANAGER_EDITION</DefineConstants>
   </PropertyGroup>
 
+  <!-- The branch the program installs and updates by default; the release workflow passes -p:ImlightBranch=<branch>. -->
+  <ItemGroup Condition="'$(ImlightBranch)' != ''">
+    <AssemblyMetadata Include="ImlightBranch" Value="$(ImlightBranch)" />
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.3.22" />
     <PackageReference Include="Avalonia.Desktop" Version="11.3.22" />
