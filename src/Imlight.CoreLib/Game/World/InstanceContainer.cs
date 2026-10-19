@@ -133,7 +133,7 @@ internal sealed class InstanceContainer(ulong instanceOwnerId, bool removeWhenEm
         var zoneId = GetNextDynamicZoneId();
 
         // Every zone created under an instance container is, by definition, instanced.
-        var zone = Context.ActorOf(Zone.Core.Zone.Props(zoneName, zoneId, true, _questProgress), zoneActorName);
+        var zone = Context.ActorOf(Zone.Core.Zone.Props(zoneName, zoneId, true, _questProgress, _instanceOwnerId), zoneActorName);
 
         // Log the new zone creation.
         Logger.Information("Game world created new zone: {ZoneName}",

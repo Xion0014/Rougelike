@@ -74,6 +74,14 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
             return;
         }
 
+        // Runs from before seeds existed get one now.
+        if (wizard.Roguelike.Seed == 0) {
+            wizard.Roguelike.Seed = NewSeed();
+            WizardCollection.UpdateCharacterRoguelike(wizard);
+        }
+
+        RoguelikeCreatures.Register(wizard);
+
         // Every zone change starts a new session, so walking into a shop or a house lands here too. Only a
         // fled battle (which sends the wizard to the hub) sends them back; otherwise they may roam freely.
         if (wizard.Roguelike.ReturnPending) {
@@ -226,8 +234,10 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
                 else if (wizard.IsInDuel) {
                     InformGameClient("Finish your battle first.");
                 }
-                else if (!SendToPhaseZone(wizard)) {
-                    InformGameClient("You are already where your run is.");
+                else {
+                    // Always moves, even within the same zone, so a wizard on the shared copy of their street
+                    // lands in their run's private copy.
+                    SendToPhaseZone(wizard, force: true);
                 }
                 break;
             case "here":
@@ -243,8 +253,9 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
     }
 
     private void StartRun(Wizard wizard) {
-        wizard.Roguelike = new RoguelikeRun();
+        wizard.Roguelike = new RoguelikeRun { Seed = NewSeed() };
         WizardCollection.UpdateCharacterRoguelike(wizard);
+        RoguelikeCreatures.Register(wizard);
 
         InformGameClient($"Your run begins! Survive {FormatTime(RoguelikeConfig.StreetSeconds)} on this street, " +
                          "then face its boss. If you fall in battle, your wizard is gone for good. " +
@@ -336,6 +347,7 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         run.Phase = RoguelikePhase.Street;
         run.StreetSeconds = 0;
         WizardCollection.UpdateCharacterRoguelike(wizard);
+        RoguelikeCreatures.Register(wizard);
 
         InformGameClient($"Tier {run.Tier} begins. Survive {FormatTime(RoguelikeConfig.StreetSeconds)}!");
         if (!SendToPhaseZone(wizard)) {
@@ -383,7 +395,7 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
     /// Sends the wizard to the zone their run's phase belongs in, unless they are already there.
     /// </summary>
     /// <returns>True when a teleport was started.</returns>
-    private bool SendToPhaseZone(Wizard wizard) {
+    private bool SendToPhaseZone(Wizard wizard, bool force = false) {
         var run = wizard.Roguelike;
         var tier = RoguelikeConfig.GetTier(run.Tier);
         if (tier is null) {
@@ -391,7 +403,8 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         }
 
         var (configured, isPrivate) = run.Phase switch {
-            RoguelikePhase.Street => (tier.Street, false),
+            // A private copy, so the run's own creatures spawn there.
+            RoguelikePhase.Street => (tier.Street, RoguelikeCreatures.RandomStreetCreatures),
             RoguelikePhase.Boss => (tier.Boss, true),
             _ => (RoguelikeConfig.ShopZone, false),
         };
@@ -405,7 +418,7 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
             return false;
         }
 
-        if (string.Equals(wizard.Zone, zone, StringComparison.OrdinalIgnoreCase)) {
+        if (!force && string.Equals(wizard.Zone, zone, StringComparison.OrdinalIgnoreCase)) {
             return false;
         }
 
@@ -462,6 +475,12 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
 
         return $"Tier {run.Tier} of {RoguelikeConfig.TierCount}: {where}. " +
                $"Creatures defeated: {run.Kills}. Bosses defeated: {run.BossesDefeated}.";
+    }
+
+    private static ulong NewSeed() {
+        var seed = (ulong) Random.Shared.NextInt64(1, long.MaxValue);
+
+        return seed == 0 ? 1 : seed;
     }
 
     private static string FormatTime(int seconds)

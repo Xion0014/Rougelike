@@ -294,7 +294,12 @@ public sealed class ZonePath : ZoneEntity {
         var originalTemplateId = spawnItemInfo.m_templateID;
         var isWisp = Supervisors.ZonePathSupervisor.IsWisp(spawnItemInfo);
         var templateId = originalTemplateId;
-        if (_randomizeCreatures && !isWisp) {
+        if (!isWisp && Imlight.CoreLib.Game.Runs.RoguelikeCreatures.TryMap(
+                Zone?.OwnerCharId ?? 0, Zone?.ZonePath, originalTemplateId, out var runTemplateId)) {
+            // A roguelike run's private street: the run's seed picks the creature.
+            templateId = runTemplateId;
+        }
+        else if (_randomizeCreatures && !isWisp) {
             templateId = AprilFools.CreatureList.GetRandomCreatureTemplateID();
         }
         else if (Randomizer.RandomizeCreatures && !isWisp) {

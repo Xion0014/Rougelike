@@ -78,6 +78,11 @@ public class Zone : ReceiveProtocolDispatcher, IWithTimers {
     public bool IsInstance { get; }
 
     /// <summary>
+    /// The character a private instance belongs to, or 0 for a shared public zone.
+    /// </summary>
+    public ulong OwnerCharId { get; }
+
+    /// <summary>
     /// The zone path, formatted as it would be in the access pass.
     /// </summary>
     public string ZonePath { get; init; }
@@ -135,8 +140,10 @@ public class Zone : ReceiveProtocolDispatcher, IWithTimers {
     /// <param name="dynamicZoneId">The dynamic zone ID of the zone.</param>
     /// <param name="isInstance">Whether this zone is a private, per-owner instance.</param>
     /// <param name="questProgress">The quest progress shared by the zones of one instance container; null for a zone of its own.</param>
-    public Zone(string zonePath, uint dynamicZoneId, bool isInstance, InstanceQuestProgress questProgress = null) {
+    public Zone(string zonePath, uint dynamicZoneId, bool isInstance, InstanceQuestProgress questProgress = null,
+                ulong ownerCharId = 0) {
         this.ScriptState = new ZoneScriptState(questProgress);
+        this.OwnerCharId = ownerCharId;
         this.ZonePath = zonePath;
         this._dynamicZoneId = dynamicZoneId;
         this.IsInstance = isInstance;
@@ -166,8 +173,9 @@ public class Zone : ReceiveProtocolDispatcher, IWithTimers {
     }
 
     // Props
-    public static Props Props(string zonePath, uint dynamicZoneId, bool isInstance, InstanceQuestProgress questProgress = null)
-        => Akka.Actor.Props.Create(() => new Zone(zonePath, dynamicZoneId, isInstance, questProgress))
+    public static Props Props(string zonePath, uint dynamicZoneId, bool isInstance, InstanceQuestProgress questProgress = null,
+                              ulong ownerCharId = 0)
+        => Akka.Actor.Props.Create(() => new Zone(zonePath, dynamicZoneId, isInstance, questProgress, ownerCharId))
             .WithMailbox("akka.actor.mailbox.zone-priority");
 
     protected override void PreRestart(Exception reason, object message) {

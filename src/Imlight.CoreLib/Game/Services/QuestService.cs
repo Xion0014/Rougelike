@@ -1461,7 +1461,7 @@ internal class QuestService(SessionActor sessionActor) : MessageService(sessionA
         }
 
         // Serialize the madlib block for the goal.
-        var madLibBlock = QuestMadlibs.GetAppropriateMadlibBlockForGoal(gTemplate, gInstance);
+        var madLibBlock = QuestMadlibs.GetAppropriateMadlibBlockForGoal(gTemplate, gInstance, qInstance.OwnerCharId);
         if (!_goalSerializer.Serialize(madLibBlock, 1, out var madLibData)) {
             Logger.Error("Failed to serialize madlib data for goal '{0}' in quest '{1}'",
                 Logger.Args(gTemplate.m_goalName, qInstance.QuestName));

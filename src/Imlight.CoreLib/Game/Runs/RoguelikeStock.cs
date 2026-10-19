@@ -338,11 +338,16 @@ internal static class RoguelikeStock {
         return spells;
     }
 
-    /// <summary>True for crown shop gear (ObjectData/CrownItems/...), which is bought with crowns, not gold.</summary>
+    /// <summary>
+    /// True for gear a gold shop should not sell: crown shop gear (ObjectData/CrownItems/...), stat-less cosmetic
+    /// blanks (.../Blanks/...) and PvP gear (ObjectData/PVP/...), which the game shows as crown items.
+    /// </summary>
     private static bool IsCrownItem(ulong templateId)
         => s_templatePaths.Value.TryGetValue(templateId, out var path)
            && (path.Contains("CrownItems", StringComparison.OrdinalIgnoreCase)
-               || path.Contains("/Crown-", StringComparison.OrdinalIgnoreCase));
+               || path.Contains("/Crown-", StringComparison.OrdinalIgnoreCase)
+               || path.Contains("/Blanks/", StringComparison.OrdinalIgnoreCase)
+               || path.Contains("/PVP/", StringComparison.OrdinalIgnoreCase));
 
     /// <summary>The gear slot of an item, from the folder its template is in, or null when it is not gear.</summary>
     private static string SlotOf(ulong templateId) {

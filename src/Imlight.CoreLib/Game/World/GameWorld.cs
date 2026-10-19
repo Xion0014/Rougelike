@@ -240,11 +240,9 @@ public class GameWorld : ReceiveProtocolDispatcher, IWithTimers {
     private void HandleInstancedZoneTransfer(ZONE_102_PROTOCOL.MSG_ZONETRANSFER message) {
         // A PRIVATE transfer (sigil dungeon / solo entry) must NEVER be satisfied by a shared public copy;
         // that would drop the player into a public instance of a dungeon they asked to enter privately.
-        if (!message.IsPrivate && _publicZones.TryGetValue(message.DestinationZone, out var zone)) {
-            zone.Forward(message);
-
-            return;
-        }
+        // A normal transfer goes to the owner's own copy of the zone when they have one (walking out of a house
+        // back onto a roguelike run's private street), and to the public zone otherwise; the container is asked
+        // first, below, and the public zone is used when the container does not have the zone.
 
         // Capture sender before async work; Akka Sender is context-bound.
         var originalSender = Sender;
@@ -267,6 +265,14 @@ public class GameWorld : ReceiveProtocolDispatcher, IWithTimers {
     [MessageHandler(typeof(ZONE_102_PROTOCOL.MSG_INSTANCECONTAINER_QUERY_RESULT))]
     private void ReceiveInstanceContainerQueryResult(ZONE_102_PROTOCOL.MSG_INSTANCECONTAINER_QUERY_RESULT result) {
         var message = result.OriginalTransfer;
+
+        if ((result.Response == null || !result.Response.HasZone)
+            && !message.IsPrivate && _publicZones.TryGetValue(message.DestinationZone, out var publicZone)) {
+            // The owner has no copy of this zone, and a public one is loaded: use it.
+            publicZone.Tell(message, result.OriginalSender);
+
+            return;
+        }
 
         if (result.Response == null || !result.Response.HasZone) {
             // A loader may already be in progress; a second player can enter the same instance zone while it

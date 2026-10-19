@@ -207,6 +207,13 @@ public static class Randomizer {
             : s_creatures.Value.Map(templateId, SeededShuffle.Mix(s_seed ^ SeededShuffle.Fnv1a("creatures")));
     }
 
+    /// <summary>
+    /// The creature that stands in for <paramref name="templateId"/> under <paramref name="seed"/>: one of a similar
+    /// level (bosses only with bosses), whether or not randomizer mode is on. Used by roguelike runs.
+    /// </summary>
+    internal static ulong MapCreatureSeeded(ulong templateId, ulong seed)
+        => s_creatures.Value.Map(templateId, seed);
+
     // The creature each swapped spawn replaced, by the spawn's global id, so quests still count it as that creature.
     private static readonly System.Collections.Concurrent.ConcurrentDictionary<ulong, ulong> s_replacedCreatures = new();
     private const int MAX_REMEMBERED_CREATURES = 50_000;

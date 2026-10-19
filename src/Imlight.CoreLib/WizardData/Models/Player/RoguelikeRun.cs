@@ -45,6 +45,9 @@ public enum RoguelikePhase {
 [Serializable]
 public class RoguelikeRun {
 
+    /// <summary>This run's random seed: it picks the creatures on the run's streets.</summary>
+    public ulong Seed { get; set; }
+
     /// <summary>The current tier, starting at 1.</summary>
     public int Tier { get; set; } = 1;
 

@@ -60,14 +60,15 @@ internal static class QuestMadlibs {
             m_blockToken = "QUEST"
         };
 
-    internal static MadlibBlock GetAppropriateMadlibBlockForGoal(GoalTemplate gTemplate, GoalInstance gInstance)
+    internal static MadlibBlock GetAppropriateMadlibBlockForGoal(GoalTemplate gTemplate, GoalInstance gInstance,
+                                                                 ulong charId = 0)
         => gTemplate.m_goalType switch {
             GOAL_TYPE.GOAL_TYPE_WAYPOINT => GetMadlibBlockForWaypointGoal(gTemplate),
             GOAL_TYPE.GOAL_TYPE_PERSONA => GetMadlibBlockForPersonaGoal(gTemplate),
             GOAL_TYPE.GOAL_TYPE_BOUNTY 
                 or GOAL_TYPE.GOAL_TYPE_BOUNTYCOLLECT 
                 or GOAL_TYPE.GOAL_TYPE_USAGE 
-                    => GetMadlibBlockForTalliedGoal(gTemplate, gInstance),
+                    => WithRunCreatureName(GetMadlibBlockForTalliedGoal(gTemplate, gInstance), gTemplate, charId),
             _ => new MadlibBlock()
         };
 
@@ -193,6 +194,33 @@ internal static class QuestMadlibs {
     private static string GetStringArgument(MadlibBlock block, string token)
         => block.m_madlibs?.OfType<MadlibArgT_ByteString>()
             .FirstOrDefault(arg => arg.m_madlibToken == token)?.m_madlibArgument;
+
+    /// <summary>
+    /// On a roguelike run, a "defeat" goal names the creature that replaced the goal's creature on the run's
+    /// street, in place of the original's name.
+    /// </summary>
+    private static MadlibBlock WithRunCreatureName(MadlibBlock block, GoalTemplate gTemplate, ulong charId) {
+        if (charId == 0 || gTemplate is not BountyGoalTemplate bounty) {
+            return block;
+        }
+
+        var nameKey = Imlight.CoreLib.Game.Runs.RoguelikeCreatures.ReplacementNameKey(
+            charId, bounty.m_npcAdjectives?.Select(a => (string) a));
+        if (nameKey is null) {
+            return block;
+        }
+
+        // The creature's name is in TALLYTEXT2 when the goal has one there, else in TALLYTEXT.
+        string descriptor2 = gTemplate.m_tallyCounter?.m_descriptor2;
+        var token = string.IsNullOrEmpty(descriptor2) ? "TALLYTEXT" : "TALLYTEXT2";
+        foreach (var argument in block.m_madlibs.OfType<MadlibArgT_ByteString>()) {
+            if (argument.m_madlibToken == token) {
+                argument.m_madlibArgument = nameKey;
+            }
+        }
+
+        return block;
+    }
 
     private static MadlibBlock GetMadlibBlockForTalliedGoal(GoalTemplate gTemplate, GoalInstance gInstance)
         => new() {
