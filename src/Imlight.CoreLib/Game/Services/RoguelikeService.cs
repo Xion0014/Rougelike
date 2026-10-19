@@ -133,7 +133,8 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
             m_inZone = true,
             m_enabled = true,
             m_discovered = true,
-            m_duration = $"{left}s",
+            // The full street time: the hourglass shows time left out of this, so it is half full at the halfway point.
+            m_duration = $"{RoguelikeConfig.StreetSeconds}s",
             m_expireTime = expireMode switch {
                 "relative" => (uint) left,
                 "zero" => 0u,
