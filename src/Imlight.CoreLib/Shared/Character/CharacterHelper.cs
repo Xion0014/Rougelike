@@ -89,6 +89,9 @@ internal static class CharacterHelper {
         EquipmentExtras.Forget(wizard);
         EquipmentExtras.Refresh(wizard);
 
+        // A roguelike run's stat potions.
+        Imlight.CoreLib.Game.Runs.RoguelikeBoosts.ApplyTo(wizard);
+
         // Check for level/XP mismatches, but don't modify XP on login.
         // Any mismatch will be corrected on the next XP gain.
         var xp = wizard.MagicSchoolBehavior.ExperiencePoints;

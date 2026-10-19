@@ -697,7 +697,9 @@ public class CombatResolver(Duel duel, CombatDuelSubCircle[] actorSubCircles) {
         UseUpCard(caster, action.m_spell);
 
         // FullPipConserve: like a 100% pip conserve stat, a half-used power pip comes back as a normal pip.
-        var conservePips = s_fullPipConserve && caster._wizard is not null;
+        var conservePips = (s_fullPipConserve && caster._wizard is not null)
+                           // A roguelike run's Potions of Thrift give a chance of it on each spell.
+                           || Imlight.CoreLib.Game.Runs.RoguelikeBoosts.RollPipConserve(caster._wizard);
 
         // Spend any school pips the spell costs.
         caster.DeductSchoolPips(action.m_spell);

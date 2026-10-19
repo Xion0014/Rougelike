@@ -254,6 +254,11 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
             GiveCrownDrop(wizard, crownItem);
         }
 
+        if (mobs.Length > 0 && RoguelikeBoosts.RollAfterBattle(wizard) is { } potion) {
+            InformGameClient(potion);
+            WizardCollection.UpdateCharacterGameStats(wizard);
+        }
+
         if (run.Phase == RoguelikePhase.Boss && mobs.Any(RoguelikeConfig.IsBossMob)) {
             ClearBoss(wizard);
 
@@ -592,7 +597,8 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         };
 
         return $"Tier {run.Tier} of {RoguelikeConfig.TierCount}: {where}. " +
-               $"Creatures defeated: {run.Kills}. Bosses defeated: {run.BossesDefeated}.";
+               $"Creatures defeated: {run.Kills}. Bosses defeated: {run.BossesDefeated}. " +
+               RoguelikeBoosts.Describe(run);
     }
 
     private static ulong NewSeed() {

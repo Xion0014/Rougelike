@@ -507,9 +507,14 @@ public class CombatDuelSubCircle {
         var chance = s_shadowPipChance > 0
             ? s_shadowPipChance
             : (int) Math.Round(ParticipantGameStats.m_shadowPipRating + ParticipantGameStats.m_bonusShadowPipRating);
-        if ((s_naturalShadowPips || HasOwnShadowMagic) && _wizard is not null && chance <= 0) {
+        var onRun = Imlight.CoreLib.Game.Runs.RoguelikeBoosts.RunShadowPips
+                    && Imlight.CoreLib.Game.Runs.RoguelikeBoosts.OnRun(_wizard);
+        if ((s_naturalShadowPips || HasOwnShadowMagic || onRun) && _wizard is not null && chance <= 0) {
             chance = NATURAL_SHADOW_PIP_CHANCE;
         }
+
+        // A roguelike run's Potions of Shadow fill the gauge faster.
+        chance += Imlight.CoreLib.Game.Runs.RoguelikeBoosts.Get(_wizard, Imlight.CoreLib.Game.Runs.RoguelikeBoosts.ShadowPip);
 
         return Math.Clamp(chance, 0, (int) GAUGE_FULL);
     }
@@ -587,7 +592,11 @@ public class CombatDuelSubCircle {
             var school = (MagicSchool) ParticipantGameStats.m_schoolID;
             var level = ParticipantGameStats.Level;
             var rating = Imlight.CoreLib.Shared.Character.MagicLevelsConfig.GetPlayerLevelInfo(school, level)?.m_archmastery ?? 0f;
-            if (rating <= 0 && (level >= ARCHMASTERY_LEVEL || s_archmasteryAllLevels)) {
+            // A roguelike run gives Archmastery at every level, like AllLevels.
+            var allLevels = s_archmasteryAllLevels
+                            || (Imlight.CoreLib.Game.Runs.RoguelikeBoosts.RunArchmastery
+                                && Imlight.CoreLib.Game.Runs.RoguelikeBoosts.OnRun(_wizard));
+            if (rating <= 0 && (level >= ARCHMASTERY_LEVEL || allLevels)) {
                 // The level table may have no number for this level; the level 50 one stands in.
                 rating = Imlight.CoreLib.Shared.Character.MagicLevelsConfig.GetPlayerLevelInfo(school, ARCHMASTERY_LEVEL)?.m_archmastery ?? 0f;
                 if (rating <= 0) {
@@ -595,11 +604,14 @@ public class CombatDuelSubCircle {
                 }
             }
 
-            if (level < ARCHMASTERY_LEVEL && !s_archmasteryAllLevels) {
+            if (level < ARCHMASTERY_LEVEL && !allLevels) {
                 rating = 0;
             }
 
             rating += s_archmasteryBonus;
+
+            // A roguelike run's Potions of Mastery.
+            rating += Imlight.CoreLib.Game.Runs.RoguelikeBoosts.Get(_wizard, Imlight.CoreLib.Game.Runs.RoguelikeBoosts.Archmastery);
             Logger.Debug("Archmastery for {0} (level {1}): {2}.", Logger.Args(_wizard.CharId, level, rating));
 
             return rating;

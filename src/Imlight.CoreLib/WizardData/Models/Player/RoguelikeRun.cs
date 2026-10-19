@@ -18,6 +18,8 @@
 
 using System;
 
+using System.Collections.Generic;
+
 namespace Imlight.CoreLib.WizardData.Models.Player;
 
 /// <summary>
@@ -69,6 +71,9 @@ public class RoguelikeRun {
     /// How many times the run's street creatures were rerolled: every login onto the street rolls new ones.
     /// </summary>
     public int Rerolls { get; set; }
+
+    /// <summary>The stat potions drunk on this run: the total each stat was raised by, by stat name.</summary>
+    public Dictionary<string, int> Boosts { get; set; } = [];
 
     /// <summary>True once the run's free mount was handed out.</summary>
     public bool MountGiven { get; set; }
