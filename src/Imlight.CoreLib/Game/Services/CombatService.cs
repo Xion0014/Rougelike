@@ -388,6 +388,11 @@ internal class CombatService(SessionActor sessionActor) : MessageService(session
         var item = wizEquipmentBehavior.GetItemInSlot(EquipmentSlotType.Mount);
 
         SendAddEffects(addedEffects);
+        SendToSocket(new GAME_5_PROTOCOL.MSG_EQUIPITEM() {
+            ItemID = _cachedMountId,
+            SlotName = "Mount",
+            IsEquip = 1
+        });
         BroadcastEquipItem(item);
         _cachedMountId = 0;
         SyncPetForMount();
@@ -460,7 +465,8 @@ internal class CombatService(SessionActor sessionActor) : MessageService(session
         // Serialize item and broadcast equip action to other players.
         var pubItem = ItemHelper.GetPublicItem(item);
 
-        if (_itemSerializer.Serialize(pubItem, PropertyFlags.Prop_Transmit, out var data)) {
+        // Serialize returns true on success; this check was inverted, so the mount never showed again after a battle.
+        if (!_itemSerializer.Serialize(pubItem, PropertyFlags.Prop_Transmit, out var data)) {
             Logger.Error("Failed to serialize item {0}", Logger.Args(item.m_globalID));
 
             return;

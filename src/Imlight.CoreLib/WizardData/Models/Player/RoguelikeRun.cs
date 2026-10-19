@@ -65,6 +65,11 @@ public class RoguelikeRun {
     /// </summary>
     public bool ReturnPending { get; set; }
 
+    /// <summary>
+    /// How many times the run's street creatures were rerolled: every login onto the street rolls new ones.
+    /// </summary>
+    public int Rerolls { get; set; }
+
     /// <summary>True once the run's free mount was handed out.</summary>
     public bool MountGiven { get; set; }
 

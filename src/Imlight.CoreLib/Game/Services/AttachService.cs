@@ -212,7 +212,9 @@ internal class AttachService(SessionActor sessionActor) : MessageService(session
 
         // Tell the game server that the user has attached, and now we need to find a zone process for their
         // zone, or create a new one. This is an internal zone transfer that does not involve the client.
-        var zoneDetails = InternalZoneTransfer(zoneName, location, house?.OwnerCharId ?? 0);
+        // A fresh login onto a run's street rolls it new creatures, on a freshly built copy of the street.
+        var rerollStreet = message.Reattach == 0 && Runs.RoguelikeCreatures.RerollOnLogin(_wizard, zoneName);
+        var zoneDetails = InternalZoneTransfer(zoneName, location, house?.OwnerCharId ?? 0, rerollStreet);
         if (zoneDetails is null || zoneDetails.ErrorCode != 0) {
             Logger.Information("Session {SessionId} MSG_ATTACH failed: zone {Zone} transfer error {ErrorCode}",
                 Logger.Args(SessionActor.SessionID, zoneName, zoneDetails?.ErrorCode ?? 1));
@@ -519,7 +521,8 @@ internal class AttachService(SessionActor sessionActor) : MessageService(session
         this._wizard = character;
     }
 
-    private ZONE_102_PROTOCOL.MSG_ZONETRANSFERRSP InternalZoneTransfer(string zoneName, string location, ulong houseOwnerCharId = 0) {
+    private ZONE_102_PROTOCOL.MSG_ZONETRANSFERRSP InternalZoneTransfer(string zoneName, string location, ulong houseOwnerCharId = 0,
+                                                                       bool resetInstance = false) {
         var (ownerCharId, isPrivate) = ZoneInstanceOwners.Resolve(_wizard.CharId, zoneName, houseOwnerCharId);
         var zoneMsg = new ZONE_102_PROTOCOL.MSG_ZONETRANSFER {
             DestinationZone = zoneName,
@@ -527,6 +530,7 @@ internal class AttachService(SessionActor sessionActor) : MessageService(session
             SendToClient = false,
             OwnerCharId = ownerCharId,
             IsPrivate = isPrivate,
+            ResetInstance = resetInstance && isPrivate,
         };
 
         return AskOtherService<ZONE_102_PROTOCOL.MSG_ZONETRANSFERRSP>(zoneMsg);

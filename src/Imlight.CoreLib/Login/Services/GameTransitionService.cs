@@ -113,6 +113,9 @@ internal class GameTransitionService(SessionActor sessionActor) : MessageService
         Logger.Information("Sending wizard {name} ({RemoteIp}) to game server {IP}:{Port}.",
             Logger.Args(wizardName, SessionActor.RemoteIp, gameServerIp, gameServer.Port));
 
+        // A real login (not a zone change), so a run's street can roll new creatures.
+        Imlight.CoreLib.Game.Runs.RoguelikeCreatures.MarkLogin(character.CharId);
+
         var zoneName = DetermineZone(character);
         var location = DetermineLocation(character);
 

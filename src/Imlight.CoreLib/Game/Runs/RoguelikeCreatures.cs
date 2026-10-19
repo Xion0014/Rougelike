@@ -104,13 +104,56 @@ internal static class RoguelikeCreatures {
 
         var street = RoguelikeConfig.ResolveZone(RoguelikeConfig.GetTier(run.Tier)?.Street);
         var info = s_runs.GetOrAdd(wizard.CharId, _ => new RunInfo());
-        if (info.Seed != run.Seed || info.Tier != run.Tier) {
+
+        // Each reroll (a fresh login onto the street) gives the street a new set of creatures.
+        var seed = run.Rerolls == 0 ? run.Seed : SeededShuffle.Mix(run.Seed ^ SeededShuffle.Mix((ulong) run.Rerolls));
+        if (info.Seed != seed || info.Tier != run.Tier) {
             info.ByAdjective.Clear();
         }
 
-        info.Seed = run.Seed;
+        info.Seed = seed;
         info.Tier = run.Tier;
         info.Street = street;
+    }
+
+    // Characters picked on the character screen whose game attach has not happened yet.
+    private static readonly ConcurrentDictionary<ulong, DateTime> s_freshLogins = new();
+
+    /// <summary>Notes that a character was picked on the character screen (a real login, not a zone change).</summary>
+    internal static void MarkLogin(ulong charId) {
+        if (Active) {
+            s_freshLogins[charId] = DateTime.UtcNow;
+        }
+    }
+
+    /// <summary>
+    /// On a fresh login onto the run's street, rolls new creatures for it. The private street is kept while it
+    /// sits idle, so without this the wizard would log back in to the same creatures (and the same leftovers).
+    /// </summary>
+    /// <returns>True when the street's old copy must be dropped, so it is built again with the new creatures.</returns>
+    internal static bool RerollOnLogin(Wizard wizard, string zonePath) {
+        if (wizard is null || !s_freshLogins.TryRemove(wizard.CharId, out var pickedAt)
+            || DateTime.UtcNow - pickedAt > TimeSpan.FromMinutes(2)) {
+            return false;
+        }
+
+        var run = wizard.Roguelike;
+        if (!Active || run is null || run.Phase != RoguelikePhase.Street) {
+            return false;
+        }
+
+        var street = RoguelikeConfig.ResolveZone(RoguelikeConfig.GetTier(run.Tier)?.Street);
+        if (!string.Equals(street, zonePath, StringComparison.OrdinalIgnoreCase)) {
+            return false;
+        }
+
+        run.Rerolls++;
+        WizardCollection.UpdateCharacterRoguelike(wizard);
+        Register(wizard);
+        Logger.Information("[Roguelike] {0} logged in on the run street {1}: new creatures (reroll {2}).",
+            Logger.Args(wizard.CharId, zonePath, run.Rerolls));
+
+        return true;
     }
 
     /// <summary>
