@@ -334,6 +334,9 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
                     SendToPhaseZone(wizard, force: true);
                 }
                 break;
+            case "stats":
+                InformGameClient(RoguelikeBoosts.DescribeStats(wizard));
+                break;
             case "here":
                 InformGameClient($"You are in zone: {wizard.Zone}");
                 break;

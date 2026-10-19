@@ -48,6 +48,9 @@ internal class CommandRunProtocol : CommandProtocol {
     [Command("return")]
     private void ReturnCommand() => Send("return");
 
+    [Command("stats")]
+    private void StatsCommand() => Send("stats");
+
     [Command("here")]
     private void HereCommand() => Send("here");
 

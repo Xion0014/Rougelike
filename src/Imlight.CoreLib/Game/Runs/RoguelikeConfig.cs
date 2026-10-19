@@ -105,6 +105,9 @@ internal static class RoguelikeConfig {
         .Select(part => ulong.TryParse(part, out var id) ? id : 0)
         .Where(id => id != 0)];
 
+    /// <summary>On a run, the Crown Shop button shows the wizard's stats in chat instead of opening the shop.</summary>
+    internal static readonly bool ShopButtonShowsStats = ConfigurationManager.GetValue("Roguelike.ShopButtonShowsStats", true);
+
     /// <summary>The name the travel tome shows while it offers its choices.</summary>
     internal static readonly string TravelBookName = ConfigurationManager.GetValue("Roguelike.TravelBookName", "Tome of Travels");
 

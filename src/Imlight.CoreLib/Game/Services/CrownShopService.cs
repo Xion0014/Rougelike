@@ -81,6 +81,16 @@ internal class CrownShopService(SessionActor sessionActor) : MessageService(sess
     [MessageHandler(typeof(WIZARD_12_PROTOCOL.MSG_PCS_SEGDATA_REQUEST))]
     private void ReceiveCrownShopSegDataRequest(WIZARD_12_PROTOCOL.MSG_PCS_SEGDATA_REQUEST message) {
         var wizard = GetActiveWizard();
+
+        // On a roguelike run the Shop button shows the wizard's stats instead: crowns are not used on a run, and
+        // the game's own stats page leaves the run's stat potions out. Not answering keeps the shop closed.
+        if (Imlight.CoreLib.Game.Runs.RoguelikeConfig.ShopButtonShowsStats
+            && Imlight.CoreLib.Game.Runs.RoguelikeBoosts.OnRun(wizard)) {
+            Logger.Information("Crown shop opened by {0} on a run; showing their stats instead.", Logger.Args(wizard.CharId));
+            InformGameClient(Imlight.CoreLib.Game.Runs.RoguelikeBoosts.DescribeStats(wizard));
+
+            return;
+        }
         var schoolStr = wizard.MagicSchoolBehavior.MagicSchool.ToString();
         var schoolCode = schoolStr.Length >= 2 ? schoolStr[..2] : schoolStr;
 

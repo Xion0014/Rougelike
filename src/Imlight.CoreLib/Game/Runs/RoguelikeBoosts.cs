@@ -138,6 +138,43 @@ internal static class RoguelikeBoosts {
             .Select(boost => $"+{boosts[boost.Key]}{boost.Unit}")) + ".";
     }
 
+    /// <summary>
+    /// The wizard's battle stats as they stand, gear and potions together, for the chat window: the game's own
+    /// stats page leaves the potions out.
+    /// </summary>
+    internal static string DescribeStats(Wizard wizard) {
+        var stats = wizard?.GameStats;
+        if (stats is null) {
+            return "Your stats are not ready yet.";
+        }
+
+        var school = wizard.MagicSchoolBehavior.MagicSchool.ToString();
+        var schoolIndex = Imlight.CoreLib.Game.Spells.MagicSchools.GetMagicSchool(school)?.m_schoolIndex ?? -1;
+        float ForSchool(List<float> bySchool) => schoolIndex >= 0 && bySchool is not null && schoolIndex < bySchool.Count
+            ? bySchool[schoolIndex]
+            : 0f;
+        static string Percent(float fraction) => $"{Math.Round(fraction * 100, 1)}%";
+
+        // As a battle works it out: the wizard's rating, 25 on a run when that is 0, plus the Potions of Shadow.
+        var shadow = (int) Math.Round(stats.m_shadowPipRating + stats.m_bonusShadowPipRating);
+        if (shadow <= 0 && RunShadowPips && OnRun(wizard)) {
+            shadow = 25;
+        }
+
+        shadow += Get(wizard, ShadowPip);
+
+        return $"Your stats ({school}): Health {stats.m_baseHitpoints}, Mana {stats.m_baseMana}, " +
+               $"Damage {Percent(stats.m_dmgBonusPercentAll + ForSchool(stats.m_dmgBonusPercent))}, " +
+               $"Resist {Percent(stats.m_dmgReducePercentAll + ForSchool(stats.m_dmgReducePercent))}, " +
+               $"Accuracy {Percent(stats.m_accBonusPercentAll + ForSchool(stats.m_accBonusPercent))}, " +
+               $"Pierce {Percent(stats.m_apBonusPercentAll + ForSchool(stats.m_apBonusPercent))}, " +
+               $"Critical {Math.Round(stats.m_criticalHitRatingAll + ForSchool(stats.m_criticalHitRatingBySchool))}, " +
+               $"Block {Math.Round(stats.m_blockRatingAll + ForSchool(stats.m_blockRatingBySchool))}, " +
+               $"Power Pip {Percent(stats.m_powerPipBase + stats.m_powerPipBonusPercentAll)}, " +
+               $"Shadow Pip {shadow}% a round, Pip Conserve {Get(wizard, PipConserve)}%, " +
+               $"Archmastery bonus +{Get(wizard, Archmastery)}. " + Describe(wizard.Roguelike);
+    }
+
     /// <summary>The run's total for a stat battles read from here (shadow pips, pip conserve, Archmastery).</summary>
     internal static int Get(Wizard wizard, string key)
         => RoguelikeConfig.Enabled && wizard?.Roguelike?.Boosts is { } boosts ? boosts.GetValueOrDefault(key) : 0;
