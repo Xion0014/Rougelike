@@ -151,6 +151,9 @@ internal sealed class CombatCreatureAIComponent(ZoneEntity entity) : ZoneEntityC
 
     [MessageHandler(typeof(COMBAT_106_PROTOCOL.MSG_ACTORADDEDTODUEL))]
     private void ReceiveCombatAdded(COMBAT_106_PROTOCOL.MSG_ACTORADDEDTODUEL message) {
+        Logger.Debug("Duel {0} | Slot {1} | Creature {2} ({3}) joined{4}.",
+            Logger.Args(message.Duel?.SigilId, message.SubCircle?.SlotIndex, Entity.ActiveGameObject?.m_debugName,
+                Entity.ActiveGameObject?.m_templateID, _sentFinalKill ? ", but it already died and will not act" : ""));
         if (_sentFinalKill) {
             return;
         }
@@ -164,7 +167,11 @@ internal sealed class CombatCreatureAIComponent(ZoneEntity entity) : ZoneEntityC
 
     [MessageHandler(typeof(COMBAT_106_PROTOCOL.MSG_NEWROUND))]
     private void ReceiveNewCombatRound(COMBAT_106_PROTOCOL.MSG_NEWROUND message) {
-        if (_sentFinalKill) {
+        if (_sentFinalKill || _currentDuelComponent is null) {
+            Logger.Warning("Creature {0} ({1}) got a new round but will not act: {2}.",
+                Logger.Args(Entity.ActiveGameObject?.m_debugName, Entity.ActiveGameObject?.m_templateID,
+                    _sentFinalKill ? "it already died" : "it was never added to the duel"));
+
             return;
         }
 

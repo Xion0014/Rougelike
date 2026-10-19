@@ -117,7 +117,12 @@ public class ZoneEntity(
     /// </summary>
     /// <param name="killer">The global ID of the entity that killed this entity.</param>
     /// <param name="despawnEffect">The name of the despawn effect to play.</param>
-    public void DeleteObject(string effectName = "", ulong killer = 0) {
+    public void DeleteObject(string effectName = "", ulong killer = 0,
+                             [System.Runtime.CompilerServices.CallerFilePath] string callerFile = "",
+                             [System.Runtime.CompilerServices.CallerMemberName] string callerMember = "",
+                             [System.Runtime.CompilerServices.CallerLineNumber] int callerLine = 0) {
+        LogRemoval("deleted", callerFile, callerMember, callerLine);
+
         var despawnEffects = new DespawnInfo {
             m_killer = (GID) killer,
             m_despawnEffect = StringHash.Compute(effectName),
@@ -148,10 +153,26 @@ public class ZoneEntity(
         Context.Stop(Self);
     }
 
+    // Says who removed a creature, so a creature that vanishes (a fight with an invisible enemy) can be traced.
+    private void LogRemoval(string what, string callerFile, string callerMember, int callerLine) {
+        if (Template is not GameObjectTemplate goTemplate
+            || !goTemplate.m_behaviors.Any(behavior => behavior is DuelistBehaviorTemplate)) {
+            return;
+        }
+
+        Logger.Debug("Creature {Name} ({TemplateId}, {GlobalId}) {What} by {Caller}.{Member}:{Line}",
+            Logger.Args(ActiveGameObject?.m_debugName, goTemplate.m_templateID, ActiveGameObject?.m_globalID.Full ?? 0,
+                what, System.IO.Path.GetFileNameWithoutExtension(callerFile), callerMember, callerLine));
+    }
+
     /// <summary>
     /// Despawns this entity from the zone, without destroying it.
     /// </summary>
-    public void DespawnObject() {
+    public void DespawnObject([System.Runtime.CompilerServices.CallerFilePath] string callerFile = "",
+                              [System.Runtime.CompilerServices.CallerMemberName] string callerMember = "",
+                              [System.Runtime.CompilerServices.CallerLineNumber] int callerLine = 0) {
+        LogRemoval("despawned", callerFile, callerMember, callerLine);
+
         var removeMsg = new GAME_5_PROTOCOL.MSG_REMOVEOBJECT {
             GameObjectID = ActiveGameObject.m_globalID
         };
