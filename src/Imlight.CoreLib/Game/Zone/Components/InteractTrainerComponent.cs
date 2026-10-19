@@ -79,6 +79,27 @@ internal sealed class InteractTrainerComponent(ZoneEntity entity) : ZoneEntityCo
     /// </summary>
     public bool IsTestTrainer { get; private set; }
 
+    private TestTrainerKind? _testKind;
+
+    /// <summary>
+    /// True when a wizard on a roguelike run gets nothing from this test trainer: Mr. Lincoln, Mellori and Merle
+    /// Ambrose step down on a run, and their spells join the pool the run's random trainers draw from instead.
+    /// </summary>
+    private bool RetiredFor(Wizard wizard)
+        => IsTestTrainer && _testKind is not TestTrainerKind.Extracts
+           && Imlight.CoreLib.Game.Runs.RoguelikeStock.TrainersActiveFor(wizard);
+
+    /// <summary>
+    /// The spells Mr. Lincoln (enchantments), Mellori (Shadow) and Merle Ambrose (monster and boss spells) teach, by
+    /// kind, for a roguelike run's random trainers.
+    /// </summary>
+    internal static IReadOnlyDictionary<string, List<NPCSpellEntry>> RetiredTrainerSpells()
+        => new Dictionary<string, List<NPCSpellEntry>> {
+            ["Enchantments"] = s_testSpells.Value[TestTrainerKind.Enchantments],
+            ["Shadow"] = s_testSpells.Value[TestTrainerKind.Shadow],
+            ["Boss"] = s_testSpells.Value[TestTrainerKind.Boss],
+        };
+
     internal enum TestTrainerKind { Enchantments, Extracts, Shadow, Boss }
 
     /// <summary>
@@ -237,6 +258,7 @@ internal sealed class InteractTrainerComponent(ZoneEntity entity) : ZoneEntityCo
     public override void OnStart() {
         if (Entity.Template is GameObjectTemplate testTrainer && TestTrainerKindOf(testTrainer) is { } kind) {
             IsTestTrainer = true;
+            _testKind = kind;
             SpellInventory = s_testSpells.Value[kind];
             InitializeServiceBases();
 
@@ -268,6 +290,10 @@ internal sealed class InteractTrainerComponent(ZoneEntity entity) : ZoneEntityCo
     /// wizard doesn't know yet; walking away and back shows the next section.
     /// </summary>
     private IEnumerable<int> OfferedIndexes(Wizard wizard) {
+        if (RetiredFor(wizard)) {
+            return [];
+        }
+
         if (!IsTestTrainer && Imlight.CoreLib.Game.Runs.RoguelikeStock.TrainersActiveFor(wizard)) {
             // A roguelike run offers a short list of random spells.
             return Enumerable.Range(0, System.Math.Min(_serviceOptionBases.Count, Imlight.CoreLib.Game.Runs.RoguelikeStock.TrainerSpellCount));
@@ -410,6 +436,11 @@ internal sealed class InteractTrainerComponent(ZoneEntity entity) : ZoneEntityCo
     /// </summary>
     internal (uint SpellId, int Level, bool IsRunSpell) SpellFor(Wizard wizard, int index) {
         var entry = SpellInventory[index];
+        if (RetiredFor(wizard)) {
+            // Nothing to train here on a run (spell 0 is not a spell).
+            return (0u, int.MaxValue, true);
+        }
+
         if (!IsTestTrainer && Imlight.CoreLib.Game.Runs.RoguelikeStock.TrainersActiveFor(wizard)) {
             // Past the run's short list there is nothing to train (spell 0 is not a spell).
             return Imlight.CoreLib.Game.Runs.RoguelikeStock.TrainerSpellFor(

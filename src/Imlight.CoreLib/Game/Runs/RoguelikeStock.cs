@@ -44,6 +44,7 @@ internal static class RoguelikeStock {
 
     internal static readonly bool RandomShops = ConfigurationManager.GetValue("Roguelike.RandomShops", true);
     internal static readonly bool RandomTrainers = ConfigurationManager.GetValue("Roguelike.RandomTrainers", true);
+    private static readonly bool s_shopDropGear = ConfigurationManager.GetValue("Roguelike.ShopDropGear", true);
     private static readonly int s_maxLevel = Math.Clamp(ConfigurationManager.GetValue("Roguelike.MaxStockLevel", 50), 1, 200);
     private static readonly int s_levelsBelow = Math.Max(0, ConfigurationManager.GetValue("Roguelike.StockLevelsBelow", 10));
     private static readonly int s_levelsAbove = Math.Max(0, ConfigurationManager.GetValue("Roguelike.StockLevelsAbove", 5));
@@ -54,8 +55,9 @@ internal static class RoguelikeStock {
     // How many random crown items to look at for one that fits the wizard, before giving up on the drop.
     private const int CROWN_DROP_TRIES = 300;
 
-    // Crown gear template ids, from the CrownItems folders. Only paths are read up front; templates load on demand.
-    private static readonly Lazy<uint[]> s_crownGearIds = new(BuildCrownGearIds, LazyThreadSafetyMode.ExecutionAndPublication);
+    // Crown gear template ids by slot, from the CrownItems folders. Only paths are read up front; templates load on
+    // demand. Grouped by slot so every slot drops as often: there is far more crown headgear than crown athames.
+    private static readonly Lazy<Dictionary<string, uint[]>> s_crownGearIds = new(BuildCrownGearIds, LazyThreadSafetyMode.ExecutionAndPublication);
 
     /// <summary>How many random spells each trainer offers a wizard on a run.</summary>
     internal static readonly int TrainerSpellCount = Math.Clamp(ConfigurationManager.GetValue("Roguelike.TrainerSpells", 10), 1, 50);
@@ -85,6 +87,17 @@ internal static class RoguelikeStock {
         = new(BuildGearPool, LazyThreadSafetyMode.ExecutionAndPublication);
     private static readonly Lazy<List<SpellEntry>> s_spells
         = new(BuildSpellPool, LazyThreadSafetyMode.ExecutionAndPublication);
+
+    // The spells of the test trainers a run retires (Mr. Lincoln, Mellori, Merle Ambrose), for the random trainers.
+    private static readonly Lazy<List<SpellEntry>> s_retiredSpells
+        = new(BuildRetiredSpellPool, LazyThreadSafetyMode.ExecutionAndPublication);
+
+    /// <summary>
+    /// The chance, 0 to 100, that each spell a random trainer offers comes from the retired test trainers' spells
+    /// (enchantments, Shadow spells, monster and boss spells) rather than the normal trainer spells.
+    /// </summary>
+    private static readonly int s_retiredSpellShare
+        = Math.Clamp(ConfigurationManager.GetValue("Roguelike.TrainerSpecialSpellShare", 25), 0, 100);
 
     /// <summary>True when this wizard's shops are randomized.</summary>
     internal static bool ShopsActiveFor(Wizard wizard)
@@ -197,11 +210,55 @@ internal static class RoguelikeStock {
         // Trainers draw from every level up to the cap, not the wizard's window: higher spells show with the level
         // they need, as something to work toward.
         var random = new Random(Seed(wizard, "trainer", trainerTemplateId));
+        var normal = new Queue<SpellEntry>(s_spells.Value.OrderBy(_ => random.Next()));
+        var special = new Queue<SpellEntry>(s_retiredSpells.Value.OrderBy(_ => random.Next()));
+        var picks = new List<SpellEntry>();
+        var seen = new HashSet<uint>();
 
-        return [.. s_spells.Value
-            .OrderBy(_ => random.Next())
-            .Take(Math.Min(count, TrainerSpellCount))
-            .OrderBy(s => s.Level)];
+        while (picks.Count < Math.Min(count, TrainerSpellCount) && (normal.Count > 0 || special.Count > 0)) {
+            var fromSpecial = special.Count > 0 && (normal.Count == 0 || random.Next(100) < s_retiredSpellShare);
+            var pick = (fromSpecial ? special : normal).Dequeue();
+            if (seen.Add(pick.Id)) {
+                picks.Add(pick);
+            }
+        }
+
+        return [.. picks.OrderBy(s => s.Level)];
+    }
+
+    private static List<SpellEntry> BuildRetiredSpellPool() {
+        var pool = new List<SpellEntry>();
+        try {
+            foreach (var (kind, entries) in Imlight.CoreLib.Game.Zone.Components.InteractTrainerComponent.RetiredTrainerSpells()) {
+                foreach (var entry in entries) {
+                    if (entry.TemplateID is > 0 and <= uint.MaxValue
+                        && CoreObjectFactory.GetCoreTemplate(entry.TemplateID) is SpellTemplate spell) {
+                        pool.Add(new SpellEntry((uint) entry.TemplateID, LevelForPips(spell)));
+                    }
+                }
+            }
+        }
+        catch (Exception ex) {
+            Logger.Error("Roguelike could not read the test trainers' spells. {Exception}", Logger.Args(ex));
+        }
+
+        Logger.Information("Roguelike: {Count} enchantment, Shadow and monster spells join the random trainers ({Share}% of picks).",
+            Logger.Args(pool.Count, s_retiredSpellShare));
+
+        return pool;
+    }
+
+    /// <summary>
+    /// The level a retired trainer's spell needs on a run: those trainers teach at level 1, so it comes from the
+    /// spell's pip cost instead (free spells at 1, then 7 levels a pip, at most the cap).
+    /// </summary>
+    private static int LevelForPips(SpellTemplate spell) {
+        // An X-pip spell counts as three pips; a Shadow pip counts on top of the normal pips.
+        var pips = spell.m_spellRank is { } rank
+            ? (rank.m_xPipSpell ? 3 : (int) rank.m_spellRank) + (int) rank.m_shadowPips
+            : 0;
+
+        return Math.Clamp(pips * 7, 1, s_maxLevel);
     }
 
     // ---------------------------------------------------------------------
@@ -218,8 +275,8 @@ internal static class RoguelikeStock {
             return null;
         }
 
-        var ids = s_crownGearIds.Value;
-        if (ids.Length == 0) {
+        var bySlot = s_crownGearIds.Value;
+        if (bySlot.Count == 0) {
             return null;
         }
 
@@ -227,34 +284,69 @@ internal static class RoguelikeStock {
         var school = wizard.MagicSchoolBehavior.MagicSchool.ToString();
         uint? anySchool = null;
 
-        for (var i = 0; i < CROWN_DROP_TRIES; i++) {
-            var id = ids[Random.Shared.Next(ids.Length)];
-            if (CoreObjectFactory.GetCoreTemplate(id) is not WizItemTemplate item) {
-                continue;
+        // Pick the slot first, then a piece for it; a slot with nothing in the wizard's window passes to the next.
+        foreach (var slot in bySlot.Keys.OrderBy(_ => Random.Shared.Next())) {
+            var ids = bySlot[slot];
+            for (var i = 0; i < CROWN_DROP_TRIES / 3; i++) {
+                var id = ids[Random.Shared.Next(ids.Length)];
+
+                // Most crown gear names its level (Crowns-S41-Deck-L150-...), so out-of-window pieces are skipped
+                // without loading them.
+                if (LevelFromName(id) is { } named && (named > high || named + 5 < low)) {
+                    continue;
+                }
+
+                if (CoreObjectFactory.GetCoreTemplate(id) is not WizItemTemplate item) {
+                    continue;
+                }
+
+                var level = Math.Max(1, EquipLevel(item));
+                if (level < low || level > high) {
+                    continue;
+                }
+
+                string itemSchool = item.m_school;
+                if (IsWearableBy(itemSchool, school)) {
+                    return id;
+                }
+
+                anySchool ??= id;
             }
 
-            var level = Math.Max(1, EquipLevel(item));
-            if (level < low || level > high) {
-                continue;
+            if (anySchool is not null) {
+                return anySchool;
             }
-
-            string itemSchool = item.m_school;
-            if (IsWearableBy(itemSchool, school)) {
-                return id;
-            }
-
-            anySchool ??= id;
         }
 
         return anySchool;
     }
 
-    private static uint[] BuildCrownGearIds()
-        => [.. s_templatePaths.Value
+    private static readonly System.Text.RegularExpressions.Regex s_levelInName
+        = new(@"[-_]L(\d+)[-_.]", System.Text.RegularExpressions.RegexOptions.Compiled);
+
+    private static int? LevelFromName(ulong templateId)
+        => s_templatePaths.Value.TryGetValue(templateId, out var path)
+           && s_levelInName.Match(System.IO.Path.GetFileName(path)) is { Success: true } match
+           && int.TryParse(match.Groups[1].Value, out var level)
+            ? level
+            : null;
+
+    private static Dictionary<string, uint[]> BuildCrownGearIds() {
+        var bySlot = s_templatePaths.Value
             .Where(pair => pair.Key is > 0 and <= uint.MaxValue
-                           && pair.Value.Contains("CrownItems", StringComparison.OrdinalIgnoreCase)
-                           && SlotOf(pair.Key) is not null)
-            .Select(pair => (uint) pair.Key)];
+                           && pair.Value.Contains("CrownItems", StringComparison.OrdinalIgnoreCase))
+            .Select(pair => (Id: (uint) pair.Key, Slot: SlotOf(pair.Key)))
+            .Where(entry => entry.Slot is not null
+                            // Pieces named above the level cap can never drop.
+                            && !(LevelFromName(entry.Id) > s_maxLevel))
+            .GroupBy(entry => entry.Slot, StringComparer.OrdinalIgnoreCase)
+            .ToDictionary(group => group.Key, group => group.Select(entry => entry.Id).ToArray(), StringComparer.OrdinalIgnoreCase);
+
+        Logger.Information("Roguelike: crown gear drops by slot: {Slots}.",
+            Logger.Args(string.Join(", ", bySlot.Select(pair => $"{pair.Key} {pair.Value.Length}"))));
+
+        return bySlot;
+    }
 
     // ---------------------------------------------------------------------
     // Run mount
@@ -312,16 +404,26 @@ internal static class RoguelikeStock {
     }
 
     private static Dictionary<string, List<GearEntry>> BuildGearPool() {
-        // Gear some vendor in the game sells, so every pick can be bought with gold. Drop tables are left out:
-        // they include crown shop gear, which a gold shop cannot sell.
-        var ids = SpiralDB.NpcInventories.Values
+        // Gear some vendor in the game sells, and (with ShopDropGear) gear creatures and bosses drop. Crown shop
+        // gear is left out wherever it comes from: a gold shop cannot sell it, and it is a rare drop on a run instead.
+        var vendorIds = SpiralDB.NpcInventories.Values
             .Where(inventory => inventory?.Inventory is not null)
             .SelectMany(inventory => inventory.Inventory)
             .Select(gid => (ulong) gid.MParts.TemplateId)
-            .Where(id => id is > 0 and <= uint.MaxValue && !IsCrownItem(id))
-            .Distinct();
+            .ToHashSet();
+        var dropIds = s_shopDropGear
+            ? SpiralDB.DropTables.Values
+                .Where(table => table?.Items is not null)
+                .SelectMany(table => table.Items)
+                .Select(item => ulong.TryParse(item.ItemId, out var id) ? id : 0)
+                .Where(id => !vendorIds.Contains(id))
+                .ToHashSet()
+            : [];
+        var ids = vendorIds.Concat(dropIds)
+            .Where(id => id is > 0 and <= uint.MaxValue && !IsCrownItem(id));
 
         var pool = new Dictionary<string, List<GearEntry>>(StringComparer.OrdinalIgnoreCase);
+        var fromDrops = 0;
         foreach (var id in ids) {
             if (SlotOf(id) is not { } slot || CoreObjectFactory.GetCoreTemplate(id) is not WizItemTemplate item) {
                 continue;
@@ -330,6 +432,15 @@ internal static class RoguelikeStock {
             // Crown-priced gear is a rare drop on a run instead (RollCrownDrop), not shop stock.
             if (item.m_creditsCost > 0) {
                 continue;
+            }
+
+            // A dropped piece is sold for its own value; one the game never priced would be free.
+            if (dropIds.Contains(id)) {
+                if (item.m_baseCost <= 0) {
+                    continue;
+                }
+
+                fromDrops++;
             }
 
             var level = Math.Max(1, EquipLevel(item));
@@ -345,8 +456,8 @@ internal static class RoguelikeStock {
             list.Add(new GearEntry((uint) id, level, school ?? ""));
         }
 
-        Logger.Information("Roguelike: {Count} pieces of gear up to level {Max} for random shops ({Slots}).",
-            Logger.Args(pool.Values.Sum(l => l.Count), s_maxLevel,
+        Logger.Information("Roguelike: {Count} pieces of gear up to level {Max} for random shops, {Drops} of them dropped by creatures ({Slots}).",
+            Logger.Args(pool.Values.Sum(l => l.Count), s_maxLevel, fromDrops,
                 string.Join(", ", pool.Select(p => $"{p.Key} {p.Value.Count}, {p.Value.Count(g => g.Level > 1)} above level 1"))));
 
         return pool;

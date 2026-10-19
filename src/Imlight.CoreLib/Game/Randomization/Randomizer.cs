@@ -98,8 +98,10 @@ public static class Randomizer {
         = ConfigurationManager.GetValue("Randomizer.CreaturesChangeEverySpawn", true);
     internal static readonly bool RandomizeCreatureDecks
         = Enabled && !Tame && ConfigurationManager.GetValue("Randomizer.RandomizeCreatureDecks", true);
+    // A roguelike run rolls gear cards too ([Roguelike] RandomItemCards), randomizer mode or not.
     internal static readonly bool RandomizeItemCards
-        = Enabled && ConfigurationManager.GetValue("Randomizer.RandomizeItemCards", true);
+        = (Enabled && ConfigurationManager.GetValue("Randomizer.RandomizeItemCards", true))
+          || (Imlight.CoreLib.Game.Runs.RoguelikeConfig.Enabled && ConfigurationManager.GetValue("Roguelike.RandomItemCards", true));
     internal static readonly bool RandomizePips
         = Enabled && !Tame && ConfigurationManager.GetValue("Randomizer.RandomizePips", true);
     // The [Trainers] switches work with or without randomizer mode.
@@ -111,8 +113,11 @@ public static class Randomizer {
         = ConfigurationManager.GetValue("Trainers.NoLevelRequirements", false);
     internal static readonly bool FreeTraining
         = ConfigurationManager.GetValue("Trainers.FreeTraining", false);
+    // A roguelike run starts every new wizard with random spells too ([Roguelike] StartingSpells).
     private static readonly int s_startingSpells
-        = Enabled ? Math.Clamp(ConfigurationManager.GetValue("Randomizer.StartingSpells", 6), 0, 50) : 0;
+        = Enabled ? Math.Clamp(ConfigurationManager.GetValue("Randomizer.StartingSpells", 6), 0, 50)
+        : Imlight.CoreLib.Game.Runs.RoguelikeConfig.Enabled ? Math.Clamp(ConfigurationManager.GetValue("Roguelike.StartingSpells", 6), 0, 50)
+        : 0;
     private const int STARTER_MAX_PIPS = 3;
     private static readonly int s_spellAfterBattleChance
         = Enabled ? Math.Clamp(ConfigurationManager.GetValue("Randomizer.SpellAfterBattleChance", 100), 0, 100) : 0;
@@ -140,6 +145,19 @@ public static class Randomizer {
     /// </summary>
     public static void StartBackgroundBuild() {
         if (!Enabled) {
+            // A roguelike run still rolls gear cards and starting spells: build those pools ahead of the first battle.
+            if (RandomizeItemCards || s_startingSpells > 0) {
+                _ = Task.Run(() => {
+                    try {
+                        Logger.Information("Roguelike: {Count} battle spells for random gear cards, {Starters} for starting spells ({Each} each).",
+                            Logger.Args(s_combatSpells.Value.Count, s_starterSpells.Value.Length, s_startingSpells));
+                    }
+                    catch (Exception ex) {
+                        Logger.Error("Roguelike could not build its spell pools. {Exception}", Logger.Args(ex));
+                    }
+                });
+            }
+
             return;
         }
 
