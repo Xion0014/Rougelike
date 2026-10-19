@@ -56,6 +56,33 @@ internal static class RoguelikeCreatures {
 
     private static readonly ConcurrentDictionary<ulong, RunInfo> s_runs = new();
 
+    // The creatures that spawn in each zone (by zone path), bosses and wisps left out.
+    private static readonly ConcurrentDictionary<string, ulong[]> s_rosters = new(StringComparer.OrdinalIgnoreCase);
+
+    /// <summary>
+    /// "Zone" (default) swaps a street's creatures among the ones that spawn in that zone, which always show.
+    /// "Any" swaps in any creature of a similar level from the whole game, but the game only loads the models of
+    /// a zone's own creatures, so many of those fight invisibly.
+    /// </summary>
+    private static readonly bool s_anyCreature = string.Equals(
+        ConfigurationManager.GetValue("Roguelike.StreetCreaturePool", "Zone"), "Any", StringComparison.OrdinalIgnoreCase);
+
+    /// <summary>Records the creatures that spawn in a zone, as it loads.</summary>
+    internal static void RegisterRoster(string zonePath, IEnumerable<ulong> templateIds) {
+        if (!Active || string.IsNullOrEmpty(zonePath) || templateIds is null || s_rosters.ContainsKey(zonePath)) {
+            return;
+        }
+
+        var roster = templateIds
+            .Distinct()
+            .Where(id => CoreObjectFactory.GetCoreTemplate(id) is GameObjectTemplate template
+                         && template.m_behaviors.OfType<NPCBehaviorTemplate>().FirstOrDefault() is { m_bossMob: false }
+                         && template.m_behaviors.OfType<DuelistBehaviorTemplate>().Any())
+            .OrderBy(id => id)
+            .ToArray();
+        s_rosters.TryAdd(zonePath, roster);
+    }
+
     /// <summary>True when a run's street creatures are swapped.</summary>
     private static bool Active => RoguelikeConfig.Enabled && RandomStreetCreatures;
 
@@ -104,7 +131,15 @@ internal static class RoguelikeCreatures {
         }
 
         var seed = SeededShuffle.Mix(info.Seed ^ SeededShuffle.Mix((ulong) info.Tier) ^ SeededShuffle.Fnv1a("street"));
-        mapped = Randomizer.MapCreatureSeeded(templateId, seed);
+        if (s_anyCreature) {
+            mapped = Randomizer.MapCreatureSeeded(templateId, seed);
+        }
+        else if (s_rosters.TryGetValue(zonePath, out var roster) && roster.Length > 1
+                 && Array.BinarySearch(roster, templateId) >= 0) {
+            // One of the zone's own creatures, picked by the run's seed for each kind the spawn point asks for.
+            mapped = roster[(int) (SeededShuffle.Mix(seed ^ templateId) % (ulong) roster.Length)];
+        }
+
         if (mapped == templateId) {
             return false;
         }

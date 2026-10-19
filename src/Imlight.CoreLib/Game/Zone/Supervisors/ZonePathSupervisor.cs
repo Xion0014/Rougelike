@@ -50,6 +50,15 @@ internal sealed class ZonePathSupervisor(Core.Zone zone) : ZoneEntitySupervisor(
 
         LogWispSpawners(pathData, creatureSpawnData);
 
+        // Roguelike runs swap a street's creatures among the ones that spawn in the zone: the game only loads the
+        // models of those, so a creature from elsewhere would fight invisibly.
+        Imlight.CoreLib.Game.Runs.RoguelikeCreatures.RegisterRoster(Zone?.ZonePath,
+            creatureSpawnData?.m_spawners?
+                .Where(spawner => spawner?.m_spawnList is not null)
+                .SelectMany(spawner => spawner.m_spawnList)
+                .Where(item => item?.m_objectInfo is not null && !IsWisp(item.m_objectInfo))
+                .Select(item => (ulong) item.m_objectInfo.m_templateID));
+
         foreach (var path in pathData.m_pathList) {
             if (!TryGetNodesForPath(path, nodesById, out var nodes)) {
                 continue;
