@@ -242,7 +242,7 @@ internal static class RoguelikeStock {
             Logger.Error("Roguelike could not read the test trainers' spells. {Exception}", Logger.Args(ex));
         }
 
-        Logger.Information("Roguelike: {Count} enchantment, Shadow and monster spells join the random trainers ({Share}% of picks).",
+        Logger.Information("Roguelike: {Count} enchantment and Shadow spells join the random trainers ({Share}% of picks).",
             Logger.Args(pool.Count, s_retiredSpellShare));
 
         return pool;

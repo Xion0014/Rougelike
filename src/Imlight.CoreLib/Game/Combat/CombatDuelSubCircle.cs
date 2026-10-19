@@ -739,7 +739,12 @@ public class CombatDuelSubCircle {
     /// Whether the participant has the school pips a spell costs.
     /// </summary>
     internal bool HasSchoolPipsForSpell(Spell spell)
-        => (s_anySchoolPips
+        => (AnyPipPaysSchoolCosts
+               // A roguelike run: any school pip, then any power pip, pays a school pip cost.
+               ? s_pipSchools.Sum(school => SchoolPips(CombatParticipant.m_pipCount, school) ?? 0)
+                 + CombatParticipant.m_pipCount.m_powerPips
+                 >= SchoolPipCosts(spell.m_pipCost).Sum(c => c.Cost)
+           : s_anySchoolPips
                ? s_pipSchools.Sum(school => SchoolPips(CombatParticipant.m_pipCount, school) ?? 0)
                  >= SchoolPipCosts(spell.m_pipCost).Sum(c => c.Cost)
                : SchoolPipCosts(spell.m_pipCost).All(c => c.Cost == 0 || (SchoolPips(CombatParticipant.m_pipCount, c.School) ?? 0) >= c.Cost))
@@ -747,6 +752,12 @@ public class CombatDuelSubCircle {
 
     // [Battle] AnySchoolPips: a school pip of any school pays for any school's pip cost.
     private static readonly bool s_anySchoolPips = ConfigurationManager.GetValue("Battle.AnySchoolPips", false);
+
+    // [Roguelike] AnyPipForSchoolPips: on a run, any school pip and then any power pip pays a school pip cost, so
+    // the Archmastery cards that cost school pips can be cast.
+    private static readonly bool s_runAnyPip = ConfigurationManager.GetValue("Roguelike.AnyPipForSchoolPips", true);
+
+    private bool AnyPipPaysSchoolCosts => s_runAnyPip && Imlight.CoreLib.Game.Runs.RoguelikeBoosts.OnRun(_wizard);
 
     /// <summary>
     /// Spends the school pips a spell costs.
@@ -767,7 +778,7 @@ public class CombatDuelSubCircle {
 
         // With AnySchoolPips, what the spell's own schools could not pay comes from the other schools, the
         // fullest first.
-        while (s_anySchoolPips && unpaid > 0) {
+        while ((s_anySchoolPips || AnyPipPaysSchoolCosts) && unpaid > 0) {
             var fullest = s_pipSchools.OrderByDescending(school => SchoolPips(pipCount, school) ?? 0).First();
             var have = SchoolPips(pipCount, fullest) ?? 0;
             if (have == 0) {
@@ -777,6 +788,12 @@ public class CombatDuelSubCircle {
             var take = Math.Min(have, unpaid);
             SetSchoolPips(pipCount, fullest, (byte) (have - take));
             unpaid -= take;
+        }
+
+        // On a run, power pips pay whatever is left.
+        if (AnyPipPaysSchoolCosts && unpaid > 0 && pipCount.m_powerPips > 0) {
+            var take = Math.Min((int) pipCount.m_powerPips, unpaid);
+            pipCount.m_powerPips = (byte) (pipCount.m_powerPips - take);
         }
     }
 

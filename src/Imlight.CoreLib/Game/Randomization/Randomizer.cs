@@ -552,6 +552,11 @@ public static class Randomizer {
                 continue;
             }
 
+            // Developer cards and monster and boss spells never reach players (gear cards, starting spells, wins).
+            if (Imlight.CoreLib.Game.Zone.Components.InteractTrainerComponent.IsDevOrMonsterSpell(path, spell)) {
+                continue;
+            }
+
             if (idsByPath.TryGetValue(path, out var id) && id <= uint.MaxValue) {
                 spells.Add((id, spell));
             }

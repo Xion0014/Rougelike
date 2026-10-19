@@ -97,8 +97,42 @@ internal sealed class InteractTrainerComponent(ZoneEntity entity) : ZoneEntityCo
         => new Dictionary<string, List<NPCSpellEntry>> {
             ["Enchantments"] = s_testSpells.Value[TestTrainerKind.Enchantments],
             ["Shadow"] = s_testSpells.Value[TestTrainerKind.Shadow],
-            ["Boss"] = s_testSpells.Value[TestTrainerKind.Boss],
+            // Merle's monster and boss spells are left out: they break battles and frustrate players.
         };
+
+    /// <summary>
+    /// True for spells players should never get: developer and test cards, monster and boss fight spells, and spells
+    /// that only work in one place (gardening, fishing, minigames and the like).
+    /// </summary>
+    internal static bool IsDevOrMonsterSpell(string path, SpellTemplate spell) {
+        string name = spell?.m_name;
+        if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(path)) {
+            return true;
+        }
+
+        if (s_skippedFolders.Any(folder => path.Contains(folder, System.StringComparison.OrdinalIgnoreCase))
+            || s_devFolders.Any(folder => path.Contains(folder, System.StringComparison.OrdinalIgnoreCase))
+            || IsBossSpell(path, name)
+            || System.Text.RegularExpressions.Regex.IsMatch(name, @"\b(DEV|Dev|Test|TEST|Debug|GM|Kill All|KillAll)\b")
+            || name.Contains("Defeat", System.StringComparison.OrdinalIgnoreCase)) {
+            return true;
+        }
+
+        string displayKey = spell.m_displayName;
+        if (string.IsNullOrEmpty(displayKey)) {
+            return true;
+        }
+
+        var shown = Imlight.CoreLib.Shared.Resources.Locale.GetEnglishName(displayKey);
+
+        return !string.IsNullOrEmpty(shown)
+               && (shown.Contains("Test", System.StringComparison.OrdinalIgnoreCase)
+                   || shown.Contains("zappy", System.StringComparison.OrdinalIgnoreCase)
+                   || shown.StartsWith("Dev ", System.StringComparison.OrdinalIgnoreCase));
+    }
+
+    // Folders of developer and staff spells.
+    private static readonly string[] s_devFolders = [ "Dev/", "Developer", "Debug", "GM/", "Admin" ];
 
     internal enum TestTrainerKind { Enchantments, Extracts, Shadow, Boss }
 
