@@ -93,7 +93,7 @@ internal static class RoguelikeConfig {
             : null;
 
     /// <summary>NPCs (by template id) that also sell potion refills, like Hilda Brewer in the Commons.</summary>
-    internal static readonly HashSet<ulong> PotionVendors = [.. SplitList(ConfigurationManager.GetValue("Roguelike.PotionVendors", "126154"))
+    internal static readonly HashSet<ulong> PotionVendors = [.. SplitList(ConfigurationManager.GetValue("Roguelike.PotionVendors", "1560179"))
         .Select(part => ulong.TryParse(part, out var id) ? id : 0)
         .Where(id => id != 0)];
 
