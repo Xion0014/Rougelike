@@ -104,7 +104,20 @@ internal static class RoguelikeConfig {
     }
 
     private static string[] SplitList(string value)
-        => (value ?? "").Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        => (value ?? "").Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Select(StripKey)
+            .Where(part => part.Length > 0)
+            .ToArray();
+
+    /// <summary>
+    /// Removes a pasted "Key =" from the front of a value, so "Tier1 = Tier1 = WizardCity/..." still works.
+    /// Zone paths and quest names never contain '=', so anything before the last '=' is a stray key.
+    /// </summary>
+    private static string StripKey(string part) {
+        var equals = part.LastIndexOf('=');
+
+        return (equals >= 0 ? part[(equals + 1)..] : part).Trim().Trim('"');
+    }
 
     /// <summary>
     /// Turns a zone name from the config into a full zone path the client knows. Takes an exact path, the
@@ -115,6 +128,7 @@ internal static class RoguelikeConfig {
             return null;
         }
 
+        configured = StripKey(configured);
         var zones = AccessPassManager.Zones;
 
         return zones.FirstOrDefault(z => z.Equals(configured, StringComparison.OrdinalIgnoreCase))
