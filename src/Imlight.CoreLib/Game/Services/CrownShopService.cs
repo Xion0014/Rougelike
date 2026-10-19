@@ -87,7 +87,10 @@ internal class CrownShopService(SessionActor sessionActor) : MessageService(sess
         if (Imlight.CoreLib.Game.Runs.RoguelikeConfig.ShopButtonShowsStats
             && Imlight.CoreLib.Game.Runs.RoguelikeBoosts.OnRun(wizard)) {
             Logger.Information("Crown shop opened by {0} on a run; showing their stats instead.", Logger.Args(wizard.CharId));
-            InformGameClient(Imlight.CoreLib.Game.Runs.RoguelikeBoosts.DescribeStats(wizard));
+            InformGameClient(Imlight.CoreLib.Game.Runs.RoguelikeBoosts.DescribeStats(wizard), isImportant: true);
+
+            // Turn the shop down, so the game does not wait on an empty shop window.
+            SendToSocket(new WIZARD_12_PROTOCOL.MSG_PCS_SEGDATA_RESPONSE { Success = 0 });
 
             return;
         }

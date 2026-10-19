@@ -163,16 +163,18 @@ internal static class RoguelikeBoosts {
 
         shadow += Get(wizard, ShadowPip);
 
-        return $"Your stats ({school}): Health {stats.m_baseHitpoints}, Mana {stats.m_baseMana}, " +
-               $"Damage {Percent(stats.m_dmgBonusPercentAll + ForSchool(stats.m_dmgBonusPercent))}, " +
-               $"Resist {Percent(stats.m_dmgReducePercentAll + ForSchool(stats.m_dmgReducePercent))}, " +
-               $"Accuracy {Percent(stats.m_accBonusPercentAll + ForSchool(stats.m_accBonusPercent))}, " +
-               $"Pierce {Percent(stats.m_apBonusPercentAll + ForSchool(stats.m_apBonusPercent))}, " +
-               $"Critical {Math.Round(stats.m_criticalHitRatingAll + ForSchool(stats.m_criticalHitRatingBySchool))}, " +
-               $"Block {Math.Round(stats.m_blockRatingAll + ForSchool(stats.m_blockRatingBySchool))}, " +
-               $"Power Pip {Percent(stats.m_powerPipBase + stats.m_powerPipBonusPercentAll)}, " +
-               $"Shadow Pip {shadow}% a round, Pip Conserve {Get(wizard, PipConserve)}%, " +
-               $"Archmastery bonus +{Get(wizard, Archmastery)}. " + Describe(wizard.Roguelike);
+        return $"Your stats ({school})\n" +
+               $"Health {stats.m_baseHitpoints}   Mana {stats.m_baseMana}\n" +
+               $"Damage {Percent(stats.m_dmgBonusPercentAll + ForSchool(stats.m_dmgBonusPercent))}   " +
+               $"Resist {Percent(stats.m_dmgReducePercentAll + ForSchool(stats.m_dmgReducePercent))}\n" +
+               $"Accuracy {Percent(stats.m_accBonusPercentAll + ForSchool(stats.m_accBonusPercent))}   " +
+               $"Pierce {Percent(stats.m_apBonusPercentAll + ForSchool(stats.m_apBonusPercent))}\n" +
+               $"Critical {Math.Round(stats.m_criticalHitRatingAll + ForSchool(stats.m_criticalHitRatingBySchool))}   " +
+               $"Block {Math.Round(stats.m_blockRatingAll + ForSchool(stats.m_blockRatingBySchool))}\n" +
+               $"Power Pip {Percent(stats.m_powerPipBase + stats.m_powerPipBonusPercentAll)}   " +
+               $"Shadow Pip {shadow}% a round\n" +
+               $"Pip Conserve {Get(wizard, PipConserve)}%   Archmastery +{Get(wizard, Archmastery)}\n\n" +
+               Describe(wizard.Roguelike);
     }
 
     /// <summary>The run's total for a stat battles read from here (shadow pips, pip conserve, Archmastery).</summary>

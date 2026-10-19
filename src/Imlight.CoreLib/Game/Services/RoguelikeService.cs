@@ -30,6 +30,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Akka.Actor;
 using Imcodec.MessageLayer.Generated;
@@ -250,13 +251,20 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         var mobs = message.MobTemplateIds ?? [];
         run.Kills += mobs.Length;
 
+        // What the battle gave, told in one box so two finds don't pile up on top of each other.
+        var finds = new List<string>();
         if (mobs.Length > 0 && RoguelikeStock.RollCrownDrop(wizard) is { } crownItem) {
             GiveCrownDrop(wizard, crownItem);
+            finds.Add("Rare find! A piece of crown gear dropped from that battle.");
         }
 
         if (mobs.Length > 0 && RoguelikeBoosts.RollAfterBattle(wizard) is { } potion) {
-            InformGameClient(potion);
+            finds.Add(potion);
             WizardCollection.UpdateCharacterGameStats(wizard);
+        }
+
+        if (finds.Count > 0) {
+            InformGameClient(string.Join("\n\n", finds), isImportant: true);
         }
 
         if (run.Phase == RoguelikePhase.Boss && mobs.Any(RoguelikeConfig.IsBossMob)) {
@@ -335,7 +343,7 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
                 }
                 break;
             case "stats":
-                InformGameClient(RoguelikeBoosts.DescribeStats(wizard));
+                InformGameClient(RoguelikeBoosts.DescribeStats(wizard), isImportant: true);
                 break;
             case "here":
                 InformGameClient($"You are in zone: {wizard.Zone}");
@@ -437,7 +445,6 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         });
 
         Imlight.CoreLib.Game.DropTables.LootGranter.GrantAndDisplay(SessionActor.ActorRef, wizard, loot);
-        InformGameClient("Rare find! A piece of crown gear dropped from that battle.");
     }
 
     private void GiveBossTrainingPoints(Wizard wizard) {
