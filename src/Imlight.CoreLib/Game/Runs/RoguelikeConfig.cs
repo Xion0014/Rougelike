@@ -97,6 +97,14 @@ internal static class RoguelikeConfig {
         .Select(part => ulong.TryParse(part, out var id) ? id : 0)
         .Where(id => id != 0)];
 
+    /// <summary>
+    /// Objects (by template id) that offer the trip to the trainers and the next street after a boss: the Rate My
+    /// Stitch tome in the Shopping District.
+    /// </summary>
+    internal static readonly HashSet<ulong> TravelBooks = [.. SplitList(ConfigurationManager.GetValue("Roguelike.TravelBooks", "1560247"))
+        .Select(part => ulong.TryParse(part, out var id) ? id : 0)
+        .Where(id => id != 0)];
+
     /// <summary>Show the street's time left in the game's own zone timer at the top of the screen.</summary>
     internal static readonly bool ShowTimer = ConfigurationManager.GetValue("Roguelike.ShowTimer", true);
 

@@ -144,6 +144,41 @@ internal sealed class ZoneLoader : ReceiveProtocolDispatcher {
         }
     }
 
+    private static readonly System.Collections.Concurrent.ConcurrentDictionary<string, string> s_displayNameKeys
+        = new(StringComparer.OrdinalIgnoreCase);
+
+    /// <summary>
+    /// The locale key of a zone's name as the game shows it ("Ravenwood"), read from the zone's own data, or null.
+    /// Read once per zone; it loads the zone's archive the way a zone load would.
+    /// </summary>
+    internal static string DisplayNameKey(string zonePath) {
+        if (string.IsNullOrEmpty(zonePath)) {
+            return null;
+        }
+
+        return s_displayNameKeys.GetOrAdd(zonePath, path => {
+            try {
+                if (!ZoneDataFileCache.TryGet(path, out var files)) {
+                    if (!ResourceManager.TryLoadArchive(path, out var wad)) {
+                        return null;
+                    }
+
+                    files = ReadZoneDataFiles(wad);
+                    ZoneDataFileCache.Add(path, files);
+                }
+
+                string key = Deserialize<WizZoneData>(files.ZoneData, "zone data", ZONE_DATA_FILE_NAME)?.m_zoneDisplayName;
+
+                return key;
+            }
+            catch (Exception ex) {
+                Logger.Warning("Could not read the name of zone {Zone}. {Message}", Logger.Args(path, ex.Message));
+
+                return null;
+            }
+        });
+    }
+
     private static ZoneDataFiles ReadZoneDataFiles(Archive wad) => new(
         wad.OpenFile(ZONE_DATA_FILE_NAME)?.ToArray(),
         wad.OpenFile(SPAWN_DATA_FILE_NAME)?.ToArray(),

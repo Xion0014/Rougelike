@@ -389,8 +389,9 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
                              "creatures defeated.", isImportant: true);
         }
         else {
-            InformGameClient($"Boss defeated! Tier {run.Tier} cleared. Spend your gold here, type .run train to " +
-                             "visit the spell trainers, then type .run next to start the next street.", isImportant: true);
+            InformGameClient($"Boss defeated! Tier {run.Tier} cleared. Spend your gold here, then use the Rate My Stitch " +
+                             "tome to visit the spell trainers (Mr. Lincoln brings you back) or to start the next street. " +
+                             "(.run train and .run next work too.)", isImportant: true);
         }
 
         PlaceAfterBattle();
