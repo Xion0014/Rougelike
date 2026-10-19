@@ -51,18 +51,28 @@ internal static class RoguelikeStock {
     /// <summary>How many random spells each trainer offers a wizard on a run.</summary>
     internal static readonly int TrainerSpellCount = Math.Clamp(ConfigurationManager.GetValue("Roguelike.TrainerSpells", 10), 1, 50);
 
-    // Wearable gear. Housing, pets, mounts, reagents and the like stay as the vendor sells them.
-    private static readonly HashSet<ObjectType> s_gearTypes = [
-        ObjectType.OT_EQUIP_HEAD, ObjectType.OT_EQUIP_CHEST, ObjectType.OT_EQUIP_LEGS,
-        ObjectType.OT_EQUIP_HANDS, ObjectType.OT_EQUIP_FINGER, ObjectType.OT_EQUIP_FEET,
-        ObjectType.OT_EQUIP_EAR,
-    ];
+    // Wearable gear, told apart by the folder its template lives in (ObjectData/Tier1/Hats/Hat-T1-042.xml):
+    // the templates' object type does not reliably name the slot. Housing, pets, mounts, reagents, jewels and
+    // the like stay as the vendor sells them.
+    private static readonly Dictionary<string, string> s_slotFolders = new(StringComparer.OrdinalIgnoreCase) {
+        ["Hats"] = "Hat", ["Hat"] = "Hat",
+        ["Robes"] = "Robe", ["Robe"] = "Robe",
+        ["Shoes"] = "Shoes", ["Boot"] = "Shoes", ["Boots"] = "Shoes",
+        ["Wands"] = "Wand", ["Wand"] = "Wand",
+        ["Athames"] = "Athame", ["Athame"] = "Athame",
+        ["Amulets"] = "Amulet", ["Amulet"] = "Amulet",
+        ["Rings"] = "Ring", ["Ring"] = "Ring",
+        ["Decks"] = "Deck", ["Deck"] = "Deck",
+    };
+
+    private static readonly Lazy<Dictionary<ulong, string>> s_templatePaths
+        = new(BuildTemplatePaths, LazyThreadSafetyMode.ExecutionAndPublication);
 
     private sealed record GearEntry(uint Id, int Level, string School);
 
     private sealed record SpellEntry(uint Id, int Level);
 
-    private static readonly Lazy<Dictionary<ObjectType, List<GearEntry>>> s_gear
+    private static readonly Lazy<Dictionary<string, List<GearEntry>>> s_gear
         = new(BuildGearPool, LazyThreadSafetyMode.ExecutionAndPublication);
     private static readonly Lazy<List<SpellEntry>> s_spells
         = new(BuildSpellPool, LazyThreadSafetyMode.ExecutionAndPublication);
@@ -95,11 +105,10 @@ internal static class RoguelikeStock {
         var stock = new List<GID>(original.Count);
 
         // Shuffled candidates per slot, drawn from in order so the same item is not offered twice.
-        var queues = new Dictionary<ObjectType, Queue<GearEntry>>();
+        var queues = new Dictionary<string, Queue<GearEntry>>();
 
         foreach (var gid in original) {
-            var type = (CoreObjectFactory.GetCoreTemplate(gid.MParts.TemplateId) as WizItemTemplate)?.m_nObjectType;
-            if (type is not { } slot || !s_gearTypes.Contains(slot)) {
+            if (SlotOf(gid.MParts.TemplateId) is not { } slot) {
                 stock.Add(gid);
                 continue;
             }
@@ -138,7 +147,7 @@ internal static class RoguelikeStock {
         return stock;
     }
 
-    private static IEnumerable<GearEntry> Candidates(ObjectType slot, string school, int low, int high) {
+    private static IEnumerable<GearEntry> Candidates(string slot, string school, int low, int high) {
         if (!s_gear.Value.TryGetValue(slot, out var all)) {
             return [];
         }
@@ -209,7 +218,7 @@ internal static class RoguelikeStock {
         return (int) (SeededShuffle.Mix(seed) & 0x7FFFFFFF);
     }
 
-    private static Dictionary<ObjectType, List<GearEntry>> BuildGearPool() {
+    private static Dictionary<string, List<GearEntry>> BuildGearPool() {
         // Gear any vendor sells or any drop table gives, so everything is obtainable in the normal game.
         var ids = SpiralDB.NpcInventories.Values
             .Where(inventory => inventory?.Inventory is not null)
@@ -222,9 +231,9 @@ internal static class RoguelikeStock {
             .Where(id => id is > 0 and <= uint.MaxValue)
             .Distinct();
 
-        var pool = new Dictionary<ObjectType, List<GearEntry>>();
+        var pool = new Dictionary<string, List<GearEntry>>(StringComparer.OrdinalIgnoreCase);
         foreach (var id in ids) {
-            if (CoreObjectFactory.GetCoreTemplate(id) is not WizItemTemplate item || !s_gearTypes.Contains(item.m_nObjectType)) {
+            if (SlotOf(id) is not { } slot || CoreObjectFactory.GetCoreTemplate(id) is not WizItemTemplate item) {
                 continue;
             }
 
@@ -234,15 +243,16 @@ internal static class RoguelikeStock {
             }
 
             string school = item.m_school;
-            if (!pool.TryGetValue(item.m_nObjectType, out var list)) {
-                pool[item.m_nObjectType] = list = [];
+            if (!pool.TryGetValue(slot, out var list)) {
+                pool[slot] = list = [];
             }
 
             list.Add(new GearEntry((uint) id, level, school ?? ""));
         }
 
-        Logger.Information("Roguelike: {Count} pieces of gear up to level {Max} for random shops.",
-            Logger.Args(pool.Values.Sum(l => l.Count), s_maxLevel));
+        Logger.Information("Roguelike: {Count} pieces of gear up to level {Max} for random shops ({Slots}).",
+            Logger.Args(pool.Values.Sum(l => l.Count), s_maxLevel,
+                string.Join(", ", pool.Select(p => $"{p.Key} {p.Value.Count}, {p.Value.Count(g => g.Level > 1)} above level 1"))));
 
         return pool;
     }
@@ -263,6 +273,34 @@ internal static class RoguelikeStock {
             Logger.Args(spells.Count, s_maxLevel));
 
         return spells;
+    }
+
+    /// <summary>The gear slot of an item, from the folder its template is in, or null when it is not gear.</summary>
+    private static string SlotOf(ulong templateId) {
+        if (!s_templatePaths.Value.TryGetValue(templateId, out var path)) {
+            return null;
+        }
+
+        // The folder right above the file: ObjectData/Tier1/Hats/Hat-T1-042.xml -> Hats.
+        var parts = path.Replace('\\', '/').Split('/');
+
+        return parts.Length >= 2 && s_slotFolders.TryGetValue(parts[^2], out var slot) ? slot : null;
+    }
+
+    private static Dictionary<ulong, string> BuildTemplatePaths() {
+        var paths = new Dictionary<ulong, string>();
+        foreach (var location in CoreObjectFactory.TemplateManifest.m_serializedTemplates) {
+            if (location is null) {
+                continue;
+            }
+
+            string path = location.m_filename;
+            if (!string.IsNullOrEmpty(path)) {
+                paths.TryAdd(location.m_id, path);
+            }
+        }
+
+        return paths;
     }
 
     private static int EquipLevel(ItemTemplate item)
