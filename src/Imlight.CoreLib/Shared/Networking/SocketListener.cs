@@ -60,7 +60,7 @@ internal sealed class SocketListener : ReceiveActor, IDisposable {
     // Live clients send up to ~220 messages in 10 s on zone entry.
     private const int DefaultTokenBucketMax = 1000;
     private const int DefaultTokenBucketPerSecond = 200;
-    private const byte DefaultTokenBucketFailedAcquisitionLimit = 5;
+    private const byte DefaultTokenBucketFailedAcquisitionLimit = 20;
 
     private readonly int _bufferSize = ConfigurationManager.Settings["Advanced.SessionActorBufferSize"].AsInt();
     private readonly bool _closeOnSocketException = ConfigurationManager.Settings["Advanced.SessionActorCloseOnException"].AsBool();
@@ -71,6 +71,7 @@ internal sealed class SocketListener : ReceiveActor, IDisposable {
     private readonly Socket _socket;
     private readonly ushort _sessionid;
     private readonly TokenBucket _tokenBucket;
+    private bool _loggedBurst;
     private readonly MessageStreamDecoder _decoder;
     private readonly List<Type> _suppressedPackets = [
             typeof(GAME_5_PROTOCOL.MSG_CLIENTMOVE),
@@ -201,6 +202,16 @@ internal sealed class SocketListener : ReceiveActor, IDisposable {
                     _tokenBucket.Spend();
                 } else if (!_tokenBucket.TryAcquire()) {
                     Logger.Warning("SessionActor {SessionId} failed to acquire token.", Logger.Args(_sessionid));
+                    if (!_loggedBurst) {
+                        // Say what the burst was, so the message behind it can be found.
+                        _loggedBurst = true;
+                        var counts = string.Join(", ", packets
+                            .GroupBy(GetScopedMessageName)
+                            .OrderByDescending(group => group.Count())
+                            .Select(group => $"{group.Key} x{group.Count()}"));
+                        Logger.Warning("SessionActor {SessionId} rate limit burst: {Count} messages in one read: {Messages}",
+                            Logger.Args(_sessionid, packets.Count, counts));
+                    }
 
                     // The rate limit was reached.
                     var failedAcquisitionCount = _tokenBucket.GetFailedAcquisitionCount();
