@@ -400,6 +400,11 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         WizardCollection.UpdateCharacterRoguelike(wizard);
         GiveBossTrainingPoints(wizard);
 
+        // Streets are too short to finish every quest; the boss settles them all, with their rewards.
+        if (RoguelikeConfig.CompleteQuestsAfterBoss) {
+            TellOtherServices(new SERVICE_101_PROTOCOL.MSG_ROGUELIKE_COMPLETEQUESTS());
+        }
+
         if (run.Phase == RoguelikePhase.Complete) {
             InformGameClient($"You cleared all {RoguelikeConfig.TierCount} tiers! Run complete with {run.Kills} " +
                              "creatures defeated.", isImportant: true);

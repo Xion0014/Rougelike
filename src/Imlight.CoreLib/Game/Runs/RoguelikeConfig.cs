@@ -105,6 +105,12 @@ internal static class RoguelikeConfig {
         .Select(part => ulong.TryParse(part, out var id) ? id : 0)
         .Where(id => id != 0)];
 
+    /// <summary>When a run's boss falls, every quest the wizard has is completed, with its rewards.</summary>
+    internal static readonly bool CompleteQuestsAfterBoss = ConfigurationManager.GetValue("Roguelike.CompleteQuestsAfterBoss", true);
+
+    /// <summary>The chance, 0 to 100, that completing a quest on a run also gives a random piece of gear.</summary>
+    internal static readonly int QuestItemChance = Math.Clamp(ConfigurationManager.GetValue("Roguelike.QuestItemChance", 50), 0, 100);
+
     /// <summary>On a run, the Crown Shop button shows the wizard's stats in chat instead of opening the shop.</summary>
     internal static readonly bool ShopButtonShowsStats = ConfigurationManager.GetValue("Roguelike.ShopButtonShowsStats", true);
 

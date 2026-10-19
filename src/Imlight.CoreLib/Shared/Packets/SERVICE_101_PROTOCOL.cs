@@ -294,4 +294,14 @@ internal sealed class SERVICE_101_PROTOCOL : IServerProtocol {
         public string Argument;
 
     }
+
+    /// <summary>
+    /// Sent by RoguelikeService when a run's boss falls: QuestService completes every quest the wizard has.
+    /// </summary>
+    public class MSG_ROGUELIKE_COMPLETEQUESTS : IServerMessage {
+
+        public byte MessageOrder { get; } = 26;
+        public byte ServiceID { get; } = 101;
+
+    }
 }

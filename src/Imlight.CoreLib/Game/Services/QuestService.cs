@@ -1391,7 +1391,48 @@ internal class QuestService(SessionActor sessionActor) : MessageService(sessionA
         });
     }
 
-    private void CompleteQuest(QuestInstance questInstance) {
+    [MessageHandler(typeof(SERVICE_101_PROTOCOL.MSG_ROGUELIKE_COMPLETEQUESTS))]
+    private void ReceiveRunCompleteQuests(SERVICE_101_PROTOCOL.MSG_ROGUELIKE_COMPLETEQUESTS message) {
+        var wizard = GetActiveWizard();
+        var quests = wizard?.QuestBehavior?.CurrentQuestInstances?.ToList() ?? [];
+        var completed = 0;
+        foreach (var qInstance in quests) {
+            if (!wizard.HasQuest(qInstance.QuestName)) {
+                continue;
+            }
+
+            try {
+                CompleteQuest(qInstance, runAutoComplete: true);
+                completed++;
+            }
+            catch (Exception ex) {
+                Logger.Error("Roguelike could not complete quest {0} for {1}: {2}",
+                    Logger.Args(qInstance.QuestName, wizard.CharId, ex.Message));
+            }
+        }
+
+        Logger.Information("[Roguelike] Boss cleared: completed {0} quest(s) for {1}.", Logger.Args(completed, wizard?.CharId));
+        if (completed > 0) {
+            InformGameClient($"The boss's defeat settles your {completed} unfinished quest{(completed == 1 ? "" : "s")}: " +
+                             "their rewards are yours.");
+        }
+    }
+
+    // Results a run's boss skips when it completes a quest: they would move the wizard, open dialogs, play
+    // scenes or start more quests, where only the rewards are wanted.
+    private static readonly string[] s_autoCompleteSkippedResults = [
+        "Teleport", "Quest", "Dialog", "Cinematic", "Camera", "Sound", "Music", "Zone", "Tutorial", "Persona",
+    ];
+
+    private static ResultList RewardResultsOnly(ResultList results)
+        => results?.m_results is null
+            ? results
+            : new ResultList {
+                m_results = [.. results.m_results.Where(result => result is not null
+                    && !s_autoCompleteSkippedResults.Any(word => result.GetType().Name.Contains(word, StringComparison.OrdinalIgnoreCase)))]
+            };
+
+    private void CompleteQuest(QuestInstance questInstance, bool runAutoComplete = false) {
         var wizard = GetActiveWizard();
 
         var xpScale = GetRunXpScale(wizard, questInstance.QuestName);
@@ -1421,16 +1462,28 @@ internal class QuestService(SessionActor sessionActor) : MessageService(sessionA
             return;
         }
 
-        ShowQuestCompletionDialogue(qTemplate);
+        if (!runAutoComplete) {
+            ShowQuestCompletionDialogue(qTemplate);
+        }
+
+        // A roguelike run: a random piece of gear, sometimes, for any quest completed.
+        if (Imlight.CoreLib.Game.Runs.RoguelikeStock.RollQuestItem(wizard) is { } questItem) {
+            var bonusLoot = new Imlight.CoreLib.WizardData.Models.World.DropTableResult();
+            bonusLoot.Items.Add(new Imlight.CoreLib.WizardData.Models.World.DropItemResult {
+                ItemId = questItem.ToString(),
+                Quantity = 1,
+            });
+            Imlight.CoreLib.Game.DropTables.LootGranter.GrantAndDisplay(SessionActor.ActorRef, wizard, bonusLoot);
+        }
 
         ResultDispatcher.ExecuteResults(
             actorContext: Context,
-            results: qTemplate.m_endResults,
+            results: runAutoComplete ? RewardResultsOnly(qTemplate.m_endResults) : qTemplate.m_endResults,
             playerRef: SessionActor.ActorRef,
             playerObj: GetActiveGameObject(),
             zoneActor: SessionActor.GetZoneActor(),
             questName: questInstance.QuestName,
-            skipWorldEffects: !ClaimInstanceStep(InstanceQuestClaimKind.QuestComplete, questInstance.QuestName, ""),
+            skipWorldEffects: runAutoComplete || !ClaimInstanceStep(InstanceQuestClaimKind.QuestComplete, questInstance.QuestName, ""),
             xpScale: xpScale
         );
 

@@ -275,6 +275,39 @@ internal static class RoguelikeStock {
             return null;
         }
 
+        return PickCrownGear(wizard);
+    }
+
+    /// <summary>
+    /// Rolls the random gear a quest completed on a run may give (QuestItemChance): crown gear or ordinary gear,
+    /// as likely as each other, in the wizard's level window and for their school when one turns up.
+    /// </summary>
+    internal static uint? RollQuestItem(Wizard wizard) {
+        if (!RoguelikeConfig.Enabled || wizard?.Roguelike is null || RoguelikeConfig.QuestItemChance <= 0
+            || Random.Shared.Next(100) >= RoguelikeConfig.QuestItemChance) {
+            return null;
+        }
+
+        return Random.Shared.Next(2) == 0
+            ? PickCrownGear(wizard) ?? PickGear(wizard)
+            : PickGear(wizard) ?? PickCrownGear(wizard);
+    }
+
+    /// <summary>A random piece of the gear random shops sell, in the wizard's level window.</summary>
+    private static uint? PickGear(Wizard wizard) {
+        var (low, high) = LevelWindow(wizard);
+        var school = wizard.MagicSchoolBehavior.MagicSchool.ToString();
+        foreach (var slot in s_gear.Value.Keys.OrderBy(_ => Random.Shared.Next())) {
+            var candidates = Candidates(slot, school, low, high).ToList();
+            if (candidates.Count > 0) {
+                return candidates[Random.Shared.Next(candidates.Count)].Id;
+            }
+        }
+
+        return null;
+    }
+
+    private static uint? PickCrownGear(Wizard wizard) {
         var bySlot = s_crownGearIds.Value;
         if (bySlot.Count == 0) {
             return null;
