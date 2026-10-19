@@ -157,10 +157,10 @@ internal static class RoguelikeConfig {
 
     /// <summary>
     /// NPCs (template ids) that teach another trainer's spells, as "npc:trainer" pairs: Mellori teaches what the Death
-    /// professor Malorn Ashthorn does, and Monstrologist Burke what Mortis does.
+    /// professor Dworgyn does, and Monstrologist Burke what Mortis does.
     /// </summary>
     internal static readonly Dictionary<ulong, ulong> TrainerStandIns = SplitList(
-            ConfigurationManager.GetValue("Roguelike.TrainerStandIns", "1381151:81102, 1401108:39390"))
+            ConfigurationManager.GetValue("Roguelike.TrainerStandIns", "1381151:82209, 1401108:39390"))
         .Select(pair => pair.Split(':'))
         .Where(parts => parts.Length == 2 && ulong.TryParse(parts[0].Trim(), out _) && ulong.TryParse(parts[1].Trim(), out _))
         .GroupBy(parts => ulong.Parse(parts[0].Trim()))
