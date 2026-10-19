@@ -127,6 +127,19 @@ internal static class RoguelikeConfig {
 
     internal const string TravelBlockedText = "That way is closed during your run.";
 
+    /// <summary>On a run, NPCs only offer main story quests.</summary>
+    internal static readonly bool MainQuestsOnly = ConfigurationManager.GetValue("Roguelike.MainQuestsOnly", true);
+
+    /// <summary>
+    /// True when an NPC may offer this quest to this wizard: always off a run, and on a run only main story quests
+    /// (the game marks them mainline; a "-MAIN-" in the quest's code counts too).
+    /// </summary>
+    internal static bool OffersQuest(Wizard wizard, QuestTemplate quest)
+        => !(Enabled && MainQuestsOnly && wizard?.Roguelike is not null)
+           || quest is null
+           || quest.m_mainline
+           || ((string) quest.m_questName ?? "").Contains("-MAIN-", StringComparison.OrdinalIgnoreCase);
+
     /// <summary>When a run's boss falls, every quest the wizard has is completed, with its rewards.</summary>
     internal static readonly bool CompleteQuestsAfterBoss = ConfigurationManager.GetValue("Roguelike.CompleteQuestsAfterBoss", true);
 

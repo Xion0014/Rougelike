@@ -215,6 +215,11 @@ internal sealed class InteractQuestOfferComponent(ZoneEntity entity)
                 continue;
             }
 
+            // A roguelike run only offers main story quests; side quests are left out.
+            if (!Imlight.CoreLib.Game.Runs.RoguelikeConfig.OffersQuest(wizard, quest)) {
+                continue;
+            }
+
             var hasQuest = wizard.HasQuest(quest.m_questName);
             var hasCompleted = wizard.HasCompletedQuest(quest.m_questName);
 
