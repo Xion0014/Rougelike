@@ -51,6 +51,10 @@ internal class CommandRunProtocol : CommandProtocol {
     [Command("here")]
     private void HereCommand() => Send("here");
 
+    [Command("timerui")]
+    [AuthRequired(AuthLevel.QualityAssurance)]
+    private void TimerUiCommand([Remainder] string layout) => Send("timerui", layout);
+
     [Command("zones")]
     [AuthRequired(AuthLevel.QualityAssurance)]
     private void ZonesCommand([Remainder] string filter) => Send("zones", filter);

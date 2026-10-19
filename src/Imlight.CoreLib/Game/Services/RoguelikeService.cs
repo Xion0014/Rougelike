@@ -51,6 +51,12 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
     // Gives the client time to finish its victory scene before a teleport.
     private static readonly TimeSpan s_afterBattleDelay = TimeSpan.FromSeconds(5);
 
+    // The id of the run's zone timer at the top of the screen.
+    private const int RUN_TIMER_ID = 0x524C;
+
+    // A timer layout being tried with .run timerui, for this session only.
+    private string _timerUiOverride;
+
     // True when the street timer ran out mid-battle; the boss starts when the battle ends.
     private bool _bossPending;
 
@@ -96,6 +102,42 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         if (wizard.Roguelike.Phase == RoguelikePhase.Street) {
             StartTickTimer();
             GrantStreetQuests(wizard);
+            ShowRunTimer(wizard, add: true);
+        }
+    }
+
+    /// <summary>
+    /// Shows (or updates) the street's time left in the game's zone timer at the top of the screen.
+    /// </summary>
+    private void ShowRunTimer(Wizard wizard, bool add) {
+        var run = wizard?.Roguelike;
+        if (!RoguelikeConfig.ShowTimer || run is null || run.Phase != RoguelikePhase.Street) {
+            return;
+        }
+
+        var left = (float) Math.Max(0, RoguelikeConfig.StreetSeconds - run.StreetSeconds);
+        var ui = _timerUiOverride ?? RoguelikeConfig.TimerUI;
+        if (add) {
+            SendToSocket(new GAME_5_PROTOCOL.MSG_ADDZONETIMER {
+                TimerID = RUN_TIMER_ID,
+                Title = RoguelikeConfig.TimerTitle,
+                TimerUI = ui,
+                CountdownTime = left,
+            });
+        }
+        else {
+            SendToSocket(new GAME_5_PROTOCOL.MSG_UPDATEZONETIMER {
+                TimerID = RUN_TIMER_ID,
+                Title = RoguelikeConfig.TimerTitle,
+                TimerUI = ui,
+                CountdownTime = left,
+            });
+        }
+    }
+
+    private void HideRunTimer() {
+        if (RoguelikeConfig.ShowTimer) {
+            SendToSocket(new GAME_5_PROTOCOL.MSG_REMOVEZONETIMER { TimerID = RUN_TIMER_ID });
         }
     }
 
@@ -137,6 +179,9 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         run.StreetSeconds += TICK_SECONDS;
         var left = RoguelikeConfig.StreetSeconds - run.StreetSeconds;
         WizardCollection.UpdateCharacterRoguelike(wizard);
+        if (left > 0) {
+            ShowRunTimer(wizard, add: false);
+        }
 
         if (left <= 0) {
             Timers.Cancel(TICK_TIMER_KEY);
@@ -225,6 +270,15 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
                 // Sent by this service's own timer after a battle.
                 SendToPhaseZone(wizard);
                 break;
+            case "timerui":
+                // Staff test: try a zone timer layout by name, for this session.
+                HideRunTimer();
+                _timerUiOverride = message.Argument?.Trim() ?? "";
+                ShowRunTimer(wizard, add: true);
+                InformGameClient(wizard.Roguelike?.Phase == RoguelikePhase.Street
+                    ? $"Showing the run timer with layout \"{_timerUiOverride}\". Put a name that works in [Roguelike] TimerUI."
+                    : "The run timer only shows on a street.");
+                break;
             case "train":
                 GoTrain(wizard);
                 break;
@@ -266,12 +320,14 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         if (!SendToPhaseZone(wizard)) {
             StartTickTimer();
             GrantStreetQuests(wizard);
+            ShowRunTimer(wizard, add: true);
         }
     }
 
     private void BeginBoss(Wizard wizard, bool afterBattle = false) {
         wizard.Roguelike.Phase = RoguelikePhase.Boss;
         WizardCollection.UpdateCharacterRoguelike(wizard);
+        HideRunTimer();
 
         InformGameClient("Time's up! The boss awaits. Win, and the shops are yours.", isImportant: true);
         if (afterBattle) {
@@ -379,6 +435,7 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         if (!SendToPhaseZone(wizard)) {
             StartTickTimer();
             GrantStreetQuests(wizard);
+            ShowRunTimer(wizard, add: true);
         }
     }
 

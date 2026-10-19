@@ -97,6 +97,15 @@ internal static class RoguelikeConfig {
         .Select(part => ulong.TryParse(part, out var id) ? id : 0)
         .Where(id => id != 0)];
 
+    /// <summary>Show the street's time left in the game's own zone timer at the top of the screen.</summary>
+    internal static readonly bool ShowTimer = ConfigurationManager.GetValue("Roguelike.ShowTimer", true);
+
+    /// <summary>The zone timer's title.</summary>
+    internal static readonly string TimerTitle = ConfigurationManager.GetValue("Roguelike.TimerTitle", "Boss arrives in");
+
+    /// <summary>The zone timer's window layout, as the game names it (try names with .run timerui).</summary>
+    internal static readonly string TimerUI = ConfigurationManager.GetValue("Roguelike.TimerUI", "");
+
     /// <summary>Where .run train sends a wizard during the shop phase, for the spell trainers.</summary>
     internal static readonly string TrainZone = ConfigurationManager.GetValue("Roguelike.TrainZone", "WizardCity/WC_Ravenwood");
 
