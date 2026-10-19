@@ -48,6 +48,9 @@ internal static class RoguelikeStock {
     private static readonly int s_levelsBelow = Math.Max(0, ConfigurationManager.GetValue("Roguelike.StockLevelsBelow", 10));
     private static readonly int s_levelsAbove = Math.Max(0, ConfigurationManager.GetValue("Roguelike.StockLevelsAbove", 5));
 
+    /// <summary>How many random spells each trainer offers a wizard on a run.</summary>
+    internal static readonly int TrainerSpellCount = Math.Clamp(ConfigurationManager.GetValue("Roguelike.TrainerSpells", 10), 1, 50);
+
     // Wearable gear. Housing, pets, mounts, reagents and the like stay as the vendor sells them.
     private static readonly HashSet<ObjectType> s_gearTypes = [
         ObjectType.OT_EQUIP_HEAD, ObjectType.OT_EQUIP_CHEST, ObjectType.OT_EQUIP_LEGS,
@@ -128,6 +131,10 @@ internal static class RoguelikeStock {
             stock.Add(new GID((gid.Full & 0xFFFFFFFF00000000UL) | pick.Id));
         }
 
+        Logger.Information("Roguelike shop {Vendor} for {Wizard}: {Swapped} of {Total} items are random gear, levels {Low}-{High}.",
+            Logger.Args(vendorTemplateId, wizard.PlayerNameBehavior?.GetWizardName() ?? wizard.CharId.ToString(),
+                stock.Count(g => !original.Contains(g)), original.Count, low, high));
+
         return stock;
     }
 
@@ -169,13 +176,13 @@ internal static class RoguelikeStock {
     }
 
     private static List<SpellEntry> TrainerSpellsFor(Wizard wizard, ulong trainerTemplateId, int count) {
-        var (low, high) = LevelWindow(wizard);
+        // Trainers draw from every level up to the cap, not the wizard's window: higher spells show with the level
+        // they need, as something to work toward.
         var random = new Random(Seed(wizard, "trainer", trainerTemplateId));
 
         return [.. s_spells.Value
-            .Where(s => s.Level >= low && s.Level <= high)
             .OrderBy(_ => random.Next())
-            .Take(count)
+            .Take(Math.Min(count, TrainerSpellCount))
             .OrderBy(s => s.Level)];
     }
 

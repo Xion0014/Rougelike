@@ -268,6 +268,11 @@ internal sealed class InteractTrainerComponent(ZoneEntity entity) : ZoneEntityCo
     /// wizard doesn't know yet; walking away and back shows the next section.
     /// </summary>
     private IEnumerable<int> OfferedIndexes(Wizard wizard) {
+        if (!IsTestTrainer && Imlight.CoreLib.Game.Runs.RoguelikeStock.TrainersActiveFor(wizard)) {
+            // A roguelike run offers a short list of random spells.
+            return Enumerable.Range(0, System.Math.Min(_serviceOptionBases.Count, Imlight.CoreLib.Game.Runs.RoguelikeStock.TrainerSpellCount));
+        }
+
         if (!IsTestTrainer) {
             return Enumerable.Range(0, _serviceOptionBases.Count);
         }
@@ -405,10 +410,12 @@ internal sealed class InteractTrainerComponent(ZoneEntity entity) : ZoneEntityCo
     /// </summary>
     internal (uint SpellId, int Level, bool IsRunSpell) SpellFor(Wizard wizard, int index) {
         var entry = SpellInventory[index];
-        if (!IsTestTrainer
-            && Imlight.CoreLib.Game.Runs.RoguelikeStock.TrainerSpellFor(
-                wizard, Entity.ActiveGameObject.m_templateID, index, SpellInventory.Count) is { } pick) {
-            return (pick.SpellId, Randomizer.NoLevelRequirements ? 1 : pick.Level, true);
+        if (!IsTestTrainer && Imlight.CoreLib.Game.Runs.RoguelikeStock.TrainersActiveFor(wizard)) {
+            // Past the run's short list there is nothing to train (spell 0 is not a spell).
+            return Imlight.CoreLib.Game.Runs.RoguelikeStock.TrainerSpellFor(
+                       wizard, Entity.ActiveGameObject.m_templateID, index, SpellInventory.Count) is { } pick
+                ? (pick.SpellId, Randomizer.NoLevelRequirements ? 1 : pick.Level, true)
+                : (0u, int.MaxValue, true);
         }
 
         var spellId = IsTestTrainer ? (uint) entry.TemplateID : Randomizer.MapSpell(wizard, (uint) entry.TemplateID);

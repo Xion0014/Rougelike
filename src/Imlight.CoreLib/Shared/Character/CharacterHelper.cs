@@ -56,6 +56,11 @@ internal static class CharacterHelper {
     
     internal const float OrientationCompressionFactor = 0.708f;
 
+    private static readonly MagicSchool[] s_primarySchools = [
+        MagicSchool.Fire, MagicSchool.Ice, MagicSchool.Storm, MagicSchool.Myth,
+        MagicSchool.Life, MagicSchool.Death, MagicSchool.Balance,
+    ];
+
     /// <summary>
     /// Recalculates the game stats for a wizard.
     /// </summary>
@@ -110,6 +115,12 @@ internal static class CharacterHelper {
         var school = Randomizer.PickSchool((MagicSchool) creationInfo.m_schoolOfFocus);
         var wizardAvatar = creationInfo.m_avatarBehavior;
         var nameIndices = creationInfo.m_nameIndices;
+
+        // Roguelike mode: the wizard's school and name are rolled, whatever was picked on the creation screens.
+        if (Imlight.CoreLib.Game.Runs.RoguelikeConfig.RandomCharacters) {
+            school = s_primarySchools[Random.Shared.Next(s_primarySchools.Length)];
+            nameIndices = Imlight.CoreLib.Shared.Resources.WizardNameBank.RandomNameKeys(wizardAvatar.m_eGender, nameIndices);
+        }
         var character = new Wizard(school, wizardAvatar, nameIndices);
         Randomizer.GiveStartingSpells(character);
 

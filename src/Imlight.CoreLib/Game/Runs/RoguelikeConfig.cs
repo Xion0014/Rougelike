@@ -44,6 +44,11 @@ internal static class RoguelikeConfig {
 
     internal static readonly bool Enabled = ConfigurationManager.GetValue("Roguelike.Enabled", false);
 
+    /// <summary>
+    /// New wizards get a random school and a random name, whatever was picked on the creation screens.
+    /// </summary>
+    internal static readonly bool RandomCharacters = Enabled && ConfigurationManager.GetValue("Roguelike.RandomCharacters", true);
+
     /// <summary>A wizard that dies in battle is deleted, the same as [Die Delete] Enabled.</summary>
     internal static readonly bool Permadeath = ConfigurationManager.GetValue("Roguelike.Permadeath", true);
 

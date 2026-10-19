@@ -101,6 +101,28 @@ public class WizardNameBank : RootSingleResourceSingleton<WizardNameBank>, IMemo
     }
 
     /// <summary>
+    /// Random name keys from the game's own name tables, for <paramref name="gender"/>. The top byte of
+    /// <paramref name="keepTopByte"/> is kept, since it is not a name part.
+    /// </summary>
+    public static uint RandomNameKeys(eGender gender, uint keepTopByte) {
+        _ = Instance;
+        var firstTable = gender == eGender.Male ? FirstNameHumanMaleTableName : FirstNameHumanFemaleTableName;
+        var first = PickIndex(firstTable, 0);
+        // 0 means "no middle/last part", so those start at 1.
+        var middle = PickIndex(MiddleNameHumanTableName, 1);
+        var last = PickIndex(LastNameHumanTableName, 1);
+
+        return (keepTopByte & 0xFF000000u) | ((uint) first << 16) | ((uint) middle << 8) | (uint) last;
+    }
+
+    private static int PickIndex(string tableName, int lowest) {
+        // A name part is one byte.
+        var size = System.Math.Min(GetTableSize(tableName), 256);
+
+        return size > lowest ? System.Random.Shared.Next(lowest, size) : 0;
+    }
+
+    /// <summary>
     /// Splits packed name keys into their first, middle and last name table indices.
     /// </summary>
     /// <param name="nameKeys">The packed name keys, as in m_nameKeys.</param>
