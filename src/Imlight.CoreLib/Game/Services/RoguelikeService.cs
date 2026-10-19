@@ -112,8 +112,9 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
     }
 
     /// <summary>
-    /// Shows (or refreshes) the street's time left on screen. The game draws shown zone tokens with a duration as
-    /// an on-screen countdown (the Nightmare dungeon's gate timer is one), so the run sends a ZoneTokenTimer.
+    /// Shows the street's time left on screen. The game draws shown zone tokens with a duration as an on-screen
+    /// hourglass (the Nightmare dungeon's gate timer is one), so the run sends a ZoneTokenTimer. The game counts it
+    /// down by itself from the expire time, so it is sent once per zone; re-sending it restarts the hourglass.
     /// </summary>
     private void ShowRunTimer(Wizard wizard, bool add) {
         var run = wizard?.Roguelike;
@@ -214,9 +215,6 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         run.StreetSeconds += TICK_SECONDS;
         var left = RoguelikeConfig.StreetSeconds - run.StreetSeconds;
         WizardCollection.UpdateCharacterRoguelike(wizard);
-        if (left > 0) {
-            ShowRunTimer(wizard, add: false);
-        }
 
         if (left <= 0) {
             Timers.Cancel(TICK_TIMER_KEY);
