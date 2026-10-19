@@ -26,6 +26,7 @@ namespace Imlight.CoreLib.Game.Commands.Protocols;
 /// Roguelike run commands, for every player. The work is done by the player's RoguelikeService.
 ///   .run status        Tier, time left and kills.
 ///   .run next          Leave the shops and start the next tier.
+///   .run train         After a boss, go to the spell trainers (Ravenwood).
 ///   .run return        Go back to the run's current street, boss or shop zone.
 ///   .run here          Show the current zone's full name.
 ///   .run zones &lt;text&gt;  List zone names containing the text (staff only), for filling in [Roguelike].
@@ -40,6 +41,9 @@ internal class CommandRunProtocol : CommandProtocol {
 
     [Command("next")]
     private void NextCommand() => Send("next");
+
+    [Command("train")]
+    private void TrainCommand() => Send("train");
 
     [Command("return")]
     private void ReturnCommand() => Send("return");

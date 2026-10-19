@@ -211,6 +211,9 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
                 // Sent by this service's own timer after a battle.
                 SendToPhaseZone(wizard);
                 break;
+            case "train":
+                GoTrain(wizard);
+                break;
             case "return":
                 if (wizard.Roguelike is null || !RoguelikeConfig.Enabled) {
                     InformGameClient("You have no run to return to.");
@@ -277,8 +280,8 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
                              "creatures defeated.", isImportant: true);
         }
         else {
-            InformGameClient($"Boss defeated! Tier {run.Tier} cleared. Spend your gold and training points, " +
-                             "then type .run next to start the next street.", isImportant: true);
+            InformGameClient($"Boss defeated! Tier {run.Tier} cleared. Spend your gold here, type .run train to " +
+                             "visit the spell trainers, then type .run next to start the next street.", isImportant: true);
         }
 
         PlaceAfterBattle();
@@ -310,6 +313,41 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
             StartTickTimer();
             GrantStreetQuests(wizard);
         }
+    }
+
+    /// <summary>
+    /// During the shop phase, sends the wizard to the spell trainers. .run return goes back to the shops,
+    /// and .run next starts the next tier from either place.
+    /// </summary>
+    private void GoTrain(Wizard wizard) {
+        var run = wizard.Roguelike;
+        if (!RoguelikeConfig.Enabled || run is null || run.Phase is not (RoguelikePhase.Shop or RoguelikePhase.Complete)) {
+            InformGameClient("You can visit the trainers after beating a boss.");
+
+            return;
+        }
+
+        if (wizard.IsInDuel) {
+            InformGameClient("Finish your battle first.");
+
+            return;
+        }
+
+        var zone = RoguelikeConfig.ResolveZone(RoguelikeConfig.TrainZone);
+        if (zone is null) {
+            InformGameClient($"Roguelike setup problem: no zone matches \"{RoguelikeConfig.TrainZone}\".");
+
+            return;
+        }
+
+        if (string.Equals(wizard.Zone, zone, StringComparison.OrdinalIgnoreCase)) {
+            InformGameClient("You are already at the trainers.");
+
+            return;
+        }
+
+        InformGameClient("Off to the trainers. Type .run return to go back to the shops, or .run next when you are ready.");
+        Teleport(zone);
     }
 
     /// <summary>
@@ -389,7 +427,7 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
                                      $"{FormatTime(Math.Max(0, RoguelikeConfig.StreetSeconds - run.StreetSeconds))} " +
                                      "until the boss",
             RoguelikePhase.Boss => $"facing the boss in {tier.Boss}",
-            RoguelikePhase.Shop => "shopping (type .run next when ready)",
+            RoguelikePhase.Shop => "shopping (.run train for the spell trainers, .run next when ready)",
             _ => "finished",
         };
 

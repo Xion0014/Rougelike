@@ -52,6 +52,9 @@ internal static class RoguelikeConfig {
 
     internal static readonly string ShopZone = ConfigurationManager.GetValue("Roguelike.ShopZone", "WizardCity/WC_Shop_Area");
 
+    /// <summary>Where .run train sends a wizard during the shop phase, for the spell trainers.</summary>
+    internal static readonly string TrainZone = ConfigurationManager.GetValue("Roguelike.TrainZone", "WizardCity/WC_Ravenwood");
+
     internal static readonly IReadOnlyList<RoguelikeTier> Tiers = ReadTiers();
 
     internal static int TierCount => Tiers.Count;
