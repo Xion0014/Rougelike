@@ -77,6 +77,26 @@ internal static class RoguelikeConfig {
     internal static int ScaleGold(Wizard wizard, int gold)
         => gold > 0 && IsOnRun(wizard) ? (int) Math.Min(int.MaxValue, Math.Round(gold * GoldMultiplier)) : gold;
 
+    /// <summary>Every new run starts with a random mount in the wizard's backpack.</summary>
+    internal static readonly bool GiveMount = ConfigurationManager.GetValue("Roguelike.GiveMount", true);
+
+    /// <summary>The speed bonus, in percent, of any mount a wizard on a run rides (0 leaves mounts as they are).</summary>
+    internal static readonly int MountSpeed = Math.Clamp(ConfigurationManager.GetValue("Roguelike.MountSpeed", 100), 0, 500);
+
+    /// <summary>
+    /// The speed a mount gives a wizard on a run, replacing the mount's own, or null to leave the mount as it is.
+    /// </summary>
+    internal static int? RunMountSpeed(Wizard wizard, Imcodec.ObjectProperty.TypeCache.WizItemTemplate template)
+        => MountSpeed > 0 && IsOnRun(wizard)
+           && template?.m_behaviors?.OfType<Imcodec.ObjectProperty.TypeCache.MountItemBehaviorTemplate>().Any() == true
+            ? MountSpeed
+            : null;
+
+    /// <summary>NPCs (by template id) that also sell potion refills, like Hilda Brewer in the Commons.</summary>
+    internal static readonly HashSet<ulong> PotionVendors = [.. SplitList(ConfigurationManager.GetValue("Roguelike.PotionVendors", "126154"))
+        .Select(part => ulong.TryParse(part, out var id) ? id : 0)
+        .Where(id => id != 0)];
+
     /// <summary>Where .run train sends a wizard during the shop phase, for the spell trainers.</summary>
     internal static readonly string TrainZone = ConfigurationManager.GetValue("Roguelike.TrainZone", "WizardCity/WC_Ravenwood");
 

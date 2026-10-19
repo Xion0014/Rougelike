@@ -81,6 +81,7 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         }
 
         RoguelikeCreatures.Register(wizard);
+        GiveRunMount(wizard);
 
         // Every zone change starts a new session, so walking into a shop or a house lands here too. Only a
         // fled battle (which sends the wizard to the hub) sends them back; otherwise they may roam freely.
@@ -256,6 +257,7 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         wizard.Roguelike = new RoguelikeRun { Seed = NewSeed() };
         WizardCollection.UpdateCharacterRoguelike(wizard);
         RoguelikeCreatures.Register(wizard);
+        GiveRunMount(wizard);
 
         InformGameClient($"Your run begins! Survive {FormatTime(RoguelikeConfig.StreetSeconds)} on this street, " +
                          "then face its boss. If you fall in battle, your wizard is gone for good. " +
@@ -302,6 +304,30 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         }
 
         PlaceAfterBattle();
+    }
+
+    /// <summary>Hands out the run's random mount, once per run.</summary>
+    private void GiveRunMount(Wizard wizard) {
+        var run = wizard.Roguelike;
+        if (!RoguelikeConfig.GiveMount || run is null || run.MountGiven) {
+            return;
+        }
+
+        if (RoguelikeStock.PickRunMount() is not { } mountId) {
+            Logger.Warning("[Roguelike] Could not find a mount to give {0}.", Logger.Args(wizard.CharId));
+
+            return;
+        }
+
+        run.MountGiven = true;
+        WizardCollection.UpdateCharacterRoguelike(wizard);
+
+        var loot = new Imlight.CoreLib.WizardData.Models.World.DropTableResult();
+        loot.Items.Add(new Imlight.CoreLib.WizardData.Models.World.DropItemResult { ItemId = mountId.ToString(), Quantity = 1 });
+        Imlight.CoreLib.Game.DropTables.LootGranter.GrantAndDisplay(SessionActor.ActorRef, wizard, loot);
+
+        var speed = RoguelikeConfig.MountSpeed > 0 ? $" Every mount runs at +{RoguelikeConfig.MountSpeed}% speed on a run." : "";
+        InformGameClient($"A mount for your run is in your backpack. Equip it to get around faster!{speed}");
     }
 
     private void GiveCrownDrop(Wizard wizard, uint templateId) {

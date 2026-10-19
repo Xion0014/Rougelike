@@ -71,12 +71,19 @@ internal static class CharacterEffectHelper {
         var addedEffects = new List<GameEffectBase>();
         var slotHash = ItemHelper.GetItemSlotHash(template);
 
+        // A roguelike run makes every mount fast; removal matches effects by name and slot, so it still works.
+        var runMountSpeed = Imlight.CoreLib.Game.Runs.RoguelikeConfig.RunMountSpeed(wizard, template);
+
         // Apply the effects from the template.
         foreach (var effectInfo in template.m_equipEffects) {
             var gameEffect = GameEffectFactory.CreateEffectFromInfo(effectInfo, slotHash);
             if (gameEffect is null) {
                 Logger.Warning("Could not create effect {0} from effect info.", Logger.Args(effectInfo.m_effectName));
                 continue;
+            }
+
+            if (runMountSpeed is { } speed && gameEffect is SpeedEffect speedEffect) {
+                speedEffect.m_speedMultiplier = speed;
             }
 
             gameEffect.m_internalID = wizard.GameEffects.Count;

@@ -65,6 +65,9 @@ public class RoguelikeRun {
     /// </summary>
     public bool ReturnPending { get; set; }
 
+    /// <summary>True once the run's free mount was handed out.</summary>
+    public bool MountGiven { get; set; }
+
     /// <summary>Creatures defeated during the whole run.</summary>
     public int Kills { get; set; }
 

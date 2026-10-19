@@ -257,6 +257,38 @@ internal static class RoguelikeStock {
             .Select(pair => (uint) pair.Key)];
 
     // ---------------------------------------------------------------------
+    // Run mount
+    // ---------------------------------------------------------------------
+
+    private const int MOUNT_PICK_TRIES = 300;
+
+    // Mount template ids, from the Mounts folders. Only paths are read up front; templates load on demand.
+    private static readonly Lazy<uint[]> s_mountIds = new(() => [.. s_templatePaths.Value
+        .Where(pair => pair.Key is > 0 and <= uint.MaxValue
+                       && pair.Value.Replace('\\', '/').Contains("/Mounts/", StringComparison.OrdinalIgnoreCase)
+                       // Two-person mounts are not supported.
+                       && !pair.Value.Contains("2P", StringComparison.Ordinal))
+        .Select(pair => (uint) pair.Key)], LazyThreadSafetyMode.ExecutionAndPublication);
+
+    /// <summary>
+    /// A random permanent, one-person mount that has a speed effect (which a run raises to MountSpeed), or null.
+    /// </summary>
+    internal static uint? PickRunMount() {
+        var ids = s_mountIds.Value;
+        for (var i = 0; i < MOUNT_PICK_TRIES && ids.Length > 0; i++) {
+            var id = ids[Random.Shared.Next(ids.Length)];
+            if (CoreObjectFactory.GetCoreTemplate(id) is WizItemTemplate item
+                && item.m_behaviors.OfType<MountItemBehaviorTemplate>().Any()
+                && item.m_equipEffects.OfType<SpeedEffectInfo>().Any()
+                && !Imlight.CoreLib.Game.Rentals.RentalItems.TryGetRentalTemplate(item, out _)) {
+                return id;
+            }
+        }
+
+        return null;
+    }
+
+    // ---------------------------------------------------------------------
     // Shared
     // ---------------------------------------------------------------------
 
