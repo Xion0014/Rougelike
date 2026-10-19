@@ -48,6 +48,15 @@ internal static class RoguelikeStock {
     private static readonly int s_levelsBelow = Math.Max(0, ConfigurationManager.GetValue("Roguelike.StockLevelsBelow", 10));
     private static readonly int s_levelsAbove = Math.Max(0, ConfigurationManager.GetValue("Roguelike.StockLevelsAbove", 5));
 
+    /// <summary>The chance, 0 to 100, that winning a battle on a run drops a random piece of crown gear.</summary>
+    internal static readonly int CrownDropChance = Math.Clamp(ConfigurationManager.GetValue("Roguelike.CrownDropChance", 10), 0, 100);
+
+    // How many random crown items to look at for one that fits the wizard, before giving up on the drop.
+    private const int CROWN_DROP_TRIES = 300;
+
+    // Crown gear template ids, from the CrownItems folders. Only paths are read up front; templates load on demand.
+    private static readonly Lazy<uint[]> s_crownGearIds = new(BuildCrownGearIds, LazyThreadSafetyMode.ExecutionAndPublication);
+
     /// <summary>How many random spells each trainer offers a wizard on a run.</summary>
     internal static readonly int TrainerSpellCount = Math.Clamp(ConfigurationManager.GetValue("Roguelike.TrainerSpells", 10), 1, 50);
 
@@ -196,6 +205,58 @@ internal static class RoguelikeStock {
     }
 
     // ---------------------------------------------------------------------
+    // Crown gear drops
+    // ---------------------------------------------------------------------
+
+    /// <summary>
+    /// Rolls the rare crown gear drop for a battle won on a run. Returns a piece of crown gear within the wizard's
+    /// level window, for their school or any school when one turns up, or null when the roll fails.
+    /// </summary>
+    internal static uint? RollCrownDrop(Wizard wizard) {
+        if (!RoguelikeConfig.Enabled || wizard?.Roguelike is null || CrownDropChance <= 0
+            || Random.Shared.Next(100) >= CrownDropChance) {
+            return null;
+        }
+
+        var ids = s_crownGearIds.Value;
+        if (ids.Length == 0) {
+            return null;
+        }
+
+        var (low, high) = LevelWindow(wizard);
+        var school = wizard.MagicSchoolBehavior.MagicSchool.ToString();
+        uint? anySchool = null;
+
+        for (var i = 0; i < CROWN_DROP_TRIES; i++) {
+            var id = ids[Random.Shared.Next(ids.Length)];
+            if (CoreObjectFactory.GetCoreTemplate(id) is not WizItemTemplate item) {
+                continue;
+            }
+
+            var level = Math.Max(1, EquipLevel(item));
+            if (level < low || level > high) {
+                continue;
+            }
+
+            string itemSchool = item.m_school;
+            if (IsWearableBy(itemSchool, school)) {
+                return id;
+            }
+
+            anySchool ??= id;
+        }
+
+        return anySchool;
+    }
+
+    private static uint[] BuildCrownGearIds()
+        => [.. s_templatePaths.Value
+            .Where(pair => pair.Key is > 0 and <= uint.MaxValue
+                           && pair.Value.Contains("CrownItems", StringComparison.OrdinalIgnoreCase)
+                           && SlotOf(pair.Key) is not null)
+            .Select(pair => (uint) pair.Key)];
+
+    // ---------------------------------------------------------------------
     // Shared
     // ---------------------------------------------------------------------
 
@@ -231,6 +292,11 @@ internal static class RoguelikeStock {
         var pool = new Dictionary<string, List<GearEntry>>(StringComparer.OrdinalIgnoreCase);
         foreach (var id in ids) {
             if (SlotOf(id) is not { } slot || CoreObjectFactory.GetCoreTemplate(id) is not WizItemTemplate item) {
+                continue;
+            }
+
+            // Crown-priced gear is a rare drop on a run instead (RollCrownDrop), not shop stock.
+            if (item.m_creditsCost > 0) {
                 continue;
             }
 

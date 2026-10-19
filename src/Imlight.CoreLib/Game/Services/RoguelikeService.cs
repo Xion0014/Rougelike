@@ -162,6 +162,10 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         var mobs = message.MobTemplateIds ?? [];
         run.Kills += mobs.Length;
 
+        if (mobs.Length > 0 && RoguelikeStock.RollCrownDrop(wizard) is { } crownItem) {
+            GiveCrownDrop(wizard, crownItem);
+        }
+
         if (run.Phase == RoguelikePhase.Boss && mobs.Any(RoguelikeConfig.IsBossMob)) {
             ClearBoss(wizard);
 
@@ -287,6 +291,17 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         }
 
         PlaceAfterBattle();
+    }
+
+    private void GiveCrownDrop(Wizard wizard, uint templateId) {
+        var loot = new Imlight.CoreLib.WizardData.Models.World.DropTableResult();
+        loot.Items.Add(new Imlight.CoreLib.WizardData.Models.World.DropItemResult {
+            ItemId = templateId.ToString(),
+            Quantity = 1,
+        });
+
+        Imlight.CoreLib.Game.DropTables.LootGranter.GrantAndDisplay(SessionActor.ActorRef, wizard, loot);
+        InformGameClient("Rare find! A piece of crown gear dropped from that battle.");
     }
 
     private void GiveBossTrainingPoints(Wizard wizard) {
