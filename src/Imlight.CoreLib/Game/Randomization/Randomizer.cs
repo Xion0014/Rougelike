@@ -98,10 +98,16 @@ public static class Randomizer {
         = ConfigurationManager.GetValue("Randomizer.CreaturesChangeEverySpawn", true);
     internal static readonly bool RandomizeCreatureDecks
         = Enabled && !Tame && ConfigurationManager.GetValue("Randomizer.RandomizeCreatureDecks", true);
-    // A roguelike run rolls gear cards too ([Roguelike] RandomItemCards), randomizer mode or not.
     internal static readonly bool RandomizeItemCards
-        = (Enabled && ConfigurationManager.GetValue("Randomizer.RandomizeItemCards", true))
-          || (Imlight.CoreLib.Game.Runs.RoguelikeConfig.Enabled && ConfigurationManager.GetValue("Roguelike.RandomItemCards", true));
+        = Enabled && ConfigurationManager.GetValue("Randomizer.RandomizeItemCards", true);
+
+    /// <summary>
+    /// On a roguelike run ([Roguelike] RandomItemCards), every card gear gives is swapped when the gear is put on,
+    /// for a random spell of the same type and pip cost picked by the run: the deck shows the swapped card, and it
+    /// stays the same for the whole run.
+    /// </summary>
+    internal static readonly bool RunItemCards
+        = Imlight.CoreLib.Game.Runs.RoguelikeConfig.Enabled && ConfigurationManager.GetValue("Roguelike.RandomItemCards", true);
     internal static readonly bool RandomizePips
         = Enabled && !Tame && ConfigurationManager.GetValue("Randomizer.RandomizePips", true);
     // The [Trainers] switches work with or without randomizer mode.
@@ -146,7 +152,7 @@ public static class Randomizer {
     public static void StartBackgroundBuild() {
         if (!Enabled) {
             // A roguelike run still rolls gear cards and starting spells: build those pools ahead of the first battle.
-            if (RandomizeItemCards || s_startingSpells > 0) {
+            if (RunItemCards || s_startingSpells > 0) {
                 _ = Task.Run(() => {
                     try {
                         Logger.Information("Roguelike: {Count} battle spells for random gear cards, {Starters} for starting spells ({Each} each).",
@@ -277,6 +283,28 @@ public static class Randomizer {
     /// </summary>
     internal static uint RollItemCard(uint spellTemplateId)
         => RandomizeItemCards ? RollSpell(spellTemplateId) : spellTemplateId;
+
+    /// <summary>
+    /// The card a piece of gear gives a wizard on a roguelike run in place of <paramref name="spellTemplateId"/>:
+    /// a spell of the same type and pip cost, the same every time for this run and item. Returns the spell itself
+    /// when it is not swapped.
+    /// </summary>
+    internal static uint MapRunItemCard(Wizard wizard, uint itemTemplateId, uint spellTemplateId) {
+        if (!RunItemCards || wizard?.Roguelike is not { } run) {
+            return spellTemplateId;
+        }
+
+        try {
+            var seed = SeededShuffle.Mix(run.Seed ^ SeededShuffle.Mix(itemTemplateId) ^ SeededShuffle.Fnv1a("itemcard"));
+
+            return (uint) s_combatSpells.Value.Map(spellTemplateId, seed);
+        }
+        catch (Exception ex) {
+            Logger.Warning("Roguelike could not swap item card {Id}. {Message}", Logger.Args(spellTemplateId, ex.Message));
+
+            return spellTemplateId;
+        }
+    }
 
     /// <summary>
     /// How many pips a participant gains this round: usually one, sometimes none, two or three.

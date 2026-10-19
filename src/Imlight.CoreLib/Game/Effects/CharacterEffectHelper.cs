@@ -90,6 +90,18 @@ internal static class CharacterEffectHelper {
             var effect = AddGameEffectToStats(wizard.GameStats, effectInfo);
 
             if (gameEffect is ProvideSpellEffect provideSpellEffect) {
+                // A roguelike run swaps the card for its own pick. The effect carries the new name to the game, so
+                // the deck shows it, and removing the gear later matches it by that name.
+                if (Imlight.CoreLib.Game.Randomization.Randomizer.RunItemCards
+                    && SpellFactory.GetSpell(provideSpellEffect.m_spellName) is { } original) {
+                    var swappedId = Imlight.CoreLib.Game.Randomization.Randomizer.MapRunItemCard(
+                        wizard, (uint) template.m_templateID, original.m_templateID);
+                    if (swappedId != original.m_templateID
+                        && Imlight.CoreLib.Shared.Resources.CoreObjectFactory.GetCoreTemplate(swappedId) is SpellTemplate swapped) {
+                        provideSpellEffect.m_spellName = swapped.m_name;
+                    }
+                }
+
                 var spells = SpellFactory.CreateSpellsFromEffect(provideSpellEffect);
 
                 if (spells is null) {
