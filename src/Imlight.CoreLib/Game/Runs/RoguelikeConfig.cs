@@ -104,7 +104,7 @@ internal static class RoguelikeConfig {
     internal static readonly string TimerTitle = ConfigurationManager.GetValue("Roguelike.TimerTitle", "Boss arrives in");
 
     /// <summary>The zone timer's window layout, as the game names it (try names with .run timerui).</summary>
-    internal static readonly string TimerUI = ConfigurationManager.GetValue("Roguelike.TimerUI", "");
+    internal static readonly string TimerUI = ConfigurationManager.GetValue("Roguelike.TimerUI", "CinematicTimer.gui");
 
     /// <summary>Where .run train sends a wizard during the shop phase, for the spell trainers.</summary>
     internal static readonly string TrainZone = ConfigurationManager.GetValue("Roguelike.TrainZone", "WizardCity/WC_Ravenwood");
