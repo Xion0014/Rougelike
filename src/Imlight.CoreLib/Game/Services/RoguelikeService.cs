@@ -119,6 +119,32 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
             GrantStreetQuests(wizard);
             ShowRunTimer(wizard, add: true);
         }
+        else if (wizard.Roguelike.Phase == RoguelikePhase.Boss) {
+            GrantBossQuests(wizard);
+        }
+    }
+
+    /// <summary>
+    /// Hands out the tier's TierNBossQuests on first reaching its boss zone, requirements skipped: some boss rooms
+    /// only give a side quest of their own, while the boss fight belongs to a main quest from elsewhere.
+    /// </summary>
+    private void GrantBossQuests(Wizard wizard) {
+        var run = wizard.Roguelike;
+        var tier = RoguelikeConfig.GetTier(run.Tier);
+        if (tier is null || tier.BossQuests.Count == 0 || run.BossQuestsGrantedTier >= run.Tier
+            || !string.Equals(wizard.Zone, RoguelikeConfig.ResolveZone(tier.Boss), StringComparison.OrdinalIgnoreCase)) {
+            return;
+        }
+
+        run.BossQuestsGrantedTier = run.Tier;
+        WizardCollection.UpdateCharacterRoguelike(wizard);
+
+        foreach (var quest in tier.BossQuests) {
+            TellOtherServices(new CHARACTER_103_PROTOCOL.MSG_QUESTCOMMAND {
+                Action = "forcegrant",
+                QuestName = quest,
+            });
+        }
     }
 
     /// <summary>

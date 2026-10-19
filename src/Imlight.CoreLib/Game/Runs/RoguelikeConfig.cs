@@ -38,6 +38,9 @@ internal sealed record RoguelikeTier(int Number, string Street, string Boss) {
     /// <summary>Quests handed to the wizard when they reach this tier's street (TierNQuests).</summary>
     public IReadOnlyList<string> Quests { get; init; } = [];
 
+    /// <summary>Quests handed to the wizard when they reach this tier's boss zone (TierNBossQuests).</summary>
+    public IReadOnlyList<string> BossQuests { get; init; } = [];
+
 }
 
 /// <summary>
@@ -214,6 +217,7 @@ internal static class RoguelikeConfig {
             var minutes = ConfigurationManager.GetValue($"Roguelike.Tier{i}Minutes", 0);
             tiers.Add(new RoguelikeTier(i, parts[0], parts[1]) {
                 Quests = SplitList(ConfigurationManager.GetValue($"Roguelike.Tier{i}Quests", "")),
+                BossQuests = SplitList(ConfigurationManager.GetValue($"Roguelike.Tier{i}BossQuests", "")),
                 StreetSeconds = minutes > 0 ? minutes * 60 : StreetSeconds,
             });
         }

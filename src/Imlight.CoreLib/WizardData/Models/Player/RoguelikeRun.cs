@@ -61,6 +61,9 @@ public class RoguelikeRun {
     /// <summary>The highest tier whose street quests were handed out, so each tier's quests come once.</summary>
     public int QuestsGrantedTier { get; set; }
 
+    /// <summary>The highest tier whose boss quests were handed out, so each tier's come once.</summary>
+    public int BossQuestsGrantedTier { get; set; }
+
     /// <summary>
     /// True after the wizard fled a battle and was sent to the hub; the next zone they arrive in sends them
     /// back to their run. Saved, because a zone change starts a new session.
