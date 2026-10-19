@@ -23,6 +23,7 @@ using Imcodec.ObjectProperty.TypeCache;
 using Imlight.Common;
 using Imlight.CoreLib.Game.World;
 using Imlight.CoreLib.Shared.Resources;
+using Imlight.CoreLib.WizardData.Models.Player;
 
 namespace Imlight.CoreLib.Game.Runs;
 
@@ -51,6 +52,25 @@ internal static class RoguelikeConfig {
         = Math.Max(1, ConfigurationManager.GetValue("Roguelike.StreetMinutes", 10)) * 60;
 
     internal static readonly string ShopZone = ConfigurationManager.GetValue("Roguelike.ShopZone", "WizardCity/WC_Shop_Area");
+
+    /// <summary>How much more experience a wizard on a run earns from battles, drops and quests.</summary>
+    internal static readonly double XpMultiplier = Math.Max(0, ConfigurationManager.GetValue("Roguelike.XpMultiplier", 5.0));
+
+    /// <summary>How much more gold a wizard on a run earns from battles, quests and gold wisps (not from selling).</summary>
+    internal static readonly double GoldMultiplier = Math.Max(0, ConfigurationManager.GetValue("Roguelike.GoldMultiplier", 3.0));
+
+    /// <summary>Training points given for beating each tier's boss.</summary>
+    internal static readonly int BossTrainingPoints = Math.Clamp(ConfigurationManager.GetValue("Roguelike.BossTrainingPoints", 2), 0, 100);
+
+    private static bool IsOnRun(Wizard wizard) => Enabled && wizard?.Roguelike is not null;
+
+    /// <summary>Earned experience, scaled for a wizard on a run.</summary>
+    internal static int ScaleXp(Wizard wizard, int xp)
+        => xp > 0 && IsOnRun(wizard) ? (int) Math.Min(int.MaxValue, Math.Round(xp * XpMultiplier)) : xp;
+
+    /// <summary>Earned gold, scaled for a wizard on a run.</summary>
+    internal static int ScaleGold(Wizard wizard, int gold)
+        => gold > 0 && IsOnRun(wizard) ? (int) Math.Min(int.MaxValue, Math.Round(gold * GoldMultiplier)) : gold;
 
     /// <summary>Where .run train sends a wizard during the shop phase, for the spell trainers.</summary>
     internal static readonly string TrainZone = ConfigurationManager.GetValue("Roguelike.TrainZone", "WizardCity/WC_Ravenwood");

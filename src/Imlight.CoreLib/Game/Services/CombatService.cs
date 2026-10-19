@@ -178,7 +178,7 @@ internal class CombatService(SessionActor sessionActor) : MessageService(session
 
         // Gain 3 XP per pip used in the duel.
         var usedPips = message.UsedPips;
-        var xpGained = usedPips * 3;
+        var xpGained = Runs.RoguelikeConfig.ScaleXp(GetActiveWizard(), usedPips * 3);
 
         var msg = new CHARACTER_103_PROTOCOL.MSG_GAINXP {
             XP = xpGained,

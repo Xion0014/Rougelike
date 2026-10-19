@@ -314,8 +314,9 @@ internal sealed class InteractTrainerComponent(ZoneEntity entity) : ZoneEntityCo
 
         foreach (var i in OfferedIndexes(wizard)) {
             // In randomizer mode the wizard learns a swapped spell, so the trainer offers that one instead.
+            // A roguelike run offers its own random spells.
             var trainerSpellId = (uint) SpellInventory[i].TemplateID;
-            var spellId = IsTestTrainer ? trainerSpellId : Randomizer.MapSpell(wizard, trainerSpellId);
+            var (spellId, offeredLevel, isRunSpell) = SpellFor(wizard, i);
             if (CoreObjectFactory.GetCoreTemplate(spellId) is not SpellTemplate spellTemplate) {
                 continue;
             }
@@ -336,7 +337,7 @@ internal sealed class InteractTrainerComponent(ZoneEntity entity) : ZoneEntityCo
             newBase.m_trainingCost = CostFor(wizard, spellTemplate);
 
             // NoLevelRequirements lets any level train any spell.
-            var requiredLevel = Randomizer.NoLevelRequirements ? 1 : SpellInventory[i].Level;
+            var requiredLevel = offeredLevel;
             newBase.m_requiredLevel = requiredLevel;
 
             // Check if wizard has enough training points to train the spell, and if the
@@ -351,7 +352,8 @@ internal sealed class InteractTrainerComponent(ZoneEntity entity) : ZoneEntityCo
             }
 
             // If the spell has no required spell, it can be trained, else check if the wizard has the required spell.
-            var originalRequiredId = RequiredSpellFor(wizard, SpellInventory[i]);
+            // A run's random spells have no prerequisites.
+            var originalRequiredId = isRunSpell ? 0 : RequiredSpellFor(wizard, SpellInventory[i]);
             if (originalRequiredId == 0) {
                 newBase.m_bCanTrain = true;
                 newBase.m_failedRequirement = null;
@@ -396,6 +398,23 @@ internal sealed class InteractTrainerComponent(ZoneEntity entity) : ZoneEntityCo
     }
 
     public void OnServiceInteraction(IActorRef playerActor, Wizard playerCharacter, CoreObject playerObject, uint serviceOptionIndex) { }
+
+    /// <summary>
+    /// The spell this wizard is offered at <paramref name="index"/>, the level it needs, and whether it is a
+    /// roguelike run's random pick. Used both to list the spells and to teach one, so the two always agree.
+    /// </summary>
+    internal (uint SpellId, int Level, bool IsRunSpell) SpellFor(Wizard wizard, int index) {
+        var entry = SpellInventory[index];
+        if (!IsTestTrainer
+            && Imlight.CoreLib.Game.Runs.RoguelikeStock.TrainerSpellFor(
+                wizard, Entity.ActiveGameObject.m_templateID, index, SpellInventory.Count) is { } pick) {
+            return (pick.SpellId, Randomizer.NoLevelRequirements ? 1 : pick.Level, true);
+        }
+
+        var spellId = IsTestTrainer ? (uint) entry.TemplateID : Randomizer.MapSpell(wizard, (uint) entry.TemplateID);
+
+        return (spellId, Randomizer.NoLevelRequirements ? 1 : entry.Level, false);
+    }
 
     /// <summary>
     /// How many training points a spell costs this wizard: none for their own school or with FreeTraining, else one.

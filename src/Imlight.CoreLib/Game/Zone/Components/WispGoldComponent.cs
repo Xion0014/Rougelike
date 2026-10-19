@@ -46,7 +46,7 @@ internal sealed class WispGoldComponent(ZoneEntity entity) : ZoneEntityComponent
 
         _collected = true;
         var level = Math.Max(1, playerWizard.MagicSchoolBehavior.Level);
-        playerWizard.AddGold(Random.Shared.Next(level * 2, level * 5 + 1) + 10);
+        playerWizard.AddGold(Runs.RoguelikeConfig.ScaleGold(playerWizard, Random.Shared.Next(level * 2, level * 5 + 1) + 10));
         playerActor.Tell(new WIZARD_12_PROTOCOL.MSG_UPDATEGOLD {
             Gold = playerWizard.GameStats.m_currentGold,
             MaxGold = playerWizard.GameStats.m_baseGoldPouch

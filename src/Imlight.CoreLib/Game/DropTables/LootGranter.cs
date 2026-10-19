@@ -114,6 +114,10 @@ public static class LootGranter {
             results.ExperienceAmount = (int) (results.ExperienceAmount * xpScale);
         }
 
+        // A roguelike run earns more, and the loot popup shows the scaled amounts.
+        results.ExperienceAmount = Runs.RoguelikeConfig.ScaleXp(wizard, results.ExperienceAmount);
+        results.GoldAmount = Runs.RoguelikeConfig.ScaleGold(wizard, results.GoldAmount);
+
         UpdateWizardGold(playerActor, wizard, results.GoldAmount);
         UpdateWizardXP(playerActor, results.ExperienceAmount);
         UpdateWizardTP(playerActor, wizard, results.TrainingPoints);

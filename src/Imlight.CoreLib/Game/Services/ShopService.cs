@@ -99,7 +99,7 @@ internal class ShopService(SessionActor sessionActor) : MessageService(sessionAc
 
         // Ensure that the vendor has the item that the player is trying to purchase.
         var itemTemplateID = new GID(message.ShopID).MParts.TemplateId;
-        if (!vendorComponent.HasItem((GID) message.ShopID)) {
+        if (!vendorComponent.HasItem((GID) message.ShopID, GetActiveWizard())) {
             HandleIllegalPurchaseAttempt(itemTemplateID, message.npcGlobalID);
 
             return;

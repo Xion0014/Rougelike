@@ -92,11 +92,15 @@ internal class TrainService(SessionActor sessionActor) : MessageService(sessionA
 
         var spellEntry = trainerComponent.SpellInventory[message.TrainingIndex];
 
-        // In randomizer mode the trainer offered this wizard's swapped spell; teach that one.
-        var spellId = trainerComponent.IsTestTrainer
-            ? (uint) spellEntry.TemplateID
-            : Randomizer.MapSpell(wizard, (uint) spellEntry.TemplateID);
+        // Teach the spell the trainer offered this wizard: a randomizer swap or a roguelike run's random pick.
+        var (spellId, requiredLevel, _) = trainerComponent.SpellFor(wizard, (int) message.TrainingIndex);
         var spellTemplate = (SpellTemplate) CoreObjectFactory.GetCoreTemplate(spellId);
+        if (spellTemplate is null || wizard.MagicSchoolBehavior.Level < requiredLevel) {
+            Logger.Warning("Wizard {0} attempted to train spell {1} without the level it needs.",
+                Logger.Args(wizard.PlayerNameBehavior.GetWizardName(), spellId));
+
+            return;
+        }
 
         if (BadgeGate.Blocks(spellTemplate?.m_purchaseRequirements, spellEntry.TemplateID, SessionActor.ActorRef, GetActiveGameObject(), wizard, SessionActor.GetZoneActor())) {
             Logger.Warning("Wizard {0} attempted to train spell {1} without the badge it requires.",

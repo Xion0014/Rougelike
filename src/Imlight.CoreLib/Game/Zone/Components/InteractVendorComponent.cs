@@ -115,19 +115,27 @@ internal sealed class InteractVendorComponent(ZoneEntity entity) : ZoneEntityCom
         ];
 
     public void OnServiceInteraction(IActorRef playerActor, Wizard playerCharacter, CoreObject playerObject, uint serviceOptionIndex) {
-        SendShopOfferings(playerActor);
+        SendShopOfferings(playerActor, playerCharacter);
         SendPlayerIntoWizbang(playerObject.m_globalID);
         SendPlayerIntoState(playerObject.m_globalID);
     }
 
-    public bool HasItem(GID itemGID)
-        => _inventory.Any(x => x.MParts.TemplateId == itemGID.MParts.TemplateId);
+    /// <summary>
+    /// True when this vendor offers the item to the wizard. A roguelike run gives each wizard their own stock.
+    /// </summary>
+    public bool HasItem(GID itemGID, Wizard wizard = null)
+        => StockFor(wizard).Any(x => x.MParts.TemplateId == itemGID.MParts.TemplateId);
 
-    private void SendShopOfferings(IActorRef playerActor) {
+    private List<GID> StockFor(Wizard wizard)
+        => Imlight.CoreLib.Game.Runs.RoguelikeStock.ShopsActiveFor(wizard)
+            ? Imlight.CoreLib.Game.Runs.RoguelikeStock.ShopFor(wizard, Entity.ActiveGameObject.m_templateID, _inventory)
+            : _inventory;
+
+    private void SendShopOfferings(IActorRef playerActor, Wizard wizard) {
         var shopOffering = new WizShopOffering() {
             m_sellModifier = 0.05f,
             m_shopTitle = string.IsNullOrWhiteSpace(_shopTitle) || _shopTitle == "Unknown Shop" ? DefaultShopTitle : _shopTitle,
-            m_shopList = _inventory,
+            m_shopList = StockFor(wizard),
             // Changes the type of currency that is used
             // 0 - Gold
             // 1 - PvP tickets

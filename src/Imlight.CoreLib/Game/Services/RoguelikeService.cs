@@ -32,6 +32,7 @@
 using System;
 using System.Linq;
 using Akka.Actor;
+using Imcodec.MessageLayer.Generated;
 using Imlight.Common;
 using Imlight.CoreLib.Game.Runs;
 using Imlight.CoreLib.Shared.Networking;
@@ -274,6 +275,7 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         run.BossesDefeated++;
         run.Phase = run.Tier >= RoguelikeConfig.TierCount ? RoguelikePhase.Complete : RoguelikePhase.Shop;
         WizardCollection.UpdateCharacterRoguelike(wizard);
+        GiveBossTrainingPoints(wizard);
 
         if (run.Phase == RoguelikePhase.Complete) {
             InformGameClient($"You cleared all {RoguelikeConfig.TierCount} tiers! Run complete with {run.Kills} " +
@@ -285,6 +287,18 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         }
 
         PlaceAfterBattle();
+    }
+
+    private void GiveBossTrainingPoints(Wizard wizard) {
+        var points = RoguelikeConfig.BossTrainingPoints;
+        if (points <= 0) {
+            return;
+        }
+
+        var total = wizard.MagicSchoolBehavior.TrainingPoints + points;
+        wizard.UpdateTrainingPoints(total);
+        SendToSocket(new WIZARD_12_PROTOCOL.MSG_UPDATETRAINING { TrainingPoints = total });
+        InformGameClient($"The boss's defeat earned you {points} training points. You now have {total}.");
     }
 
     private void NextTier(Wizard wizard) {
