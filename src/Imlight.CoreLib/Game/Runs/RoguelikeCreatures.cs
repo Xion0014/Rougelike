@@ -167,6 +167,47 @@ internal static class RoguelikeCreatures {
         return true;
     }
 
+    // The creature each run-swapped spawn stands in for, by the spawn's global id, so it fights with its stats.
+    private static readonly ConcurrentDictionary<ulong, ulong> s_statSources = new();
+    private const int MAX_STAT_SOURCES = 50_000;
+
+    /// <summary>
+    /// If true (default), a creature a run swaps in fights with the health, level, school and deck of the creature
+    /// it stands in for, so a street is as hard as it normally is whatever shows up.
+    /// </summary>
+    private static readonly bool s_keepStats = ConfigurationManager.GetValue("Roguelike.SwappedCreaturesKeepStats", true);
+
+    /// <summary>Remembers which creature a run-swapped spawn stands in for.</summary>
+    internal static void RememberStatSource(ulong spawnGlobalId, ulong originalTemplateId) {
+        if (!s_keepStats) {
+            return;
+        }
+
+        // Spawns are not forgotten when they leave, so the list is emptied now and then.
+        if (s_statSources.Count >= MAX_STAT_SOURCES) {
+            s_statSources.Clear();
+        }
+
+        s_statSources[spawnGlobalId] = originalTemplateId;
+    }
+
+    /// <summary>
+    /// The template a creature's battle stats and deck come from: the creature it stands in for when a run swapped
+    /// it in, else its own.
+    /// </summary>
+    internal static CoreTemplate StatTemplateFor(Zone.Core.ZoneEntity entity) {
+        var own = entity.Template;
+        var globalId = entity.ActiveGameObject?.m_globalID.Full ?? 0;
+        if (globalId == 0 || !s_statSources.TryGetValue(globalId, out var originalId)) {
+            return own;
+        }
+
+        return CoreObjectFactory.GetCoreTemplate(originalId) is GameObjectTemplate original
+               && original.m_behaviors.OfType<NPCBehaviorTemplate>().Any()
+            ? original
+            : own;
+    }
+
     /// <summary>
     /// How many creatures of a won battle count for a "defeat" goal regardless of which creature the goal names:
     /// the battle's non-boss creatures, when the wizard is on their run's street and the goal is for that zone.

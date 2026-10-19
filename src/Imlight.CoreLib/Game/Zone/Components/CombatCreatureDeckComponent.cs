@@ -61,8 +61,11 @@ internal sealed class CombatCreatureDeckComponent : ZoneEntityComponent, ICompon
 
     // ctor
     public CombatCreatureDeckComponent(ZoneEntity entity) : base(entity) { 
+        // A creature a roguelike run swapped in casts the deck of the creature it stands in for.
+        var statTemplate = Imlight.CoreLib.Game.Runs.RoguelikeCreatures.StatTemplateFor(entity);
+
         // Collect every behavior from the creature's equipment items.
-        var equipmentItemBehaviors = entity.Template.m_behaviors
+        var equipmentItemBehaviors = statTemplate.m_behaviors
             .OfType<EquipmentBehaviorTemplate>()
             .SelectMany(x => x.m_itemList)
             .Select(x => CoreObjectFactory.GetCoreTemplate(x))
@@ -71,7 +74,7 @@ internal sealed class CombatCreatureDeckComponent : ZoneEntityComponent, ICompon
 
         // Combine equipment item behaviors with the entity's own behaviors.
         // MobDeckBehaviorTemplate can appear in either location.
-        var allBehaviors = entity.Template.m_behaviors
+        var allBehaviors = statTemplate.m_behaviors
             .Concat(equipmentItemBehaviors);
 
         // MobDeckBehaviorTemplate stores spell names directly, if it exists.

@@ -294,10 +294,12 @@ public sealed class ZonePath : ZoneEntity {
         var originalTemplateId = spawnItemInfo.m_templateID;
         var isWisp = Supervisors.ZonePathSupervisor.IsWisp(spawnItemInfo);
         var templateId = originalTemplateId;
+        var swappedByRun = false;
         if (!isWisp && Imlight.CoreLib.Game.Runs.RoguelikeCreatures.TryMap(
                 Zone?.OwnerCharId ?? 0, Zone?.ZonePath, originalTemplateId, out var runTemplateId)) {
             // A roguelike run's private street: the run's seed picks the creature.
             templateId = runTemplateId;
+            swappedByRun = true;
         }
         else if (_randomizeCreatures && !isWisp) {
             templateId = AprilFools.CreatureList.GetRandomCreatureTemplateID();
@@ -321,6 +323,10 @@ public sealed class ZonePath : ZoneEntity {
         creatureObj = CoreObjectFactory.InitializeCoreObjectBehaviors(creatureObj, template);
         if (templateId != originalTemplateId) {
             Randomizer.RememberReplacedCreature(creatureObj.m_globalID, originalTemplateId);
+        }
+        if (swappedByRun) {
+            // It looks like the replacement but fights like the creature it stands in for.
+            Imlight.CoreLib.Game.Runs.RoguelikeCreatures.RememberStatSource(creatureObj.m_globalID, originalTemplateId);
         }
         if (isWisp) {
             Logger.Debug("Wisp {0} spawned on path {1}.", Logger.Args((template as GameObjectTemplate)?.m_objectName, _template.m_name));

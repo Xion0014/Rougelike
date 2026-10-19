@@ -78,12 +78,16 @@ internal sealed class NpcComponent : ZoneEntityComponent, IComponentFactory, ICl
         && gameObjectTemplate.m_behaviors.Any(x => x is NPCBehaviorTemplate);
 
     public NpcComponent(ZoneEntity entity) : base(entity) {
-        _npcBehaviorTemplate = entity.Template.m_behaviors
+        // A creature a roguelike run swapped in takes its stats from the creature it stands in for.
+        var statTemplate = Imlight.CoreLib.Game.Runs.RoguelikeCreatures.StatTemplateFor(entity);
+        _npcBehaviorTemplate = statTemplate.m_behaviors
             .OfType<NPCBehaviorTemplate>()
-            .First();
-        _duelistBehaviorTemplate = entity.Template.m_behaviors
+            .FirstOrDefault()
+            ?? entity.Template.m_behaviors.OfType<NPCBehaviorTemplate>().First();
+        _duelistBehaviorTemplate = statTemplate.m_behaviors
             .OfType<DuelistBehaviorTemplate>()
-            .FirstOrDefault();
+            .FirstOrDefault()
+            ?? entity.Template.m_behaviors.OfType<DuelistBehaviorTemplate>().FirstOrDefault();
 
         this.IsBossMonster = _npcBehaviorTemplate.m_bossMob;
         this.IntelligenceFactor = _npcBehaviorTemplate.m_fIntelligence;
