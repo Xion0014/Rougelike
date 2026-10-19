@@ -50,12 +50,6 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
     // Gives the client time to finish its victory scene before a teleport.
     private static readonly TimeSpan s_afterBattleDelay = TimeSpan.FromSeconds(5);
 
-    // True once this session has put the wizard where their run says (first attach after login).
-    private bool _placedThisSession;
-
-    // True after a fled battle sent the wizard to the hub; the next attach sends them back.
-    private bool _returnAfterHub;
-
     // True when the street timer ran out mid-battle; the boss starts when the battle ends.
     private bool _bossPending;
 
@@ -79,9 +73,11 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
             return;
         }
 
-        if (!_placedThisSession || _returnAfterHub) {
-            _placedThisSession = true;
-            _returnAfterHub = false;
+        // Every zone change starts a new session, so walking into a shop or a house lands here too. Only a
+        // fled battle (which sends the wizard to the hub) sends them back; otherwise they may roam freely.
+        if (wizard.Roguelike.ReturnPending) {
+            wizard.Roguelike.ReturnPending = false;
+            WizardCollection.UpdateCharacterRoguelike(wizard);
             if (SendToPhaseZone(wizard)) {
                 return;
             }
@@ -192,12 +188,12 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         }
 
         // The wizard fled (or permadeath is off) and is being sent to the hub. Send them back afterwards.
-        _returnAfterHub = true;
+        run.ReturnPending = true;
         if (_bossPending) {
             _bossPending = false;
             run.Phase = RoguelikePhase.Boss;
-            WizardCollection.UpdateCharacterRoguelike(GetActiveWizard());
         }
+        WizardCollection.UpdateCharacterRoguelike(GetActiveWizard());
     }
 
     [MessageHandler(typeof(SERVICE_101_PROTOCOL.MSG_ROGUELIKE_COMMAND))]
@@ -215,6 +211,17 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
                 // Sent by this service's own timer after a battle.
                 SendToPhaseZone(wizard);
                 break;
+            case "return":
+                if (wizard.Roguelike is null || !RoguelikeConfig.Enabled) {
+                    InformGameClient("You have no run to return to.");
+                }
+                else if (wizard.IsInDuel) {
+                    InformGameClient("Finish your battle first.");
+                }
+                else if (!SendToPhaseZone(wizard)) {
+                    InformGameClient("You are already where your run is.");
+                }
+                break;
             case "here":
                 InformGameClient($"You are in zone: {wizard.Zone}");
                 break;
@@ -230,7 +237,6 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
     private void StartRun(Wizard wizard) {
         wizard.Roguelike = new RoguelikeRun();
         WizardCollection.UpdateCharacterRoguelike(wizard);
-        _placedThisSession = true;
 
         InformGameClient($"Your run begins! Survive {FormatTime(RoguelikeConfig.StreetSeconds)} on this street, " +
                          "then face its boss. If you fall in battle, your wizard is gone for good. " +
