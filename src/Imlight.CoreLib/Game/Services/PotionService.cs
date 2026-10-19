@@ -64,7 +64,13 @@ internal class PotionService(SessionActor sessionActor) : MessageService(session
         var potionCharge = wizard.GameStats.m_potionCharge;
         var potionMax = wizard.GameStats.m_potionMax;
 
+        Logger.Information("Wizard {0} uses a potion: charge {1} of {2}, health {3}/{4}, mana {5}/{6}, in battle {7}.",
+            Logger.Args(wizard.CharId, potionCharge, potionMax, wizard.GameStats.m_currentHitpoints,
+                wizard.GameStats.m_baseHitpoints, wizard.GameStats.m_currentMana, wizard.GameStats.m_baseMana, wizard.IsInDuel));
+
         if (potionCharge < 1.0) { // If the player has no potion charge, they cannot heal.
+            InformGameClient("Your potion bottles are empty. Refill them at a potion vendor.");
+
             return;
         }
 
@@ -76,6 +82,8 @@ internal class PotionService(SessionActor sessionActor) : MessageService(session
         var currentMana = wizard.GameStats.m_currentMana;
 
         if (currentHealth >= baseHealth && currentMana >= baseMana) { // If health and mana are full, no need to heal.
+            InformGameClient("Your health and mana are already full, so the potion was not used.");
+
             return;
         }
 
@@ -131,6 +139,8 @@ internal class PotionService(SessionActor sessionActor) : MessageService(session
 
         // Whole potions still missing. Nothing to fill, so confirm success as a benign no-op.
         var missing = (int) Math.Ceiling(max - charge);
+        Logger.Information("Wizard {0} asks to refill potions: charge {1} of {2}, {3} missing, fill all {4}.",
+            Logger.Args(wizard.CharId, charge, max, missing, message.AmountEnum != 0));
         if (missing <= 0) {
             SendToSocket(new WIZARD_12_PROTOCOL.MSG_POTIONBUYCONFIRM { Failure = 0 });
 
