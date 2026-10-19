@@ -32,6 +32,9 @@ namespace Imlight.CoreLib.Game.Runs;
 /// </summary>
 internal sealed record RoguelikeTier(int Number, string Street, string Boss) {
 
+    /// <summary>How long the street lasts before the boss, in seconds (TierNMinutes, else StreetMinutes).</summary>
+    public int StreetSeconds { get; init; }
+
     /// <summary>Quests handed to the wizard when they reach this tier's street (TierNQuests).</summary>
     public IReadOnlyList<string> Quests { get; init; } = [];
 
@@ -149,6 +152,17 @@ internal static class RoguelikeConfig {
     /// <summary>On a run, the Crown Shop button shows the wizard's stats in chat instead of opening the shop.</summary>
     internal static readonly bool ShopButtonShowsStats = ConfigurationManager.GetValue("Roguelike.ShopButtonShowsStats", true);
 
+    /// <summary>
+    /// NPCs (template ids) that teach another trainer's spells, as "npc:trainer" pairs: Mellori teaches what the Death
+    /// professor Malorn Ashthorn does, and Monstrologist Burke what Mortis does.
+    /// </summary>
+    internal static readonly Dictionary<ulong, ulong> TrainerStandIns = SplitList(
+            ConfigurationManager.GetValue("Roguelike.TrainerStandIns", "1381151:81102, 1401108:39390"))
+        .Select(pair => pair.Split(':'))
+        .Where(parts => parts.Length == 2 && ulong.TryParse(parts[0].Trim(), out _) && ulong.TryParse(parts[1].Trim(), out _))
+        .GroupBy(parts => ulong.Parse(parts[0].Trim()))
+        .ToDictionary(group => group.Key, group => ulong.Parse(group.First()[1].Trim()));
+
     /// <summary>The name the travel tome shows while it offers its choices.</summary>
     internal static readonly string TravelBookName = ConfigurationManager.GetValue("Roguelike.TravelBookName", "Tome of Travels");
 
@@ -170,6 +184,9 @@ internal static class RoguelikeConfig {
     internal static readonly IReadOnlyList<RoguelikeTier> Tiers = ReadTiers();
 
     internal static int TierCount => Tiers.Count;
+
+    /// <summary>How long a tier's street lasts before its boss, in seconds.</summary>
+    internal static int StreetSecondsFor(int tier) => GetTier(tier) is { StreetSeconds: > 0 } t ? t.StreetSeconds : StreetSeconds;
 
     internal static RoguelikeTier GetTier(int number)
         => Tiers.Count == 0 ? null : Tiers[Math.Clamp(number, 1, Tiers.Count) - 1];
@@ -194,8 +211,10 @@ internal static class RoguelikeConfig {
                 break;
             }
 
+            var minutes = ConfigurationManager.GetValue($"Roguelike.Tier{i}Minutes", 0);
             tiers.Add(new RoguelikeTier(i, parts[0], parts[1]) {
                 Quests = SplitList(ConfigurationManager.GetValue($"Roguelike.Tier{i}Quests", "")),
+                StreetSeconds = minutes > 0 ? minutes * 60 : StreetSeconds,
             });
         }
 

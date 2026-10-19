@@ -132,7 +132,7 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
             return;
         }
 
-        var left = Math.Max(0, RoguelikeConfig.StreetSeconds - run.StreetSeconds);
+        var left = Math.Max(0, RoguelikeConfig.StreetSecondsFor(run.Tier) - run.StreetSeconds);
         var now = (uint) DateTimeOffset.UtcNow.ToUnixTimeSeconds();
         var expireMode = (_timerUiOverride ?? RoguelikeConfig.TimerExpireMode).ToLowerInvariant();
         var token = new ZoneTokenTimer {
@@ -144,7 +144,7 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
             m_enabled = true,
             m_discovered = true,
             // The full street time: the hourglass shows time left out of this, so it is half full at the halfway point.
-            m_duration = $"{RoguelikeConfig.StreetSeconds}s",
+            m_duration = $"{RoguelikeConfig.StreetSecondsFor(run.Tier)}s",
             m_expireTime = expireMode switch {
                 "relative" => (uint) left,
                 "zero" => 0u,
@@ -222,9 +222,9 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
             return;
         }
 
-        var before = RoguelikeConfig.StreetSeconds - run.StreetSeconds;
+        var before = RoguelikeConfig.StreetSecondsFor(run.Tier) - run.StreetSeconds;
         run.StreetSeconds += TICK_SECONDS;
-        var left = RoguelikeConfig.StreetSeconds - run.StreetSeconds;
+        var left = RoguelikeConfig.StreetSecondsFor(run.Tier) - run.StreetSeconds;
         WizardCollection.UpdateCharacterRoguelike(wizard);
 
         if (left <= 0) {
@@ -372,7 +372,7 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         RoguelikeCreatures.Register(wizard);
         GiveRunMount(wizard);
 
-        InformGameClient($"Your run begins! Survive {FormatTime(RoguelikeConfig.StreetSeconds)} on this street, " +
+        InformGameClient($"Your run begins! Survive {FormatTime(RoguelikeConfig.StreetSecondsFor(wizard.Roguelike.Tier))} on this street, " +
                          "then face its boss. If you fall in battle, your wizard is gone for good. " +
                          "Type .run to check your progress.", isImportant: true);
 
@@ -495,7 +495,7 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         WizardCollection.UpdateCharacterRoguelike(wizard);
         RoguelikeCreatures.Register(wizard);
 
-        InformGameClient($"Tier {run.Tier} begins. Survive {FormatTime(RoguelikeConfig.StreetSeconds)}!");
+        InformGameClient($"Tier {run.Tier} begins. Survive {FormatTime(RoguelikeConfig.StreetSecondsFor(run.Tier))}!");
         if (!SendToPhaseZone(wizard)) {
             StartTickTimer();
             GrantStreetQuests(wizard);
@@ -613,7 +613,7 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
 
         var where = run.Phase switch {
             RoguelikePhase.Street => $"on {tier.Street}, " +
-                                     $"{FormatTime(Math.Max(0, RoguelikeConfig.StreetSeconds - run.StreetSeconds))} " +
+                                     $"{FormatTime(Math.Max(0, RoguelikeConfig.StreetSecondsFor(run.Tier) - run.StreetSeconds))} " +
                                      "until the boss",
             RoguelikePhase.Boss => $"facing the boss in {tier.Boss}",
             RoguelikePhase.Shop => "shopping (.run train for the spell trainers, .run next when ready)",

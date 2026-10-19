@@ -290,6 +290,21 @@ internal sealed class InteractTrainerComponent(ZoneEntity entity) : ZoneEntityCo
     }
 
     public override void OnStart() {
+        // Roguelike mode: an NPC set in [Roguelike] TrainerStandIns teaches what another trainer does (Mellori stands in
+        // for the Death professor, Burke for Mortis, both out of reach in Nightside). On a run that makes them random
+        // trainers like the rest, with spells of their own.
+        if (Entity.Template is GameObjectTemplate standIn
+            && Imlight.CoreLib.Game.Runs.RoguelikeConfig.Enabled
+            && Imlight.CoreLib.Game.Runs.RoguelikeConfig.TrainerStandIns.TryGetValue(standIn.m_templateID, out var teacherId)
+            && NpcSpellInventoryCollection.TryGetNpcInventory(teacherId, out var teacherInventory)) {
+            SpellInventory = teacherInventory.Spells;
+            InitializeServiceBases();
+            Logger.Information("{0} teaches the spells of trainer {1} ({2} spells).",
+                Logger.Args(standIn.m_objectName, teacherId, SpellInventory.Count));
+
+            return;
+        }
+
         if (Entity.Template is GameObjectTemplate testTrainer && TestTrainerKindOf(testTrainer) is { } kind) {
             IsTestTrainer = true;
             _testKind = kind;
