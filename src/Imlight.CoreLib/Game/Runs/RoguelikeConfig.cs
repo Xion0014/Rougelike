@@ -105,6 +105,28 @@ internal static class RoguelikeConfig {
         .Select(part => ulong.TryParse(part, out var id) ? id : 0)
         .Where(id => id != 0)];
 
+    /// <summary>
+    /// On a run, the Commons, Home, world gate and recall buttons do nothing, and the zones in BlockedZones (and
+    /// houses) cannot be entered: a wizard who gets there is sent back to their run.
+    /// </summary>
+    internal static readonly bool BlockTravel = ConfigurationManager.GetValue("Roguelike.BlockTravel", true);
+
+    internal static readonly HashSet<string> BlockedZones = new(
+        SplitList(ConfigurationManager.GetValue("Roguelike.BlockedZones", "WizardCity/WC_Hub, WizardCity/WC_Streets/WC_OldeTown")),
+        StringComparer.OrdinalIgnoreCase);
+
+    /// <summary>True when this wizard is on a run that keeps them to its own zones.</summary>
+    internal static bool TravelBlockedFor(Wizard wizard) => Enabled && BlockTravel && wizard?.Roguelike is not null;
+
+    /// <summary>True for a zone a wizard on a run may not enter: the Commons, Olde Town and houses by default.</summary>
+    internal static bool IsBlockedZone(string zonePath)
+        => !string.IsNullOrEmpty(zonePath)
+           && (BlockedZones.Contains(zonePath)
+               || zonePath.StartsWith("Housing/", StringComparison.OrdinalIgnoreCase)
+               || Imlight.CoreLib.Game.Housing.HouseZoneIndex.IsHouseZone(zonePath));
+
+    internal const string TravelBlockedText = "That way is closed during your run.";
+
     /// <summary>When a run's boss falls, every quest the wizard has is completed, with its rewards.</summary>
     internal static readonly bool CompleteQuestsAfterBoss = ConfigurationManager.GetValue("Roguelike.CompleteQuestsAfterBoss", true);
 

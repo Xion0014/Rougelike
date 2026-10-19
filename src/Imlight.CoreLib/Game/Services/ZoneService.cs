@@ -204,6 +204,18 @@ internal class ZoneService(SessionActor sessionActor) : MessageService(sessionAc
             return;
         }
 
+        // A roguelike run keeps the wizard to its own zones: a door out of the Shopping District to the Commons (or a
+        // flee to the hub) sends them back to where the run has them instead.
+        if (message.SendToClient && Imlight.CoreLib.Game.Runs.RoguelikeConfig.IsBlockedZone(message.DestinationZone)
+            && Imlight.CoreLib.Game.Runs.RoguelikeConfig.TravelBlockedFor(GetActiveWizard())) {
+            Logger.Information("Session {SessionId}: {Zone} is closed during a run; sending the wizard back to their run.",
+                Logger.Args(SessionActor.SessionID, message.DestinationZone));
+            InformGameClient(Imlight.CoreLib.Game.Runs.RoguelikeConfig.TravelBlockedText);
+            TellOtherServices(new SERVICE_101_PROTOCOL.MSG_ROGUELIKE_COMMAND { Action = "return" });
+
+            return;
+        }
+
         // A trigger or a script that teleports into a house zone names no lot, so the player's own house in that zone is used.
         if (message.SendToClient && message.HouseEntry is null && HouseZoneIndex.IsHouseZone(message.DestinationZone)
             && !TryUseOwnHouse(message)) {
@@ -402,6 +414,12 @@ internal class ZoneService(SessionActor sessionActor) : MessageService(sessionAc
 
     [MessageHandler(typeof(WIZARD_12_PROTOCOL.MSG_GOHOME))]
     private void ReceiveGoHome(WIZARD_12_PROTOCOL.MSG_GOHOME message) {
+        if (Imlight.CoreLib.Game.Runs.RoguelikeConfig.TravelBlockedFor(GetActiveWizard())) {
+            InformGameClient(Imlight.CoreLib.Game.Runs.RoguelikeConfig.TravelBlockedText);
+
+            return;
+        }
+
         // this teleports the wizard to the world hub, NOT their home/dorm. for that you want MSG_GOTODORM. goofy ahh naming scheme
         // Justin's server: this button always goes to the Commons, from any world.
         var wizard = GetActiveWizard();
@@ -434,6 +452,12 @@ internal class ZoneService(SessionActor sessionActor) : MessageService(sessionAc
     [MessageHandler(typeof(WIZARD_12_PROTOCOL.MSG_GOTODORM))]
     private void ReceiveGotoHouse(WIZARD_12_PROTOCOL.MSG_GOTODORM message) {
         if (_transferGate.IsQueued || Timers.IsTimerActive("zonetransfer")) {
+            return;
+        }
+
+        if (Imlight.CoreLib.Game.Runs.RoguelikeConfig.TravelBlockedFor(GetActiveWizard())) {
+            InformGameClient(Imlight.CoreLib.Game.Runs.RoguelikeConfig.TravelBlockedText);
+
             return;
         }
 
@@ -503,6 +527,12 @@ internal class ZoneService(SessionActor sessionActor) : MessageService(sessionAc
             };
 
             ZoneBroadcast(wizBangMsg, false);
+
+            return;
+        }
+
+        if (Imlight.CoreLib.Game.Runs.RoguelikeConfig.TravelBlockedFor(GetActiveWizard())) {
+            InformGameClient(Imlight.CoreLib.Game.Runs.RoguelikeConfig.TravelBlockedText);
 
             return;
         }

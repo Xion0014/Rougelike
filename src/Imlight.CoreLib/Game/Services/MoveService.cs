@@ -212,6 +212,12 @@ internal class MoveService : MessageService {
 
     [MessageHandler(typeof(GAME_5_PROTOCOL.MSG_RECALL_LOCATION))]
     private void ReceiveRecallLocation(GAME_5_PROTOCOL.MSG_RECALL_LOCATION message) {
+        if (Imlight.CoreLib.Game.Runs.RoguelikeConfig.TravelBlockedFor(GetActiveWizard())) {
+            InformGameClient(Imlight.CoreLib.Game.Runs.RoguelikeConfig.TravelBlockedText);
+
+            return;
+        }
+
         var teleportEffectsMsg = new CHARACTER_103_PROTOCOL.MSG_DOTELEPORTEFFECTS();
         TellOtherServices(teleportEffectsMsg);
 

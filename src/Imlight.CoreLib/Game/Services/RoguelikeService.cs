@@ -95,6 +95,15 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         RoguelikeCreatures.Register(wizard);
         GiveRunMount(wizard);
 
+        // However the wizard got to a zone the run keeps them out of (logging in there, say), back they go.
+        if (RoguelikeConfig.TravelBlockedFor(wizard) && RoguelikeConfig.IsBlockedZone(wizard.Zone)) {
+            wizard.Roguelike.ReturnPending = false;
+            WizardCollection.UpdateCharacterRoguelike(wizard);
+            if (SendToPhaseZone(wizard, force: true)) {
+                return;
+            }
+        }
+
         // Every zone change starts a new session, so walking into a shop or a house lands here too. Only a
         // fled battle (which sends the wizard to the hub) sends them back; otherwise they may roam freely.
         if (wizard.Roguelike.ReturnPending) {
