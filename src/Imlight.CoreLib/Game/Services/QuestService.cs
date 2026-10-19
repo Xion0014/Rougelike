@@ -1025,7 +1025,11 @@ internal class QuestService(SessionActor sessionActor) : MessageService(sessionA
                     continue;
                 }
 
-                ProcessCombatGoal(wizard, qInstance, bountyGoal, message.MobAdjectives, foughtWithGroupMate);
+                // On a roguelike run's street, any creature defeated there counts for the street's "defeat"
+                // goals, since the run swaps its creatures.
+                var runKills = Imlight.CoreLib.Game.Runs.RoguelikeCreatures.WildcardKills(
+                    wizard, bountyGoal.m_destinationZone, message.MobTemplateIds);
+                ProcessCombatGoal(wizard, qInstance, bountyGoal, message.MobAdjectives, foughtWithGroupMate, runKills);
             }
         }
     }
@@ -1547,18 +1551,19 @@ internal class QuestService(SessionActor sessionActor) : MessageService(sessionA
                                    QuestInstance qInstance,
                                    BountyGoalTemplate goalTemplate,
                                    string[] defeatedMobAdjectives,
-                                   bool foughtWithGroupMate) {
+                                   bool foughtWithGroupMate,
+                                   int runWildcardKills = 0) {
         var shouldIncrement = goalTemplate.m_goalType == GOAL_TYPE.GOAL_TYPE_BOUNTY;
         var goalMobAdjectives = goalTemplate.m_npcAdjectives ?? [];
+        defeatedMobAdjectives ??= [];
 
-        // Check to see if the defeated mob matches the goal's NPC adjectives.
-        if (!defeatedMobAdjectives.Any(adjective => goalMobAdjectives.Contains(adjective))) {
+        // Determine how many of the defeated mobs' adjectives match the goal's. We'll increment by that amount.
+        // On a roguelike run's street, every creature defeated there counts instead.
+        var matchCount = defeatedMobAdjectives.Count(adjective => goalMobAdjectives.Contains(adjective));
+        matchCount = Math.Max(matchCount, runWildcardKills);
+        if (matchCount <= 0) {
             return;
         }
-
-        // If there were, determine how many of the adjectives matched.
-        // We'll increment by that amount.
-        var matchCount = defeatedMobAdjectives.Count(adjective => goalMobAdjectives.Contains(adjective));
 
         if (goalTemplate.m_goalType == GOAL_TYPE.GOAL_TYPE_BOUNTYCOLLECT) {
             var chance = goalTemplate.m_tallyCounter?.m_percentChance ?? DEFAULT_KILL_COLLECT_CHANCE;

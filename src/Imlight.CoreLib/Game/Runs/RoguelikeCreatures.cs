@@ -64,8 +64,14 @@ internal static class RoguelikeCreatures {
     /// "Any" swaps in any creature of a similar level from the whole game, but the game only loads the models of
     /// a zone's own creatures, so many of those fight invisibly.
     /// </summary>
-    private static readonly bool s_anyCreature = string.Equals(
-        ConfigurationManager.GetValue("Roguelike.StreetCreaturePool", "Zone"), "Any", StringComparison.OrdinalIgnoreCase);
+    private static readonly bool s_anyCreature = !string.Equals(
+        ConfigurationManager.GetValue("Roguelike.StreetCreaturePool", "Any"), "Zone", StringComparison.OrdinalIgnoreCase);
+
+    /// <summary>
+    /// If true, every spawn on a run's street rolls a fresh random creature. If false, each kind of creature is
+    /// replaced by the same random one for the whole tier, and quest goals name it.
+    /// </summary>
+    private static readonly bool s_everySpawn = ConfigurationManager.GetValue("Roguelike.StreetCreaturesChangeEverySpawn", false);
 
     /// <summary>Records the creatures that spawn in a zone, as it loads.</summary>
     internal static void RegisterRoster(string zonePath, IEnumerable<ulong> templateIds) {
@@ -130,9 +136,14 @@ internal static class RoguelikeCreatures {
             return false;
         }
 
+        // Bosses keep their place.
+        if (IsBoss(templateId)) {
+            return false;
+        }
+
         var seed = SeededShuffle.Mix(info.Seed ^ SeededShuffle.Mix((ulong) info.Tier) ^ SeededShuffle.Fnv1a("street"));
         if (s_anyCreature) {
-            mapped = Randomizer.MapCreatureSeeded(templateId, seed);
+            mapped = s_everySpawn ? Randomizer.PickCreature(templateId) : Randomizer.MapCreatureSeeded(templateId, seed);
         }
         else if (s_rosters.TryGetValue(zonePath, out var roster) && roster.Length > 1
                  && Array.BinarySearch(roster, templateId) >= 0) {
@@ -155,6 +166,34 @@ internal static class RoguelikeCreatures {
 
         return true;
     }
+
+    /// <summary>
+    /// How many creatures of a won battle count for a "defeat" goal regardless of which creature the goal names:
+    /// the battle's non-boss creatures, when the wizard is on their run's street and the goal is for that zone.
+    /// Zero otherwise, leaving the normal adjective match to decide.
+    /// </summary>
+    internal static int WildcardKills(Wizard wizard, string goalZone, IEnumerable<ulong> defeatedTemplateIds) {
+        var run = wizard?.Roguelike;
+        if (!Active || run is null || run.Phase != RoguelikePhase.Street || defeatedTemplateIds is null) {
+            return 0;
+        }
+
+        var street = RoguelikeConfig.ResolveZone(RoguelikeConfig.GetTier(run.Tier)?.Street);
+        if (street is null || !string.Equals(wizard.Zone, street, StringComparison.OrdinalIgnoreCase)) {
+            return 0;
+        }
+
+        // A goal for somewhere else (a tower, a dungeon) still needs its own creatures.
+        if (!string.IsNullOrEmpty(goalZone) && !string.Equals(goalZone, street, StringComparison.OrdinalIgnoreCase)) {
+            return 0;
+        }
+
+        return defeatedTemplateIds.Count(id => !IsBoss(id));
+    }
+
+    private static bool IsBoss(ulong templateId)
+        => CoreObjectFactory.GetCoreTemplate(templateId) is GameObjectTemplate template
+           && template.m_behaviors.OfType<NPCBehaviorTemplate>().FirstOrDefault() is { m_bossMob: true };
 
     /// <summary>
     /// The display name key of the creature that replaced a bounty goal's creature on the wizard's run, or null.

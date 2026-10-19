@@ -214,6 +214,13 @@ public static class Randomizer {
     internal static ulong MapCreatureSeeded(ulong templateId, ulong seed)
         => s_creatures.Value.Map(templateId, seed);
 
+    /// <summary>
+    /// A fresh random creature of a similar level for <paramref name="templateId"/>, different every call, whether or
+    /// not randomizer mode is on. Used by roguelike runs.
+    /// </summary>
+    internal static ulong PickCreature(ulong templateId)
+        => s_creatures.Value.Pick(templateId, Random.Shared);
+
     // The creature each swapped spawn replaced, by the spawn's global id, so quests still count it as that creature.
     private static readonly System.Collections.Concurrent.ConcurrentDictionary<ulong, ulong> s_replacedCreatures = new();
     private const int MAX_REMEMBERED_CREATURES = 50_000;
