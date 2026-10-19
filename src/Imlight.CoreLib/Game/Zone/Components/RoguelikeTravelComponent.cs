@@ -38,7 +38,8 @@ using Imlight.CoreLib.WizardData.Models.Player;
 
 namespace Imlight.CoreLib.Game.Zone.Components;
 
-internal sealed class RoguelikeTravelComponent(ZoneEntity entity) : ZoneEntityComponent(entity), IServiceComponent, IComponentFactory {
+internal sealed class RoguelikeTravelComponent(ZoneEntity entity)
+    : ZoneEntityComponent(entity), IServiceComponent, IExclusiveServiceComponent, IComponentFactory {
 
     public string ServiceName     => "RoguelikeTravel";
     public string NpcIcon         => null;
@@ -51,6 +52,12 @@ internal sealed class RoguelikeTravelComponent(ZoneEntity entity) : ZoneEntityCo
 
     private bool IsBook => Entity.Template is GameObjectTemplate template
                            && RoguelikeConfig.TravelBooks.Contains(template.m_templateID);
+
+    // While it has choices for a wizard, the tome offers nothing else (its own Rate My Stitch page left an empty
+    // button) and goes by a name of its own. Mr. Lincoln keeps his name.
+    public bool IsExclusiveFor(Wizard wizard) => IsBook && ActionsFor(wizard).Count > 0;
+
+    public string NameFor(Wizard wizard) => IsBook ? RoguelikeConfig.TravelBookName : null;
 
     public static bool ShouldAttachToEntity(CoreTemplate template)
         => RoguelikeConfig.Enabled

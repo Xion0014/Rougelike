@@ -75,6 +75,19 @@ public interface IServiceComponent {
 
 }
 
+/// <summary>
+/// A service component that, when it has something for a player, is the only one an object offers them, under a
+/// name of its own.
+/// </summary>
+public interface IExclusiveServiceComponent {
+
+    bool IsExclusiveFor(Wizard playerCharacter);
+
+    /// <summary>The name the object shows while exclusive, as plain text, or null to keep its own.</summary>
+    string NameFor(Wizard playerCharacter);
+
+}
+
 internal sealed class InteractServiceMementoComponent(ZoneEntity entity) 
     : ZoneEntityComponent(entity), IComponentFactory, IWithTimers {
 
@@ -329,7 +342,16 @@ internal sealed class InteractServiceMementoComponent(ZoneEntity entity)
         _componentFirstOption.Clear();
         var allOptions = new List<ServiceOptionBase>();
         var componentsWithOptions = new List<IServiceComponent>();
+
+        // A component that takes over the object (a roguelike run's travel tome) hides everything else it offers.
+        var exclusive = _serviceComponents
+            .OfType<IExclusiveServiceComponent>()
+            .FirstOrDefault(component => component.IsExclusiveFor(playerCharacter));
         foreach (var component in _serviceComponents) {
+            if (exclusive is not null && !ReferenceEquals(component, exclusive)) {
+                continue;
+            }
+
             var componentOptions = OptionsFor(component, playerCharacter);
             if (componentOptions.Count > 0) {
                 componentsWithOptions.Add(component);
@@ -353,7 +375,7 @@ internal sealed class InteractServiceMementoComponent(ZoneEntity entity)
         var sortedComponents = SortComponentsByPriority(componentsWithOptions.Count > 0 ? componentsWithOptions : _serviceComponents);
         var highestPriority = sortedComponents.FirstOrDefault();
 
-        SetMadLibBlock();
+        SetMadLibBlock(exclusive?.NameFor(playerCharacter));
 
         var npcIconOrDefault = string.IsNullOrEmpty(highestPriority?.NpcIcon)
             ? gameObjTemplate?.m_sIcon.ToString()
@@ -374,7 +396,7 @@ internal sealed class InteractServiceMementoComponent(ZoneEntity entity)
         };
     }
 
-    private void SetMadLibBlock() {
+    private void SetMadLibBlock(string nameOverride = null) {
         // NPCs normally have a madlib of first name, last name, and title.
         // To avoid hardcoding these values, we use the display name of the template.
         // We'll also set the madlib token to just "NAME" so the client displays the name as-is.
@@ -382,12 +404,15 @@ internal sealed class InteractServiceMementoComponent(ZoneEntity entity)
             return;
         }
 
-        var madlibList = new List<MadlibArg> {
-            new MadlibArgT_ByteString() {
-                m_madlibArgument = gameObjTemplate.m_displayName,
-                m_madlibToken = "NAME"
-            },
+        var nameArg = new MadlibArgT_ByteString() {
+            m_madlibArgument = gameObjTemplate.m_displayName,
+            m_madlibToken = "NAME"
         };
+        if (!string.IsNullOrEmpty(nameOverride)) {
+            nameArg.m_madlibArgument = nameOverride;
+        }
+
+        var madlibList = new List<MadlibArg> { nameArg };
 
         _madlibBlock = new MadlibBlock() {
             m_blockToken = "NPC",

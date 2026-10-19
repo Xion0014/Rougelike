@@ -105,6 +105,9 @@ internal static class RoguelikeConfig {
         .Select(part => ulong.TryParse(part, out var id) ? id : 0)
         .Where(id => id != 0)];
 
+    /// <summary>The name the travel tome shows while it offers its choices.</summary>
+    internal static readonly string TravelBookName = ConfigurationManager.GetValue("Roguelike.TravelBookName", "Tome of Travels");
+
     /// <summary>Show the street's time left in the game's own zone timer at the top of the screen.</summary>
     internal static readonly bool ShowTimer = ConfigurationManager.GetValue("Roguelike.ShowTimer", true);
 
