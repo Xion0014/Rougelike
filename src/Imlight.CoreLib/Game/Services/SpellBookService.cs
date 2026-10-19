@@ -195,7 +195,8 @@ internal class SpellbookService(SessionActor sessionActor) : MessageService(sess
         }
 
         // Update the in-memory exclusion list.
-        wizard.SpellbookBehavior.SetItemSpellExclusion(message.DeckID, spellTemplateId, exclude);
+        var copies = wizard.SpellbookBehavior.TemporarySpells.Count(spell => spell.m_templateID == spellTemplateId);
+        wizard.SpellbookBehavior.SetItemSpellExclusion(message.DeckID, spellTemplateId, exclude, copies);
 
         // Persist the change.
         WizardData.Collections.WizardCollection.UpdateCharacterSpellbookBehavior(wizard);

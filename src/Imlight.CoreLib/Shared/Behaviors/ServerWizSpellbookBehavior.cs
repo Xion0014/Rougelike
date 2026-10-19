@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json.Serialization;
 using Imlight.CoreLib.Game.Spells;
 using Imlight.Common;
@@ -38,7 +39,9 @@ public class ServerWizSpellbookBehavior : ServerSpellbookBehavior {
     [JsonIgnore] public int MaxSpells { get; set; }
     [JsonIgnore] public int MaxTreasureCards { get; set; }
 
-    public Dictionary<ulong, HashSet<uint>> ExcludedItemSpellIds { get; set; } = [];
+    // One entry per crossed out copy: gear can give the same card more than once, and with a set only one of two
+    // crossed out copies stayed crossed out after a zone change (Niduus, 2026-10-19).
+    public Dictionary<ulong, List<uint>> ExcludedItemSpellIds { get; set; } = [];
 
     public void InitializeProperties(DeckBehaviorTemplate deckTemplate) {
         SetPropertiesFromDeckTemplate(deckTemplate);
@@ -155,18 +158,21 @@ public class ServerWizSpellbookBehavior : ServerSpellbookBehavior {
     /// <param name="deckId">The global ID of the deck item.</param>
     /// <param name="spellTemplateId">The spell template ID to exclude/include.</param>
     /// <param name="exclude">True to exclude, false to include (un-exclude).</param>
-    public void SetItemSpellExclusion(ulong deckId, uint spellTemplateId, bool exclude) {
+    public void SetItemSpellExclusion(ulong deckId, uint spellTemplateId, bool exclude, int copies) {
         if (exclude) {
-            if (!ExcludedItemSpellIds.TryGetValue(deckId, out var set)) {
-                set = [];
-                ExcludedItemSpellIds[deckId] = set;
+            if (!ExcludedItemSpellIds.TryGetValue(deckId, out var list)) {
+                list = [];
+                ExcludedItemSpellIds[deckId] = list;
             }
-            set.Add(spellTemplateId);
+
+            if (list.Count(id => id == spellTemplateId) < Math.Max(copies, 1)) {
+                list.Add(spellTemplateId);
+            }
         }
         else {
-            if (ExcludedItemSpellIds.TryGetValue(deckId, out var set)) {
-                set.Remove(spellTemplateId);
-                if (set.Count == 0) {
+            if (ExcludedItemSpellIds.TryGetValue(deckId, out var list)) {
+                list.Remove(spellTemplateId);
+                if (list.Count == 0) {
                     ExcludedItemSpellIds.Remove(deckId);
                 }
             }
@@ -174,11 +180,12 @@ public class ServerWizSpellbookBehavior : ServerSpellbookBehavior {
     }
 
     /// <summary>
-    /// Returns true if the given spell template ID is excluded for the given deck item.
+    /// How many copies of the given spell template are crossed out for the given deck item.
     /// </summary>
-    public bool IsItemSpellExcluded(ulong deckId, uint spellTemplateId) 
-        => ExcludedItemSpellIds.TryGetValue(deckId, out var set)
-            && set.Contains(spellTemplateId);
+    public int ExcludedItemSpellCount(ulong deckId, uint spellTemplateId)
+        => ExcludedItemSpellIds.TryGetValue(deckId, out var list)
+            ? list.Count(id => id == spellTemplateId)
+            : 0;
 
     public new ClientSpellbookBehavior GetClientBehaviorInstance() {
         var spellIdList = new List<SpellIDTracker>();

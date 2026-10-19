@@ -1160,11 +1160,16 @@ public class CombatDuelSubCircle {
         var temporarySpells = new List<CombatDeckSpellData>();
         var equippedDeckId = _wizard.EquipmentBehavior.SlotList
             .FirstOrDefault(s => s.SlotType == EquipmentSlotType.Deck)?.ItemId;
+        var skipped = new Dictionary<uint, int>();
         foreach (var tempSpell in _wizard.SpellbookBehavior.TemporarySpells) {
-            // Check if this item spell is excluded for the equipped deck.
-            if (equippedDeckId != null
-                && _wizard.SpellbookBehavior.IsItemSpellExcluded(equippedDeckId.Value, tempSpell.m_templateID)) {
-                continue;
+            // Skip as many copies of this item spell as are crossed out for the equipped deck.
+            if (equippedDeckId != null) {
+                skipped.TryGetValue(tempSpell.m_templateID, out var done);
+                if (done < _wizard.SpellbookBehavior.ExcludedItemSpellCount(equippedDeckId.Value, tempSpell.m_templateID)) {
+                    skipped[tempSpell.m_templateID] = done + 1;
+
+                    continue;
+                }
             }
 
             // Randomizer mode may swap each gear card for another spell of the same type and pip cost.
