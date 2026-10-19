@@ -219,16 +219,13 @@ internal static class RoguelikeStock {
     }
 
     private static Dictionary<string, List<GearEntry>> BuildGearPool() {
-        // Gear any vendor sells or any drop table gives, so everything is obtainable in the normal game.
+        // Gear some vendor in the game sells, so every pick can be bought with gold. Drop tables are left out:
+        // they include crown shop gear, which a gold shop cannot sell.
         var ids = SpiralDB.NpcInventories.Values
             .Where(inventory => inventory?.Inventory is not null)
             .SelectMany(inventory => inventory.Inventory)
             .Select(gid => (ulong) gid.MParts.TemplateId)
-            .Concat(SpiralDB.DropTables.Values
-                .Where(table => table?.Items is not null)
-                .SelectMany(table => table.Items)
-                .Select(item => ulong.TryParse(item.ItemId, out var id) ? id : 0))
-            .Where(id => id is > 0 and <= uint.MaxValue)
+            .Where(id => id is > 0 and <= uint.MaxValue && !IsCrownItem(id))
             .Distinct();
 
         var pool = new Dictionary<string, List<GearEntry>>(StringComparer.OrdinalIgnoreCase);
@@ -274,6 +271,12 @@ internal static class RoguelikeStock {
 
         return spells;
     }
+
+    /// <summary>True for crown shop gear (ObjectData/CrownItems/...), which is bought with crowns, not gold.</summary>
+    private static bool IsCrownItem(ulong templateId)
+        => s_templatePaths.Value.TryGetValue(templateId, out var path)
+           && (path.Contains("CrownItems", StringComparison.OrdinalIgnoreCase)
+               || path.Contains("/Crown-", StringComparison.OrdinalIgnoreCase));
 
     /// <summary>The gear slot of an item, from the folder its template is in, or null when it is not gear.</summary>
     private static string SlotOf(ulong templateId) {
