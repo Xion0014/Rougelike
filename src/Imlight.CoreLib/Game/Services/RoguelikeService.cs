@@ -33,6 +33,8 @@ using System;
 using System.Linq;
 using Akka.Actor;
 using Imcodec.MessageLayer.Generated;
+using Imcodec.ObjectProperty;
+using Imcodec.ObjectProperty.TypeCache;
 using Imlight.Common;
 using Imlight.CoreLib.Game.Runs;
 using Imlight.CoreLib.Shared.Networking;
@@ -51,10 +53,13 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
     // Gives the client time to finish its victory scene before a teleport.
     private static readonly TimeSpan s_afterBattleDelay = TimeSpan.FromSeconds(5);
 
-    // The id of the run's zone timer at the top of the screen.
-    private const int RUN_TIMER_ID = 0x524C;
+    // The name of the run's on-screen timer token.
+    private const string RUN_TOKEN_NAME = "ZT_RoguelikeStreetTimer";
 
-    // A timer layout being tried with .run timerui, for this session only.
+    private static readonly Imcodec.ObjectProperty.ObjectSerializer s_tokenSerializer
+        = new(Versionable: false, Behaviors: Imcodec.ObjectProperty.SerializerFlags.None);
+
+    // An expire-time format being tried with .run timerui (absolute, relative, zero), for this session only.
     private string _timerUiOverride;
 
     // True when the street timer ran out mid-battle; the boss starts when the battle ends.
@@ -107,7 +112,8 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
     }
 
     /// <summary>
-    /// Shows (or updates) the street's time left in the game's zone timer at the top of the screen.
+    /// Shows (or refreshes) the street's time left on screen. The game draws shown zone tokens with a duration as
+    /// an on-screen countdown (the Nightmare dungeon's gate timer is one), so the run sends a ZoneTokenTimer.
     /// </summary>
     private void ShowRunTimer(Wizard wizard, bool add) {
         var run = wizard?.Roguelike;
@@ -115,29 +121,58 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
             return;
         }
 
-        var left = (float) Math.Max(0, RoguelikeConfig.StreetSeconds - run.StreetSeconds);
-        var ui = _timerUiOverride ?? RoguelikeConfig.TimerUI;
-        if (add) {
-            SendToSocket(new GAME_5_PROTOCOL.MSG_ADDZONETIMER {
-                TimerID = RUN_TIMER_ID,
-                Title = RoguelikeConfig.TimerTitle,
-                TimerUI = ui,
-                CountdownTime = left,
+        var left = Math.Max(0, RoguelikeConfig.StreetSeconds - run.StreetSeconds);
+        var now = (uint) DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        var expireMode = (_timerUiOverride ?? RoguelikeConfig.TimerExpireMode).ToLowerInvariant();
+        var token = new ZoneTokenTimer {
+            m_debugName = RUN_TOKEN_NAME,
+            m_description = RoguelikeConfig.TimerTitle,
+            m_displayMode = ZTDisplayMode.ZTDM_Shown,
+            m_storage = ZTStorage.ZTS_Player,
+            m_inZone = true,
+            m_enabled = true,
+            m_discovered = true,
+            m_duration = $"{left}s",
+            m_expireTime = expireMode switch {
+                "relative" => (uint) left,
+                "zero" => 0u,
+                _ => now + (uint) left,
+            },
+        };
+
+        if (!s_tokenSerializer.Serialize(token, (uint) (PropertyFlags.Prop_Transmit | PropertyFlags.Prop_AuthorityTransmit),
+                out var data)) {
+            Logger.Warning("[Roguelike] Could not serialize the run timer token.");
+
+            return;
+        }
+
+        // Replace any earlier copy so the countdown restarts from the server's time.
+        if (!add) {
+            SendToSocket(new WIZARD3_56_PROTOCOL.MSG_RemoveZoneToken {
+                GlobalID = wizard.GameObjectID,
+                TokenName = RUN_TOKEN_NAME,
             });
         }
-        else {
-            SendToSocket(new GAME_5_PROTOCOL.MSG_UPDATEZONETIMER {
-                TimerID = RUN_TIMER_ID,
-                Title = RoguelikeConfig.TimerTitle,
-                TimerUI = ui,
-                CountdownTime = left,
-            });
+
+        SendToSocket(new WIZARD3_56_PROTOCOL.MSG_AddZoneToken {
+            GlobalID = wizard.GameObjectID,
+            Add = data,
+        });
+
+        if (add) {
+            Logger.Information("[Roguelike] Run timer token sent to {0}: {1}s left, expire mode {2}, {3} bytes.",
+                Logger.Args(wizard.CharId, left, expireMode, data.Length));
         }
     }
 
     private void HideRunTimer() {
-        if (RoguelikeConfig.ShowTimer) {
-            SendToSocket(new GAME_5_PROTOCOL.MSG_REMOVEZONETIMER { TimerID = RUN_TIMER_ID });
+        var wizard = GetActiveWizard();
+        if (RoguelikeConfig.ShowTimer && wizard is not null) {
+            SendToSocket(new WIZARD3_56_PROTOCOL.MSG_RemoveZoneToken {
+                GlobalID = wizard.GameObjectID,
+                TokenName = RUN_TOKEN_NAME,
+            });
         }
     }
 
@@ -276,7 +311,7 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
                 _timerUiOverride = message.Argument?.Trim() ?? "";
                 ShowRunTimer(wizard, add: true);
                 InformGameClient(wizard.Roguelike?.Phase == RoguelikePhase.Street
-                    ? $"Showing the run timer with layout \"{_timerUiOverride}\". Put a name that works in [Roguelike] TimerUI."
+                    ? $"Showing the run timer with expire mode \"{_timerUiOverride}\" (absolute, relative or zero). Put the one that works in TimerExpireMode."
                     : "The run timer only shows on a street.");
                 break;
             case "train":

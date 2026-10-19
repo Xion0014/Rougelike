@@ -103,8 +103,11 @@ internal static class RoguelikeConfig {
     /// <summary>The zone timer's title.</summary>
     internal static readonly string TimerTitle = ConfigurationManager.GetValue("Roguelike.TimerTitle", "Boss arrives in");
 
-    /// <summary>The zone timer's window layout, as the game names it (try names with .run timerui).</summary>
-    internal static readonly string TimerUI = ConfigurationManager.GetValue("Roguelike.TimerUI", "CinematicTimer.gui");
+    /// <summary>
+    /// How the timer token's expire time is written: "absolute" (Unix seconds when it runs out), "relative" (seconds
+    /// left) or "zero" (leave it to the duration). Try them with .run timerui.
+    /// </summary>
+    internal static readonly string TimerExpireMode = ConfigurationManager.GetValue("Roguelike.TimerExpireMode", "absolute");
 
     /// <summary>Where .run train sends a wizard during the shop phase, for the spell trainers.</summary>
     internal static readonly string TrainZone = ConfigurationManager.GetValue("Roguelike.TrainZone", "WizardCity/WC_Ravenwood");
