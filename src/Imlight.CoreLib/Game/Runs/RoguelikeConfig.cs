@@ -166,6 +166,14 @@ internal static class RoguelikeConfig {
         .GroupBy(parts => ulong.Parse(parts[0].Trim()))
         .ToDictionary(group => group.Key, group => ulong.Parse(group.First()[1].Trim()));
 
+    /// <summary>
+    /// If true, a new run opens with a welcome spoken by StartDialogActor (Merle Ambrose), and the wizard goes to the
+    /// first street, with the countdown starting there, once they close it.
+    /// </summary>
+    internal static readonly bool StartDialog = ConfigurationManager.GetValue("Roguelike.StartDialog", true);
+
+    internal static readonly uint StartDialogActor = (uint) ConfigurationManager.GetValue("Roguelike.StartDialogActor", 38168);
+
     /// <summary>The name the travel tome shows while it offers its choices.</summary>
     internal static readonly string TravelBookName = ConfigurationManager.GetValue("Roguelike.TravelBookName", "Tome of Travels");
 

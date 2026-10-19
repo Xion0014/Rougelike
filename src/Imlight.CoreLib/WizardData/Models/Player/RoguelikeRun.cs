@@ -78,6 +78,9 @@ public class RoguelikeRun {
     /// <summary>The stat potions drunk on this run: the total each stat was raised by, by stat name.</summary>
     public Dictionary<string, int> Boosts { get; set; } = [];
 
+    /// <summary>True until the wizard closes the run's welcome; closing it sends them to the first street.</summary>
+    public bool AwaitingStart { get; set; }
+
     /// <summary>True once the run's free mount was handed out.</summary>
     public bool MountGiven { get; set; }
 

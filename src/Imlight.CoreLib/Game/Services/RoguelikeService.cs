@@ -86,6 +86,13 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
             return;
         }
 
+        // A run whose welcome was never closed (the wizard logged out first) shows it again.
+        if (wizard.Roguelike.AwaitingStart) {
+            ShowStartDialog(wizard);
+
+            return;
+        }
+
         // Runs from before seeds existed get one now.
         if (wizard.Roguelike.Seed == 0) {
             wizard.Roguelike.Seed = NewSeed();
@@ -345,6 +352,10 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         }
 
         switch ((message.Action ?? "").ToLowerInvariant()) {
+            case "begin":
+                // The welcome was never closed (or the game never said so): start anyway.
+                BeginRunAfterWelcome(wizard);
+                break;
             case "next":
                 NextTier(wizard);
                 break;
@@ -393,15 +404,107 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
     }
 
     private void StartRun(Wizard wizard) {
-        wizard.Roguelike = new RoguelikeRun { Seed = NewSeed() };
+        wizard.Roguelike = new RoguelikeRun { Seed = NewSeed(), AwaitingStart = RoguelikeConfig.StartDialog };
         WizardCollection.UpdateCharacterRoguelike(wizard);
         RoguelikeCreatures.Register(wizard);
         GiveRunMount(wizard);
 
-        InformGameClient($"Your run begins! Survive {FormatTime(RoguelikeConfig.StreetSecondsFor(wizard.Roguelike.Tier))} on this street, " +
-                         "then face its boss. If you fall in battle, your wizard is gone for good. " +
-                         "Type .run to check your progress.", isImportant: true);
+        if (wizard.Roguelike.AwaitingStart) {
+            // The wizard reads the welcome first; closing it starts the run.
+            ShowStartDialog(wizard);
 
+            return;
+        }
+
+        InformGameClient(StartText(wizard), isImportant: true);
+        BeginFirstStreet(wizard);
+    }
+
+    private const string START_TIMER_KEY = "RoguelikeStartDialog";
+    private static readonly TimeSpan s_startDialogTimeout = TimeSpan.FromSeconds(120);
+    private DateTime _startDialogShownAt;
+    private bool _awaitingStartDialog;
+
+    private static string StartText(Wizard wizard)
+        => $"Your run begins! Survive {FormatTime(RoguelikeConfig.StreetSecondsFor(wizard.Roguelike.Tier))} on " +
+           "each street, then face its boss. Win, and the shops are yours. If you fall in battle, your wizard is " +
+           "gone for good. Type .run to check your progress.";
+
+    /// <summary>
+    /// Shows the run's welcome as Merle Ambrose speaking. The run starts (the teleport to the first street, and its
+    /// countdown) when the wizard closes it, or after a while if the game never says it was closed.
+    /// </summary>
+    private void ShowStartDialog(Wizard wizard) {
+        var dialog = new ActorDialog {
+            m_dialogTag = "RoguelikeStart",
+            m_dialogEntries = [
+                new NPCDialogEntry {
+                    m_dialog = StartText(wizard),
+                    m_actorTemplateID = RoguelikeConfig.StartDialogActor,
+                    m_bypassCameraOnReview = true,
+                    m_allowPlayerToMove = true,
+                },
+                new NPCDialogEntry {
+                    m_dialog = "When you are ready, close this and you are on your way. Good luck, young wizard!",
+                    m_actorTemplateID = RoguelikeConfig.StartDialogActor,
+                    m_bypassCameraOnReview = true,
+                    m_allowPlayerToMove = true,
+                },
+            ],
+        };
+
+        var serializer = new ObjectSerializer(Versionable: false);
+        if (!serializer.Serialize(dialog, 16, out var data)) {
+            Logger.Error("[Roguelike] Could not serialize the start dialog; starting the run now.");
+            BeginRunAfterWelcome(wizard);
+
+            return;
+        }
+
+        _awaitingStartDialog = true;
+        _startDialogShownAt = DateTime.UtcNow;
+        SendToSocket(new WIZARD_12_PROTOCOL.MSG_ACTORDIALOG {
+            MobileID = 0,
+            QuestID = 0,
+            GoalID = 0,
+            CompletionType = "RoguelikeStart",
+            ActorDialog = data,
+            Persona = "",
+            PersonaName = "",
+            PersonaIcon = "",
+        });
+        Timers.StartSingleTimer(START_TIMER_KEY, new SERVICE_101_PROTOCOL.MSG_ROGUELIKE_COMMAND { Action = "begin" },
+                                s_startDialogTimeout);
+    }
+
+    [MessageHandler(typeof(WIZARD_12_PROTOCOL.MSG_COMPLETEDIALOG))]
+    private void ReceiveCompleteDialog(WIZARD_12_PROTOCOL.MSG_COMPLETEDIALOG message) {
+        // The game sends an empty completion type when a dialog window closes. Anything closed in the first moment
+        // after the welcome went out belongs to an earlier dialog.
+        string completionType = message.CompletionType;
+        if (!_awaitingStartDialog || !string.IsNullOrEmpty(completionType)
+            || DateTime.UtcNow - _startDialogShownAt < TimeSpan.FromSeconds(1)) {
+            return;
+        }
+
+        BeginRunAfterWelcome(GetActiveWizard());
+    }
+
+    /// <summary>Starts a run whose welcome was read: off to the first street, where the countdown begins.</summary>
+    private void BeginRunAfterWelcome(Wizard wizard) {
+        _awaitingStartDialog = false;
+        Timers.Cancel(START_TIMER_KEY);
+        if (wizard?.Roguelike is not { AwaitingStart: true } run) {
+            return;
+        }
+
+        run.AwaitingStart = false;
+        WizardCollection.UpdateCharacterRoguelike(wizard);
+        Logger.Information("[Roguelike] {0} starts their run.", Logger.Args(wizard.CharId));
+        BeginFirstStreet(wizard);
+    }
+
+    private void BeginFirstStreet(Wizard wizard) {
         if (!SendToPhaseZone(wizard)) {
             StartTickTimer();
             GrantStreetQuests(wizard);
