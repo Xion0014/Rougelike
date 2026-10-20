@@ -226,6 +226,16 @@ internal static class RoguelikeConfig {
     /// </summary>
     internal static readonly bool StartDialog = ConfigurationManager.GetValue("Roguelike.StartDialog", true);
 
+    /// <summary>
+    /// [Roguelike] RandomMusic: during a run, every zone plays a random piece of the game's music (MusicTracks)
+    /// instead of its own, and it comes back after each battle.
+    /// </summary>
+    internal static readonly bool RandomMusic = ConfigurationManager.GetValue("Roguelike.RandomMusic", false);
+
+    /// <summary>The music a run picks from: the game's own track paths, as the zones name them.</summary>
+    internal static readonly string[] MusicTracks = SplitList(ConfigurationManager.GetValue("Roguelike.MusicTracks",
+        "|Music|WorldData|WC/WC_RavenWood.ogg, |Sound|WorldData|Sound/WizardCity2M.mp3, |Sound|WorldData|Sound/WizardCity3M.mp3, |Sound|WorldData|Sound/WizardCity4M.mp3, |Sound|WorldData|Sound/WizardCity_HauntedCaves.mp3, |Music|WorldData|MB/Marleybone4M.mp3, |DragonSpire|WorldData|Sound/Music/DragonSpyre3.mp3, |Music|WorldData|MS/SB/GNT_SB_Theme.mp3, |Zafaria|WorldData|Sound/Music/ZF_Hub.mp3, |Zafaria|WorldData|Sound/Music/ZF_DrumJungle.mp3, |Zafaria|WorldData|Sound/Music/ZF_Savannah.mp3, |Zafaria|WorldData|Sound/Music/ZF_Zamunda.mp3, |Music|WorldData|AV/AV_Hub.mp3, |Music|WorldData|AV/AV_AbbeyRoad.mp3, |Music|WorldData|AV/AV_Wyrd.mp3, |Music|WorldData|AZ/AZ_City_Theme.mp3, |Music|WorldData|AZ/AZ_Swamp_Tense.mp3, |Music|WorldData|KR/KR_Bastion.mp3, |Music|WorldData|KR/KR_LastWood.mp3, |Music|WorldData|KR/KR_MoonCliffs.mp3, |Music|WorldData|PL/PL_Walruskberg_Theme.mp3, |Music|WorldData|PL/PL_FrozenForest_Theme.mp3, |Music|WorldData|MR/MR_City_Theme.mp3, |Music|WorldData|MR/MR_DesertCanyons_Theme.mp3, |Music|WorldData|EM/EM_Aeriel_Theme.ogg, |Music|WorldData|EM/EM_Jungle_Theme.ogg, |Music|WorldData|EM/EM_Zanadu_Theme.ogg, |Music|WorldData|EM/EM_2/EM_NightmareRealm_Theme.ogg, |Music|WorldData|KM/KM_CityTheme.ogg, |Music|WorldData|KM/KM_RuralTheme.ogg, |Music|WorldData|LM/LM_JunglePulp_Theme.ogg, |Music|WorldData|LM/LM_UrsaiVillage_Theme.ogg, |Music|WorldData|DM/DM_Graveholm_Theme.ogg, |Music|WorldData|DM/DM_Outsiders_Theme.ogg, |Music|WorldData|AQ/AQ_Olympus.mp3"));
+
     internal static readonly uint StartDialogActor = (uint) ConfigurationManager.GetValue("Roguelike.StartDialogActor", 38168);
 
     /// <summary>

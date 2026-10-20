@@ -101,6 +101,7 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
 
         RoguelikeCreatures.Register(wizard);
         GiveRunMount(wizard);
+        PlayRunMusic(newTrack: true);
 
         // However the wizard got to a zone the run keeps them out of (logging in there, say), back they go.
         if (RoguelikeConfig.TravelBlockedFor(wizard) && RoguelikeConfig.IsBlockedZone(wizard.Zone)) {
@@ -293,6 +294,13 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         var mobs = message.MobTemplateIds ?? [];
         run.Kills += mobs.Length;
 
+        // The battle's music gave way to the zone's own as it ended; bring the run's track back.
+        if (RoguelikeConfig.RandomMusic) {
+            Timers.StartSingleTimer(MUSIC_TIMER_KEY,
+                new SERVICE_101_PROTOCOL.MSG_ROGUELIKE_COMMAND { Action = "music", Argument = "resume" },
+                TimeSpan.FromSeconds(3));
+        }
+
         // What the battle gave, told in one box so two finds don't pile up on top of each other.
         var finds = new List<string>();
         if (mobs.Length > 0 && RoguelikeStock.RollCrownDrop(wizard) is { } crownItem) {
@@ -366,6 +374,10 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
             case "next":
                 NextTier(wizard);
                 break;
+            case "music":
+                // ".run music" rolls another track; the service's own timer replays the current one after a battle.
+                PlayRunMusic(newTrack: message.Argument != "resume");
+                break;
             case "place":
                 // Sent by this service's own timer after a battle.
                 SendToPhaseZone(wizard);
@@ -425,6 +437,36 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
 
         InformGameClient(StartText(wizard), isImportant: true);
         BeginFirstStreet(wizard);
+    }
+
+    private const string MUSIC_TIMER_KEY = "RoguelikeMusic";
+    private string _runTrack;
+
+    /// <summary>
+    /// With RandomMusic, plays a random track from MusicTracks (or the current one again, after a battle's own
+    /// music), in place of the zone's music.
+    /// </summary>
+    private void PlayRunMusic(bool newTrack) {
+        if (!RoguelikeConfig.RandomMusic || RoguelikeConfig.MusicTracks.Length == 0 || GetActiveWizard()?.Roguelike is null) {
+            return;
+        }
+
+        if (newTrack || string.IsNullOrEmpty(_runTrack)) {
+            var tracks = RoguelikeConfig.MusicTracks;
+            var pick = tracks[Random.Shared.Next(tracks.Length)];
+            if (tracks.Length > 1 && pick == _runTrack) {
+                pick = tracks[(Array.IndexOf(tracks, pick) + 1 + Random.Shared.Next(tracks.Length - 1)) % tracks.Length];
+            }
+
+            _runTrack = pick;
+        }
+
+        SendToSocket(new WIZARD_12_PROTOCOL.MSG_PLAYMUSIC {
+            FadeTime = 1.5f,
+            Flags = 0,
+            SoundFilename = _runTrack,
+            StartDelay = 0.5f,
+        });
     }
 
     private const string START_TIMER_KEY = "RoguelikeStartDialog";
