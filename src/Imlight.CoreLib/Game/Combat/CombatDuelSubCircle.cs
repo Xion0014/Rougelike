@@ -760,6 +760,57 @@ public class CombatDuelSubCircle {
     private bool AnyPipPaysSchoolCosts => s_runAnyPip && Imlight.CoreLib.Game.Runs.RoguelikeBoosts.OnRun(_wizard);
 
     /// <summary>
+    /// On a run any school pip pays any school's cost, but the game client only lets a card be picked when the
+    /// pips it shows match the card's schools. So before the pips are sent, the wizard's school pips are given the
+    /// schools their hand asks for: the card that needs the most school pips first, then the next, as far as the
+    /// pips go. Whatever is left keeps the school most of the pips had.
+    /// </summary>
+    internal void SuitSchoolPipsToHand() {
+        if (!AnyPipPaysSchoolCosts || _combatDeck?.LastGivenHand is not { Count: > 0 } hand) {
+            return;
+        }
+
+        var pips = CombatParticipant.m_pipCount;
+        var total = s_pipSchools.Sum(school => SchoolPips(pips, school) ?? 0);
+        if (total == 0) {
+            return;
+        }
+
+        var leftoverSchool = s_pipSchools.OrderByDescending(school => SchoolPips(pips, school) ?? 0).First();
+        var assigned = s_pipSchools.ToDictionary(school => school, _ => 0);
+        var used = 0;
+
+        var needs = hand
+            .Where(spell => spell?.m_pipCost is not null && !CombatActionResolver.IsXPipSpell(spell))
+            .Select(spell => SchoolPipCosts(spell.m_pipCost).Where(c => c.Cost > 0)
+                .GroupBy(c => c.School).ToDictionary(g => g.Key, g => g.Sum(c => (int) c.Cost)))
+            .Where(need => need.Count > 0)
+            .OrderByDescending(need => need.Values.Sum());
+
+        foreach (var need in needs) {
+            var extra = need.Sum(kv => Math.Max(0, kv.Value - assigned[kv.Key]));
+            if (extra == 0 || used + extra > total) {
+                continue;
+            }
+
+            foreach (var (school, cost) in need) {
+                assigned[school] = Math.Max(assigned[school], cost);
+            }
+
+            used += extra;
+        }
+
+        if (used == 0) {
+            return;
+        }
+
+        assigned[leftoverSchool] += total - used;
+        foreach (var school in s_pipSchools) {
+            SetSchoolPips(pips, school, (byte) assigned[school]);
+        }
+    }
+
+    /// <summary>
     /// Spends the school pips a spell costs.
     /// </summary>
     internal void DeductSchoolPips(Spell spell) {

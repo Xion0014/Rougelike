@@ -1317,6 +1317,9 @@ internal sealed class CombatDuelComponent(ZoneEntity entity)
         };
 
         circle.ParticipantActor.Tell(msg);
+
+        // A new card may want its school pips in other schools (roguelike runs).
+        SendCombatPips();
     }
 
     internal void SendCombatPips() {
@@ -1330,6 +1333,7 @@ internal sealed class CombatDuelComponent(ZoneEntity entity)
                 return;
             }
 
+            circle.SuitSchoolPipsToHand();
             var current = circle.CombatParticipant.m_pipCount;
             var participantPipData = new ParticipantPipData {
                 m_acq = 1,
