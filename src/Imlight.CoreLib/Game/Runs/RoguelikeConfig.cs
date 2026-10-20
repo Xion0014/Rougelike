@@ -41,6 +41,12 @@ internal sealed record RoguelikeTier(int Number, string Street, string Boss) {
     /// <summary>Quests handed to the wizard when they reach this tier's boss zone (TierNBossQuests).</summary>
     public IReadOnlyList<string> BossQuests { get; init; } = [];
 
+    /// <summary>
+    /// The boss that ends the tier (TierNBoss): part of its name, or its template id. Empty: any boss beaten in the
+    /// boss phase ends it.
+    /// </summary>
+    public string FinalBoss { get; init; } = "";
+
 }
 
 /// <summary>
@@ -254,6 +260,7 @@ internal static class RoguelikeConfig {
             tiers.Add(new RoguelikeTier(i, parts[0], parts[1]) {
                 Quests = SplitList(ConfigurationManager.GetValue($"Roguelike.Tier{i}Quests", "")),
                 BossQuests = SplitList(ConfigurationManager.GetValue($"Roguelike.Tier{i}BossQuests", "")),
+                FinalBoss = StripKey(ConfigurationManager.GetValue($"Roguelike.Tier{i}Boss", "") ?? "").Trim(),
                 StreetSeconds = minutes > 0 ? minutes * 60 : StreetSeconds,
             });
         }
@@ -313,6 +320,32 @@ internal static class RoguelikeConfig {
                                               || z.Contains(filter, StringComparison.OrdinalIgnoreCase));
 
     /// <summary>True when the creature template is flagged as a boss.</summary>
+    /// <summary>
+    /// True when beating this creature ends the tier: the tier's TierNBoss when one is set (by name or template id),
+    /// else any boss. A dungeon can hold several bosses before the last one.
+    /// </summary>
+    internal static bool IsTierBoss(int tierNumber, ulong mobTemplateId) {
+        var finalBoss = GetTier(tierNumber)?.FinalBoss;
+        if (string.IsNullOrEmpty(finalBoss)) {
+            return IsBossMob(mobTemplateId);
+        }
+
+        if (ulong.TryParse(finalBoss, out var bossId)) {
+            return mobTemplateId == bossId;
+        }
+
+        if (CoreObjectFactory.GetCoreTemplate(mobTemplateId) is not GameObjectTemplate template) {
+            return false;
+        }
+
+        string displayKey = template.m_displayName;
+        var shown = string.IsNullOrEmpty(displayKey) ? "" : Locale.GetEnglishName(displayKey) ?? "";
+        string objectName = template.m_objectName;
+
+        return shown.Contains(finalBoss, StringComparison.OrdinalIgnoreCase)
+               || (objectName ?? "").Contains(finalBoss, StringComparison.OrdinalIgnoreCase);
+    }
+
     internal static bool IsBossMob(ulong mobTemplateId) {
         var template = CoreObjectFactory.GetCoreTemplate(mobTemplateId) as GameObjectTemplate;
         var npc = template?.m_behaviors?.OfType<NPCBehaviorTemplate>().FirstOrDefault();

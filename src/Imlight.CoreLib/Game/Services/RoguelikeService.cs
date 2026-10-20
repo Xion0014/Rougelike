@@ -309,7 +309,7 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
             InformGameClient(string.Join("\n\n", finds), isImportant: true);
         }
 
-        if (run.Phase == RoguelikePhase.Boss && mobs.Any(RoguelikeConfig.IsBossMob)) {
+        if (run.Phase == RoguelikePhase.Boss && mobs.Any(id => RoguelikeConfig.IsTierBoss(run.Tier, id))) {
             ClearBoss(wizard);
 
             return;
