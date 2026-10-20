@@ -38,6 +38,12 @@ internal sealed record RoguelikeTier(int Number, string Street, string Boss) {
     /// <summary>Quests handed to the wizard when they reach this tier's street (TierNQuests).</summary>
     public IReadOnlyList<string> Quests { get; init; } = [];
 
+    /// <summary>
+    /// TierNBossSwap: a creature template id that takes the place of every boss in this tier's boss zone (it looks
+    /// like it, but fights with the health, level and deck of the boss it replaces). 0: bosses stay.
+    /// </summary>
+    public ulong BossSwap { get; init; }
+
     /// <summary>Quests handed to the wizard when they reach this tier's boss zone (TierNBossQuests).</summary>
     public IReadOnlyList<string> BossQuests { get; init; } = [];
 
@@ -361,6 +367,8 @@ internal static class RoguelikeConfig {
                 BossQuests = SplitList(ConfigurationManager.GetValue($"Roguelike.Tier{i}BossQuests", "")),
                 FinalBoss = StripKey(ConfigurationManager.GetValue($"Roguelike.Tier{i}Boss", "") ?? "").Trim(),
                 StreetSeconds = minutes > 0 ? minutes * 60 : StreetSeconds,
+                BossSwap = ulong.TryParse(StripKey(ConfigurationManager.GetValue($"Roguelike.Tier{i}BossSwap", "") ?? "").Trim(),
+                                          out var swap) ? swap : 0,
             });
         }
 

@@ -189,6 +189,16 @@ internal static class RoguelikeCreatures {
             }
         }
 
+        // The tier's boss zone may put another boss in the boss's place (TierNBossSwap).
+        if (info.Run is { Phase: RoguelikePhase.Boss } bossRun && IsBoss(templateId)
+            && RoguelikeConfig.GetTier(bossRun.Tier) is { BossSwap: > 0 } tier
+            && string.Equals(RoguelikeConfig.ResolveZone(tier.Boss), zonePath, StringComparison.OrdinalIgnoreCase)
+            && CoreObjectFactory.GetCoreTemplate(tier.BossSwap) is GameObjectTemplate) {
+            mapped = tier.BossSwap;
+
+            return mapped != templateId;
+        }
+
         if (!IsRunZone(info, zonePath)) {
             return false;
         }
