@@ -319,6 +319,71 @@ internal static class RoguelikeStock {
         return candidates.Count == 0 ? null : candidates[Random.Shared.Next(candidates.Count)].Id;
     }
 
+    // ---------------------------------------------------------------------
+    // Random creature decks
+    // ---------------------------------------------------------------------
+
+    /// <summary>
+    /// [Roguelike] RandomCreatureDecks: the creatures a run swaps in fight with a random deck of normal trainer
+    /// spells (no developer, monster or boss cards) for their level and school, instead of their own.
+    /// </summary>
+    internal static readonly bool RandomCreatureDecks = ConfigurationManager.GetValue("Roguelike.RandomCreatureDecks", true);
+    private static readonly int s_creatureAttacks = Math.Clamp(ConfigurationManager.GetValue("Roguelike.CreatureDeckAttacks", 4), 1, 10);
+    private static readonly int s_creatureSupport = Math.Clamp(ConfigurationManager.GetValue("Roguelike.CreatureDeckSupport", 3), 0, 10);
+    // Spells up to this many levels above the creature's own can turn up, so low creatures still get a few.
+    private static readonly int s_creatureLevelLead = Math.Max(0, ConfigurationManager.GetValue("Roguelike.CreatureDeckLevelLead", 2));
+
+    private static readonly string[] s_attackTypes = ["Damage", "AOE", "Steal"];
+    private static readonly string[] s_supportTypes = ["Heal", "Charm", "Ward", "Curse", "Global"];
+
+    /// <summary>
+    /// A random deck for a creature on a run: CreatureDeckAttacks attack spells and CreatureDeckSupport others
+    /// (blades, shields, heals, traps, globals), all spells the trainers teach at up to the creature's level, of
+    /// its school where there are enough. Empty when nothing fits.
+    /// </summary>
+    internal static List<uint> RollCreatureDeck(int level, string school) {
+        var deck = new List<uint>();
+        try {
+            var cap = Math.Max(1, level) + s_creatureLevelLead;
+            var usable = s_spells.Value
+                .Where(entry => entry.Level <= cap)
+                .Select(entry => (entry.Id, Spell: CoreObjectFactory.GetCoreTemplate(entry.Id) as SpellTemplate))
+                .Where(x => x.Spell is not null && !x.Spell.m_Treasure && x.Spell.m_spellRank is { m_shadowPips: 0 }
+                            && !Imlight.CoreLib.Game.Combat.CombatEnchantments.IsEnchantment(x.Spell))
+                .ToList();
+
+            bool OfType(SpellTemplate spell, string[] types)
+                => types.Any(t => string.Equals((string) spell.m_sTypeName, t, StringComparison.OrdinalIgnoreCase));
+            bool OfSchool(SpellTemplate spell)
+                => string.IsNullOrEmpty(school) || string.Equals((string) spell.m_sMagicSchoolName, school, StringComparison.OrdinalIgnoreCase);
+
+            void Take(string[] types, int count) {
+                // Its own school first; other schools fill in when it has too few.
+                var own = usable.Where(x => OfType(x.Spell, types) && OfSchool(x.Spell)).Select(x => x.Id).ToList();
+                var other = usable.Where(x => OfType(x.Spell, types) && !OfSchool(x.Spell)).Select(x => x.Id).ToList();
+                foreach (var pool in new[] { own, other }) {
+                    while (count > 0 && pool.Count > 0) {
+                        var i = Random.Shared.Next(pool.Count);
+                        if (!deck.Contains(pool[i])) {
+                            deck.Add(pool[i]);
+                            count--;
+                        }
+
+                        pool.RemoveAt(i);
+                    }
+                }
+            }
+
+            Take(s_attackTypes, s_creatureAttacks);
+            Take(s_supportTypes, s_creatureSupport);
+        }
+        catch (Exception ex) {
+            Logger.Warning("Roguelike could not build a creature deck. {Message}", Logger.Args(ex.Message));
+        }
+
+        return deck;
+    }
+
     /// <summary>A random piece of the gear random shops sell, in the wizard's level window.</summary>
     private static uint? PickGear(Wizard wizard) {
         var (low, high) = LevelWindow(wizard);

@@ -248,6 +248,10 @@ internal static class RoguelikeCreatures {
         s_statSources[spawnGlobalId] = originalTemplateId;
     }
 
+    /// <summary>True when a run swapped this creature in (so it fights with a random deck, RandomCreatureDecks).</summary>
+    internal static bool IsRunSwapped(Zone.Core.ZoneEntity entity)
+        => entity.ActiveGameObject?.m_globalID.Full is { } id && id != 0 && s_statSources.ContainsKey(id);
+
     /// <summary>
     /// The template a creature's battle stats and deck come from: the creature it stands in for when a run swapped
     /// it in, else its own.
