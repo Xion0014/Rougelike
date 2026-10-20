@@ -48,6 +48,7 @@ internal static class RoguelikeCreatures {
         public ulong Seed;
         public int Tier;
         public string Street;
+        public RoguelikeRun Run;
 
         // The creature that replaced each quest adjective ("Lost_Soul") on this run's street, for quest text.
         public readonly ConcurrentDictionary<string, ulong> ByAdjective = new(StringComparer.OrdinalIgnoreCase);
@@ -114,7 +115,20 @@ internal static class RoguelikeCreatures {
         info.Seed = seed;
         info.Tier = run.Tier;
         info.Street = street;
+        info.Run = run;
     }
+
+    /// <summary>
+    /// [Roguelike] RandomDungeonCreatures: while a tier's street is on, the dungeons and rooms its quests lead
+    /// into (Krokotopia's Hall of Champions, Grand Arena...) swap their creatures too, not just the street.
+    /// </summary>
+    private static readonly bool s_streetDungeons = ConfigurationManager.GetValue("Roguelike.RandomDungeonCreatures", true);
+
+    /// <summary>True when creatures in this zone are swapped for this run: its street, or (with
+    /// RandomDungeonCreatures) any place the wizard goes to while the street phase is on.</summary>
+    private static bool IsRunZone(RunInfo info, string zonePath)
+        => string.Equals(info.Street, zonePath, StringComparison.OrdinalIgnoreCase)
+           || (s_streetDungeons && info.Run is { Phase: RoguelikePhase.Street } && !RoguelikeConfig.IsBlockedZone(zonePath));
 
     // Characters picked on the character screen whose game attach has not happened yet.
     private static readonly ConcurrentDictionary<ulong, DateTime> s_freshLogins = new();
@@ -175,7 +189,7 @@ internal static class RoguelikeCreatures {
             }
         }
 
-        if (!string.Equals(info.Street, zonePath, StringComparison.OrdinalIgnoreCase)) {
+        if (!IsRunZone(info, zonePath)) {
             return false;
         }
 
@@ -262,13 +276,13 @@ internal static class RoguelikeCreatures {
             return 0;
         }
 
-        var street = RoguelikeConfig.ResolveZone(RoguelikeConfig.GetTier(run.Tier)?.Street);
-        if (street is null || !string.Equals(wizard.Zone, street, StringComparison.OrdinalIgnoreCase)) {
+        if (!s_runs.TryGetValue(wizard.CharId, out var info) || string.IsNullOrEmpty(wizard.Zone)
+            || !IsRunZone(info, wizard.Zone)) {
             return 0;
         }
 
-        // A goal for somewhere else (a tower, a dungeon) still needs its own creatures.
-        if (!string.IsNullOrEmpty(goalZone) && !string.Equals(goalZone, street, StringComparison.OrdinalIgnoreCase)) {
+        // A goal for somewhere else still needs its own creatures; one for here takes any of them.
+        if (!string.IsNullOrEmpty(goalZone) && !string.Equals(goalZone, wizard.Zone, StringComparison.OrdinalIgnoreCase)) {
             return 0;
         }
 
