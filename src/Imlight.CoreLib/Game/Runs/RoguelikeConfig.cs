@@ -138,13 +138,41 @@ internal static class RoguelikeConfig {
 
     /// <summary>
     /// True when an NPC may offer this quest to this wizard: always off a run, and on a run only main story quests
-    /// (the game marks them mainline; a "-MAIN-" in the quest's code counts too).
+    /// (the game marks them mainline; a "-MAIN-" in the quest's code counts too), plus every quest offered inside a
+    /// dungeon. A dungeon's own quests (the Krokosphinx Vault's "Test of Strength") open its way forward, so the
+    /// main quest through it can't be finished without them.
     /// </summary>
-    internal static bool OffersQuest(Wizard wizard, QuestTemplate quest)
+    internal static bool OffersQuest(Wizard wizard, QuestTemplate quest, string npcZone = null, bool npcZoneIsInstance = false)
         => !(Enabled && MainQuestsOnly && wizard?.Roguelike is not null)
            || quest is null
            || quest.m_mainline
-           || ((string) quest.m_questName ?? "").Contains("-MAIN-", StringComparison.OrdinalIgnoreCase);
+           || ((string) quest.m_questName ?? "").Contains("-MAIN-", StringComparison.OrdinalIgnoreCase)
+           || IsDungeonZone(wizard, npcZone, npcZoneIsInstance);
+
+    /// <summary>
+    /// True for a dungeon: a zone loaded as an instance that is not one of the run's own private copies of a street
+    /// or boss zone, or a zone named in DungeonZones.
+    /// </summary>
+    private static bool IsDungeonZone(Wizard wizard, string zonePath, bool isInstance) {
+        if (string.IsNullOrEmpty(zonePath)) {
+            return false;
+        }
+
+        if (DungeonZones.Any(zone => zonePath.StartsWith(zone, StringComparison.OrdinalIgnoreCase))) {
+            return true;
+        }
+
+        if (!isInstance) {
+            return false;
+        }
+
+        return !Tiers.Any(tier => string.Equals(ResolveZone(tier.Street), zonePath, StringComparison.OrdinalIgnoreCase)
+                                  || string.Equals(ResolveZone(tier.Boss), zonePath, StringComparison.OrdinalIgnoreCase));
+    }
+
+    /// <summary>Zones (path prefixes) whose NPCs may offer side quests on a run, as dungeons do.</summary>
+    internal static readonly string[] DungeonZones = SplitList(ConfigurationManager.GetValue("Roguelike.DungeonZones",
+        "Krokotopia/KT_Krokosphinx/KT_Vault, Krokotopia/KT_Krokosphinx/KT_Retreat"));
 
     /// <summary>When a run's boss falls, every quest the wizard has is completed, with its rewards.</summary>
     internal static readonly bool CompleteQuestsAfterBoss = ConfigurationManager.GetValue("Roguelike.CompleteQuestsAfterBoss", true);
