@@ -29,6 +29,7 @@ namespace Imlight.CoreLib.Game.Commands.Protocols;
 ///   .run train         After a boss, go to the spell trainers (Ravenwood).
 ///   .run return        Go back to the run's current street, boss or shop zone.
 ///   .run here          Show the current zone's full name.
+///   .run goto &lt;tier&gt; [street|boss|shop]  Jump to a tier's phase, for testing (staff only).
 ///   .run zones &lt;text&gt;  List zone names containing the text (staff only), for filling in [Roguelike].
 /// </summary>
 internal class CommandRunProtocol : CommandProtocol {
@@ -57,6 +58,10 @@ internal class CommandRunProtocol : CommandProtocol {
     [Command("timerui")]
     [AuthRequired(AuthLevel.QualityAssurance)]
     private void TimerUiCommand([Remainder] string layout) => Send("timerui", layout);
+
+    [Command("goto")]
+    [AuthRequired(AuthLevel.QualityAssurance)]
+    private void GotoCommand([Remainder] string where) => Send("goto", where);
 
     [Command("zones")]
     [AuthRequired(AuthLevel.QualityAssurance)]

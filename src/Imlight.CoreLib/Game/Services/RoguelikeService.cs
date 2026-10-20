@@ -402,6 +402,9 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
             case "train":
                 GoTrain(wizard);
                 break;
+            case "goto":
+                GotoPhase(wizard, message.Argument);
+                break;
             case "return":
                 if (wizard.Roguelike is null || !RoguelikeConfig.Enabled) {
                     InformGameClient("You have no run to return to.");
@@ -726,6 +729,66 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
             StartTickTimer();
             GrantStreetQuests(wizard);
             ShowRunTimer(wizard, add: true);
+        }
+    }
+
+    /// <summary>
+    /// Staff test: ".run goto 3 boss" puts the run on that tier and phase (street, boss or shop; street when left
+    /// out) and sends the wizard there, with the tier's quests handed out again.
+    /// </summary>
+    private void GotoPhase(Wizard wizard, string argument) {
+        var run = wizard.Roguelike;
+        var parts = (argument ?? "").Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (!RoguelikeConfig.Enabled || run is null) {
+            InformGameClient("You have no run.");
+
+            return;
+        }
+
+        if (parts.Length == 0 || !int.TryParse(parts[0], out var tier) || tier < 1 || tier > RoguelikeConfig.TierCount) {
+            InformGameClient($"Usage: .run goto <tier 1-{RoguelikeConfig.TierCount}> [street|boss|shop]");
+
+            return;
+        }
+
+        var phase = (parts.Length > 1 ? parts[1] : "street").ToLowerInvariant() switch {
+            "boss" => RoguelikePhase.Boss,
+            "shop" or "shops" => RoguelikePhase.Shop,
+            _ => RoguelikePhase.Street,
+        };
+
+        if (wizard.IsInDuel) {
+            InformGameClient("Finish your battle first.");
+
+            return;
+        }
+
+        run.AwaitingStart = false;
+        run.Tier = tier;
+        run.Phase = phase;
+        run.StreetSeconds = 0;
+        run.QuestsGrantedTier = tier - 1;
+        run.BossQuestsGrantedTier = tier - 1;
+        run.ReturnPending = false;
+        WizardCollection.UpdateCharacterRoguelike(wizard);
+        RoguelikeCreatures.Register(wizard);
+        HideRunTimer();
+        Timers.Cancel(TICK_TIMER_KEY);
+
+        Logger.Information("[Roguelike] {0} jumps to tier {1}, {2}.", Logger.Args(wizard.CharId, tier, phase));
+        InformGameClient($"Tier {tier}, {phase.ToString().ToLowerInvariant()}.");
+        if (SendToPhaseZone(wizard, force: true)) {
+            return;
+        }
+
+        // Already there: start what arriving would have.
+        if (phase == RoguelikePhase.Street) {
+            StartTickTimer();
+            GrantStreetQuests(wizard);
+            ShowRunTimer(wizard, add: true);
+        }
+        else if (phase == RoguelikePhase.Boss) {
+            GrantBossQuests(wizard);
         }
     }
 
