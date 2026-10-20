@@ -1189,6 +1189,10 @@ public class CombatDuelSubCircle {
             }
         }
         allSpells.AddRange(temporarySpells);
+        Logger.Information("Battle deck for {0}: deck {1}, {2} item cards from gear, {3} left out as crossed out ({4}); saved crossed out: {5}.",
+            Logger.Args(_wizard.CharId, equippedDeckId, _wizard.SpellbookBehavior.TemporarySpells.Count, skipped.Values.Sum(),
+                string.Join(", ", skipped.Select(pair => $"{pair.Key} x{pair.Value}")),
+                string.Join("; ", _wizard.SpellbookBehavior.ExcludedItemSpellIds.Select(pair => $"deck {pair.Key}: {string.Join(", ", pair.Value)}"))));
         _combatDeck = new CombatDeck(allSpells, vaultSpells, PLAYER_HAND_SIZE);
 
         CombatParticipant = new CombatParticipant {

@@ -197,6 +197,9 @@ internal class SpellbookService(SessionActor sessionActor) : MessageService(sess
         // Update the in-memory exclusion list.
         var copies = wizard.SpellbookBehavior.TemporarySpells.Count(spell => spell.m_templateID == spellTemplateId);
         wizard.SpellbookBehavior.SetItemSpellExclusion(message.DeckID, spellTemplateId, exclude, copies);
+        Logger.Information("Item card {0} (template {1}) {2} in deck {3}: gear gives {4}, now crossed out {5}.",
+            Logger.Args(message.SpellID, spellTemplateId, exclude ? "crossed out" : "put back", message.DeckID, copies,
+                wizard.SpellbookBehavior.ExcludedItemSpellCount(message.DeckID, spellTemplateId)));
 
         // Persist the change.
         WizardData.Collections.WizardCollection.UpdateCharacterSpellbookBehavior(wizard);
