@@ -988,6 +988,10 @@ internal class QuestService(SessionActor sessionActor) : MessageService(sessionA
         }
 
         SendQuestStartingMessage(quest, questInstance);
+
+        // A dungeon's own quests can need this one (ReqHasQuest): the Katzenstein's Lab quest needs the main quest a
+        // roguelike run hands out there. Granted on arrival, they would be missed when this quest comes later.
+        TryGrantDungeonQuests(wizard);
     }
 
     [MessageHandler(typeof(COMBAT_106_PROTOCOL.MSG_COMBATWIN))]
