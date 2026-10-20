@@ -442,21 +442,19 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
     /// countdown) when the wizard closes it, or after a while if the game never says it was closed.
     /// </summary>
     private void ShowStartDialog(Wizard wizard) {
+        // The dialog window only shows the game's own text (locale keys), so the run's rules go in a box on
+        // top of it, and the dialog is Merle Ambrose speaking lines the game already has.
+        InformGameClient(StartText(wizard) + "\n\nClose Merle Ambrose's words when you are ready: that starts the run.",
+                         isImportant: true);
         var dialog = new ActorDialog {
             m_dialogTag = "RoguelikeStart",
             m_dialogEntries = [
-                new NPCDialogEntry {
-                    m_dialog = StartText(wizard),
+                .. RoguelikeConfig.StartDialogLines.Select(key => new NPCDialogEntry {
+                    m_dialog = key,
                     m_actorTemplateID = RoguelikeConfig.StartDialogActor,
                     m_bypassCameraOnReview = true,
                     m_allowPlayerToMove = true,
-                },
-                new NPCDialogEntry {
-                    m_dialog = "When you are ready, close this and you are on your way. Good luck, young wizard!",
-                    m_actorTemplateID = RoguelikeConfig.StartDialogActor,
-                    m_bypassCameraOnReview = true,
-                    m_allowPlayerToMove = true,
-                },
+                }),
             ],
         };
 

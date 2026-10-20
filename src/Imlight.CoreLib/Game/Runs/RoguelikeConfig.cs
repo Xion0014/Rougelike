@@ -228,6 +228,12 @@ internal static class RoguelikeConfig {
 
     internal static readonly uint StartDialogActor = (uint) ConfigurationManager.GetValue("Roguelike.StartDialogActor", 38168);
 
+    /// <summary>
+    /// The lines of the welcome dialog: the game's own text keys (the window shows nothing else), one page each.
+    /// </summary>
+    internal static readonly IReadOnlyList<string> StartDialogLines = SplitList(ConfigurationManager.GetValue(
+        "Roguelike.StartDialogLines", "WizQst99C9_00000017, WizQst955B_00000043, CinematicDialogs_00000124"));
+
     /// <summary>The name the travel tome shows while it offers its choices.</summary>
     internal static readonly string TravelBookName = ConfigurationManager.GetValue("Roguelike.TravelBookName", "Tome of Travels");
 
