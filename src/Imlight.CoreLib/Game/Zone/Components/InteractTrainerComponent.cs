@@ -69,6 +69,8 @@ internal sealed class InteractTrainerComponent(ZoneEntity entity) : ZoneEntityCo
         // Attach if the template is an NPC and has a spell inventory in Dragon database.
         => template is GameObjectTemplate goTemplate 
         && goTemplate.m_behaviors.Any(x => x is NPCBehaviorTemplate) 
+        && !(Imlight.CoreLib.Game.Runs.RoguelikeConfig.Enabled
+             && Imlight.CoreLib.Game.Runs.RoguelikeConfig.MovedSpellVendors.Contains(goTemplate.m_templateID))
         && (NpcSpellInventoryCollection.TryGetNpcInventory(goTemplate.m_templateID, out _)
             || TestTrainerKindOf(goTemplate) is not null);
 
@@ -297,7 +299,7 @@ internal sealed class InteractTrainerComponent(ZoneEntity entity) : ZoneEntityCo
             && Imlight.CoreLib.Game.Runs.RoguelikeConfig.Enabled
             && Imlight.CoreLib.Game.Runs.RoguelikeConfig.TrainerStandIns.TryGetValue(standIn.m_templateID, out var teacherId)
             && NpcSpellInventoryCollection.TryGetNpcInventory(teacherId, out var teacherInventory)) {
-            SpellInventory = teacherInventory.Spells;
+            SpellInventory = WithMovedSpells(teacherId, teacherInventory.Spells);
             InitializeServiceBases();
             Logger.Information("{0} teaches the spells of trainer {1} ({2} spells).",
                 Logger.Args(standIn.m_objectName, teacherId, SpellInventory.Count));
@@ -323,8 +325,61 @@ internal sealed class InteractTrainerComponent(ZoneEntity entity) : ZoneEntityCo
             return;
         }
 
-        SpellInventory = spellInventory.Spells;
+        SpellInventory = WithMovedSpells(goTemplate.m_templateID, spellInventory.Spells);
         InitializeServiceBases();
+    }
+
+    /// <summary>
+    /// A trainer's spells plus, in roguelike mode, the battle spells of the vendors in MovedSpellVendors for its
+    /// school (SchoolTrainers): Sabrina Greenstar's shields go to their schools' professors.
+    /// </summary>
+    private static List<NPCSpellEntry> WithMovedSpells(ulong trainerId, List<NPCSpellEntry> own)
+        => Imlight.CoreLib.Game.Runs.RoguelikeConfig.Enabled && s_movedSpells.Value.TryGetValue(trainerId, out var moved)
+            ? [.. own, .. moved.Where(m => own.All(o => o.TemplateID != m.TemplateID))]
+            : own;
+
+    private static readonly System.Lazy<Dictionary<ulong, List<NPCSpellEntry>>> s_movedSpells
+        = new(BuildMovedSpells, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
+
+    private static Dictionary<ulong, List<NPCSpellEntry>> BuildMovedSpells() {
+        var result = new Dictionary<ulong, List<NPCSpellEntry>>();
+        var paths = new Dictionary<ulong, string>();
+        foreach (var location in CoreObjectFactory.TemplateManifest?.m_serializedTemplates ?? []) {
+            if (location is not null) {
+                paths.TryAdd(location.m_id, location.m_filename);
+            }
+        }
+
+        foreach (var vendorId in Imlight.CoreLib.Game.Runs.RoguelikeConfig.MovedSpellVendors) {
+            if (!NpcSpellInventoryCollection.TryGetNpcInventory(vendorId, out var inventory) || inventory?.Spells is null) {
+                continue;
+            }
+
+            foreach (var entry in inventory.Spells) {
+                // Battle spells only: Diego's duel-minigame cards and item variants ("Kite Shield - Amulet") stay behind.
+                if (CoreObjectFactory.GetCoreTemplate(entry.TemplateID) is not SpellTemplate spell
+                    || !paths.TryGetValue(entry.TemplateID, out var path)
+                    || IsDevOrMonsterSpell(path, spell) || ((string) spell.m_name ?? "").Contains(" - ")) {
+                    continue;
+                }
+
+                string school = spell.m_sMagicSchoolName;
+                var trainers = Imlight.CoreLib.Game.Runs.RoguelikeConfig.SchoolTrainers;
+                if (!trainers.TryGetValue(school ?? "", out var trainerId) && !trainers.TryGetValue("Balance", out trainerId)) {
+                    continue;
+                }
+
+                if (!result.TryGetValue(trainerId, out var list)) {
+                    result[trainerId] = list = [];
+                }
+
+                list.Add(new NPCSpellEntry { TemplateID = entry.TemplateID, RequiredSpellID = 0, Level = System.Math.Max(1, entry.Level) });
+                Logger.Information("Roguelike: {0} ({1}) moves from vendor {2} to trainer {3}.",
+                    Logger.Args((string) spell.m_name, school, vendorId, trainerId));
+            }
+        }
+
+        return result;
     }
 
     // About six pages of the training window; the game disconnects when an NPC offers hundreds.

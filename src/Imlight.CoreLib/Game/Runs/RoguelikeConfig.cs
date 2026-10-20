@@ -218,7 +218,29 @@ internal static class RoguelikeConfig {
         .Select(pair => pair.Split(':'))
         .Where(parts => parts.Length == 2 && ulong.TryParse(parts[0].Trim(), out _) && ulong.TryParse(parts[1].Trim(), out _))
         .GroupBy(parts => ulong.Parse(parts[0].Trim()))
-        .ToDictionary(group => group.Key, group => ulong.Parse(group.First()[1].Trim()));
+        .ToDictionary(group => group.Key, group => UpgradedStandIn(group.Key, ulong.Parse(group.First()[1].Trim())));
+
+    // Older Imlight.ini files had Mellori (1381151) copy Malorn Ashthorn (81102, 6 spells); she is the Death
+    // professor now and copies Dworgyn (82209).
+    private static ulong UpgradedStandIn(ulong standIn, ulong teacher)
+        => standIn == 1381151 && teacher == 81102 ? 82209 : teacher;
+
+    /// <summary>
+    /// [Roguelike] MovedSpellVendors: NPCs outside Ravenwood that teach spells (Sabrina Greenstar in the Commons,
+    /// Diego on Unicorn Way) teach nothing; their battle spells go to the school's trainer in SchoolTrainers.
+    /// </summary>
+    internal static readonly HashSet<ulong> MovedSpellVendors = [.. SplitList(ConfigurationManager.GetValue(
+            "Roguelike.MovedSpellVendors", "38210, 38226"))
+        .Select(id => ulong.TryParse(id.Trim(), out var v) ? v : 0).Where(v => v != 0)];
+
+    /// <summary>The Ravenwood trainer of each school (School:template id), who takes the moved vendors' spells.</summary>
+    internal static readonly Dictionary<string, ulong> SchoolTrainers = SplitList(ConfigurationManager.GetValue(
+            "Roguelike.SchoolTrainers",
+            "Fire:38208, Ice:38172, Storm:38141, Myth:38206, Life:38204, Death:82209, Balance:81103"))
+        .Select(pair => pair.Split(':'))
+        .Where(parts => parts.Length == 2 && ulong.TryParse(parts[1].Trim(), out _))
+        .GroupBy(parts => parts[0].Trim(), StringComparer.OrdinalIgnoreCase)
+        .ToDictionary(group => group.Key, group => ulong.Parse(group.First()[1].Trim()), StringComparer.OrdinalIgnoreCase);
 
     /// <summary>
     /// If true, a new run opens with a welcome spoken by StartDialogActor (Merle Ambrose), and the wizard goes to the

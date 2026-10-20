@@ -596,7 +596,10 @@ internal static class RoguelikeStock {
             .GroupBy(entry => entry.TemplateID)
             .Select(group => new SpellEntry((uint) group.Key, Math.Max(1, group.Min(entry => entry.Level))))
             .Where(entry => entry.Level <= s_maxLevel
-                            && CoreObjectFactory.GetCoreTemplate(entry.Id) is SpellTemplate { m_Treasure: false })
+                            && CoreObjectFactory.GetCoreTemplate(entry.Id) is SpellTemplate { m_Treasure: false } spell
+                            // Minigame and duel-only cards some vendors teach (Diego's Rhoshambo spells) stay out.
+                            && !(s_templatePaths.Value.TryGetValue(entry.Id, out var path)
+                                 && Imlight.CoreLib.Game.Zone.Components.InteractTrainerComponent.IsDevOrMonsterSpell(path, spell)))
             .ToList();
 
         Logger.Information("Roguelike: {Count} trainer spells up to level {Max} for random trainers.",
