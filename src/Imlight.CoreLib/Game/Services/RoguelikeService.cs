@@ -378,7 +378,12 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
                 PlayBattleMusic();
                 break;
             case "music":
-                // ".run music" rolls another track; the service's own timer replays the current one after a battle.
+                // ".run music" rolls another track; the service's own timers replay the current one after a battle
+                // and change it every MusicChangeMinutes outside battles.
+                if (message.Argument == "rotate" && wizard.IsInDuel) {
+                    break;
+                }
+
                 PlayRunMusic(newTrack: message.Argument != "resume");
                 break;
             case "place":
@@ -443,6 +448,7 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
     }
 
     private const string MUSIC_TIMER_KEY = "RoguelikeMusic";
+    private const string MUSIC_ROTATE_KEY = "RoguelikeMusicRotate";
     private string _runTrack;
 
     // The zone's own music, to bring back after a random battle theme when zone music is not random.
@@ -457,7 +463,7 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
             // Only battles are random: after one, the zone's own music, which the game may not bring back itself.
             if (!newTrack && RoguelikeConfig.RandomBattleMusic && !string.IsNullOrEmpty(_zoneMusic)) {
                 SendToSocket(new WIZARD_12_PROTOCOL.MSG_PLAYMUSIC {
-                    FadeTime = 1.5f, Flags = 0, SoundFilename = _zoneMusic, StartDelay = 0.5f,
+                    FadeTime = 1.5f, Flags = (sbyte) RoguelikeConfig.MusicFlags, SoundFilename = _zoneMusic, StartDelay = 0.5f,
                 });
             }
 
@@ -476,24 +482,19 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
             }
 
             _runTrack = pick;
+            if (RoguelikeConfig.MusicChangeMinutes > 0) {
+                var every = TimeSpan.FromMinutes(RoguelikeConfig.MusicChangeMinutes);
+                Timers.StartPeriodicTimer(MUSIC_ROTATE_KEY,
+                    new SERVICE_101_PROTOCOL.MSG_ROGUELIKE_COMMAND { Action = "music", Argument = "rotate" }, every, every);
+            }
         }
 
         SendToSocket(new WIZARD_12_PROTOCOL.MSG_PLAYMUSIC {
             FadeTime = 1.5f,
-            Flags = 0,
+            Flags = (sbyte) RoguelikeConfig.MusicFlags,
             SoundFilename = _runTrack,
             StartDelay = 0.5f,
         });
-    }
-
-    /// <summary>A battle with the wizard in it began: with RandomBattleMusic, once the game has started its own
-    /// combat music, a random combat theme takes over.</summary>
-    [MessageHandler(typeof(COMBAT_106_PROTOCOL.MSG_ACTORADDEDTODUEL))]
-    private void ReceiveAddedToDuel() {
-        if (RoguelikeConfig.RandomBattleMusic && GetActiveWizard()?.Roguelike is not null) {
-            Timers.StartSingleTimer(MUSIC_TIMER_KEY, new SERVICE_101_PROTOCOL.MSG_ROGUELIKE_COMMAND { Action = "battlemusic" },
-                                    TimeSpan.FromSeconds(1.5));
-        }
     }
 
     private void PlayBattleMusic() {
@@ -504,9 +505,9 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
 
         SendToSocket(new WIZARD_12_PROTOCOL.MSG_PLAYMUSIC {
             FadeTime = 1.0f,
-            Flags = 0,
+            Flags = (sbyte) RoguelikeConfig.MusicFlags,
             SoundFilename = tracks[Random.Shared.Next(tracks.Length)],
-            StartDelay = 0f,
+            StartDelay = 0.5f,
         });
     }
 

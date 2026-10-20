@@ -232,6 +232,18 @@ internal static class RoguelikeConfig {
     /// </summary>
     internal static readonly bool RandomMusic = ConfigurationManager.GetValue("Roguelike.RandomMusic", false);
 
+    /// <summary>
+    /// [Roguelike] MusicFlags: the flags sent with each track. The game's tracks only repeat on their own with
+    /// the right flag; 1 asks for that.
+    /// </summary>
+    internal static readonly int MusicFlags = ConfigurationManager.GetValue("Roguelike.MusicFlags", 1);
+
+    /// <summary>
+    /// [Roguelike] MusicChangeMinutes: outside battles, a new random track this often (0 = never), so the music
+    /// never runs out even if a track does not repeat.
+    /// </summary>
+    internal static readonly int MusicChangeMinutes = Math.Max(0, ConfigurationManager.GetValue("Roguelike.MusicChangeMinutes", 3));
+
     /// <summary>The music a run picks from: the game's own track paths, as the zones name them.</summary>
     internal static readonly string[] MusicTracks = SplitList(ConfigurationManager.GetValue("Roguelike.MusicTracks",
         "|Music|WorldData|WC/WC_RavenWood.ogg, |Sound|WorldData|Sound/WizardCity2M.mp3, |Sound|WorldData|Sound/WizardCity3M.mp3, |Sound|WorldData|Sound/WizardCity4M.mp3, |Sound|WorldData|Sound/WizardCity_HauntedCaves.mp3, |Music|WorldData|MB/Marleybone4M.mp3, |DragonSpire|WorldData|Sound/Music/DragonSpyre3.mp3, |Music|WorldData|MS/SB/GNT_SB_Theme.mp3, |Zafaria|WorldData|Sound/Music/ZF_Hub.mp3, |Zafaria|WorldData|Sound/Music/ZF_DrumJungle.mp3, |Zafaria|WorldData|Sound/Music/ZF_Savannah.mp3, |Zafaria|WorldData|Sound/Music/ZF_Zamunda.mp3, |Music|WorldData|AV/AV_Hub.mp3, |Music|WorldData|AV/AV_AbbeyRoad.mp3, |Music|WorldData|AV/AV_Wyrd.mp3, |Music|WorldData|AZ/AZ_City_Theme.mp3, |Music|WorldData|AZ/AZ_Swamp_Tense.mp3, |Music|WorldData|KR/KR_Bastion.mp3, |Music|WorldData|KR/KR_LastWood.mp3, |Music|WorldData|KR/KR_MoonCliffs.mp3, |Music|WorldData|PL/PL_Walruskberg_Theme.mp3, |Music|WorldData|PL/PL_FrozenForest_Theme.mp3, |Music|WorldData|MR/MR_City_Theme.mp3, |Music|WorldData|MR/MR_DesertCanyons_Theme.mp3, |Music|WorldData|EM/EM_Aeriel_Theme.ogg, |Music|WorldData|EM/EM_Jungle_Theme.ogg, |Music|WorldData|EM/EM_Zanadu_Theme.ogg, |Music|WorldData|EM/EM_2/EM_NightmareRealm_Theme.ogg, |Music|WorldData|KM/KM_CityTheme.ogg, |Music|WorldData|KM/KM_RuralTheme.ogg, |Music|WorldData|LM/LM_JunglePulp_Theme.ogg, |Music|WorldData|LM/LM_UrsaiVillage_Theme.ogg, |Music|WorldData|DM/DM_Graveholm_Theme.ogg, |Music|WorldData|DM/DM_Outsiders_Theme.ogg, |Music|WorldData|AQ/AQ_Olympus.mp3"));

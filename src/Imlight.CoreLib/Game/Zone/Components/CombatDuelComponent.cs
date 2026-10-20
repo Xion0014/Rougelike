@@ -89,6 +89,9 @@ internal sealed class CombatDuelComponent(ZoneEntity entity)
     private const byte PLANNING_TIME = 30;
     private const float DUEL_GRACE_PERIOD_IN_SECONDS = 3.75f;
     private const float DUEL_NEW_ROUND_DELAY = 2.5f;
+
+    // The players already told their battle started (for a roguelike run's battle music).
+    private readonly HashSet<IActorRef> _battleMusicTold = [];
     private const float YAW_ERROR_COMPENSATION = 1.58f;
     private const string GRACE_TIME_KEY = "GracePeriod";
     private const string PLANNING_TIME_KEY = "PlanningPhase";
@@ -414,6 +417,14 @@ internal sealed class CombatDuelComponent(ZoneEntity entity)
 
         // Re-telegraph minion AI moves now that the planning HUD exists.
         ResendMinionMoveSelections();
+
+        // A player's first planning phase: the game has started this battle's music by now, so a roguelike run
+        // may put its own on (RandomBattleMusic).
+        EnactActionOnSubCircles(circle => {
+            if (circle.IsHumanPlayer && circle.ParticipantActor is { } actor && _battleMusicTold.Add(actor)) {
+                actor.Tell(new SERVICE_101_PROTOCOL.MSG_ROGUELIKE_COMMAND { Action = "battlemusic" });
+            }
+        });
 
         // Tutorial duels flush queued card grants and re-script the golems before planning.
         _tutorialDirector.OnPlanningPhaseBegin();
