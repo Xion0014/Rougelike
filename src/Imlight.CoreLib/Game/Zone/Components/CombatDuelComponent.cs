@@ -798,6 +798,7 @@ internal sealed class CombatDuelComponent(ZoneEntity entity)
         AssignParticipantToSubCircle(availablePlayerSubCircle, startingPlayerActor.Key, startingPlayerObject);
 
         _isActive = true;
+        _battleMusicTold.Clear();
         ReserveCirclesForGroupOf(startingPlayerObject);
 
         Logger.Debug("Duel {0} | Created. Grace period over in {1}",
