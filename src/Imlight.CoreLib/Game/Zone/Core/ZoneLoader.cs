@@ -179,6 +179,38 @@ internal sealed class ZoneLoader : ReceiveProtocolDispatcher {
         });
     }
 
+    private static readonly System.Collections.Concurrent.ConcurrentDictionary<string, string> s_musicFiles
+        = new(StringComparer.OrdinalIgnoreCase);
+
+    /// <summary>The music a zone plays, as its own data names it, or null. Read once per zone.</summary>
+    internal static string MusicFileName(string zonePath) {
+        if (string.IsNullOrEmpty(zonePath)) {
+            return null;
+        }
+
+        return s_musicFiles.GetOrAdd(zonePath, path => {
+            try {
+                if (!ZoneDataFileCache.TryGet(path, out var files)) {
+                    if (!ResourceManager.TryLoadArchive(path, out var wad)) {
+                        return null;
+                    }
+
+                    files = ReadZoneDataFiles(wad);
+                    ZoneDataFileCache.Add(path, files);
+                }
+
+                string music = Deserialize<WizZoneData>(files.ZoneData, "zone data", ZONE_DATA_FILE_NAME)?.m_musicFileName;
+
+                return music;
+            }
+            catch (Exception ex) {
+                Logger.Warning("Could not read the music of zone {Zone}. {Message}", Logger.Args(path, ex.Message));
+
+                return null;
+            }
+        });
+    }
+
     private static ZoneDataFiles ReadZoneDataFiles(Archive wad) => new(
         wad.OpenFile(ZONE_DATA_FILE_NAME)?.ToArray(),
         wad.OpenFile(SPAWN_DATA_FILE_NAME)?.ToArray(),

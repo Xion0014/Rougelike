@@ -295,7 +295,7 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         run.Kills += mobs.Length;
 
         // The battle's music gave way to the zone's own as it ended; bring the run's track back.
-        if (RoguelikeConfig.RandomMusic) {
+        if (RoguelikeConfig.RandomMusic || RoguelikeConfig.RandomBattleMusic) {
             Timers.StartSingleTimer(MUSIC_TIMER_KEY,
                 new SERVICE_101_PROTOCOL.MSG_ROGUELIKE_COMMAND { Action = "music", Argument = "resume" },
                 TimeSpan.FromSeconds(3));
@@ -374,6 +374,9 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
             case "next":
                 NextTier(wizard);
                 break;
+            case "battlemusic":
+                PlayBattleMusic();
+                break;
             case "music":
                 // ".run music" rolls another track; the service's own timer replays the current one after a battle.
                 PlayRunMusic(newTrack: message.Argument != "resume");
@@ -442,12 +445,26 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
     private const string MUSIC_TIMER_KEY = "RoguelikeMusic";
     private string _runTrack;
 
+    // The zone's own music, to bring back after a random battle theme when zone music is not random.
+    private string _zoneMusic => Imlight.CoreLib.Game.Zone.Core.ZoneLoader.MusicFileName(GetActiveWizard()?.Zone);
+
     /// <summary>
     /// With RandomMusic, plays a random track from MusicTracks (or the current one again, after a battle's own
     /// music), in place of the zone's music.
     /// </summary>
     private void PlayRunMusic(bool newTrack) {
-        if (!RoguelikeConfig.RandomMusic || RoguelikeConfig.MusicTracks.Length == 0 || GetActiveWizard()?.Roguelike is null) {
+        if (!RoguelikeConfig.RandomMusic) {
+            // Only battles are random: after one, the zone's own music, which the game may not bring back itself.
+            if (!newTrack && RoguelikeConfig.RandomBattleMusic && !string.IsNullOrEmpty(_zoneMusic)) {
+                SendToSocket(new WIZARD_12_PROTOCOL.MSG_PLAYMUSIC {
+                    FadeTime = 1.5f, Flags = 0, SoundFilename = _zoneMusic, StartDelay = 0.5f,
+                });
+            }
+
+            return;
+        }
+
+        if (RoguelikeConfig.MusicTracks.Length == 0 || RoguelikeConfig.MusicTracks.Length == 0 || GetActiveWizard()?.Roguelike is null) {
             return;
         }
 
@@ -466,6 +483,30 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
             Flags = 0,
             SoundFilename = _runTrack,
             StartDelay = 0.5f,
+        });
+    }
+
+    /// <summary>A battle with the wizard in it began: with RandomBattleMusic, once the game has started its own
+    /// combat music, a random combat theme takes over.</summary>
+    [MessageHandler(typeof(COMBAT_106_PROTOCOL.MSG_ACTORADDEDTODUEL))]
+    private void ReceiveAddedToDuel() {
+        if (RoguelikeConfig.RandomBattleMusic && GetActiveWizard()?.Roguelike is not null) {
+            Timers.StartSingleTimer(MUSIC_TIMER_KEY, new SERVICE_101_PROTOCOL.MSG_ROGUELIKE_COMMAND { Action = "battlemusic" },
+                                    TimeSpan.FromSeconds(1.5));
+        }
+    }
+
+    private void PlayBattleMusic() {
+        var tracks = RoguelikeConfig.BattleMusicTracks;
+        if (!RoguelikeConfig.RandomBattleMusic || tracks.Length == 0 || GetActiveWizard()?.Roguelike is null) {
+            return;
+        }
+
+        SendToSocket(new WIZARD_12_PROTOCOL.MSG_PLAYMUSIC {
+            FadeTime = 1.0f,
+            Flags = 0,
+            SoundFilename = tracks[Random.Shared.Next(tracks.Length)],
+            StartDelay = 0f,
         });
     }
 
