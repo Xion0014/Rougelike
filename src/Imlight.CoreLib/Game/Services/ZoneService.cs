@@ -207,7 +207,8 @@ internal class ZoneService(SessionActor sessionActor) : MessageService(sessionAc
         // A roguelike run keeps the wizard to its own zones: a door out of the Shopping District to the Commons (or a
         // flee to the hub) sends them back to where the run has them instead.
         if (message.SendToClient && Imlight.CoreLib.Game.Runs.RoguelikeConfig.IsBlockedZone(message.DestinationZone)
-            && Imlight.CoreLib.Game.Runs.RoguelikeConfig.TravelBlockedFor(GetActiveWizard())) {
+            && Imlight.CoreLib.Game.Runs.RoguelikeConfig.TravelBlockedFor(GetActiveWizard())
+            && !Imlight.CoreLib.Game.Runs.RoguelikeConfig.IsStaffTeleport(GetActiveWizard()?.CharId ?? 0)) {
             Logger.Information("Session {SessionId}: {Zone} is closed during a run; sending the wizard back to their run.",
                 Logger.Args(SessionActor.SessionID, message.DestinationZone));
             InformGameClient(Imlight.CoreLib.Game.Runs.RoguelikeConfig.TravelBlockedText);

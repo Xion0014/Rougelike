@@ -104,7 +104,8 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         PlayRunMusic(newTrack: true);
 
         // However the wizard got to a zone the run keeps them out of (logging in there, say), back they go.
-        if (RoguelikeConfig.TravelBlockedFor(wizard) && RoguelikeConfig.IsBlockedZone(wizard.Zone)) {
+        if (RoguelikeConfig.TravelBlockedFor(wizard) && RoguelikeConfig.IsBlockedZone(wizard.Zone)
+            && !RoguelikeConfig.IsStaffTeleport(wizard.CharId, consume: true)) {
             wizard.Roguelike.ReturnPending = false;
             WizardCollection.UpdateCharacterRoguelike(wizard);
             if (SendToPhaseZone(wizard, force: true)) {

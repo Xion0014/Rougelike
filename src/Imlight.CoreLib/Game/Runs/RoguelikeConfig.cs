@@ -225,6 +225,25 @@ internal static class RoguelikeConfig {
     private static ulong UpgradedStandIn(ulong standIn, ulong teacher)
         => standIn == 1381151 && teacher == 81102 ? 82209 : teacher;
 
+    // Wizards a staff .tp is moving right now, so the run does not turn them back from a closed zone.
+    private static readonly System.Collections.Concurrent.ConcurrentDictionary<ulong, DateTime> s_staffTeleports = new();
+
+    /// <summary>Notes that a staff command is teleporting this wizard (good for a minute).</summary>
+    internal static void MarkStaffTeleport(ulong charId) => s_staffTeleports[charId] = DateTime.UtcNow;
+
+    /// <summary>True while a staff teleport of this wizard is under way; <paramref name="consume"/> ends it.</summary>
+    internal static bool IsStaffTeleport(ulong charId, bool consume = false) {
+        if (!s_staffTeleports.TryGetValue(charId, out var at) || DateTime.UtcNow - at > TimeSpan.FromMinutes(1)) {
+            return false;
+        }
+
+        if (consume) {
+            s_staffTeleports.TryRemove(charId, out _);
+        }
+
+        return true;
+    }
+
     /// <summary>
     /// [Roguelike] MovedSpellVendors: NPCs outside Ravenwood that teach spells (Sabrina Greenstar in the Commons,
     /// Diego on Unicorn Way) teach nothing; their battle spells go to the school's trainer in SchoolTrainers.
