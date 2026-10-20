@@ -180,6 +180,26 @@ internal static class RoguelikeConfig {
     internal static readonly string[] DungeonZones = SplitList(ConfigurationManager.GetValue("Roguelike.DungeonZones",
         "Krokotopia/KT_Krokosphinx/KT_Vault, Krokotopia/KT_Krokosphinx/KT_Retreat"));
 
+    /// <summary>
+    /// Roguelike mode: the most creatures a "defeat" goal and the most items a "collect" goal asks for (0 leaves them as
+    /// they are), so a street's quests fit in its time.
+    /// </summary>
+    internal static readonly int MaxGoalCount = Math.Max(0, ConfigurationManager.GetValue("Roguelike.MaxGoalCount", 2));
+
+    /// <summary>Caps a quest's defeat and collect goals at MaxGoalCount. Called as quests load.</summary>
+    internal static void CapGoalCounts(QuestTemplate quest) {
+        if (!Enabled || MaxGoalCount <= 0 || quest?.m_goals is null) {
+            return;
+        }
+
+        foreach (var goal in quest.m_goals) {
+            if (goal?.m_tallyCounter is { } tally && tally.m_count > MaxGoalCount
+                && goal.m_goalType is GOAL_TYPE.GOAL_TYPE_BOUNTY or GOAL_TYPE.GOAL_TYPE_BOUNTYCOLLECT or GOAL_TYPE.GOAL_TYPE_USAGE) {
+                tally.m_count = MaxGoalCount;
+            }
+        }
+    }
+
     /// <summary>When a run's boss falls, every quest the wizard has is completed, with its rewards.</summary>
     internal static readonly bool CompleteQuestsAfterBoss = ConfigurationManager.GetValue("Roguelike.CompleteQuestsAfterBoss", true);
 

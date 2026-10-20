@@ -619,6 +619,8 @@ public static class SpiralDB {
                 using var stream = File.OpenRead(file);
                 var quest = JsonSerializer.Deserialize<QuestTemplate>(stream, s_jsonOptions);
                 if (quest != null) {
+                    // Roguelike mode shortens defeat and collect goals ([Roguelike] MaxGoalCount).
+                    Imlight.CoreLib.Game.Runs.RoguelikeConfig.CapGoalCounts(quest);
                     targetBag.Add(quest);
                     targetDict[quest.m_questName] = quest;
                     Interlocked.Increment(ref count);
