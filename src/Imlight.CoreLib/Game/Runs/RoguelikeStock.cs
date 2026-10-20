@@ -293,6 +293,32 @@ internal static class RoguelikeStock {
             : PickGear(wizard) ?? PickCrownGear(wizard);
     }
 
+    // ---------------------------------------------------------------------
+    // Spells learned from battles, quests and bosses
+    // ---------------------------------------------------------------------
+
+    internal static readonly int BattleSpellChance = Math.Clamp(ConfigurationManager.GetValue("Roguelike.BattleSpellChance", 10), 0, 100);
+    internal static readonly int QuestSpellChance = Math.Clamp(ConfigurationManager.GetValue("Roguelike.QuestSpellChance", 25), 0, 100);
+    internal static readonly int BossSpellChance = Math.Clamp(ConfigurationManager.GetValue("Roguelike.BossSpellChance", 100), 0, 100);
+
+    /// <summary>
+    /// Rolls a spell for the wizard to learn, with the given chance (0 to 100): one the random trainers could offer
+    /// (the trainer spells, plus the enchantment and Shadow spells of the trainers a run retires), that the wizard
+    /// does not know yet and has the level for. Null when the roll fails or there is nothing left to learn.
+    /// </summary>
+    internal static uint? RollSpellToLearn(Wizard wizard, int chance) {
+        if (!RoguelikeConfig.Enabled || wizard?.Roguelike is null || chance <= 0 || Random.Shared.Next(100) >= chance) {
+            return null;
+        }
+
+        var level = Math.Max(1, (int) wizard.MagicSchoolBehavior.Level);
+        var candidates = s_spells.Value.Concat(s_retiredSpells.Value)
+            .Where(spell => spell.Level <= level && !wizard.SpellbookBehavior.HasSpell(spell.Id))
+            .ToList();
+
+        return candidates.Count == 0 ? null : candidates[Random.Shared.Next(candidates.Count)].Id;
+    }
+
     /// <summary>A random piece of the gear random shops sell, in the wizard's level window.</summary>
     private static uint? PickGear(Wizard wizard) {
         var (low, high) = LevelWindow(wizard);

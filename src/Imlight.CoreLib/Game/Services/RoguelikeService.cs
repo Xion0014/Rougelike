@@ -309,7 +309,14 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
             InformGameClient(string.Join("\n\n", finds), isImportant: true);
         }
 
-        if (run.Phase == RoguelikePhase.Boss && mobs.Any(id => RoguelikeConfig.IsTierBoss(run.Tier, id))) {
+        // A chance to learn a spell: always worth a try after a boss, sometimes after any battle.
+        var isTierBoss = run.Phase == RoguelikePhase.Boss && mobs.Any(id => RoguelikeConfig.IsTierBoss(run.Tier, id));
+        if (mobs.Length > 0
+            && RoguelikeStock.RollSpellToLearn(wizard, isTierBoss ? RoguelikeStock.BossSpellChance : RoguelikeStock.BattleSpellChance) is { } spellId) {
+            TeachSpell(wizard, spellId);
+        }
+
+        if (isTierBoss) {
             ClearBoss(wizard);
 
             return;
@@ -578,6 +585,14 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
 
         var speed = RoguelikeConfig.MountSpeed > 0 ? $" Every mount runs at +{RoguelikeConfig.MountSpeed}% speed on a run." : "";
         InformGameClient($"A mount for your run is in your backpack. Equip it to get around faster!{speed}");
+    }
+
+    /// <summary>Teaches a spell the way a drop does, so the game shows its "New Spell Learned" window.</summary>
+    private void TeachSpell(Wizard wizard, uint spellId) {
+        var loot = new Imlight.CoreLib.WizardData.Models.World.DropTableResult();
+        loot.Items.Add(new Imlight.CoreLib.WizardData.Models.World.DropItemResult { ItemId = spellId.ToString(), Quantity = 1 });
+        Imlight.CoreLib.Game.DropTables.LootGranter.GrantAndDisplay(SessionActor.ActorRef, wizard, loot);
+        Logger.Information("[Roguelike] {0} learned spell {1} from a battle.", Logger.Args(wizard.CharId, spellId));
     }
 
     private void GiveCrownDrop(Wizard wizard, uint templateId) {

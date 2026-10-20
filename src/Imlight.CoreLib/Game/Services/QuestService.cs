@@ -1470,6 +1470,16 @@ internal class QuestService(SessionActor sessionActor) : MessageService(sessionA
             ShowQuestCompletionDialogue(qTemplate);
         }
 
+        // A roguelike run: sometimes a spell to learn, for any quest completed.
+        if (Imlight.CoreLib.Game.Runs.RoguelikeStock.RollSpellToLearn(wizard, Imlight.CoreLib.Game.Runs.RoguelikeStock.QuestSpellChance) is { } questSpell) {
+            var spellLoot = new Imlight.CoreLib.WizardData.Models.World.DropTableResult();
+            spellLoot.Items.Add(new Imlight.CoreLib.WizardData.Models.World.DropItemResult {
+                ItemId = questSpell.ToString(),
+                Quantity = 1,
+            });
+            Imlight.CoreLib.Game.DropTables.LootGranter.GrantAndDisplay(SessionActor.ActorRef, wizard, spellLoot);
+        }
+
         // A roguelike run: a random piece of gear, sometimes, for any quest completed.
         if (Imlight.CoreLib.Game.Runs.RoguelikeStock.RollQuestItem(wizard) is { } questItem) {
             var bonusLoot = new Imlight.CoreLib.WizardData.Models.World.DropTableResult();
