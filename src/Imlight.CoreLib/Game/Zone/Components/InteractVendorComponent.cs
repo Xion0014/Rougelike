@@ -71,6 +71,8 @@ internal sealed class InteractVendorComponent(ZoneEntity entity) : ZoneEntityCom
     private List<GID> _inventory;
     private string _shopTitle = "Unknown Shop";
     private int _shopType = 0;
+    // Which shop window the game opens: 0 the equipment (robe) shop, 2 reagents, 4 jewels, 5 pet snacks.
+    private int _furnitureShop = 0;
     private bool _csrTestShop = false;
 
     public static bool ShouldAttachToEntity(CoreTemplate template)
@@ -89,6 +91,7 @@ internal sealed class InteractVendorComponent(ZoneEntity entity) : ZoneEntityCom
                 _shopTitle = shoppingBehavior.m_shopTitle;
             }
             _shopType = shoppingBehavior.m_shopType;
+            _furnitureShop = shoppingBehavior.m_furnitureShop;
             _csrTestShop = shoppingBehavior.m_CSRTestShop;
         }
 
@@ -155,6 +158,8 @@ internal sealed class InteractVendorComponent(ZoneEntity entity) : ZoneEntityCom
             // 0 - Gold
             // 1 - PvP tickets
             m_shopType = _shopType,
+            // A jewel vendor opens the jewel shop window (4); the robe shop window has no tab for jewels.
+            m_furnitureShop = IsJewelVendor ? 4 : _furnitureShop,
             // todo: figure this out for QA
             m_CSRTestShop = _csrTestShop,
         };
