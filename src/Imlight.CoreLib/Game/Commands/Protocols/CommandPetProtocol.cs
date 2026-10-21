@@ -29,7 +29,8 @@ using Imlight.CoreLib.WizardData.Models.Player;
 namespace Imlight.CoreLib.Game.Commands.Protocols;
 
 /// <summary>
-/// Pet commands for the pet you are wearing: `.pet info`, `.pet feed`, `.pet xp`, `.pet level`, `.pet talent`.
+/// Pet commands for the pet you are wearing: `.pet info`, `.pet feed`, `.pet xp`, `.pet level`, `.pet talent`,
+/// `.pet derby`, `.pet stats`.
 /// </summary>
 internal class CommandPetProtocol : CommandProtocol {
 
@@ -96,6 +97,10 @@ internal class CommandPetProtocol : CommandProtocol {
     [Command("talent")]
     [AuthRequired(AuthLevel.QualityAssurance)]
     private void TalentCommand([Remainder] string name) {
+        if (TryPoolCommand(name, derby: false)) {
+            return;
+        }
+
         var talent = FindTalent(name);
         if (talent is null || WornPet() is not { } pet) {
             return;
@@ -109,6 +114,104 @@ internal class CommandPetProtocol : CommandProtocol {
 
         PetCare.Finish(Context.Character, pet, null, Send);
         InformSenderClient($"Your pet now has {PetProgress.TalentLabel(talent)}. Relog to see it in the pet window.");
+    }
+
+    // `.pet derby get|claim|unclaim`, the same as `.pet talent` for the derby talents (Justin, 2026-10-19).
+    [Command("derby")]
+    [AuthRequired(AuthLevel.QualityAssurance)]
+    private void DerbyCommand([Remainder] string text) {
+        if (!TryPoolCommand(text, derby: true)) {
+            InformSenderClient("Type .pet derby get <slot 0-9> <talent>, .pet derby claim <slot> or .pet derby unclaim <slot>.");
+        }
+    }
+
+    // `.pet stats <Strength|Intellect|Agility|Will|Power|Happiness> <amount|max>`.
+    [Command("stats")]
+    [AuthRequired(AuthLevel.QualityAssurance)]
+    private void StatsCommand([Remainder] string text) {
+        var words = (text ?? "").Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (words.Length != 2) {
+            InformSenderClient("Type .pet stats <Strength, Intellect, Agility, Will, Power or Happiness> <amount or max>.");
+
+            return;
+        }
+
+        if (WornPet() is not { } pet) {
+            return;
+        }
+
+        var problem = PetProgress.SetStat(pet, words[0], words[1], out var shownAs);
+        if (problem is not null) {
+            InformSenderClient(problem);
+
+            return;
+        }
+
+        PetCare.Finish(Context.Character, pet, null, Send);
+        InformSenderClient($"Your pet's {shownAs}.");
+    }
+
+    /// <summary>
+    /// `get <slot> <talent>` puts a talent into a slot (0 at the top of the pet window, 9 at the bottom) without
+    /// showing it; `claim <slot>` shows it, at most five; `unclaim <slot>` hides it again.
+    /// </summary>
+    /// <returns>False if the text is not one of these, so the caller can treat it another way.</returns>
+    private bool TryPoolCommand(string text, bool derby) {
+        var words = (text ?? "").Split(' ', 3, StringSplitOptions.RemoveEmptyEntries);
+        var action = words.Length > 0 ? words[0].ToLowerInvariant() : "";
+        if (action is not ("get" or "claim" or "unclaim")) {
+            return false;
+        }
+
+        var command = derby ? ".pet derby" : ".pet talent";
+        if (words.Length < 2 || !int.TryParse(words[1], out var slot) || slot < 0 || slot > 9) {
+            InformSenderClient(action == "get"
+                ? $"Type {command} get <slot 0-9> <talent name>. Slot 0 is the top of the pet window, 9 the bottom."
+                : $"Type {command} {action} <slot 0-9>.");
+
+            return true;
+        }
+
+        if (WornPet() is not { } pet) {
+            return true;
+        }
+
+        string problem;
+        PetTalentBaseTemplate talent;
+        if (action == "get") {
+            if (words.Length < 3) {
+                InformSenderClient($"Type {command} get {slot} <talent name>.");
+
+                return true;
+            }
+
+            talent = FindTalent(words[2], derby);
+            if (talent is null) {
+                return true;
+            }
+
+            problem = PetProgress.PutInPool(pet, derby, slot, talent);
+        }
+        else {
+            problem = PetProgress.Claim(pet, derby, slot, action == "claim", out talent);
+        }
+
+        if (problem is not null) {
+            InformSenderClient(problem);
+
+            return true;
+        }
+
+        // From now on the pet's shown talents stay as picked instead of filling up with its age.
+        Imlight.CoreLib.Game.Combat.BattleModes.HandPickedPetTalents.Set(pet.m_globalID.Full, true);
+        PetCare.Finish(Context.Character, pet, null, Send);
+        InformSenderClient(action switch {
+            "get" => $"Slot {slot} now holds {PetProgress.TalentLabel(talent)}, not claimed yet. Claim it with {command} claim {slot}.",
+            "claim" => $"Claimed {PetProgress.TalentLabel(talent)} in slot {slot}.",
+            _ => $"Unclaimed {PetProgress.TalentLabel(talent)} in slot {slot}.",
+        });
+
+        return true;
     }
 
     [Command("untalent")]
@@ -177,9 +280,9 @@ internal class CommandPetProtocol : CommandProtocol {
         return pet;
     }
 
-    private PetTalentBaseTemplate FindTalent(string name) {
+    private PetTalentBaseTemplate FindTalent(string name, bool? derby = null) {
         var text = name?.Trim() ?? "";
-        var talents = PetData.AllTalents.ToList();
+        var talents = PetData.AllTalents.Where(t => derby is null || (t is PetDerbyTalentTemplate) == derby).ToList();
         var talent = talents.FirstOrDefault(t => string.Equals(t.m_talentName, text, StringComparison.OrdinalIgnoreCase))
             ?? talents.FirstOrDefault(t => string.Equals(Locale.GetEnglishName(t.m_displayName), text, StringComparison.OrdinalIgnoreCase));
         if (talent is null) {

@@ -334,6 +334,11 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
             TeachSpell(wizard, spellId);
         }
 
+        // Sometimes a pet: any age, stat talents only, every stat at its maximum.
+        if (mobs.Length > 0 && RoguelikePets.RollsDrop(wizard, isTierBoss)) {
+            GiveRunPet(wizard);
+        }
+
         if (isTierBoss) {
             ClearBoss(wizard);
 
@@ -421,6 +426,24 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
             case "logout":
                 // Sent by this service's own timer, once the farewell has had a moment on screen.
                 CloseSession();
+                break;
+            case "pet":
+                // Staff test: ".run pet" gives a random run pet, ".run pet mega" (or 1 to 7) one of that age.
+                if (wizard.Roguelike is null) {
+                    InformGameClient("Start a run first.");
+                    break;
+                }
+
+                var arg = message.Argument?.Trim();
+                byte? petAge = string.IsNullOrEmpty(arg) ? null
+                    : byte.TryParse(arg, out var n) && n is >= 1 and <= 7 ? n
+                    : Imlight.CoreLib.Game.Pet.PetProgress.ParseLevel(arg);
+                if (!string.IsNullOrEmpty(arg) && petAge is null) {
+                    InformGameClient("Usage: .run pet [baby|teen|adult|ancient|epic|mega|ultra]");
+                    break;
+                }
+
+                GiveRunPet(wizard, petAge);
                 break;
             case "goto":
                 GotoPhase(wizard, message.Argument);
@@ -794,6 +817,36 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         loot.Items.Add(new Imlight.CoreLib.WizardData.Models.World.DropItemResult { ItemId = spellId.ToString(), Quantity = 1 });
         Imlight.CoreLib.Game.DropTables.LootGranter.GrantAndDisplay(SessionActor.ActorRef, wizard, loot);
         Logger.Information("[Roguelike] {0} learned spell {1} from a battle.", Logger.Args(wizard.CharId, spellId));
+    }
+
+    /// <summary>Gives the wizard a run pet (RoguelikePets): a random one, or of the given age (1 Baby to 7 Ultra).</summary>
+    private void GiveRunPet(Wizard wizard, byte? age = null) {
+        var pet = RoguelikePets.Build(wizard, age);
+        if (pet is null || !wizard.AddPetToInventory(pet)) {
+            Logger.Warning("[Roguelike] Could not give {0} a pet.", Logger.Args(wizard.CharId));
+            if (age is not null) {
+                InformGameClient("Could not build a pet. Check the server log.");
+            }
+
+            return;
+        }
+
+        if (!Imlight.CoreLib.Shared.Items.ItemSync.SendAdded(SessionActor.ActorRef, wizard, pet)) {
+            Logger.Warning("[Roguelike] Could not show {0} their new pet.", Logger.Args(wizard.CharId));
+        }
+
+        SendToSocket(new WIZARD2_53_PROTOCOL.MSG_ITEMACQUISITION {
+            ItemGlobalID = pet.m_globalID,
+            ItemLocation = 1,
+            ItemTemplateID = (uint) pet.m_templateID,
+        });
+
+        var talents = RoguelikePets.ShownTalents(pet);
+        InformGameClient($"A pet found you! It is {RoguelikePets.AgeOf(pet)}" +
+                         (string.IsNullOrEmpty(talents) ? "." : $", with {talents}.") + " It is in your backpack.",
+                         isImportant: true);
+        Logger.Information("[Roguelike] {0} got pet {1} ({2}): {3}.",
+            Logger.Args(wizard.CharId, pet.m_templateID.Full, RoguelikePets.AgeOf(pet), talents));
     }
 
     private void GiveCrownDrop(Wizard wizard, uint templateId) {

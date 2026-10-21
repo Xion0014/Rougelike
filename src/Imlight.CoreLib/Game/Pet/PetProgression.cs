@@ -94,9 +94,12 @@ internal static class PetProgression {
 
         var changed = EnsureGenes(behavior, template);
         changed |= EnsureStats(behavior, template);
-        changed |= EnsureHappiness(behavior);
+        changed |= EnsureHappiness(behavior, PetMaxRaises.Get(pet.m_globalID.Full, "Happiness"));
         changed |= EnsureLevel(behavior, template);
-        changed |= EnsureExpressed(behavior);
+        if (!Imlight.CoreLib.Game.Combat.BattleModes.HandPickedPetTalents.IsOn(pet.m_globalID.Full)) {
+            changed |= EnsureExpressed(behavior);
+        }
+
         changed |= RefreshRatings(behavior);
 
         return changed;
@@ -157,8 +160,18 @@ internal static class PetProgression {
                 break;
             }
 
-            total -= required;
+            if (!PetRules.RunningTotalXp) {
+                total -= required;
+            }
+
             level++;
+
+            // The real game keeps the extra for the next level; with KeepExtraXp off it is lost.
+            if (!PetRules.KeepExtraXp && !PetRules.RunningTotalXp) {
+                total = 0;
+
+                break;
+            }
         }
 
         behavior.m_level = (byte) level;
@@ -376,8 +389,9 @@ internal static class PetProgression {
     private static PetStat CopyStat(PetStat stat, int value)
         => new() { m_name = stat.m_name, m_statID = StringHash.Compute(stat.m_name), m_value = value };
 
-    private static bool EnsureHappiness(ClientPetItemBehavior behavior) {
-        var maximum = (uint) PetRules.MaximumHappiness;
+    private static bool EnsureHappiness(ClientPetItemBehavior behavior, int raisedMaximum) {
+        // `.pet stats happiness` may have raised this pet's maximum.
+        var maximum = (uint) Math.Max(PetRules.MaximumHappiness, raisedMaximum);
         var changed = false;
         if (behavior.m_maximumHappiness == 0) {
             behavior.m_happiness = Math.Min((uint) PetRules.StartingHappiness, maximum);
@@ -425,7 +439,8 @@ internal static class PetProgression {
     }
 
     private static bool EnsureExpressed(ClientPetItemBehavior behavior) {
-        var earned = behavior.m_level - 1;
+        // One talent per age from Teen to Mega: five at most (Ultra adds none).
+        var earned = Math.Min(behavior.m_level - 1, PetProgress.MAX_SHOWN_TALENTS);
         var changed = ExpressUpTo(behavior.m_allTalents, behavior.m_expressedTalents ??= [], earned);
         changed |= ExpressUpTo(behavior.m_allDerbyTalents, behavior.m_expressedDerbyTalents ??= [], earned);
 

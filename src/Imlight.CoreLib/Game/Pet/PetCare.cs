@@ -97,7 +97,7 @@ internal static class PetCare {
                 });
 
             PetProgress.AddXp(pet, PetProgress.SnackXp(pet, snackTemplate), growth);
-            PetProgress.ApplyStatChanges(pet, snackTemplate.m_statModifierSet?.m_modifications, growth);
+            PetProgress.ApplyStatChanges(pet, PetProgress.SnackStatChanges(snackTemplate), growth);
             if (behavior.m_maximumHappiness > 0) {
                 behavior.m_happiness = Math.Min(behavior.m_maximumHappiness, behavior.m_happiness + (uint) Math.Max(1, snackTemplate.m_rank));
             }
@@ -117,12 +117,21 @@ internal static class PetCare {
     /// </summary>
     internal static void Finish(Wizard wizard, WizClientObjectItem pet, PetProgress.PetGrowth growth, Action<IMessage> send) {
         var behavior = PetProgress.GetBehavior(pet);
+
+        // The talent rows of the pet window read the ratings: a new talent shows its name there.
+        PetProgression.EnsureInitialized(pet);
         if (!WizardItemCollection.SaveItemBehaviors(pet)) {
             Logger.Warning("Could not save pet {0} of {1}.", Logger.Args(pet.m_globalID, wizard.CharId));
         }
 
         if (ReferenceEquals(GetWornPet(wizard), pet)) {
             EquipmentExtras.Refresh(wizard);
+
+        }
+
+        // Commands like .pet stats change the pet without growth, and the pet window only shows it after this update.
+        if (growth is null && behavior is not null && PetBehaviorUpdate.TryCreate(pet, out var plainUpdate)) {
+            send(plainUpdate);
         }
 
         if (growth is null || behavior is null) {
@@ -130,13 +139,7 @@ internal static class PetCare {
         }
 
         try {
-            if (growth.XpGained > 0) {
-                send(new WIZARD2_53_PROTOCOL.MSG_GAINPETXP {
-                    PetGID = pet.m_globalID,
-                    XP = growth.XpGained,
-                });
-            }
-
+            // Level-ups first, then the pet's new state so the pet window shows the XP and stats, then the XP popup.
             foreach (var (level, talent, derby) in growth.LevelUps) {
                 send(new PET_9_PROTOCOL.MSG_PETLEVELUP {
                     GlobalID = pet.m_globalID,
@@ -147,6 +150,17 @@ internal static class PetCare {
                     NewDerbyPower = derby is null ? 0 : PetData.TalentId(derby.m_talentName),
                     NewJewel = 0,
                     Display = 1,
+                });
+            }
+
+            if (PetBehaviorUpdate.TryCreate(pet, out var update)) {
+                send(update);
+            }
+
+            if (growth.XpGained > 0) {
+                send(new WIZARD2_53_PROTOCOL.MSG_GAINPETXP {
+                    PetGID = pet.m_globalID,
+                    XP = growth.XpGained,
                 });
             }
         }

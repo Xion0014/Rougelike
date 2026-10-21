@@ -38,6 +38,7 @@ using Imcodec.ObjectProperty.TypeCache;
 using Imcodec.IO;
 using Imcodec.Types;
 using Imlight.Common;
+using Imlight.CoreLib.Shared.Items;
 using Imlight.CoreLib.Shared.Resources;
 
 namespace Imlight.CoreLib.Game.Pet;
@@ -48,12 +49,14 @@ internal static class PetProgress {
     internal const byte MEGA_LEVEL = 6;
     internal const byte MAX_LEVEL = 7;
     // [Pets] in Imlight.ini.
-    private static int? s_snackXpPerRank;
-    private static float? s_favoriteSnackBonus;
+    private static bool? s_doubleSnackXp;
+    private static float? s_likedSnackBonus;
 
-    private static int SnackXpPerRank => s_snackXpPerRank ??= Math.Max(1, ReadSetting("Pets.SnackXpPerRank", 5));
+    // Double XP & Rewards, which the feed window shows: snack experience counts twice.
+    private static bool DoubleSnackXp => s_doubleSnackXp ??= ReadSetting("Pets.DoubleSnackXp", true);
 
-    private static float FavoriteSnackBonus => s_favoriteSnackBonus ??= ReadSetting("Pets.FavoriteSnackBonus", 1.5f);
+    // Renamed from FavoriteSnackBonus (was 1.5) so old ini values do not stick; Justin's rule has no liked bonus.
+    private static float LikedSnackBonus => s_likedSnackBonus ??= Math.Max(0f, ReadSetting("Pets.LikedSnackBonus", 1.0f));
 
     private static T ReadSetting<T>(string key, T defaultValue) {
         try {
@@ -90,8 +93,17 @@ internal static class PetProgress {
         return index >= BABY_LEVEL ? (byte) index : null;
     }
 
-    internal static ClientPetItemBehavior GetBehavior(WizClientObjectItem pet)
-        => pet?.m_inactiveBehaviors?.OfType<ClientPetItemBehavior>().FirstOrDefault();
+    internal static ClientPetItemBehavior GetBehavior(WizClientObjectItem pet) {
+        var behavior = pet?.m_inactiveBehaviors?.OfType<ClientPetItemBehavior>().FirstOrDefault();
+        if (behavior is not null) {
+            // Remembered so the maximum stats, worked out from the behavior alone, can find the pet's raised ones.
+            s_pets.AddOrUpdate(behavior, pet);
+        }
+
+        return behavior;
+    }
+
+    private static readonly System.Runtime.CompilerServices.ConditionalWeakTable<ClientPetItemBehavior, WizClientObjectItem> s_pets = new();
 
     internal static PetItemBehaviorTemplate GetTemplate(WizClientObjectItem pet)
         => pet is null ? null : PetFactory.GetPetItemBehaviorTemplate((uint) pet.m_templateID);
@@ -167,13 +179,27 @@ internal static class PetProgress {
         behavior.m_XP += xp;
         growth.XpGained += xp;
 
+        // m_XP counts from the start of the current level, like the pet window shows it (4/125, then 0/250), unless
+        // RunningTotalXp keeps it as a total that each level's goal is measured against.
         while (behavior.m_level < MAX_LEVEL) {
             var required = RequiredXp(template, behavior.m_level);
             if (required == 0 || behavior.m_XP < required) {
                 break;
             }
 
+            if (!PetRules.RunningTotalXp) {
+                behavior.m_XP -= required;
+            }
+
             LevelUp(behavior, template, growth);
+
+            // The real game keeps the extra for the next level; with KeepExtraXp off it is lost.
+            if (!PetRules.KeepExtraXp && !PetRules.RunningTotalXp) {
+                growth.XpGained -= Math.Min(growth.XpGained, behavior.m_XP);
+                behavior.m_XP = 0;
+
+                break;
+            }
         }
 
         if (behavior.m_level >= MAX_LEVEL) {
@@ -196,14 +222,14 @@ internal static class PetProgress {
 
         EnsureInitialized(pet);
         while (behavior.m_level < level && behavior.m_level < MAX_LEVEL) {
-            // Leveling this way also brings the experience up to what the level needs.
-            behavior.m_XP = Math.Max(behavior.m_XP, RequiredXp(template, behavior.m_level));
+            // Each level starts at 0 experience.
+            behavior.m_XP = 0;
             LevelUp(behavior, template, growth);
         }
 
         if (behavior.m_level > level) {
             behavior.m_level = level;
-            behavior.m_XP = level > BABY_LEVEL ? RequiredXp(template, (byte) (level - 1)) : 0;
+            behavior.m_XP = 0;
             behavior.m_requiredXP = RequiredXp(template, level);
         }
 
@@ -237,6 +263,11 @@ internal static class PetProgress {
     /// Picks a talent from the pool that the pet does not show yet. Higher ranked talents are rarer.
     /// </summary>
     private static PetTalentBaseTemplate Manifest(List<uint> pool, List<uint> expressed) {
+        // A pet shows at most five of each kind, which talents claimed by hand may already fill.
+        if (expressed.Count >= MAX_SHOWN_TALENTS) {
+            return null;
+        }
+
         var candidates = (pool ?? [])
             .Where(id => !expressed.Contains(id))
             .Select(PetData.GetTalent)
@@ -258,6 +289,147 @@ internal static class PetProgress {
         expressed.Add(PetData.TalentId(picked.m_talentName));
 
         return picked;
+    }
+
+    /// <summary>
+    /// The most talents of one kind (combat or derby) a pet shows.
+    /// </summary>
+    internal const int MAX_SHOWN_TALENTS = 5;
+
+    /// <summary>
+    /// The talent pool of one kind, in the order the pet window lists it (slot 0 at the top).
+    /// </summary>
+    internal static List<uint> Pool(ClientPetItemBehavior behavior, bool derby)
+        => derby ? behavior.m_allDerbyTalents ??= [] : behavior.m_allTalents ??= [];
+
+    private static List<uint> Shown(ClientPetItemBehavior behavior, bool derby)
+        => derby ? behavior.m_expressedDerbyTalents ??= [] : behavior.m_expressedTalents ??= [];
+
+    /// <summary>
+    /// Puts a talent into a slot of the pet's pool without showing it (`.pet talent get`). The talent that was in the
+    /// slot leaves the pool and stops showing.
+    /// </summary>
+    /// <returns>Null when it worked, otherwise the reason in plain words.</returns>
+    internal static string PutInPool(WizClientObjectItem pet, bool derby, int slot, PetTalentBaseTemplate talent) {
+        var behavior = GetBehavior(pet);
+        if (behavior is null || talent is null) {
+            return "Wear a pet first.";
+        }
+
+        if ((talent is PetDerbyTalentTemplate) != derby) {
+            return derby ? "That is not a derby talent. Use .pet talent for it." : "That is a derby talent. Use .pet derby for it.";
+        }
+
+        EnsureInitialized(pet);
+        var pool = Pool(behavior, derby);
+        var id = PetData.TalentId(talent.m_talentName);
+        var at = pool.IndexOf(id);
+        if (at >= 0 && at != slot) {
+            return $"Your pet already has that talent in slot {at}.";
+        }
+
+        while (pool.Count <= slot) {
+            pool.Add(0);
+        }
+
+        if (pool[slot] != id) {
+            Shown(behavior, derby).Remove(pool[slot]);
+            pool[slot] = id;
+        }
+
+        RecalculateMaxStats(behavior, GetTemplate(pet));
+
+        return null;
+    }
+
+    /// <summary>
+    /// Shows or hides the talent in a slot of the pet's pool (`.pet talent claim` and `unclaim`).
+    /// </summary>
+    /// <returns>Null when it worked, otherwise the reason in plain words.</returns>
+    internal static string Claim(WizClientObjectItem pet, bool derby, int slot, bool claim, out PetTalentBaseTemplate talent) {
+        talent = null;
+        var behavior = GetBehavior(pet);
+        if (behavior is null) {
+            return "Wear a pet first.";
+        }
+
+        EnsureInitialized(pet);
+        var pool = Pool(behavior, derby);
+        if (slot >= pool.Count || pool[slot] == 0 || PetData.GetTalent(pool[slot]) is not { } found) {
+            return $"Slot {slot} has no talent. Put one there with .pet {(derby ? "derby" : "talent")} get {slot} <name>.";
+        }
+
+        talent = found;
+        var shown = Shown(behavior, derby);
+        if (claim == shown.Contains(pool[slot])) {
+            return claim ? "That talent is already claimed." : "That talent is not claimed.";
+        }
+
+        if (claim && shown.Count >= MAX_SHOWN_TALENTS) {
+            return $"Your pet already shows {MAX_SHOWN_TALENTS} {(derby ? "derby talents" : "talents")}. Unclaim one first with .pet {(derby ? "derby" : "talent")} unclaim <slot>.";
+        }
+
+        if (claim) {
+            // Kept in pool order, like the window lists them.
+            shown.Add(pool[slot]);
+            shown.Sort((a, b) => pool.IndexOf(a).CompareTo(pool.IndexOf(b)));
+        }
+        else {
+            shown.Remove(pool[slot]);
+        }
+
+        RecalculateMaxStats(behavior, GetTemplate(pet));
+
+        return null;
+    }
+
+    /// <summary>
+    /// Sets one stat (Strength, Intellect, Agility, Will, Power) or Happiness to an amount or its maximum (`.pet stats`).
+    /// </summary>
+    /// <returns>Null when it worked, otherwise the reason in plain words.</returns>
+    internal static string SetStat(WizClientObjectItem pet, string statName, string amount, out string shownAs) {
+        shownAs = null;
+        var behavior = GetBehavior(pet);
+        if (behavior is null) {
+            return "Wear a pet first.";
+        }
+
+        EnsureInitialized(pet);
+        var useMax = string.Equals(amount, "max", StringComparison.OrdinalIgnoreCase);
+        if (!useMax && !int.TryParse(amount, out _)) {
+            return "Type an amount or max, such as .pet stats strength 150 or .pet stats will max.";
+        }
+
+        // An amount above the maximum raises the maximum to it (Justin, 2026-10-19: Strength 220 to 260).
+        var wanted = useMax ? 0 : Math.Max(0, int.Parse(amount));
+        if (string.Equals(statName, "happiness", StringComparison.OrdinalIgnoreCase)) {
+            if (!useMax && wanted > behavior.m_maximumHappiness) {
+                PetMaxRaises.Set(pet.m_globalID.Full, "Happiness", wanted);
+                behavior.m_maximumHappiness = (uint) wanted;
+            }
+
+            var most = behavior.m_maximumHappiness;
+            behavior.m_happiness = useMax ? most : (uint) Math.Min(wanted, (int) most);
+            shownAs = $"Happiness {behavior.m_happiness}/{most}";
+
+            return null;
+        }
+
+        var stat = behavior.m_currentStats?.FirstOrDefault(s => SameStat(s.m_name, statName));
+        if (stat is null) {
+            return "Pick Strength, Intellect, Agility, Will, Power or Happiness.";
+        }
+
+        if (!useMax && wanted > GetStat(behavior.m_maxStats, stat.m_name)) {
+            PetMaxRaises.Set(pet.m_globalID.Full, stat.m_name, wanted);
+            RecalculateMaxStats(behavior, GetTemplate(pet));
+        }
+
+        var max = GetStat(behavior.m_maxStats, stat.m_name);
+        stat.m_value = useMax ? max : Math.Min(wanted, max);
+        shownAs = $"{stat.m_name} {stat.m_value}/{max}";
+
+        return null;
     }
 
     /// <summary>
@@ -334,15 +506,33 @@ internal static class PetProgress {
     }
 
     /// <summary>
-    /// The experience a snack gives: by default five per snack rank, half again for a snack the pet likes.
+    /// The experience a snack gives (Justin, 2026-10-19): the stat numbers on its card added up (Decaversary Cake:
+    /// +15 Agility, +15 Intellect, +25 Power = 55), twice that with Double XP, times LikedSnackBonus for a snack the
+    /// pet likes.
     /// </summary>
     internal static uint SnackXp(WizClientObjectItem pet, PetSnackItemTemplate snack) {
-        var xp = SnackXpPerRank * Math.Max(1, snack?.m_rank ?? 1);
-        if (IsFavoriteSnack(pet, snack)) {
-            xp = (int) (xp * FavoriteSnackBonus);
+        float xp = (snack?.m_statModifierSet?.m_modifications ?? []).Where(change => change is not null).Sum(change => Math.Max(0, change.m_change));
+        if (DoubleSnackXp) {
+            xp *= 2;
         }
 
-        return (uint) xp;
+        if (IsFavoriteSnack(pet, snack)) {
+            xp *= LikedSnackBonus;
+        }
+
+        return (uint) Math.Max(1, Math.Round(xp, MidpointRounding.AwayFromZero));
+    }
+
+    /// <summary>
+    /// The stat changes a snack gives: the numbers on its card, twice those with Double XP &amp; Rewards and
+    /// DoubleSnackStats (Justin, 2026-10-19).
+    /// </summary>
+    internal static IEnumerable<PetStatModification> SnackStatChanges(PetSnackItemTemplate snack) {
+        var changes = snack?.m_statModifierSet?.m_modifications ?? [];
+
+        return DoubleSnackXp && PetRules.DoubleSnackStats
+            ? changes.Select(change => change is null ? null : change with { m_change = change.m_change * 2 })
+            : changes;
     }
 
     internal static bool IsFavoriteSnack(WizClientObjectItem pet, PetSnackItemTemplate snack) {
@@ -385,6 +575,49 @@ internal static class PetProgress {
         }
 
         return result;
+    }
+
+    /// <summary>
+    /// The cards a pet's talents give its owner in battle, such as Hexster's Hex.
+    /// </summary>
+    internal static List<ProvideSpellEffectInfo> CardEffects(WizClientObjectItem pet, IEnumerable<string> extraTalents = null) {
+        var behavior = GetBehavior(pet);
+        if (behavior is null) {
+            return [];
+        }
+
+        return [.. (behavior.m_expressedTalents ?? []).Select(PetData.GetTalent)
+            .Concat((extraTalents ?? []).Select(PetData.GetTalent))
+            .OfType<PetTalentTemplate>()
+            .SelectMany(talent => talent.m_effectList?.OfType<ProvideSpellEffectInfo>() ?? [])
+            .Concat(PowerCardEffects(pet))];
+    }
+
+    /// <summary>
+    /// The pet's own card for its level, such as the Obsidian Mimic's Black Mantle (the card the pet window shows).
+    /// The pet template lists it per level (m_Levels: m_powerCardName, 2 and 3, and m_powerCardCount).
+    /// </summary>
+    private static IEnumerable<ProvideSpellEffectInfo> PowerCardEffects(WizClientObjectItem pet) {
+        var behavior = GetBehavior(pet);
+        var level = GetTemplate(pet)?.m_Levels?.FirstOrDefault(info => info is not null && info.m_level == behavior?.m_level);
+        if (level is null || level.m_powerCardCount <= 0) {
+            yield break;
+        }
+
+        var names = new[] { (string) level.m_powerCardName, (string) level.m_powerCardName2, (string) level.m_powerCardName3 }
+            .Where(name => !string.IsNullOrWhiteSpace(name)).ToList();
+        for (var i = 0; i < names.Count; i++) {
+            // Copies beyond one per named card go to the first card.
+            var copies = i == 0 ? Math.Max(1, (int) level.m_powerCardCount - (names.Count - 1)) : 1;
+            yield return new ProvideSpellEffectInfo {
+                // The game looks the effect up by this name in its own list (WizardEffects.xml): "ProvideSpell" is the
+                // plain card-giving effect. A made-up name such as "PetPowerCard" matched nothing there, so the deck
+                // window never listed the card with the item cards (Justin, 2026-10-19).
+                m_effectName = "ProvideSpell",
+                m_spellName = names[i],
+                m_numSpells = copies,
+            };
+        }
     }
 
     private static WizStatisticEffect ScaleEffect(PetBoostPlayerStatEffectTemplate t, float basis) => new() {
@@ -465,18 +698,47 @@ internal static class PetProgress {
             return;
         }
 
+        // Selfish talents raise the maximum: the pet's own and the one of a jewel in its socket (Mighty is +65
+        // Strength). Taking the jewel out puts the maximum back (Justin, 2026-10-20).
+        var pet = s_pets.TryGetValue(behavior, out var found) ? found : null;
         var bonus = (behavior.m_expressedTalents ?? [])
             .Select(PetData.GetTalent)
+            .Concat(pet is null ? [] : JewelSockets.GetPetJewelTalents(pet).Select(PetData.GetTalent))
             .OfType<PetTalentTemplate>()
             .SelectMany(t => t.m_maxStatList ?? [])
             .Where(s => s is not null)
             .ToList();
-        behavior.m_maxStats = [.. StatNames(template).Select(name => NewStat(name,
-            GetStat(template.m_maxStats, name) + bonus.Where(b => SameStat(b.m_name, name)).Sum(b => b.m_value)))];
+        var petId = pet?.m_globalID.Full ?? 0UL;
+        behavior.m_maxStats = [.. StatNames(template).Select(name => NewStat(name, Math.Max(
+            BaseMaxStat(template, name) + bonus.Where(b => SameStat(b.m_name, name)).Sum(b => b.m_value),
+            petId == 0 ? 0 : CappedRaise(petId, name))))];
 
+        // Selfish talents raise only the maximum; the stat itself still has to be trained up (Justin, 2026-10-20).
+        // 0.10.17 added their points to the stat too, so those points are taken back once.
         foreach (var stat in behavior.m_currentStats ?? []) {
+            if (petId != 0 && PetSelfishStats.Get(petId, stat.m_name) is var added and not 0) {
+                stat.m_value = Math.Max(0, stat.m_value - added);
+                PetSelfishStats.Set(petId, stat.m_name, 0);
+            }
+
             stat.m_value = Math.Min(stat.m_value, GetStat(behavior.m_maxStats, stat.m_name));
         }
+    }
+
+    // A raised maximum never goes past the server's maximum ([Pets] MaxStrength and the others): only selfish talents
+    // do (Justin, 2026-10-20). 0.10.58 hatching saved raises above it, which this also undoes.
+    private static int CappedRaise(ulong petId, string name) {
+        var raise = PetMaxRaises.Get(petId, name);
+        var most = PetRules.MaxStat(name);
+
+        return most > 0 ? Math.Min(raise, most) : raise;
+    }
+
+    // [Pets] MaxStrength and the others (260 by default); 0 uses the pet's own maximum from the game files.
+    private static int BaseMaxStat(PetItemBehaviorTemplate template, string name) {
+        var configured = PetRules.MaxStat(name);
+
+        return configured > 0 ? configured : GetStat(template.m_maxStats, name);
     }
 
     private static List<uint> TalentPool(List<ByteString> guaranteed, List<ByteString> talents)

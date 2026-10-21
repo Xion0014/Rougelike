@@ -63,6 +63,9 @@ public class PetFactory : RootDirectoryResourceSingleton<PetFactory>, IMemoryStr
 
     public static bool IsPetTemplate(uint templateId) => s_petTemplates.ContainsKey(templateId);
 
+    /// <summary>Every pet template id (a roguelike run's pet drops pick from these).</summary>
+    internal static IReadOnlyCollection<uint> PetTemplateIds => s_petTemplates.Keys;
+
     public static WizClientObjectItem CreateHatchedPet(ulong ownerId, uint templateId)
         => CreatePet(ownerId, templateId, preHatch: true);
 
