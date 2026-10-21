@@ -126,6 +126,7 @@ internal sealed partial class LauncherWindow : Window {
     private readonly StackPanel _bookAnswer = new() { Orientation = Orientation.Horizontal, Spacing = 10, HorizontalAlignment = HorizontalAlignment.Right, Margin = new Thickness(0, 14, 8, 0) };
     private Border? _bookClose;
     private bool _bookMustAnswer;
+    private bool _updateAfterNotice;
 
     // The panels at the bottom.
     private readonly Border _wizardPanel;
@@ -249,7 +250,14 @@ internal sealed partial class LauncherWindow : Window {
             if (_manager.IsInstalled) {
                 await RefreshStatusAsync();
                 _statusTimer.Start();
-                await AutoUpdateAsync();
+
+                // An update waits until the notice is answered, so it never starts behind it.
+                if (NoticeSeen) {
+                    await AutoUpdateAsync();
+                }
+                else {
+                    _updateAfterNotice = true;
+                }
             }
         };
         Closing += (_, e) => {
@@ -259,7 +267,7 @@ internal sealed partial class LauncherWindow : Window {
                 _closeAnyway = true;
                 Hint("Wizard101 is still open, so the server is staying awake. Close the game first, or close this window again to stop everything.", isError: true);
             }
-            else if (_busy) {
+            else if (_busy && !_closeAnyway) {
                 e.Cancel = true;
                 Hint("Hold on, the setup is still busy. It will be done soon.", isError: true);
             }
@@ -931,7 +939,7 @@ internal sealed partial class LauncherWindow : Window {
     // Building blocks
     // ---------------------------------------------------------------------
 
-    private Border Pill(string text, Func<Task> action, bool gold = false) {
+    private Border Pill(string text, Func<Task> action, bool gold = false, bool evenWhenBusy = false) {
         var label = new TextBlock {
             Text = text,
             FontSize = 14,
@@ -953,7 +961,7 @@ internal sealed partial class LauncherWindow : Window {
         pill.PointerEntered += (_, _) => pill.Background = hover;
         pill.PointerExited += (_, _) => pill.Background = normal;
         pill.PointerReleased += async (_, _) => {
-            if (!pill.IsEnabled || _busy) {
+            if (!evenWhenBusy && (!pill.IsEnabled || _busy)) {
                 return;
             }
 
@@ -1004,21 +1012,23 @@ internal sealed partial class LauncherWindow : Window {
             CloseBook();
 
             return Task.CompletedTask;
-        }, gold: true);
+        }, gold: true, evenWhenBusy: true);
         close.HorizontalAlignment = HorizontalAlignment.Right;
         _bookClose = close;
-        var understood = Pill("I understand, let's play", () => {
+        var understood = Pill("I understand, let's play", async () => {
             NoticeSeen = true;
             CloseBook();
-
-            return Task.CompletedTask;
-        }, gold: true);
+            if (_updateAfterNotice) {
+                _updateAfterNotice = false;
+                await AutoUpdateAsync();
+            }
+        }, gold: true, evenWhenBusy: true);
         var leave = Pill("Close the launcher", () => {
             _closeAnyway = true;
             Close();
 
             return Task.CompletedTask;
-        });
+        }, evenWhenBusy: true);
         _bookAnswer.Children.AddRange([leave, understood]);
         var header = new Grid { ColumnDefinitions = new ColumnDefinitions("*,Auto"), Margin = new Thickness(0, 0, 0, 10) };
         Grid.SetColumn(close, 1);
