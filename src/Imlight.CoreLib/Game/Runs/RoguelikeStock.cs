@@ -214,7 +214,7 @@ internal static class RoguelikeStock {
         var random = new Random(Seed(wizard, "petshop", vendorTemplateId));
         var upper = original.First(g => Imlight.CoreLib.Game.Pet.PetFactory.IsPetTemplate(g.MParts.TemplateId)).Full & 0xFFFFFFFF00000000UL;
         var picks = RoguelikePets.ShopPool
-            .Where(id => !IsCrownItem(id))
+            .Where(IsGoldShopPet)
             .OrderBy(_ => random.Next())
             .Take(PetShopCount)
             .Select(id => new GID(upper | id))
@@ -782,11 +782,28 @@ internal static class RoguelikeStock {
     /// blanks (.../Blanks/...) and PvP gear (ObjectData/PVP/...), which the game shows as crown items.
     /// </summary>
     private static bool IsCrownItem(ulong templateId)
-        => s_templatePaths.Value.TryGetValue(templateId, out var path)
+        => HasAdjective(templateId, "FLAG_CrownsOnly")
+           || s_templatePaths.Value.TryGetValue(templateId, out var path)
            && (path.Contains("CrownItems", StringComparison.OrdinalIgnoreCase)
                || path.Contains("/Crown-", StringComparison.OrdinalIgnoreCase)
                || path.Contains("/Blanks/", StringComparison.OrdinalIgnoreCase)
                || path.Contains("/PVP/", StringComparison.OrdinalIgnoreCase));
+
+    private static bool HasAdjective(ulong templateId, string adjective)
+        => templateId <= uint.MaxValue
+           && CoreObjectFactory.GetCoreTemplate((uint) templateId) is WizItemTemplate template
+           && template.m_adjectiveList?.Any(a => string.Equals(a?.ToString(), adjective, StringComparison.OrdinalIgnoreCase)) == true;
+
+    /// <summary>
+    /// True when a run pet shop may sell this pet: not crown-only, not an exclusive (No Sell, pack and hatch-only
+    /// pets), not Magic Weaving, and with a gold price.
+    /// </summary>
+    private static bool IsGoldShopPet(uint id)
+        => !IsCrownItem(id)
+           && !HasAdjective(id, "FLAG_NoSell")
+           && CoreObjectFactory.GetCoreTemplate(id) is WizItemTemplate template
+           && template.m_baseCost > 0
+           && !Imlight.CoreLib.Shared.Items.JewelSockets.IsMagicWeaving(template);
 
     /// <summary>The gear slot of an item, from the folder its template is in, or null when it is not gear.</summary>
     private static string SlotOf(ulong templateId) {
