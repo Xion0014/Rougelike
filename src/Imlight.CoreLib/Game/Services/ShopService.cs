@@ -416,7 +416,11 @@ internal class ShopService(SessionActor sessionActor) : MessageService(sessionAc
 
     private static bool TryCreatePurchasedPet(Wizard wizard, WizItemTemplate template,
                                               WIZARD_12_PROTOCOL.MSG_SHOPBUYREQUEST message, out WizClientObjectItem pet) {
-        pet = PetFactory.CreateHatchedPet(wizard.CharId, template.m_templateID);
+        // On a run the pet shop rolls the pet: random age, stat talents and name, every stat at its maximum.
+        pet = Imlight.CoreLib.Game.Runs.RoguelikeStock.ShopsActiveFor(wizard)
+            ? Imlight.CoreLib.Game.Runs.RoguelikePets.Build(wizard, null, template.m_templateID)
+            : null;
+        pet ??= PetFactory.CreateHatchedPet(wizard.CharId, template.m_templateID);
         if (pet is null) {
             return false;
         }

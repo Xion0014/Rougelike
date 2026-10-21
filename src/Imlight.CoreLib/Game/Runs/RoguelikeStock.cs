@@ -122,6 +122,15 @@ internal static class RoguelikeStock {
             return original?.ToList() ?? [];
         }
 
+        // The pet and jewel vendors get stock of their own kind instead of gear.
+        if (PetShopFor(wizard, vendorTemplateId, original) is { } pets) {
+            return pets;
+        }
+
+        if (JewelShopFor(wizard, vendorTemplateId, original) is { } jewels) {
+            return jewels;
+        }
+
         var (low, high) = LevelWindow(wizard);
         var school = wizard.MagicSchoolBehavior.MagicSchool.ToString();
         var random = new Random(Seed(wizard, "shop", vendorTemplateId));
@@ -167,6 +176,93 @@ internal static class RoguelikeStock {
         Logger.Information("Roguelike shop {Vendor} for {Wizard}: {Swapped} of {Total} items are random gear, levels {Low}-{High}.",
             Logger.Args(vendorTemplateId, wizard.PlayerNameBehavior?.GetWizardName() ?? wizard.CharId.ToString(),
                 stock.Count(g => !original.Contains(g)), original.Count, low, high));
+
+        return stock;
+    }
+
+    /// <summary>[Roguelike] PetShopCount: how many random pets a pet vendor sells on a run.</summary>
+    internal static readonly int PetShopCount = Math.Clamp(ConfigurationManager.GetValue("Roguelike.PetShopCount", 5), 1, 30);
+
+    /// <summary>[Roguelike] JewelShopRange: a jewel vendor sells jewels this many levels above or below the wizard.</summary>
+    internal static readonly int JewelShopRange = Math.Clamp(ConfigurationManager.GetValue("Roguelike.JewelShopRange", 5), 0, 100);
+
+    /// <summary>[Roguelike] JewelShopMaxLevel: the highest level of jewel a jewel vendor sells.</summary>
+    internal static readonly int JewelShopMaxLevel = Math.Clamp(ConfigurationManager.GetValue("Roguelike.JewelShopMaxLevel", 100), 1, 200);
+
+    /// <summary>[Roguelike] JewelShopCount: how many jewels a jewel vendor sells (0 keeps the vendor's own count).</summary>
+    internal static readonly int JewelShopCount = Math.Clamp(ConfigurationManager.GetValue("Roguelike.JewelShopCount", 0), 0, 60);
+
+    // A vendor whose stock is mostly of one kind is that kind of shop.
+    private static bool MostlyOf(IReadOnlyList<GID> original, Func<uint, bool> isKind) {
+        var count = original.Count(g => isKind(g.MParts.TemplateId));
+
+        return count > 0 && count * 2 >= original.Count;
+    }
+
+    private static bool IsJewelTemplate(uint id)
+        => CoreObjectFactory.GetCoreTemplate(id) is WizItemTemplate t && Imlight.CoreLib.Shared.Items.JewelSockets.IsJewel(t);
+
+    /// <summary>
+    /// A pet vendor's stock on a run: <see cref="PetShopCount"/> random pets in place of its own (anything else it
+    /// sells stays). The pet's age, talents and name are rolled when it is bought. Null when this is not a pet vendor.
+    /// </summary>
+    private static List<GID> PetShopFor(Wizard wizard, ulong vendorTemplateId, IReadOnlyList<GID> original) {
+        if (!MostlyOf(original, Imlight.CoreLib.Game.Pet.PetFactory.IsPetTemplate)) {
+            return null;
+        }
+
+        var random = new Random(Seed(wizard, "petshop", vendorTemplateId));
+        var upper = original.First(g => Imlight.CoreLib.Game.Pet.PetFactory.IsPetTemplate(g.MParts.TemplateId)).Full & 0xFFFFFFFF00000000UL;
+        var picks = RoguelikePets.ShopPool
+            .Where(id => !IsCrownItem(id))
+            .OrderBy(_ => random.Next())
+            .Take(PetShopCount)
+            .Select(id => new GID(upper | id))
+            .ToList();
+
+        var stock = original.Where(g => !Imlight.CoreLib.Game.Pet.PetFactory.IsPetTemplate(g.MParts.TemplateId)).ToList();
+        stock.InsertRange(0, picks);
+
+        Logger.Information("Roguelike pet shop {Vendor} for {Wizard}: {Count} random pets.",
+            Logger.Args(vendorTemplateId, wizard.PlayerNameBehavior?.GetWizardName() ?? wizard.CharId.ToString(), picks.Count));
+
+        return stock;
+    }
+
+    /// <summary>
+    /// A jewel vendor's stock on a run: random jewels and pins (no Magic Weaving, no crown jewels) from
+    /// <see cref="JewelShopRange"/> levels below to that many above the wizard, never above
+    /// <see cref="JewelShopMaxLevel"/>. Null when this is not a jewel vendor.
+    /// </summary>
+    private static List<GID> JewelShopFor(Wizard wizard, ulong vendorTemplateId, IReadOnlyList<GID> original) {
+        if (!MostlyOf(original, IsJewelTemplate)) {
+            return null;
+        }
+
+        var level = Math.Max(1, (int) wizard.MagicSchoolBehavior.Level);
+        var high = Math.Min(level + JewelShopRange, JewelShopMaxLevel);
+        var low = Math.Max(1, Math.Min(level - JewelShopRange, high));
+        var count = JewelShopCount > 0 ? JewelShopCount : original.Count(g => IsJewelTemplate(g.MParts.TemplateId));
+
+        var random = new Random(Seed(wizard, "jewelshop", vendorTemplateId));
+        var upper = original.First(g => IsJewelTemplate(g.MParts.TemplateId)).Full & 0xFFFFFFFF00000000UL;
+        var picks = s_jewels.Value
+            .Where(j => j.Level >= low && j.Level <= high)
+            .OrderBy(_ => random.Next())
+            .Take(count)
+            .OrderBy(j => j.Level)
+            .Select(j => new GID(upper | j.Id))
+            .ToList();
+
+        if (picks.Count == 0) {
+            return null;
+        }
+
+        var stock = original.Where(g => !IsJewelTemplate(g.MParts.TemplateId)).ToList();
+        stock.InsertRange(0, picks);
+
+        Logger.Information("Roguelike jewel shop {Vendor} for {Wizard}: {Count} random jewels, levels {Low}-{High}.",
+            Logger.Args(vendorTemplateId, wizard.PlayerNameBehavior?.GetWizardName() ?? wizard.CharId.ToString(), picks.Count, low, high));
 
         return stock;
     }

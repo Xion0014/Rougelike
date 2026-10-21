@@ -101,6 +101,9 @@ internal static class RoguelikePets {
         return pet;
     }
 
+    /// <summary>The pets a run pet shop can sell: every pet with stat talents to roll.</summary>
+    internal static IReadOnlyList<uint> ShopPool => s_pets.Value;
+
     /// <summary>The pet's given name ("Fluffy Moonbeam"), or empty.</summary>
     internal static string NameOf(WizClientObjectItem pet)
         => pet?.m_inactiveBehaviors?.OfType<ClientPetNameBehavior>().FirstOrDefault() is { } name && name.m_nameKeys != 0
