@@ -221,15 +221,19 @@ public class GameServer : Server {
     private void ReceiveDieDelete(SERVER_100_PROTOCOL.MSG_DIEDELETE message) {
         var session = ActiveSessions.FirstOrDefault(s => s.GetAssociatedAccount()?.AccountId == message.AccountID);
         if (session is not null) {
-            session.ActorRef.Tell(new EXTENDEDBASE_2_PROTOCOL.MSG_SERVERMESSAGE {
-                Message = $"{message.CharacterName} died in battle. Die = Delete is on, so this wizard is gone for good.",
-                Modal = 1
+            // The game's own disconnect window, with the reason, sends the player back to the login screen; closing
+            // the connection outright made the game report a lost connection and try to reconnect.
+            var farewell = $"{message.CharacterName} died in battle and is gone for good.";
+            session.ActorRef.Tell(new EXTENDEDBASE_2_PROTOCOL.MSG_FORCE_DISCONNECT {
+                Type = 0,
+                TimeStamp = DateTime.UtcNow.ToString("O"),
+                Message = farewell,
             });
-            session.Dispose();
+            Context.System.Scheduler.ScheduleTellOnce(TimeSpan.FromSeconds(2), session.ActorRef, "Close", Self);
         }
 
         // The session saves the character as it closes. Deleting afterwards keeps those saves from leaving pieces behind.
-        Context.System.Scheduler.ScheduleTellOnce(TimeSpan.FromSeconds(3), Self, new SERVER_100_PROTOCOL.MSG_DIEDELETENOW {
+        Context.System.Scheduler.ScheduleTellOnce(TimeSpan.FromSeconds(5), Self, new SERVER_100_PROTOCOL.MSG_DIEDELETENOW {
             AccountID = message.AccountID,
             CharacterID = message.CharacterID,
             CharacterName = message.CharacterName,

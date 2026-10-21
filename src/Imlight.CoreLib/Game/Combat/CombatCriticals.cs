@@ -48,6 +48,7 @@
 using System;
 using System.Linq;
 using Imcodec.ObjectProperty.TypeCache;
+using Imlight.Common;
 using Imlight.CoreLib.Game.Effects;
 
 namespace Imlight.CoreLib.Game.Combat;
@@ -112,15 +113,17 @@ internal static class CombatCriticals {
         var critChance = caster._wizard is not null
             ? GetCriticalRating(caster, school) / 1000f
             : TierPercent(s_creatureCrit, run.Tier);
-        if (!Rolls(Math.Clamp(critChance, 0f, 1f))) {
-            return (false, false);
-        }
-
+        var landed = Rolls(Math.Clamp(critChance, 0f, 1f));
         var blockChance = target._wizard is not null
             ? GetBlockRating(target, school) / 1000f
             : TierPercent(s_creatureBlock, run.Tier);
+        var blocked = landed && Rolls(Math.Clamp(blockChance, 0f, 1f));
 
-        return (true, Rolls(Math.Clamp(blockChance, 0f, 1f)));
+        Logger.Information("[Roguelike] Critical roll: {0} ({1} school) {2:P0} to crit, target {3:P0} to block: {4}.",
+            Logger.Args(caster._wizard is not null ? "wizard" : "creature", school, critChance, blockChance,
+                        !landed ? "no crit" : blocked ? "crit, blocked" : "CRIT x2"));
+
+        return (landed, blocked);
     }
 
     internal static bool RollsCritical(CombatDuelSubCircle caster, CombatDuelSubCircle target, string school, bool isHeal) {
