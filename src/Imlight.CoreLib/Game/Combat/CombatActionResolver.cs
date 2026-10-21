@@ -233,7 +233,7 @@ internal static class CombatActionResolver {
     }
 
     /// <summary>An effect and every effect inside it (random, variable, list, count-based and conditional effects).</summary>
-    private static IEnumerable<SpellEffect> AllEffects(SpellEffect effect) {
+    internal static IEnumerable<SpellEffect> AllEffects(SpellEffect effect) {
         if (effect is null) {
             yield break;
         }

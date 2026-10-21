@@ -417,7 +417,7 @@ internal static class RoguelikeStock {
     /// <summary>[Roguelike] JewelDropChance: the chance (0 to 100) that a won battle drops a jewel or pin.</summary>
     internal static readonly int JewelDropChance = Math.Clamp(ConfigurationManager.GetValue("Roguelike.JewelDropChance", 100), 0, 100);
 
-    private sealed record JewelEntry(uint Id, int Level);
+    private sealed record JewelEntry(uint Id, int Level, JewelSocketType Shape);
 
     private static readonly Lazy<List<JewelEntry>> s_jewels = new(BuildJewelPool, LazyThreadSafetyMode.ExecutionAndPublication);
 
@@ -443,12 +443,32 @@ internal static class RoguelikeStock {
         var fits = s_jewels.Value
             .Where(j => j.Level <= level
                         && (string.IsNullOrEmpty(shape)
-                            || CoreObjectFactory.GetCoreTemplate(j.Id) is WizItemTemplate t
-                               && Imlight.CoreLib.Shared.Items.JewelSockets.GetShape(t) is { } s
-                               && Imlight.CoreLib.Shared.Items.JewelSockets.ShapeName(s).Contains(shape, StringComparison.OrdinalIgnoreCase)))
+                            || Imlight.CoreLib.Shared.Items.JewelSockets.ShapeName(j.Shape).Contains(shape, StringComparison.OrdinalIgnoreCase)))
             .ToList();
+        if (fits.Count == 0) {
+            return null;
+        }
 
-        return fits.Count == 0 ? null : fits[Random.Shared.Next(fits.Count)].Id;
+        // A shape first, each as likely as the others, then a jewel of it: so pet jewels and pins turn up as often as
+        // square jewels, however many of each the game has.
+        var shapes = fits.Select(j => j.Shape).Distinct().ToList();
+        var picked = shapes[Random.Shared.Next(shapes.Count)];
+        var ofShape = fits.Where(j => j.Shape == picked).ToList();
+
+        return ofShape[Random.Shared.Next(ofShape.Count)].Id;
+    }
+
+    /// <summary>A developer test item: "test" in its file name, or "TEST" in the name it shows.</summary>
+    private static bool IsTestItem(string path, ItemTemplate template) {
+        if (path.Contains("test", StringComparison.OrdinalIgnoreCase)) {
+            return true;
+        }
+
+        string key = template.m_displayName;
+
+        return !string.IsNullOrEmpty(key)
+               && Imlight.CoreLib.Shared.Resources.Locale.GetEnglishName(key) is { Length: > 0 } shown
+               && shown.Contains("test", StringComparison.OrdinalIgnoreCase);
     }
 
     private static List<JewelEntry> BuildJewelPool() {
@@ -461,12 +481,14 @@ internal static class RoguelikeStock {
                     || !Imlight.CoreLib.Shared.Items.JewelSockets.IsJewel(template)
                     // Magic Weaving is not on this server.
                     || Imlight.CoreLib.Shared.Items.JewelSockets.IsMagicWeaving(template)
+                    // Developer test jewels ("TESTING PURPOSES", the ...TEST jewels).
+                    || IsTestItem(path, template)
                     // Crown-only and no-trade jewels stay out, like crown gear in the gold shops.
                     || IsCrownItem(id)) {
                     continue;
                 }
 
-                list.Add(new JewelEntry((uint) id, Math.Max(1, EquipLevel(template))));
+                list.Add(new JewelEntry((uint) id, Math.Max(1, EquipLevel(template)), Imlight.CoreLib.Shared.Items.JewelSockets.GetShape(template)!.Value));
             }
         }
         catch (Exception ex) {

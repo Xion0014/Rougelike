@@ -112,6 +112,11 @@ internal sealed class InteractTrainerComponent(ZoneEntity entity) : ZoneEntityCo
             return true;
         }
 
+        // One-shot spells (PWN, a 99,999 damage Loremaster and the like) end a run in one hit.
+        if (DealsTooMuch(spell)) {
+            return true;
+        }
+
         if (s_skippedFolders.Any(folder => path.Contains(folder, System.StringComparison.OrdinalIgnoreCase))
             || s_devFolders.Any(folder => path.Contains(folder, System.StringComparison.OrdinalIgnoreCase))
             || IsBossSpell(path, name)
@@ -125,12 +130,48 @@ internal sealed class InteractTrainerComponent(ZoneEntity entity) : ZoneEntityCo
             return true;
         }
 
+        // Spells named after a developer's own test table (DavidDevSpell: "Pwn").
+        if (displayKey.Contains("DevSpell", System.StringComparison.OrdinalIgnoreCase)
+            || displayKey.Contains("TestSpell", System.StringComparison.OrdinalIgnoreCase)) {
+            return true;
+        }
+
         var shown = Imlight.CoreLib.Shared.Resources.Locale.GetEnglishName(displayKey);
 
         return !string.IsNullOrEmpty(shown)
                && (shown.Contains("Test", System.StringComparison.OrdinalIgnoreCase)
                    || shown.Contains("zappy", System.StringComparison.OrdinalIgnoreCase)
                    || shown.StartsWith("Dev ", System.StringComparison.OrdinalIgnoreCase));
+    }
+
+    /// <summary>
+    /// [Roguelike] MaxSpellDamage: a spell with any single damage, heal or damage-over-time number above this is never
+    /// given, taught or put in a creature's deck (the strongest real spells stay well under it).
+    /// </summary>
+    private static readonly int s_maxSpellDamage = System.Math.Max(1, ConfigurationManager.GetValue("Roguelike.MaxSpellDamage", 3000));
+
+    private static readonly string[] s_bannedSpellNames = ConfigurationManager.GetValue("Roguelike.BannedSpells", "Pwn")
+        .Split(',', System.StringSplitOptions.RemoveEmptyEntries | System.StringSplitOptions.TrimEntries);
+
+    internal static bool DealsTooMuch(SpellTemplate spell) {
+        if (spell?.m_effects is null) {
+            return false;
+        }
+
+        // Spells listed by shown name in BannedSpells, too.
+        string displayKey = spell.m_displayName;
+        if (!string.IsNullOrEmpty(displayKey) && s_bannedSpellNames.Length > 0
+            && Imlight.CoreLib.Shared.Resources.Locale.GetEnglishName(displayKey) is { Length: > 0 } shown
+            && s_bannedSpellNames.Any(banned => shown.Trim().Equals(banned, System.StringComparison.OrdinalIgnoreCase))) {
+            return true;
+        }
+
+        return spell.m_effects
+            .SelectMany(Imlight.CoreLib.Game.Combat.CombatActionResolver.AllEffects)
+            .Any(effect => effect is not null
+                           && effect.m_effectType is kSpellEffects.kDamage or kSpellEffects.kDamageNoCrit or kSpellEffects.kDamageOverTime
+                               or kSpellEffects.kHeal or kSpellEffects.kStealHealth
+                           && System.Math.Abs(effect.m_effectParam) > s_maxSpellDamage);
     }
 
     // Folders of developer and staff spells.
