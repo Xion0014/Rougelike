@@ -216,10 +216,19 @@ internal sealed class InteractObjectStateComponent(ZoneEntity entity)
     /// </summary>
     internal bool IsInGoalOptionState() {
         var current = Zone.ScriptState.GetObjectStateIfChanged(ObjectName);
+        if (string.IsNullOrEmpty(current)) {
+            return false;
+        }
 
-        return !string.IsNullOrEmpty(current)
-            && GetStateOptions(Entity.Template as GameObjectTemplate)
-                .Any(option => IsGoalOption(option) && string.Equals(EnterState(option), current, StringComparison.OrdinalIgnoreCase));
+        var goalOptions = GetStateOptions(Entity.Template as GameObjectTemplate).Where(IsGoalOption).ToList();
+
+        // An object several quests use (Dragonspyre's crystal stands) has goal options that start from the state
+        // another one leaves it in (Rein Check's "UpBlue" to "UpBlue"): it still waits for a use.
+        if (goalOptions.Any(option => string.Equals(VisibleState(option), current, StringComparison.OrdinalIgnoreCase))) {
+            return false;
+        }
+
+        return goalOptions.Any(option => string.Equals(EnterState(option), current, StringComparison.OrdinalIgnoreCase));
     }
 
     /// <summary>
