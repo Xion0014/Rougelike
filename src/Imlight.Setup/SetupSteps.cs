@@ -400,6 +400,12 @@ internal sealed class SetupSteps : IDisposable {
         IniFile.Set(lines, "Database", "AdminAccountPassword", password);
         // Imlight.exe serves the game files from the player's own Wizard101 at this address when the server starts.
         IniFile.Set(lines, "Patch Server", "PatchServerInternalUrl", "http://127.0.0.1:12369");
+        if (Edition.IS_ROGUELIKE) {
+            // A roguelike server on the player's own PC: runs on, and any new name at the login screen is an account.
+            IniFile.Set(lines, "Roguelike", "Enabled", "true");
+            IniFile.Set(lines, "Login Server", "AutoCreateAccounts", "true");
+        }
+
         File.WriteAllLines(ConfigFile, lines);
         SetupLog.Info("Saved your settings to Config\\Imlight.ini.");
     }

@@ -80,6 +80,26 @@ internal static class UserAuthenticator {
         = ConfigurationManager.Settings["Global Settings.GameRevision"].AsString();
     private static readonly TimeSpan s_deadline = TimeSpan.FromSeconds(10);
 
+    /// <summary>
+    /// [Login Server] AutoCreateAccounts: a username the server does not know becomes a new account when it logs
+    /// in. For a server on the player's own PC (the roguelike launcher turns it on); leave it off for a public server.
+    /// </summary>
+    private static readonly bool s_autoCreateAccounts = ConfigurationManager.GetValue("Login Server.AutoCreateAccounts", false);
+
+    /// <summary>The stored password of an account made at login: any password is let in until one is set.</summary>
+    internal const string AUTO_PASSWORD = "AUTO-CREATED-NO-PASSWORD";
+
+    private static bool CreateAutoAccount(string username) {
+        if (string.IsNullOrWhiteSpace(username) || username.Length > 32) {
+            return false;
+        }
+
+        var created = AccountCollection.CreateAccount(new Account(username.Trim(), "", AUTO_PASSWORD));
+        Logger.Information("Login: {0} account {1} on its first login.", Logger.Args(created ? "made the" : "could not make the", username));
+
+        return created;
+    }
+
     internal class AuthenticationDetails {
         
         internal Account _account;
@@ -134,8 +154,13 @@ internal static class UserAuthenticator {
             }
         }
 
-        // Check if we can find the account.
+        // Check if we can find the account. With AutoCreateAccounts (a server on the player's own PC), a new
+        // username makes its account here.
         var matchedAccount = AccountCollection.GetAccountForCharacterList(username);
+        if (matchedAccount is null && s_autoCreateAccounts && CreateAutoAccount(username)) {
+            matchedAccount = AccountCollection.GetAccountForCharacterList(username);
+        }
+
         if (matchedAccount is null) {
             Logger.Warning("SessionActor {0} was rejected: account not found.", Logger.Args(sessionId));
             details._result = UserAuthenResult.AuthenFailed;
@@ -179,7 +204,10 @@ internal static class UserAuthenticator {
 
         details._account = matchedAccount;
 
-        var doesPasswordMatch = ClientKey.VerifyCK1(matchedAccount.PasswordHash, sessionId, offerTime, offerMilli, clientKey1);
+        // The game sends only a one-way proof of the password, so an account made at login cannot know it: it lets
+        // any password in until one is set (the launcher's "Set password", or .account in game).
+        var doesPasswordMatch = (s_autoCreateAccounts && matchedAccount.PasswordHash == AUTO_PASSWORD)
+            || ClientKey.VerifyCK1(matchedAccount.PasswordHash, sessionId, offerTime, offerMilli, clientKey1);
         if (doesPasswordMatch) {
             // Create a new session key and store it in the database.
             var sessionKey = ClientKey.HashSessionKey(sessionId, offerTime, offerMilli);

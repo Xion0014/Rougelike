@@ -33,7 +33,7 @@ namespace Imlight.Setup;
 /// </summary>
 internal static class InstalledCommands {
 
-    internal const string INSTALLED_EXE = "Imlight.exe";
+    internal const string INSTALLED_EXE = Edition.INSTALLED_EXE;
     internal const string SHORTCUT_FOLDER = Edition.NAME;
     internal const string APP_SHORTCUT = Edition.NAME + ".lnk";
     internal const string START_SHORTCUT = "Start " + Edition.NAME + ".lnk";

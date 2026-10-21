@@ -62,7 +62,8 @@ internal static class Program {
             case SetupMode.Start:
                 return await InstalledCommands.StartAsync(options.InstallFolder, options.NoWait);
             case SetupMode.Panel:
-                return ManagerApp.Run(options.InstallFolder);
+                // The roguelike launcher's window also installs, so it opens before anything is installed.
+                return Edition.IS_ROGUELIKE ? LauncherApp.Run(options.InstallFolder) : ManagerApp.Run(options.InstallFolder);
             case SetupMode.Play:
                 return InstalledCommands.Play(options.InstallFolder);
             case SetupMode.Uninstall:

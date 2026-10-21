@@ -21,6 +21,19 @@
     <DefineConstants>$(DefineConstants);MANAGER_EDITION</DefineConstants>
   </PropertyGroup>
 
+  <!-- dotnet publish -p:ImlightEdition=Roguelike builds SpiralRoguelike.exe, the playful roguelike launcher. -->
+  <PropertyGroup Condition="'$(ImlightEdition)' == 'Roguelike'">
+    <AssemblyName>SpiralRoguelike</AssemblyName>
+    <DefineConstants>$(DefineConstants);MANAGER_EDITION;ROGUELIKE_EDITION</DefineConstants>
+    <ApplicationIcon>Assets\launcher.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- The launcher window's fonts (see Assets\Fonts\README.txt) and icon. -->
+    <AvaloniaResource Include="Assets\**\*.ttf" />
+    <AvaloniaResource Include="Assets\launcher.ico" />
+  </ItemGroup>
+
   <!-- The branch the program installs and updates by default; the release workflow passes -p:ImlightBranch=<branch>. -->
   <ItemGroup Condition="'$(ImlightBranch)' != ''">
     <AssemblyMetadata Include="ImlightBranch" Value="$(ImlightBranch)" />

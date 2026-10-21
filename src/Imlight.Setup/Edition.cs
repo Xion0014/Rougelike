@@ -21,7 +21,7 @@ using System.Linq;
 namespace Imlight.Setup;
 
 /// <summary>
-/// The two builds of this program. ImlightSetup installs original Imlight; ImlightManager (built with
+/// The builds of this program (and SpiralRoguelike, built with -p:ImlightEdition=Roguelike). ImlightSetup installs original Imlight; ImlightManager (built with
 /// -p:ImlightEdition=Manager) installs the Xion0014/Rougelike fork, which adds roguelike mode, the
 /// randomizer and ID lookup. They install side by side under different names.
 /// </summary>
@@ -42,8 +42,21 @@ internal static class Edition {
         .FirstOrDefault(a => a.Key == "ImlightBranch" && !string.IsNullOrWhiteSpace(a.Value))?.Value
         ?? "quality-assurance";
 
-#if MANAGER_EDITION
+#if ROGUELIKE_EDITION
+    // The roguelike launcher (built with -p:ImlightEdition=Roguelike): a playful window that installs the roguelike
+    // server on the player's own PC, keeps it updated, and plays Wizard101 on it. Accounts are made at first login.
     internal const bool IS_MANAGER = true;
+    internal const bool IS_ROGUELIKE = true;
+    internal const string NAME = "Spiral Roguelike";
+    internal const string DEFAULT_REPOSITORY = "Xion0014/Rougelike";
+    internal const string INSTALL_FOLDER_NAME = "SpiralRoguelike";
+    internal const string RELEASE_ASSET = "SpiralRoguelike.exe";
+    internal const string REGISTRY_KEY = "SpiralRoguelike";
+    internal const string INSTALLED_EXE = "SpiralRoguelike.exe";
+#elif MANAGER_EDITION
+    internal const bool IS_MANAGER = true;
+    internal const bool IS_ROGUELIKE = false;
+    internal const string INSTALLED_EXE = "Imlight.exe";
     internal const string NAME = "Imlight Manager";
     internal const string DEFAULT_REPOSITORY = "Xion0014/Rougelike";
     internal const string INSTALL_FOLDER_NAME = "ImlightManager";
@@ -51,6 +64,8 @@ internal static class Edition {
     internal const string REGISTRY_KEY = "ImlightManager";
 #else
     internal const bool IS_MANAGER = false;
+    internal const bool IS_ROGUELIKE = false;
+    internal const string INSTALLED_EXE = "Imlight.exe";
     internal const string NAME = "Imlight Server";
     internal const string DEFAULT_REPOSITORY = "Revive101/Imlight";
     internal const string INSTALL_FOLDER_NAME = "ImlightServer";

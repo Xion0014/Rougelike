@@ -32,7 +32,7 @@ internal enum SetupMode { Install, Start, Play, Uninstall, Panel }
 internal sealed class SetupOptions {
 
     /// <summary>What to do. The shortcuts pass --start, --update or --uninstall; the installed Imlight.exe opens the app by default.</summary>
-    public SetupMode Mode { get; private set; } = IsInstalledCopy() ? SetupMode.Panel : SetupMode.Install;
+    public SetupMode Mode { get; private set; } = Edition.IS_ROGUELIKE || IsInstalledCopy() ? SetupMode.Panel : SetupMode.Install;
 
     /// <summary>The GitHub repository (owner/repo) to build Imlight from.</summary>
     public string Repository { get; private set; } = Edition.DEFAULT_REPOSITORY;

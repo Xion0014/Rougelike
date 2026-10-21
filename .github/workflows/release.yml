@@ -94,6 +94,15 @@ jobs:
             -p:ImlightBranch=${{ steps.version.outputs.branch }} -o out/manager
           Copy-Item out/manager/ImlightManager.exe release/
 
+      - name: Build SpiralRoguelike.exe
+        # The playful roguelike launcher: installs the roguelike server on the player's PC, updates it and plays on it.
+        shell: pwsh
+        run: |
+          dotnet publish src/Imlight.Setup/Imlight.Setup.csproj -c Release -r win-x64 --self-contained true `
+            -p:PublishSingleFile=true -p:Version=${{ steps.version.outputs.version }} -p:ImlightEdition=Roguelike `
+            -p:ImlightBranch=${{ steps.version.outputs.branch }} -o out/roguelike
+          Copy-Item out/roguelike/SpiralRoguelike.exe release/
+
       - name: Add the generator inputs
         if: env.GENERATOR_INPUTS != ''
         shell: pwsh
@@ -132,8 +141,9 @@ jobs:
           $tag = "${{ steps.version.outputs.tag }}"
           $branch = "${{ steps.version.outputs.branch }}"
           $commit = "${{ github.sha }}".Substring(0, 7)
-          $notes = "Built from $branch at $commit. Download ImlightManager.exe and run it: it installs the roguelike server " +
-                   "from the $branch branch, and updates itself and the server whenever a newer release is published here."
+          $notes = "Built from $branch at $commit. Players: download SpiralRoguelike.exe and press Begin; it sets up the " +
+                   "roguelike on your own PC from your Wizard101 files and keeps itself updated. Server owners: ImlightManager.exe " +
+                   "installs the roguelike server from the $branch branch with the full control panel."
           if (-not $env:GENERATOR_INPUTS) {
             $notes += " The launcher in this release cannot update the server by itself; use ImlightManager.exe."
           }
