@@ -378,6 +378,7 @@ internal class AttachService(SessionActor sessionActor) : MessageService(session
     private static readonly int s_startingCrowns
         = Math.Max(0, ConfigurationManager.GetValue("Character.StartingCrowns", 100_000_000));
     private static readonly bool s_refillCrowns = ConfigurationManager.GetValue("Character.RefillCrowns", true);
+    private static readonly bool s_noRunCrowns = ConfigurationManager.GetValue("Roguelike.NoCrowns", true);
 
     private void GiveCrowns() {
         // The crown shop, seamstress and packs spend the account's crowns, so that is the one balance. A wizard
@@ -386,6 +387,11 @@ internal class AttachService(SessionActor sessionActor) : MessageService(session
         var crowns = Math.Max(account?.Crowns ?? 0, _wizard.Crowns);
         if (!_wizard.StartingCrownsGiven || (s_refillCrowns && crowns < s_startingCrowns)) {
             crowns = Math.Max(crowns, s_startingCrowns);
+        }
+
+        // [Roguelike] NoCrowns: a roguelike server has no crowns at all, so nothing is bought around the run.
+        if (Imlight.CoreLib.Game.Runs.RoguelikeConfig.Enabled && s_noRunCrowns) {
+            crowns = 0;
         }
 
         if (account is not null && account.Crowns != crowns) {

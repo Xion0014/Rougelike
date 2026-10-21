@@ -829,14 +829,21 @@ internal static class RoguelikeStock {
            && template.m_adjectiveList?.Any(a => string.Equals(a.ToString(), adjective, StringComparison.OrdinalIgnoreCase)) == true;
 
     /// <summary>
-    /// True when a run pet shop may sell this pet: not crown-only, not an exclusive (No Sell, pack and hatch-only
-    /// pets), not Magic Weaving, and with a gold price.
+    /// True when a run pet shop may sell this pet: a gold price and no crown or arena price, not crown-only, not an
+    /// exclusive (No Sell, pack and hatch-only pets), not retired or arena-only, and not Magic Weaving.
     /// </summary>
     private static bool IsGoldShopPet(uint id)
         => !IsCrownItem(id)
            && !HasAdjective(id, "FLAG_NoSell")
+           && !HasAdjective(id, "FLAG_ArenaPointsOnly")
+           && !HasAdjective(id, "FLAG_Retired")
            && CoreObjectFactory.GetCoreTemplate(id) is WizItemTemplate template
            && template.m_baseCost > 0
+           // A crown or arena price means a crown shop or arena pet, even without the crowns-only flag.
+           && template.m_creditsCost <= 0
+           && template.m_arenaPointCost <= 0
+           && template.m_pvpCurrencyCost <= 0
+           && template.m_pvpTourneyCurrencyCost <= 0
            && !Imlight.CoreLib.Shared.Items.JewelSockets.IsMagicWeaving(template);
 
     /// <summary>The gear slot of an item, from the folder its template is in, or null when it is not gear.</summary>

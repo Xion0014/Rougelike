@@ -107,7 +107,7 @@ internal static class RoguelikeConfig {
     internal static readonly double XpMultiplier = Math.Max(0, ConfigurationManager.GetValue("Roguelike.XpMultiplier", 5.0));
 
     /// <summary>How much more gold a wizard on a run earns from battles, quests and gold wisps (not from selling).</summary>
-    internal static readonly double GoldMultiplier = Math.Max(0, ConfigurationManager.GetValue("Roguelike.GoldMultiplier", 3.0));
+    internal static readonly double GoldMultiplier = Math.Max(0, ConfigurationManager.GetValue("Roguelike.GoldMultiplier", 100.0));
 
     /// <summary>Training points given for beating each tier's boss.</summary>
     internal static readonly int BossTrainingPoints = Math.Clamp(ConfigurationManager.GetValue("Roguelike.BossTrainingPoints", 2), 0, 100);
