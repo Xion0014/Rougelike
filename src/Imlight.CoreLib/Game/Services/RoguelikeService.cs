@@ -123,7 +123,7 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
             }
         }
 
-        if (wizard.Roguelike.Phase == RoguelikePhase.Complete && wizard.Roguelike.ArcPromptPending) {
+        if (wizard.Roguelike.ArcPromptPending && wizard.Roguelike.Phase is RoguelikePhase.Shop or RoguelikePhase.Complete) {
             ShowArcPrompt(wizard);
         }
 
@@ -542,8 +542,11 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
     /// logs them out. Logging back in finds them at the shops, still asked.
     /// </summary>
     private void ShowArcPrompt(Wizard wizard) {
-        InformGameClient($"Congratulations on clearing Arc 1! {wizard.Roguelike.Kills} creatures defeated.\n\n" +
-                         "Would you like to continue to Arc 2, or take a break? Answer Merle Ambrose: Yes to continue, " +
+        var arc = ArcNumber(wizard.Roguelike.Tier);
+        var last = wizard.Roguelike.Phase == RoguelikePhase.Complete;
+        InformGameClient($"Congratulations on clearing Arc {arc}! {wizard.Roguelike.Kills} creatures defeated.\n\n" +
+                         (last ? "That was the last arc there is, for now. " : "") +
+                         $"Would you like to continue{(last ? "" : $" to Arc {arc + 1}")}, or take a break? Answer Merle Ambrose: Yes to continue, " +
                          "No to take a break (you will be logged out, and come back at the shops). " +
                          "You can also type .run continue or .run break.", isImportant: true);
 
@@ -586,10 +589,13 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         ChooseArc(GetActiveWizard(), takeBreak: message.Success == 0);
     }
 
+    /// <summary>Which arc a tier belongs to: 1 up to the first ArcEndTiers tier, 2 up to the next, and so on.</summary>
+    private static int ArcNumber(int tier) => 1 + RoguelikeConfig.ArcEndTiers.Count(end => end < tier);
+
     private void ChooseArc(Wizard wizard, bool takeBreak) {
         var run = wizard?.Roguelike;
-        if (run is not { Phase: RoguelikePhase.Complete }) {
-            InformGameClient("That choice comes after clearing the last tier.");
+        if (run is not { ArcPromptPending: true }) {
+            InformGameClient("That choice comes at the end of an arc.");
 
             return;
         }
@@ -599,7 +605,7 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         WizardCollection.UpdateCharacterRoguelike(wizard);
 
         if (takeBreak) {
-            Logger.Information("[Roguelike] {0} takes a break after Arc 1.", Logger.Args(wizard.CharId));
+            Logger.Information("[Roguelike] {0} takes a break after tier {1}.", Logger.Args(wizard.CharId, run.Tier));
             InformGameClient("Enjoy your break! When you log back in, you'll be at the shops.", isImportant: true);
             SendToSocket(new EXTENDEDBASE_2_PROTOCOL.MSG_FORCE_DISCONNECT {
                 Type = 0,
@@ -612,8 +618,11 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
             return;
         }
 
-        Logger.Information("[Roguelike] {0} continues to Arc 2.", Logger.Args(wizard.CharId));
-        InformGameClient("Arc 2 is still being built! Until it opens, the shops and trainers are yours.", isImportant: true);
+        Logger.Information("[Roguelike] {0} continues after tier {1}.", Logger.Args(wizard.CharId, run.Tier));
+        InformGameClient(run.Phase == RoguelikePhase.Complete
+            ? "There are no more arcs yet! Until the next one opens, the shops and trainers are yours."
+            : $"Arc {ArcNumber(run.Tier + 1)} awaits! Spend your gold, then use the Rate My Stitch tome to start tier {run.Tier + 1}.",
+            isImportant: true);
     }
 
     private const string LOGOUT_TIMER_KEY = "RoguelikeLogout";
@@ -731,7 +740,8 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         var run = wizard.Roguelike;
         run.BossesDefeated++;
         run.Phase = run.Tier >= RoguelikeConfig.TierCount ? RoguelikePhase.Complete : RoguelikePhase.Shop;
-        run.ArcPromptPending = run.Phase == RoguelikePhase.Complete;
+        // The end of an arc (ArcEndTiers, and the last tier) asks the wizard whether to go on or take a break.
+        run.ArcPromptPending = run.Phase == RoguelikePhase.Complete || RoguelikeConfig.ArcEndTiers.Contains(run.Tier);
         WizardCollection.UpdateCharacterRoguelike(wizard);
         GiveBossTrainingPoints(wizard);
 
@@ -740,9 +750,10 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
             TellOtherServices(new SERVICE_101_PROTOCOL.MSG_ROGUELIKE_COMPLETEQUESTS());
         }
 
-        if (run.Phase == RoguelikePhase.Complete) {
+        if (run.ArcPromptPending) {
             // The "continue or take a break" question comes once the wizard is back at the shops.
-            Logger.Information("[Roguelike] {0} cleared every tier ({1} creatures defeated).", Logger.Args(wizard.CharId, run.Kills));
+            Logger.Information("[Roguelike] {0} cleared tier {1}, the end of an arc ({2} creatures defeated).",
+                Logger.Args(wizard.CharId, run.Tier, run.Kills));
         }
         else {
             InformGameClient($"Boss defeated! Tier {run.Tier} cleared. Spend your gold here, then use the Rate My Stitch " +
@@ -826,8 +837,19 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         run.Tier++;
         run.Phase = RoguelikePhase.Street;
         run.StreetSeconds = 0;
+        run.ArcPromptPending = false;
         WizardCollection.UpdateCharacterRoguelike(wizard);
         RoguelikeCreatures.Register(wizard);
+
+        // A tier without a street goes straight to its boss.
+        if (RoguelikeConfig.GetTier(run.Tier) is { HasStreet: false }) {
+            run.Phase = RoguelikePhase.Boss;
+            WizardCollection.UpdateCharacterRoguelike(wizard);
+            InformGameClient($"Tier {run.Tier} begins: straight to the boss!", isImportant: true);
+            SendToPhaseZone(wizard);
+
+            return;
+        }
 
         InformGameClient($"Tier {run.Tier} begins. Survive {FormatTime(RoguelikeConfig.StreetSecondsFor(run.Tier))}!");
         if (!SendToPhaseZone(wizard)) {
@@ -859,7 +881,7 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         var phase = (parts.Length > 1 ? parts[1] : "street").ToLowerInvariant() switch {
             "boss" => RoguelikePhase.Boss,
             "shop" or "shops" => RoguelikePhase.Shop,
-            _ => RoguelikePhase.Street,
+            _ => RoguelikeConfig.GetTier(tier) is { HasStreet: false } ? RoguelikePhase.Boss : RoguelikePhase.Street,
         };
 
         if (wizard.IsInDuel) {

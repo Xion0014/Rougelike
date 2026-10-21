@@ -95,7 +95,8 @@ internal sealed class RoguelikeTravelComponent(ZoneEntity entity)
     private static string DestinationKey(Wizard wizard, string action) {
         var zonePath = action switch {
             "train" => RoguelikeConfig.ResolveZone(RoguelikeConfig.TrainZone),
-            "next" => RoguelikeConfig.ResolveZone(RoguelikeConfig.GetTier(wizard.Roguelike.Tier + 1)?.Street),
+            "next" => RoguelikeConfig.GetTier(wizard.Roguelike.Tier + 1) is { } next
+                ? RoguelikeConfig.ResolveZone(next.HasStreet ? next.Street : next.Boss) : null,
             _ => RoguelikeConfig.ResolveZone(RoguelikeConfig.ShopZone),
         };
 

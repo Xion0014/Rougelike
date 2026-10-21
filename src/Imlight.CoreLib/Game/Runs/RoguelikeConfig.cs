@@ -50,6 +50,21 @@ internal sealed record RoguelikeTier(int Number, string Street, string Boss) {
     /// </summary>
     public bool BossSwapOwnStats { get; init; }
 
+    /// <summary>True when the tier has a street; a tier without one ("none") goes straight to its boss.</summary>
+    public bool HasStreet => !string.IsNullOrWhiteSpace(Street);
+
+    /// <summary>
+    /// TierNBossRoom: creature template ids that take the place of every creature in the boss zone, in turn
+    /// (the first spawn gets the first id, and so on). Empty: the room keeps its creatures.
+    /// </summary>
+    public IReadOnlyList<ulong> BossRoom { get; init; } = [];
+
+    /// <summary>TierNLevel: the level a boss's random deck draws spells up to (0: the boss's own level).</summary>
+    public int Level { get; init; }
+
+    /// <summary>TierNXp: this tier's experience multiplier (0: XpMultiplier).</summary>
+    public double Xp { get; init; }
+
     /// <summary>TierNBossCreatures = Random: the boss zone's other creatures are swapped like a street's.</summary>
     public bool RandomBossZoneCreatures { get; init; }
 
@@ -101,7 +116,21 @@ internal static class RoguelikeConfig {
 
     /// <summary>Earned experience, scaled for a wizard on a run.</summary>
     internal static int ScaleXp(Wizard wizard, int xp)
-        => xp > 0 && IsOnRun(wizard) ? (int) Math.Min(int.MaxValue, Math.Round(xp * XpMultiplier)) : xp;
+        => xp > 0 && IsOnRun(wizard) ? (int) Math.Min(int.MaxValue, Math.Round(xp * XpMultiplierFor(wizard))) : xp;
+
+    /// <summary>The run's experience multiplier: the tier's own (TierNXp), else XpMultiplier.</summary>
+    internal static double XpMultiplierFor(Wizard wizard)
+        => wizard?.Roguelike is { } run && GetTier(run.Tier) is { Xp: > 0 } tier ? tier.Xp : XpMultiplier;
+
+    /// <summary>
+    /// [Roguelike] ArcEndTiers: the tiers that end an arc (5: Arc 1 ends with Malistaire). After one, the wizard is asked
+    /// whether to go on to the next arc or take a break (which logs them out).
+    /// </summary>
+    internal static readonly HashSet<int> ArcEndTiers = [.. SplitList(ConfigurationManager.GetValue("Roguelike.ArcEndTiers", "5"))
+        .Select(t => int.TryParse(t.Trim(), out var v) ? v : 0).Where(v => v > 0)];
+
+    /// <summary>The highest tier level (TierNLevel) set, so the shops and trainers stock up to it.</summary>
+    internal static int HighestTierLevel => Tiers.Count == 0 ? 0 : Tiers.Max(t => t.Level);
 
     /// <summary>Earned gold, scaled for a wizard on a run.</summary>
     internal static int ScaleGold(Wizard wizard, int gold)
@@ -370,6 +399,11 @@ internal static class RoguelikeConfig {
                 break;
             }
 
+            // A tier with no street ("none") goes straight from the shops to its boss.
+            if (parts.Length == 2 && parts[0].Trim() is "none" or "-" or "None") {
+                parts[0] = "";
+            }
+
             if (parts.Length != 2) {
                 Logger.Warning("[Roguelike] Tier{0} needs a street and a boss zone separated by a comma. Tiers stop here.",
                     Logger.Args(i));
@@ -390,6 +424,10 @@ internal static class RoguelikeConfig {
                                                "Random", StringComparison.OrdinalIgnoreCase),
                 BossSwapOwnStats = string.Equals(ConfigurationManager.GetValue($"Roguelike.Tier{i}BossSwapStats", "")?.Trim(),
                                                  "Own", StringComparison.OrdinalIgnoreCase),
+                BossRoom = [.. SplitList(ConfigurationManager.GetValue($"Roguelike.Tier{i}BossRoom", ""))
+                    .Select(id => ulong.TryParse(StripKey(id).Trim(), out var v) ? v : 0).Where(v => v != 0)],
+                Level = Math.Max(0, ConfigurationManager.GetValue($"Roguelike.Tier{i}Level", 0)),
+                Xp = Math.Max(0, ConfigurationManager.GetValue($"Roguelike.Tier{i}Xp", 0.0)),
             });
         }
 

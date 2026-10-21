@@ -45,7 +45,9 @@ internal static class RoguelikeStock {
     internal static readonly bool RandomShops = ConfigurationManager.GetValue("Roguelike.RandomShops", true);
     internal static readonly bool RandomTrainers = ConfigurationManager.GetValue("Roguelike.RandomTrainers", true);
     private static readonly bool s_shopDropGear = ConfigurationManager.GetValue("Roguelike.ShopDropGear", true);
-    private static readonly int s_maxLevel = Math.Clamp(ConfigurationManager.GetValue("Roguelike.MaxStockLevel", 50), 1, 200);
+    // Shops and trainers stock up to MaxStockLevel, or the highest tier level (TierNLevel) when that is higher.
+    private static readonly int s_maxLevel = Math.Clamp(
+        Math.Max(ConfigurationManager.GetValue("Roguelike.MaxStockLevel", 50), RoguelikeConfig.HighestTierLevel), 1, 200);
     private static readonly int s_levelsBelow = Math.Max(0, ConfigurationManager.GetValue("Roguelike.StockLevelsBelow", 10));
     private static readonly int s_levelsAbove = Math.Max(0, ConfigurationManager.GetValue("Roguelike.StockLevelsAbove", 5));
 
@@ -345,7 +347,8 @@ internal static class RoguelikeStock {
     internal static List<uint> RollCreatureDeck(int level, string school, bool isBoss = false) {
         var deck = new List<uint>();
         try {
-            var cap = Math.Max(1, level) + s_creatureLevelLead;
+            // A boss's level is its tier's (TierNLevel): spells up to it, no lead.
+            var cap = Math.Max(1, level) + (isBoss ? 0 : s_creatureLevelLead);
             var usable = s_spells.Value
                 .Where(entry => entry.Level <= cap)
                 .Select(entry => (entry.Id, Spell: CoreObjectFactory.GetCoreTemplate(entry.Id) as SpellTemplate))

@@ -112,6 +112,11 @@ internal static class RoguelikeCreatures {
             info.ByAdjective.Clear();
         }
 
+        // A new tier's boss room starts its turns over.
+        if (info.Tier != run.Tier) {
+            s_bossRoomSpawns.TryRemove(wizard.CharId, out _);
+        }
+
         info.Seed = seed;
         info.Tier = run.Tier;
         info.Street = street;
@@ -187,6 +192,20 @@ internal static class RoguelikeCreatures {
             Register(WizardCollection.GetCharacterUnloaded(ownerCharId));
             if (!s_runs.TryGetValue(ownerCharId, out info)) {
                 return false;
+            }
+        }
+
+        // The tier's boss room may hold other creatures altogether (TierNBossRoom: Morganthe twice in a cave).
+        if (BossZoneTier(info, zonePath) is { BossRoom.Count: > 0 } roomTier) {
+            var turn = s_bossRoomSpawns.AddOrUpdate(ownerCharId, 0, (_, n) => n + 1);
+            var pick = roomTier.BossRoom[turn % roomTier.BossRoom.Count];
+            if (CoreObjectFactory.GetCoreTemplate(pick) is GameObjectTemplate) {
+                mapped = pick;
+                if (roomTier.BossSwapOwnStats) {
+                    s_ownStats.TryAdd(mapped, 0);
+                }
+
+                return mapped != templateId;
             }
         }
 
@@ -274,13 +293,21 @@ internal static class RoguelikeCreatures {
     private static bool IsRandomBossZone(RunInfo info, string zonePath)
         => BossZoneTier(info, zonePath) is { RandomBossZoneCreatures: true };
 
-    /// <summary>True when this boss is in its run's boss zone and the tier gives bosses a random deck (TierNBossDeck).</summary>
-    internal static bool WantsRandomBossDeck(Zone.Core.ZoneEntity entity) {
+    /// <summary>
+    /// The level a boss's random deck draws spells up to, when this boss is in its run's boss zone and the tier gives
+    /// bosses a random deck (TierNBossDeck): TierNLevel, else the boss's own level. Null: no random deck.
+    /// </summary>
+    internal static int? RandomBossDeckLevel(Zone.Core.ZoneEntity entity, int bossLevel) {
         var zone = entity?.Zone;
         return Active && zone is not null && zone.OwnerCharId != 0
                && s_runs.TryGetValue(zone.OwnerCharId, out var info)
-               && BossZoneTier(info, zone.ZonePath) is { RandomBossDeck: true };
+               && BossZoneTier(info, zone.ZonePath) is { RandomBossDeck: true } tier
+            ? (tier.Level > 0 ? tier.Level : bossLevel)
+            : null;
     }
+
+    // How many creatures each run's boss room has spawned (TierNBossRoom hands its ids out in turn).
+    private static readonly ConcurrentDictionary<ulong, int> s_bossRoomSpawns = new();
 
     /// <summary>True when a run swapped this creature in (so it fights with a random deck, RandomCreatureDecks).</summary>
     internal static bool IsRunSwapped(Zone.Core.ZoneEntity entity)
