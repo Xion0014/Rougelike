@@ -392,6 +392,17 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
             case "battlemusic":
                 PlayBattleMusic();
                 break;
+            case "music" when message.Argument is "off" or "on":
+                // ".run music off": no run music for this wizard, the game's own settings and zone music apply.
+                MusicOff.Set(wizard.CharId, message.Argument == "off");
+                InformGameClient(message.Argument == "off"
+                    ? "Run music is off for you. Zone music comes back with your next zone change."
+                    : "Run music is on for you.");
+                if (message.Argument == "on") {
+                    PlayRunMusic(newTrack: true);
+                }
+
+                break;
             case "music":
                 // ".run music" rolls another track; the service's own timers replay the current one after a battle
                 // and change it every MusicChangeMinutes outside battles.
@@ -504,7 +515,16 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
     /// With RandomMusic, plays a random track from MusicTracks (or the current one again, after a battle's own
     /// music), in place of the zone's music.
     /// </summary>
+    /// <summary>Wizards who turned run music off (.run music off); kept in run-music-off.txt next to the server.</summary>
+    private static readonly Imlight.CoreLib.Game.Combat.BattleModes MusicOff = new("run-music-off.txt");
+
+    private bool MusicOffForMe => GetActiveWizard() is { } w && MusicOff.IsOn(w.CharId);
+
     private void PlayRunMusic(bool newTrack) {
+        if (MusicOffForMe) {
+            return;
+        }
+
         if (!RoguelikeConfig.RandomMusic) {
             // Only battles are random: after one, the zone's own music, which the game may not bring back itself.
             if (!newTrack && RoguelikeConfig.RandomBattleMusic && !string.IsNullOrEmpty(_zoneMusic)) {
@@ -544,6 +564,10 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
     }
 
     private void PlayBattleMusic() {
+        if (MusicOffForMe) {
+            return;
+        }
+
         var tracks = RoguelikeConfig.BattleMusicTracks;
         if (!RoguelikeConfig.RandomBattleMusic || tracks.Length == 0 || GetActiveWizard()?.Roguelike is null) {
             return;

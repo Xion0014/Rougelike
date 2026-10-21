@@ -324,7 +324,7 @@ internal static class RoguelikeConfig {
     /// [Roguelike] MusicFlags: the flags sent with each track. The game's tracks only repeat on their own with
     /// the right flag; 1 asks for that.
     /// </summary>
-    internal static readonly int MusicFlags = ConfigurationManager.GetValue("Roguelike.MusicFlags", 1);
+    internal static readonly int MusicFlags = ConfigurationManager.GetValue("Roguelike.MusicFlags", 0);
 
     /// <summary>
     /// [Roguelike] MusicChangeMinutes: outside battles, a new random track this often (0 = never), so the music
