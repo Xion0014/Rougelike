@@ -346,9 +346,10 @@ internal sealed class SetupSteps : IDisposable {
         if (existingConfig && File.Exists(defaults)) {
             var lines = File.ReadAllLines(ConfigFile).ToList();
             var added = IniFile.AddMissing(lines, File.ReadAllLines(defaults));
-            if (added > 0) {
+            var refreshed = Edition.IS_ROGUELIKE ? IniFile.CopyRunDesign(lines, File.ReadAllLines(defaults)) : 0;
+            if (added > 0 || refreshed > 0) {
                 File.WriteAllLines(ConfigFile, lines);
-                SetupLog.Detail($"Added {added} new settings to Config\\Imlight.ini.");
+                SetupLog.Detail($"Added {added} new settings to Config\\Imlight.ini and refreshed {refreshed} run settings.");
             }
         }
 

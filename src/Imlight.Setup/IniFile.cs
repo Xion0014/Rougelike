@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Imlight.Setup;
 
@@ -25,6 +26,46 @@ namespace Imlight.Setup;
 /// Reads and edits values in Imlight.ini, keeping every comment and every other line as it was.
 /// </summary>
 internal static class IniFile {
+
+    /// <summary>
+    /// The roguelike launcher's run design: the tiers (every TierN... key), how long streets last, where arcs end and
+    /// the experience, gold and training point rewards. Each update takes these from the release, so every player
+    /// runs the same tiers; the switches players flip themselves (music, Die = Delete) are left alone.
+    /// </summary>
+    internal static int CopyRunDesign(List<string> lines, IReadOnlyList<string> defaults) {
+        string[] keys = ["StreetMinutes", "ArcEndTiers", "XpMultiplier", "GoldMultiplier", "BossTrainingPoints"];
+        var changed = 0;
+        string? section = null;
+        foreach (var line in defaults) {
+            var trimmed = line.Trim();
+            if (trimmed.StartsWith('[') && trimmed.EndsWith(']')) {
+                section = trimmed[1..^1].Trim();
+
+                continue;
+            }
+
+            var equals = trimmed.IndexOf('=');
+            if (!string.Equals(section, "Roguelike", StringComparison.OrdinalIgnoreCase) || trimmed.StartsWith(';') || equals <= 0) {
+                continue;
+            }
+
+            var key = trimmed[..equals].Trim();
+            var value = trimmed[(equals + 1)..].Trim();
+            var isTier = key.Length > 4 && key.StartsWith("Tier", StringComparison.OrdinalIgnoreCase) && char.IsDigit(key[4]);
+            if (!isTier && !keys.Contains(key, StringComparer.OrdinalIgnoreCase)) {
+                continue;
+            }
+
+            if (GetFrom(lines, "Roguelike", key) == value) {
+                continue;
+            }
+
+            Set(lines, "Roguelike", key, value);
+            changed++;
+        }
+
+        return changed;
+    }
 
     /// <summary>
     /// Adds the sections and keys a newer default file has that the person's file lacks, with their comments,
@@ -95,6 +136,26 @@ internal static class IniFile {
     /// <summary>
     /// Returns a value from an ini file, or null when the file, section or key is missing.
     /// </summary>
+    private static string? GetFrom(IEnumerable<string> lines, string section, string key) {
+        var inSection = false;
+        foreach (var line in lines) {
+            var trimmed = line.Trim();
+            if (trimmed.StartsWith('[') && trimmed.EndsWith(']')) {
+                inSection = trimmed[1..^1].Trim().Equals(section, StringComparison.OrdinalIgnoreCase);
+
+                continue;
+            }
+
+            var equals = trimmed.IndexOf('=');
+            if (inSection && !trimmed.StartsWith(';') && equals > 0
+                && trimmed[..equals].Trim().Equals(key, StringComparison.OrdinalIgnoreCase)) {
+                return trimmed[(equals + 1)..].Trim();
+            }
+        }
+
+        return null;
+    }
+
     internal static string? Get(string path, string section, string key) {
         if (!System.IO.File.Exists(path)) {
             return null;
