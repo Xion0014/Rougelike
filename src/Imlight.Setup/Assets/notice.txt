@@ -1,0 +1,11 @@
+; The AI notice. It shows the first time the launcher opens (the player must answer it), and from the
+; "AI notice" button any time after. Same format as the other pages: # heading, Q: line in gold, paragraphs.
+
+# A note before you play
+
+Q: This project was developed with the help of AI.
+Much of Spiral Roguelike's code was written with the help of an AI assistant (Claude, made by Anthropic), guided and tested by a person.
+
+If that makes you uncomfortable, you are welcome to remove this program and not take part. Close the launcher and uninstall "Spiral Roguelike" from Settings > Apps; nothing else on your PC or in your Wizard101 is changed.
+
+Once someone makes a version of this without AI, I will unlist this project.

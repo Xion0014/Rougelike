@@ -1,0 +1,46 @@
+; The launcher's Rules page. Edit freely: it is shown exactly as written, in this order.
+;   # Heading       a section title
+;   Q: line         a line in gold
+;   anything else   a paragraph (leave a blank line between paragraphs)
+;   ; comment       not shown
+
+# The idea
+
+A run is a climb through tiers. Each tier is a street full of creatures, then a boss. Beat the boss, shop and train, then head into the next tier. Everything is shuffled: the creatures, their decks, the spells you can learn, the gear in the shops and the music.
+
+# How a tier works
+
+Q: 1. Fight on the street
+Each tier starts on a street with a countdown (about 10 minutes, set for each tier). Battle as much as you can: you earn experience, gold, gear, spells, pets, jewels and stat potions. The timer only counts while you are online, and the time left shows on screen.
+
+Q: 2. Beat the boss
+When the timer runs out you are sent to the tier's boss. Win the battle against the boss to clear the tier.
+
+Q: 3. Shop
+After the boss you arrive in the Shopping District. Spend your gold on random gear, pets from the Pet Shop and jewels from RockHammer's Jewel Works. The shops restock every tier.
+
+Q: 4. Refill your potions
+Talk to Maxwell Sharp, the peacock in the Shopping District, to refill your health and mana potions.
+
+Q: 5. Train in Ravenwood
+Use the Tome of Travels (the tome on its pedestal in the Shopping District) to go to Ravenwood. The trainers there teach random spells from every school. Spend your training points wisely.
+
+Q: 6. Start the next tier
+Use the Tome of Travels again to start the next tier's street. Want to shop some more first? Talk to Mr. Lincoln in Ravenwood to go back to the Shopping District.
+
+# Good to know
+
+Q: Arcs
+After the last boss of an arc you get a choice: carry on into the next arc, or take a break. Your run waits for you.
+
+Q: One life?
+With Die = Delete on (under Run magic), a wizard who dies in battle and is still dead when the battle ends is gone for good. Fleeing doesn't count.
+
+Q: Stat potions
+Won battles often give a stat potion that is drunk on the spot: a random stat (health, mana, damage, resist, critical and more) goes up for the rest of the run.
+
+Q: Your stats
+The Crown Shop button shows your stats in chat during a run (there are no crowns on a run).
+
+Q: Handy commands
+Type .run status to see where your run stands, and .run stats for your stats.

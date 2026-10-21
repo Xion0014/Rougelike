@@ -35,6 +35,8 @@
     <!-- The launcher's FAQ and credits pages: edit these text files to change them. -->
     <AvaloniaResource Include="Assets\faq.txt" />
     <AvaloniaResource Include="Assets\credits.txt" />
+    <AvaloniaResource Include="Assets\rules.txt" />
+    <AvaloniaResource Include="Assets\notice.txt" />
   </ItemGroup>
 
   <!-- The branch the program installs and updates by default; the release workflow passes -p:ImlightBranch=<branch>. -->

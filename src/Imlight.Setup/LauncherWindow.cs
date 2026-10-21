@@ -113,14 +113,19 @@ internal sealed partial class LauncherWindow : Window {
     private readonly Border _logsPill;
     private readonly Border _setupLogPill;
     private readonly Border _gameFolderPill;
+    private readonly Border _rulesPill;
     private readonly Border _faqPill;
     private readonly Border _creditsPill;
+    private readonly Border _noticePill;
 
     // The FAQ and credits, shown over the card.
     private readonly Border _book;
     private readonly TextBlock _bookTitle = new() { FontSize = 30 };
     private readonly StackPanel _bookPages = new() { Spacing = 6 };
     private readonly ScrollViewer _bookScroll = new() { MaxHeight = 430 };
+    private readonly StackPanel _bookAnswer = new() { Orientation = Orientation.Horizontal, Spacing = 10, HorizontalAlignment = HorizontalAlignment.Right, Margin = new Thickness(0, 14, 8, 0) };
+    private Border? _bookClose;
+    private bool _bookMustAnswer;
 
     // The panels at the bottom.
     private readonly Border _wizardPanel;
@@ -181,6 +186,16 @@ internal sealed partial class LauncherWindow : Window {
             return Task.CompletedTask;
         });
         _gameFolderPill = Pill("Choose my Wizard101 folder", ChooseGameFolderAsync);
+        _rulesPill = Pill("★ Rules", () => {
+            OpenBook("How a run works", "rules.txt");
+
+            return Task.CompletedTask;
+        });
+        _noticePill = Pill("AI notice", () => {
+            OpenBook("Please read", "notice.txt");
+
+            return Task.CompletedTask;
+        });
         _faqPill = Pill("? FAQ", () => {
             OpenBook("Questions & answers", "faq.txt");
 
@@ -191,7 +206,7 @@ internal sealed partial class LauncherWindow : Window {
 
             return Task.CompletedTask;
         });
-        _pills.Children.AddRange([_updatePill, _sleepPill, _logsPill, _setupLogPill, _gameFolderPill, _faqPill, _creditsPill]);
+        _pills.Children.AddRange([_updatePill, _sleepPill, _logsPill, _setupLogPill, _gameFolderPill, _rulesPill, _faqPill, _creditsPill, _noticePill]);
         _book = Book();
         foreach (var pill in _pills.Children) {
             pill.Margin = new Thickness(5, 4);
@@ -227,6 +242,10 @@ internal sealed partial class LauncherWindow : Window {
         Opened += async (_, _) => {
             _skyTimer.Start();
             ShowInstalledState();
+            if (!NoticeSeen) {
+                OpenBook("Please read", "notice.txt", mustAnswer: true);
+            }
+
             if (_manager.IsInstalled) {
                 await RefreshStatusAsync();
                 _statusTimer.Start();
@@ -966,6 +985,20 @@ internal sealed partial class LauncherWindow : Window {
             return Task.CompletedTask;
         }, gold: true);
         close.HorizontalAlignment = HorizontalAlignment.Right;
+        _bookClose = close;
+        var understood = Pill("I understand, let's play", () => {
+            NoticeSeen = true;
+            CloseBook();
+
+            return Task.CompletedTask;
+        }, gold: true);
+        var leave = Pill("Close the launcher", () => {
+            _closeAnyway = true;
+            Close();
+
+            return Task.CompletedTask;
+        });
+        _bookAnswer.Children.AddRange([leave, understood]);
         var header = new Grid { ColumnDefinitions = new ColumnDefinitions("*,Auto"), Margin = new Thickness(0, 0, 0, 10) };
         Grid.SetColumn(close, 1);
         header.Children.AddRange([_bookTitle, close]);
@@ -980,7 +1013,7 @@ internal sealed partial class LauncherWindow : Window {
             CornerRadius = new CornerRadius(26),
             Padding = new Thickness(28, 20, 20, 22),
             BoxShadow = BoxShadows.Parse("0 16 50 0 #80000000"),
-            Child = new StackPanel { Children = { header, _bookScroll } },
+            Child = new StackPanel { Children = { header, _bookScroll, _bookAnswer } },
         };
         // Clicks on the page stay on the page; a click on the dimmed sky around it closes it.
         page.PointerPressed += (_, e) => e.Handled = true;
@@ -990,12 +1023,26 @@ internal sealed partial class LauncherWindow : Window {
             IsVisible = false,
             Child = page,
         };
-        shade.PointerPressed += (_, _) => CloseBook();
+        shade.PointerPressed += (_, _) => {
+            if (!_bookMustAnswer) {
+                CloseBook();
+            }
+        };
 
         return shade;
     }
 
-    private void OpenBook(string title, string file) {
+    /// <summary>
+    /// Opens a page. With <paramref name="mustAnswer"/> (the AI notice the first time) it stays until the player picks
+    /// "I understand" or "Close the launcher".
+    /// </summary>
+    private void OpenBook(string title, string file, bool mustAnswer = false) {
+        _bookMustAnswer = mustAnswer;
+        _bookAnswer.IsVisible = mustAnswer;
+        if (_bookClose is not null) {
+            _bookClose.IsVisible = !mustAnswer;
+        }
+
         _bookTitle.Text = title;
         _bookPages.Children.Clear();
         foreach (var block in ReadBook(file)) {
@@ -1006,7 +1053,34 @@ internal sealed partial class LauncherWindow : Window {
         _book.IsVisible = true;
     }
 
-    private void CloseBook() => _book.IsVisible = false;
+    private void CloseBook() {
+        _bookMustAnswer = false;
+        _book.IsVisible = false;
+    }
+
+    // Whether this PC has answered the AI notice; kept next to the install, so it shows once.
+    private static string NoticeFile => Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), Edition.INSTALL_FOLDER_NAME, "ai-notice-seen.txt");
+
+    private static bool NoticeSeen {
+        get {
+            try {
+                return File.Exists(NoticeFile);
+            }
+            catch (Exception) {
+                return false;
+            }
+        }
+        set {
+            try {
+                Directory.CreateDirectory(Path.GetDirectoryName(NoticeFile)!);
+                File.WriteAllText(NoticeFile, $"The AI notice was read on {DateTime.Now:yyyy-MM-dd HH:mm}.");
+            }
+            catch (Exception) {
+                // Shown again next time; nothing else depends on it.
+            }
+        }
+    }
 
     /// <summary>
     /// Turns faq.txt or credits.txt into text: "# " headings, "Q: " lines in gold, paragraphs (lines next to each other
