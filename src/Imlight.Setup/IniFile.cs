@@ -28,12 +28,21 @@ namespace Imlight.Setup;
 internal static class IniFile {
 
     /// <summary>
-    /// The roguelike launcher's run design: the tiers (every TierN... key), how long streets last, where arcs end and
-    /// the experience, gold and training point rewards. Each update takes these from the release, so every player
+    /// The roguelike launcher's run design: the tiers (every TierN... key), how long streets last, where arcs end, the
+    /// rewards, shop and drop levels, potions, backpack size, randomizer and pip rules. Each update takes these from the release, so every player
     /// runs the same tiers; the switches players flip themselves (music, Die = Delete) are left alone.
     /// </summary>
     internal static int CopyRunDesign(List<string> lines, IReadOnlyList<string> defaults) {
-        string[] keys = ["StreetMinutes", "ArcEndTiers", "XpMultiplier", "GoldMultiplier", "BossTrainingPoints"];
+        // Section.Key, plus every [Roguelike] TierN... key.
+        string[] keys = [
+            "Roguelike.StreetMinutes", "Roguelike.ArcEndTiers", "Roguelike.XpMultiplier", "Roguelike.GoldMultiplier",
+            "Roguelike.BossTrainingPoints", "Roguelike.MaxStockLevel", "Roguelike.CrownDropChance", "Roguelike.NoCrowns",
+            "Character.StartingPotions", "Character.MaxInventoryItems",
+            "Randomizer.RandomizeSchool", "Randomizer.RandomizeSpells", "Randomizer.RandomizeDrops",
+            "Randomizer.CreaturesChangeEverySpawn", "Randomizer.RandomizeCreatureDecks", "Randomizer.RandomizeItemCards",
+            "Randomizer.RandomizePips",
+            "Battle.GainSchoolPips", "Battle.AnySchoolPips", "Archmastery.AllLevels",
+        ];
         var changed = 0;
         string? section = null;
         foreach (var line in defaults) {
@@ -45,22 +54,23 @@ internal static class IniFile {
             }
 
             var equals = trimmed.IndexOf('=');
-            if (!string.Equals(section, "Roguelike", StringComparison.OrdinalIgnoreCase) || trimmed.StartsWith(';') || equals <= 0) {
+            if (section is null || trimmed.StartsWith(';') || equals <= 0) {
                 continue;
             }
 
             var key = trimmed[..equals].Trim();
             var value = trimmed[(equals + 1)..].Trim();
-            var isTier = key.Length > 4 && key.StartsWith("Tier", StringComparison.OrdinalIgnoreCase) && char.IsDigit(key[4]);
-            if (!isTier && !keys.Contains(key, StringComparer.OrdinalIgnoreCase)) {
+            var isTier = section.Equals("Roguelike", StringComparison.OrdinalIgnoreCase)
+                && key.Length > 4 && key.StartsWith("Tier", StringComparison.OrdinalIgnoreCase) && char.IsDigit(key[4]);
+            if (!isTier && !keys.Contains($"{section}.{key}", StringComparer.OrdinalIgnoreCase)) {
                 continue;
             }
 
-            if (GetFrom(lines, "Roguelike", key) == value) {
+            if (GetFrom(lines, section, key) == value) {
                 continue;
             }
 
-            Set(lines, "Roguelike", key, value);
+            Set(lines, section, key, value);
             changed++;
         }
 
