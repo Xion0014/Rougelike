@@ -208,6 +208,12 @@ internal static class RoguelikeStock {
             .Split([',', ';', ' '], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries),
         StringComparer.OrdinalIgnoreCase);
 
+    /// <summary>
+    /// [Roguelike] JewelShopWindow: the shop window kind (m_furnitureShop) a jewel vendor opens. 7 is the game's jewel
+    /// shop window, read from Katherine RockHammer's own shop (2 reagents, 5 pet snacks, 0 the robe shop).
+    /// </summary>
+    internal static readonly int JewelShopWindow = ConfigurationManager.GetValue("Roguelike.JewelShopWindow", 7);
+
     /// <summary>True when a vendor sells jewels: it is listed in JewelShops, or most of its stock is jewels.</summary>
     internal static bool IsJewelVendor(ulong vendorTemplateId, string shopTitle, IReadOnlyList<GID> stock)
         => IsJewelShop(vendorTemplateId, shopTitle) || (stock is { Count: > 0 } && MostlyOf(stock, IsJewelTemplate));
