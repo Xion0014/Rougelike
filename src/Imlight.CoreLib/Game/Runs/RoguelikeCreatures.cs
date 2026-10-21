@@ -195,6 +195,9 @@ internal static class RoguelikeCreatures {
             && string.Equals(RoguelikeConfig.ResolveZone(tier.Boss), zonePath, StringComparison.OrdinalIgnoreCase)
             && CoreObjectFactory.GetCoreTemplate(tier.BossSwap) is GameObjectTemplate) {
             mapped = tier.BossSwap;
+            if (tier.BossSwapOwnStats) {
+                s_ownStats.TryAdd(mapped, 0);
+            }
 
             return mapped != templateId;
         }
@@ -244,9 +247,12 @@ internal static class RoguelikeCreatures {
     /// </summary>
     private static readonly bool s_keepStats = ConfigurationManager.GetValue("Roguelike.SwappedCreaturesKeepStats", true);
 
+    // Swapped-in bosses that fight as themselves (TierNBossSwapStats = Own).
+    private static readonly ConcurrentDictionary<ulong, byte> s_ownStats = new();
+
     /// <summary>Remembers which creature a run-swapped spawn stands in for.</summary>
-    internal static void RememberStatSource(ulong spawnGlobalId, ulong originalTemplateId) {
-        if (!s_keepStats) {
+    internal static void RememberStatSource(ulong spawnGlobalId, ulong originalTemplateId, ulong spawnedTemplateId = 0) {
+        if (!s_keepStats || s_ownStats.ContainsKey(spawnedTemplateId)) {
             return;
         }
 

@@ -326,7 +326,7 @@ public sealed class ZonePath : ZoneEntity {
         }
         if (swappedByRun) {
             // It looks like the replacement but fights like the creature it stands in for.
-            Imlight.CoreLib.Game.Runs.RoguelikeCreatures.RememberStatSource(creatureObj.m_globalID, originalTemplateId);
+            Imlight.CoreLib.Game.Runs.RoguelikeCreatures.RememberStatSource(creatureObj.m_globalID, originalTemplateId, templateId);
         }
         if (isWisp) {
             Logger.Debug("Wisp {0} spawned on path {1}.", Logger.Args((template as GameObjectTemplate)?.m_objectName, _template.m_name));

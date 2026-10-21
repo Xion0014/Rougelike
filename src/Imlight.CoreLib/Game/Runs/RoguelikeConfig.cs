@@ -44,6 +44,12 @@ internal sealed record RoguelikeTier(int Number, string Street, string Boss) {
     /// </summary>
     public ulong BossSwap { get; init; }
 
+    /// <summary>
+    /// TierNBossSwapStats: "Own" makes the swapped-in boss fight with its own health, level and deck (Jade Oni's
+    /// 8,000 health); anything else keeps the replaced boss's.
+    /// </summary>
+    public bool BossSwapOwnStats { get; init; }
+
     /// <summary>Quests handed to the wizard when they reach this tier's boss zone (TierNBossQuests).</summary>
     public IReadOnlyList<string> BossQuests { get; init; } = [];
 
@@ -369,6 +375,8 @@ internal static class RoguelikeConfig {
                 StreetSeconds = minutes > 0 ? minutes * 60 : StreetSeconds,
                 BossSwap = ulong.TryParse(StripKey(ConfigurationManager.GetValue($"Roguelike.Tier{i}BossSwap", "") ?? "").Trim(),
                                           out var swap) ? swap : 0,
+                BossSwapOwnStats = string.Equals(ConfigurationManager.GetValue($"Roguelike.Tier{i}BossSwapStats", "")?.Trim(),
+                                                 "Own", StringComparison.OrdinalIgnoreCase),
             });
         }
 
