@@ -306,6 +306,12 @@ public class ServerWizGameStats : IClientTypeProvider<WizGameStats> {
             m_energyMax = baseStats.m_petEnergy,
             m_powerPipBase = baseStats.m_pipChance,
 
+            // Flat damage and flat resist (gear, jewels): the stats page's second rows read these, not the effects.
+            m_dmgBonusFlat = m_dmgBonusFlat,
+            m_dmgBonusFlatAll = m_dmgBonusFlatAll,
+            m_dmgReduceFlat = m_dmgReduceFlat,
+            m_dmgReduceFlatAll = m_dmgReduceFlatAll,
+
             m_baseGoldPouch = m_baseGoldPouch,
             m_currentHitpoints = m_currentHitpoints,
             m_currentGold = m_currentGold,

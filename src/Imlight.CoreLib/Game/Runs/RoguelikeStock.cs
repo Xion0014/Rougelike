@@ -329,6 +329,8 @@ internal static class RoguelikeStock {
                     || path.Contains("Recipe", StringComparison.OrdinalIgnoreCase)
                     || CoreObjectFactory.GetCoreTemplate(id) is not WizItemTemplate template
                     || !Imlight.CoreLib.Shared.Items.JewelSockets.IsJewel(template)
+                    // Magic Weaving is not on this server.
+                    || Imlight.CoreLib.Shared.Items.JewelSockets.IsMagicWeaving(template)
                     // Crown-only and no-trade jewels stay out, like crown gear in the gold shops.
                     || IsCrownItem(id)) {
                     continue;

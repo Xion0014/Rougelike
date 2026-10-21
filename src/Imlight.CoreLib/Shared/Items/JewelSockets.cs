@@ -65,6 +65,19 @@ internal static class JewelSockets {
     internal static bool IsJewel(WizItemTemplate template) => GetShape(template) is not null;
 
     /// <summary>
+    /// True for a Magic Weaving jewel: one that needs a secondary school (the hybrid cards such as Typhoon Ghoul).
+    /// Magic Weaving is not on this server, so these jewels neither drop nor go into sockets.
+    /// </summary>
+    internal static bool IsMagicWeaving(WizItemTemplate template)
+        => NeedsSecondarySchool(template?.m_equipRequirements);
+
+    private static bool NeedsSecondarySchool(Requirement requirement) => requirement switch {
+        ReqHasSecondarySchool or ReqIsSecondarySchool => true,
+        RequirementList list => (list.m_requirements ?? []).Any(NeedsSecondarySchool),
+        _ => false,
+    };
+
+    /// <summary>
     /// Whether a jewel is No Shatter, so taking it out returns it instead of destroying it. The No Shatter jewels
     /// (the Blackhawk and AM pet jewels: Stuff of Legends Peridot, Lifesaver Jade...) are the jewels marked No Sell,
     /// and carry an extra behavior (DeletedBehavior, or a second PetJewelBehavior on Lifesaver Jade) (Justin, 2026-10-20).
@@ -203,6 +216,10 @@ internal static class JewelSockets {
         var shape = GetShape(jewelTemplate);
         if (shape is null) {
             return "That is not a jewel or a pin.";
+        }
+
+        if (IsMagicWeaving(jewelTemplate)) {
+            return "Magic Weaving jewels do not work on this server.";
         }
 
         if (sockets[socketNumber]?.m_socketType != shape) {
