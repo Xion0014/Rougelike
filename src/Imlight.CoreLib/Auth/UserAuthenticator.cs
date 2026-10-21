@@ -158,7 +158,13 @@ internal static class UserAuthenticator {
         // username makes its account here.
         var matchedAccount = AccountCollection.GetAccountForCharacterList(username);
         if (matchedAccount is null && s_autoCreateAccounts && CreateAutoAccount(username)) {
-            matchedAccount = AccountCollection.GetAccountForCharacterList(username);
+            // The new account can take a moment to show up in lookups.
+            for (var attempt = 0; matchedAccount is null && attempt < 10; attempt++) {
+                matchedAccount = AccountCollection.GetAccountForCharacterList(username);
+                if (matchedAccount is null) {
+                    System.Threading.Thread.Sleep(150);
+                }
+            }
         }
 
         if (matchedAccount is null) {

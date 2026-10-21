@@ -209,6 +209,9 @@ public static class AccountCollection {
             var metadata = session.Advanced.GetMetadataFor(account);
             metadata[Raven.Client.Constants.Documents.Metadata.Collection] = CollectionName;
 
+            // Lookups by username go through an index, so wait for it: an account made at login is looked up
+            // straight away, and would not be found yet.
+            session.Advanced.WaitForIndexesAfterSaveChanges(timeout: TimeSpan.FromSeconds(5), throwOnTimeout: false);
             session.SaveChanges();
 
             return true;
