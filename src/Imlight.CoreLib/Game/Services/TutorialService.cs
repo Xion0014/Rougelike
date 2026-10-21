@@ -602,10 +602,18 @@ internal sealed class TutorialService(SessionActor sessionActor) : MessageServic
             return;
         }
 
-        var templateIds = ConfigurationManager.Settings["Character.DefaultItems"].AsList()
+        // On a roguelike server the kit is Roguelike.StarterItems instead (the tutorial deck), never the QA gear in
+        // Character.DefaultItems: its resist and speed stats would make a run meaningless. The run gives the mount.
+        var kitKey = Imlight.CoreLib.Game.Runs.RoguelikeConfig.Enabled ? "Roguelike.StarterItems" : "Character.DefaultItems";
+        var kitList = Imlight.CoreLib.Game.Runs.RoguelikeConfig.Enabled
+            ? ConfigurationManager.GetValue("Roguelike.StarterItems", "126983").Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            : ConfigurationManager.Settings["Character.DefaultItems"].AsList().ToArray();
+        var templateIds = kitList
             .Select(id => ulong.TryParse(id, out var parsed) ? parsed : 0)
             .Where(id => id > 0)
+            .Where(id => !Imlight.CoreLib.Game.Runs.RoguelikeConfig.Enabled || !Imlight.CoreLib.Game.Runs.RoguelikeStock.IsCheatStarterItem(id))
             .ToArray();
+        Logger.Information("Starter kit from {0}: {1}.", Logger.Args(kitKey, string.Join(",", templateIds)));
         if (templateIds.Length == 0) {
             return;
         }

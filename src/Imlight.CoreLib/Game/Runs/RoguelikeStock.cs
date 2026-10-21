@@ -101,6 +101,16 @@ internal static class RoguelikeStock {
     private static readonly int s_retiredSpellShare
         = Math.Clamp(ConfigurationManager.GetValue("Roguelike.TrainerSpecialSpellShare", 25), 0, 100);
 
+    /// <summary>
+    /// True for a starter item a run must not begin with: QA gear (cheat resist and speed stats) and mounts (the
+    /// run gives its own).
+    /// </summary>
+    internal static bool IsCheatStarterItem(ulong templateId)
+        => s_templatePaths.Value.TryGetValue(templateId, out var path)
+           && (path.Contains("/QA_", StringComparison.OrdinalIgnoreCase)
+               || path.Contains("QA_Gear", StringComparison.OrdinalIgnoreCase)
+               || path.StartsWith("ObjectData/Mounts/", StringComparison.OrdinalIgnoreCase));
+
     /// <summary>True when this wizard's shops are randomized.</summary>
     internal static bool ShopsActiveFor(Wizard wizard)
         => RandomShops && RoguelikeConfig.Enabled && wizard?.Roguelike is not null;
