@@ -519,6 +519,9 @@ public class Wizard {
         item.m_characterId = (GID) CharId;
         CoreObjectFactory.InitializeCoreObjectBehaviors(item, item.m_templateID);
 
+        // An item with sockets starts with all of them open (they cost crowns to open in the real game).
+        Imlight.CoreLib.Shared.Items.JewelSockets.GetState(item, create: true);
+
         return true;
     }
 

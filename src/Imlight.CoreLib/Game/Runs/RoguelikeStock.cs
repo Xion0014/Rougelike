@@ -280,6 +280,58 @@ internal static class RoguelikeStock {
         return PickCrownGear(wizard);
     }
 
+    // ---------------------------------------------------------------------
+    // Jewel and pin drops
+    // ---------------------------------------------------------------------
+
+    /// <summary>[Roguelike] JewelDropChance: the chance (0 to 100) that a won battle drops a jewel or pin.</summary>
+    internal static readonly int JewelDropChance = Math.Clamp(ConfigurationManager.GetValue("Roguelike.JewelDropChance", 100), 0, 100);
+
+    private sealed record JewelEntry(uint Id, int Level);
+
+    private static readonly Lazy<List<JewelEntry>> s_jewels = new(BuildJewelPool, LazyThreadSafetyMode.ExecutionAndPublication);
+
+    /// <summary>
+    /// Rolls the battle's jewel drop: a random jewel or pin (any shape: square, circle, triangle, tear, pet, or a pin)
+    /// the wizard has the level for, or null.
+    /// </summary>
+    internal static uint? RollJewel(Wizard wizard) {
+        if (!RoguelikeConfig.Enabled || wizard?.Roguelike is null || JewelDropChance <= 0
+            || Random.Shared.Next(100) >= JewelDropChance) {
+            return null;
+        }
+
+        var level = Math.Max(1, (int) wizard.MagicSchoolBehavior.Level);
+        var fits = s_jewels.Value.Where(j => j.Level <= level).ToList();
+
+        return fits.Count == 0 ? null : fits[Random.Shared.Next(fits.Count)].Id;
+    }
+
+    private static List<JewelEntry> BuildJewelPool() {
+        var list = new List<JewelEntry>();
+        try {
+            foreach (var (id, path) in s_templatePaths.Value) {
+                if (id is 0 or > uint.MaxValue || !path.Contains("Jewel", StringComparison.OrdinalIgnoreCase)
+                    || path.Contains("Recipe", StringComparison.OrdinalIgnoreCase)
+                    || CoreObjectFactory.GetCoreTemplate(id) is not WizItemTemplate template
+                    || !Imlight.CoreLib.Shared.Items.JewelSockets.IsJewel(template)
+                    // Crown-only and no-trade jewels stay out, like crown gear in the gold shops.
+                    || IsCrownItem(id)) {
+                    continue;
+                }
+
+                list.Add(new JewelEntry((uint) id, Math.Max(1, EquipLevel(template))));
+            }
+        }
+        catch (Exception ex) {
+            Logger.Error("Roguelike could not build the jewel pool. {0}", Logger.Args(ex.Message));
+        }
+
+        Logger.Information("Roguelike: {0} jewels and pins can drop.", Logger.Args(list.Count));
+
+        return list;
+    }
+
     /// <summary>
     /// Rolls the random gear a quest completed on a run may give (QuestItemChance): crown gear or ordinary gear,
     /// as likely as each other, in the wizard's level window and for their school when one turns up.

@@ -318,6 +318,13 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
             finds.Add("Rare find! A piece of crown gear dropped from that battle.");
         }
 
+        if (mobs.Length > 0 && RoguelikeStock.RollJewel(wizard) is { } jewelId) {
+            GiveCrownDrop(wizard, jewelId);
+            var jewelName = Imlight.CoreLib.Shared.Resources.CoreObjectFactory.GetCoreTemplate(jewelId) is WizItemTemplate jewel
+                ? Imlight.CoreLib.Shared.Resources.Locale.GetEnglishName(jewel.m_displayName.ToString()) : null;
+            finds.Add($"A jewel dropped{(string.IsNullOrEmpty(jewelName) ? "" : $": {jewelName}")}! Socket it into your gear.");
+        }
+
         if (mobs.Length > 0 && RoguelikeBoosts.RollAfterBattle(wizard) is { } potion) {
             finds.Add(potion);
             WizardCollection.UpdateCharacterGameStats(wizard);

@@ -64,6 +64,25 @@ internal static class JewelSockets {
 
     internal static bool IsJewel(WizItemTemplate template) => GetShape(template) is not null;
 
+    /// <summary>
+    /// Whether a jewel is No Shatter, so taking it out returns it instead of destroying it. The No Shatter jewels
+    /// (the Blackhawk and AM pet jewels: Stuff of Legends Peridot, Lifesaver Jade...) are the jewels marked No Sell,
+    /// and carry an extra behavior (DeletedBehavior, or a second PetJewelBehavior on Lifesaver Jade) (Justin, 2026-10-20).
+    /// </summary>
+    internal static bool IsNoShatter(WizItemTemplate template) {
+        if (template is null) {
+            return false;
+        }
+
+        var adjectives = (template.m_adjectiveList ?? []).Select(a => (string) a ?? "").ToList();
+        var behaviors = (template.m_behaviors ?? []).Select(b => (string) b?.m_behaviorName ?? "").ToList();
+
+        return adjectives.Any(a => a.Equals("FLAG_NoSell", StringComparison.OrdinalIgnoreCase)
+                || a.Contains("Shatter", StringComparison.OrdinalIgnoreCase))
+            || behaviors.Contains("DeletedBehavior")
+            || behaviors.Count(b => b == "PetJewelBehavior") > 1;
+    }
+
     internal static JewelSocketType? GetShape(WizItemTemplate template) {
         foreach (var adjective in template?.m_adjectiveList ?? []) {
             var name = (string) adjective;
@@ -118,6 +137,9 @@ internal static class JewelSockets {
 
         if (state is not null) {
             state.m_publicJewelInfo ??= new PublicEquippedJewelInfo { m_bSocketsLocked = false };
+
+            // This server never charges crowns to open sockets: every socket is open.
+            state.m_publicJewelInfo.m_bSocketsLocked = false;
             state.m_publicJewelInfo.m_infoPairs ??= [];
         }
 
@@ -140,11 +162,28 @@ internal static class JewelSockets {
     /// The pet talents of the jewel in a pet's socket.
     /// </summary>
     internal static IEnumerable<string> GetPetJewelTalents(WizClientObjectItem pet)
-        => GetSocketedJewels(pet)
-            .SelectMany(t => t.m_behaviors?.OfType<PetJewelBehaviorTemplate>() ?? [])
+        => GetSocketedJewels(pet).SelectMany(JewelTalents);
+
+    // Some talent jewels, such as Guardian Wall Sapphire (Jewel-ST-Talent-Combat-TowerShield), have no
+    // PetJewelBehavior; their talent is the end of the jewel's name.
+    private static IEnumerable<string> JewelTalents(WizItemTemplate jewel) {
+        var named = (jewel.m_behaviors?.OfType<PetJewelBehaviorTemplate>() ?? [])
             .SelectMany(b => b.m_petTalentName ?? [])
             .Select(n => (string) n)
-            .Where(n => !string.IsNullOrEmpty(n));
+            .Where(n => !string.IsNullOrEmpty(n))
+            .ToList();
+        if (named.Count > 0) {
+            return named;
+        }
+
+        string objectName = jewel.m_objectName;
+        var start = objectName?.IndexOf("Talent-", StringComparison.OrdinalIgnoreCase) ?? -1;
+        if (start < 0 || Imlight.CoreLib.Game.Pet.PetData.GetTalent(objectName[start..]) is null) {
+            return [];
+        }
+
+        return [objectName[start..]];
+    }
 
     /// <summary>
     /// Checks whether a jewel can go in a socket.

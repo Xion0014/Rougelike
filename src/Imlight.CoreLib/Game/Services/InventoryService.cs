@@ -71,7 +71,7 @@ internal class InventoryService(SessionActor sessionActor) : MessageService(sess
         var slot = wizard.EquipmentBehavior.SlotList?.FirstOrDefault(s => s.ItemId.Value == message.GlobalID);
         if (slot is not null || wizard.EquipmentBehavior.HasItemEquipped(message.GlobalID)) {
             var item = wizard.EquipmentBehavior.GetItem(message.GlobalID);
-            var template = item is not null ? ItemHelper.GetItemTemplate(item) : null;
+            var template = ItemHelper.GetItemTemplate(item);
 
             if (template is null) {
                 var dbItem = WizardItemCollection.GetItem(wizard.CharId, message.GlobalID);
@@ -319,10 +319,12 @@ internal class InventoryService(SessionActor sessionActor) : MessageService(sess
 
             EquipmentExtras.Refresh(wizard);
 
-            // The effects go to the stats page right away.
+            // The jewel's effects go to the stats page right away.
             foreach (var effectMessage in EquipmentExtras.TakeCardEffectMessages(wizard)) {
                 SendToSocket(effectMessage);
             }
+
+            RefreshPetMaxStats(wizard, item);
             Logger.Information("{0} socketed jewel {1} into item {2}, socket {3}.",
                 Logger.Args(wizard.CharId, jewel.m_templateID, item.m_templateID, message.SocketNumber));
         }
@@ -331,6 +333,19 @@ internal class InventoryService(SessionActor sessionActor) : MessageService(sess
             InformGameClient("Socketing that jewel ran into a problem. Please send the server log.");
         }
     }
+
+    // A pet jewel's stat talent raises the pet's maximum stats while it is in; the pet window gets the new numbers.
+    private void RefreshPetMaxStats(Wizard wizard, WizClientObjectItem item) {
+        if (Imlight.CoreLib.Game.Pet.PetProgress.GetBehavior(item) is null) {
+            return;
+        }
+
+        Imlight.CoreLib.Game.Pet.PetProgress.EnsureInitialized(item);
+        Imlight.CoreLib.Game.Pet.PetCare.Finish(wizard, item, null, SendToSocket);
+    }
+
+    // [Jewels] KeepShatteredJewels: a jewel taken out goes back to the backpack instead of shattering.
+    private static readonly bool KeepShatteredJewels = ConfigurationManager.GetValue("Jewels.KeepShatteredJewels", false);
 
     [MessageHandler(typeof(WIZARD2_53_PROTOCOL.MSG_UNSOCKETJEWELREQUEST))]
     private void ReceiveUnsocketJewelRequest(WIZARD2_53_PROTOCOL.MSG_UNSOCKETJEWELREQUEST message) {
@@ -345,7 +360,10 @@ internal class InventoryService(SessionActor sessionActor) : MessageService(sess
                 return;
             }
 
+            // A No Shatter jewel goes back to the backpack; any other jewel shatters on the way out unless
+            // [Jewels] KeepShatteredJewels is on (Justin, 2026-10-20).
             var jewelTemplateId = JewelSockets.Unsocket(item, message.SocketNumber);
+            var noShatter = JewelSockets.IsNoShatter(CoreObjectFactory.GetCoreTemplate(jewelTemplateId) as WizItemTemplate);
             if (jewelTemplateId == 0) {
                 InformGameClient("That socket is empty.");
 
@@ -360,20 +378,25 @@ internal class InventoryService(SessionActor sessionActor) : MessageService(sess
                 SocketDeleted = 0,
             });
 
-            // On this server a jewel taken out goes back to the backpack instead of breaking.
-            if (wizard.AddItemToInventory(jewelTemplateId, out var jewel)) {
-                SendInventoryAdd(wizard, jewel);
-            }
-            else {
-                InformGameClient("Your backpack is full, so the jewel could not come back.");
+            Logger.Information("Jewel {0} taken out of item {1}, socket {2}: {3}.", Logger.Args(jewelTemplateId, item.m_templateID,
+                message.SocketNumber, noShatter ? "No Shatter, back to the backpack" : KeepShatteredJewels ? "kept (KeepShatteredJewels)" : "shattered"));
+            if (noShatter || KeepShatteredJewels) {
+                if (wizard.AddItemToInventory(jewelTemplateId, out var jewel)) {
+                    SendInventoryAdd(wizard, jewel);
+                }
+                else {
+                    InformGameClient("Your backpack is full, so the jewel could not come back.");
+                }
             }
 
             EquipmentExtras.Refresh(wizard);
 
-            // The effects go to the stats page right away.
+            // The jewel's effects go to the stats page right away.
             foreach (var effectMessage in EquipmentExtras.TakeCardEffectMessages(wizard)) {
                 SendToSocket(effectMessage);
             }
+
+            RefreshPetMaxStats(wizard, item);
         }
         catch (Exception e) {
             Logger.Error("Taking out a jewel failed: {0}", Logger.Args(e));
