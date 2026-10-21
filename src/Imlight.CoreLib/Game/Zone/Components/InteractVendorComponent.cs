@@ -107,14 +107,27 @@ internal sealed class InteractVendorComponent(ZoneEntity entity) : ZoneEntityCom
         }
     }
 
+    // A vendor that sells jewels (Katherine RockHammer) opens the game's jewel shop window: the equipment shop window
+    // has no tab for jewels, so they would not show there.
+    private bool IsJewelVendor
+        => Imlight.CoreLib.Game.Runs.RoguelikeStock.IsJewelVendor(Entity.ActiveGameObject.m_templateID, _shopTitle, _inventory);
+
     public IEnumerable<ServiceOptionBase> GetServiceOptions(Wizard _)
-        => [
-            new EquipmentShopOption {
-                m_displayKey = DisplayKey,
-                m_iconKey = NpcIcon,
-                m_serviceName = ServiceName,
-            }
-        ];
+        => IsJewelVendor
+            ? [
+                new JewelShopOption {
+                    m_displayKey = "GUI_ShopOptionJewel",
+                    m_iconKey = NpcIcon,
+                    m_serviceName = ServiceName,
+                }
+            ]
+            : [
+                new EquipmentShopOption {
+                    m_displayKey = DisplayKey,
+                    m_iconKey = NpcIcon,
+                    m_serviceName = ServiceName,
+                }
+            ];
 
     public void OnServiceInteraction(IActorRef playerActor, Wizard playerCharacter, CoreObject playerObject, uint serviceOptionIndex) {
         SendShopOfferings(playerActor, playerCharacter);

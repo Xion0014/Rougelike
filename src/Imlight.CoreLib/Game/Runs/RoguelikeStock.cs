@@ -204,9 +204,13 @@ internal static class RoguelikeStock {
     /// template id or shop title key. Default: Katherine RockHammer's Jewel Works in the Shopping District.
     /// </summary>
     private static readonly HashSet<string> s_jewelShops = new(
-        ConfigurationManager.GetValue("Roguelike.JewelShops", "WizardShops_00000180")
+        ConfigurationManager.GetValue("Roguelike.JewelShops", "1233878, NPCs_01748438, WizardShops_00000180")
             .Split([',', ';', ' '], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries),
         StringComparer.OrdinalIgnoreCase);
+
+    /// <summary>True when a vendor sells jewels: it is listed in JewelShops, or most of its stock is jewels.</summary>
+    internal static bool IsJewelVendor(ulong vendorTemplateId, string shopTitle, IReadOnlyList<GID> stock)
+        => IsJewelShop(vendorTemplateId, shopTitle) || (stock is { Count: > 0 } && MostlyOf(stock, IsJewelTemplate));
 
     private static bool IsJewelShop(ulong vendorTemplateId, string shopTitle)
         => s_jewelShops.Contains(vendorTemplateId.ToString())
