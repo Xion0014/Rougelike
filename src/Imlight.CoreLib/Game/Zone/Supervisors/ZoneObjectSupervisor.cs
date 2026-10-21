@@ -71,12 +71,42 @@ internal sealed class ZoneObjectSupervisor(Core.Zone zone) : ZoneEntitySuperviso
                 continue;
             }
 
+            // A roguelike run may put another creature in a placed creature's spot (a boss room's TierNBossSwap or
+            // TierNBossRoom, or a street's random creatures), the way spawn points do.
+            var originalTemplateId = objectInfo.m_templateID.Full;
+            var swappedByRun = false;
+            ulong newTemplateId = 0;
+            if (IsDuelist(template)
+                && Imlight.CoreLib.Game.Runs.RoguelikeCreatures.TryMap(Zone?.OwnerCharId ?? 0, Zone?.ZonePath,
+                                                                         originalTemplateId, out var runTemplateId)
+                && CoreObjectFactory.GetCoreTemplate(runTemplateId) is GameObjectTemplate runTemplate && IsDuelist(runTemplate)) {
+                template = runTemplate;
+                newTemplateId = runTemplateId;
+                swappedByRun = true;
+            }
+
+            if (swappedByRun) {
+                objectInfo.m_templateID = new GID(newTemplateId);
+            }
+
             var coreObject = CoreObjectFactory.FinalizeCoreObject(objectInfo, template);
+            if (swappedByRun) {
+                objectInfo.m_templateID = new GID(originalTemplateId);
+            }
+
             if (coreObject is null) {
                 Logger.Warning("Could not finalize CoreObject {0} with template ID {1}.",
                     Logger.Args(objectInfo.m_zoneTag, objectInfo.m_templateID.Full));
 
                 continue;
+            }
+
+            if (swappedByRun) {
+                // It looks like the replacement but fights like the creature it stands in for (unless "Own" stats).
+                Imlight.CoreLib.Game.Runs.RoguelikeCreatures.RememberStatSource(coreObject.m_globalID, originalTemplateId,
+                                                                               newTemplateId);
+                Logger.Debug("Roguelike: placed creature {0} ({1}) shows up as {2}.",
+                    Logger.Args(objectInfo.m_zoneTag, originalTemplateId, newTemplateId));
             }
 
             // Determine if this is a critical object.
@@ -106,6 +136,10 @@ internal sealed class ZoneObjectSupervisor(Core.Zone zone) : ZoneEntitySuperviso
 
         return MathF.Sqrt((x * x) + (y * y) + (z * z));
     }
+
+    private static bool IsDuelist(GameObjectTemplate template)
+        => template?.m_behaviors is { } behaviors
+           && behaviors.Any(b => b is NPCBehaviorTemplate) && behaviors.Any(b => b is DuelistBehaviorTemplate);
 
     private static bool IsObjectEligibleForSpawn(CoreObjectInfo objectInfo) {
         if (objectInfo is null) {
