@@ -117,6 +117,8 @@ internal class EquipmentService(SessionActor sessionActor) : MessageService(sess
             var playerCharacter = GetActiveWizard();
             var effects = playerCharacter.GameEffects;
 
+            // Every effect goes out now, the pet's and jewels' included.
+            EquipmentExtras.TakeCardEffectChanges(playerCharacter);
             SendAddEffects([.. effects]);
 
             // Spawn the equipped pet as a zone entity if one is equipped.
@@ -206,6 +208,7 @@ internal class EquipmentService(SessionActor sessionActor) : MessageService(sess
 
         SendEquipItem(item, message.SlotName);
         SendAddEffects(effects);
+        SendCardEffectChanges(wizard);
 
         if (RentalItems.TryGetBehavior(item, out _)) {
             TellOtherServices(new CHARACTER_103_PROTOCOL.MSG_STARTRENTAL { ItemId = itemId });
@@ -307,6 +310,7 @@ internal class EquipmentService(SessionActor sessionActor) : MessageService(sess
 
         SendUnequipItem(slotName, slot, itemId);
         SendRemoveEffects(removedEffects);
+        SendCardEffectChanges(wizard);
 
         // A manual unequip abandons any pending auto-remount.
         if (Enum.TryParse<EquipmentSlotType>(slotName, true, out var unequippedSlot)
@@ -624,6 +628,13 @@ internal class EquipmentService(SessionActor sessionActor) : MessageService(sess
                 EffectData = effectSerializedData
             });
         }
+    }
+
+    // The worn pet's and jewels' effects and cards, which EquipmentExtras puts on and takes off with the gear.
+    private void SendCardEffectChanges(Wizard wizard) {
+        var (removed, added) = EquipmentExtras.TakeCardEffectChanges(wizard);
+        SendRemoveEffects(removed);
+        SendAddEffects(added);
     }
 
     private void SendRemoveEffects(List<GameEffectBase> effects) {

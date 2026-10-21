@@ -149,6 +149,15 @@ public class Wizard {
     // Stats the worn pet's talents and the socketed jewels added, so they can be taken off exactly.
     [JsonIgnore] internal List<(string Name, WizStatisticEffect Effect)> AppliedPetEffects = [];
     [JsonIgnore] internal List<GameEffectInfo> AppliedJewelEffects = [];
+
+    /// <summary>A new internal id for an effect, one past the highest the wizard has.</summary>
+    internal int NextEffectId() => GameEffects.Count == 0 ? 0 : GameEffects.Max(effect => effect?.m_internalID ?? -1) + 1;
+
+    // The pet's and jewels' effects listed on the wizard (so the stats page counts them), and the changes the game
+    // has not been told about yet.
+    [JsonIgnore] internal List<GameEffectBase> AppliedCardEffects = [];
+    [JsonIgnore] internal List<GameEffectBase> AddedCardEffects = [];
+    [JsonIgnore] internal List<GameEffectBase> RemovedCardEffects = [];
     [JsonIgnore] public string GameServerIp;
     [JsonIgnore] public ushort GameServerPort;
     [JsonIgnore] public string QueuedZoneName;

@@ -318,6 +318,11 @@ internal class InventoryService(SessionActor sessionActor) : MessageService(sess
             });
 
             EquipmentExtras.Refresh(wizard);
+
+            // The effects go to the stats page right away.
+            foreach (var effectMessage in EquipmentExtras.TakeCardEffectMessages(wizard)) {
+                SendToSocket(effectMessage);
+            }
             Logger.Information("{0} socketed jewel {1} into item {2}, socket {3}.",
                 Logger.Args(wizard.CharId, jewel.m_templateID, item.m_templateID, message.SocketNumber));
         }
@@ -364,6 +369,11 @@ internal class InventoryService(SessionActor sessionActor) : MessageService(sess
             }
 
             EquipmentExtras.Refresh(wizard);
+
+            // The effects go to the stats page right away.
+            foreach (var effectMessage in EquipmentExtras.TakeCardEffectMessages(wizard)) {
+                SendToSocket(effectMessage);
+            }
         }
         catch (Exception e) {
             Logger.Error("Taking out a jewel failed: {0}", Logger.Args(e));
