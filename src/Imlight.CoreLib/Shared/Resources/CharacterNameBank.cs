@@ -135,6 +135,21 @@ public class WizardNameBank : RootSingleResourceSingleton<WizardNameBank>, IMemo
     /// </summary>
     /// <param name="nameKeys">The packed name keys a client picked for a pet.</param>
     /// <returns>True if the first and last parts are in their tables and there is no middle part.</returns>
+    /// <summary>
+    /// A random pet name, as packed name keys: a first and a last name from the pet name tables (from Niduus/Imlight).
+    /// </summary>
+    /// <returns>The packed name keys, or 0 if the tables are not loaded.</returns>
+    public static uint RandomPetName() {
+        _ = Instance;
+        var firsts = System.Math.Min(GetTableSize(PetFirstNameTableName), 256);
+        var lasts = System.Math.Min(GetTableSize(PetLastNameTableName), 256);
+        if (firsts == 0 || lasts == 0) {
+            return 0;
+        }
+
+        return (uint) (System.Random.Shared.Next(firsts) << 16 | System.Random.Shared.Next(lasts));
+    }
+
     public static bool IsValidPetName(uint nameKeys) {
         var (first, middle, last) = GetNameParts(nameKeys);
 

@@ -68,6 +68,11 @@ internal static class RoguelikePets {
             return null;
         }
 
+        // A name of its own, so a new pet is easy to find in the backpack.
+        if (Imlight.CoreLib.Shared.Resources.WizardNameBank.RandomPetName() is var nameKeys and not 0) {
+            PetFactory.TrySetPetName(pet, nameKeys);
+        }
+
         PetProgress.EnsureInitialized(pet);
         var behavior = PetProgress.GetBehavior(pet);
         if (behavior is null) {
@@ -95,6 +100,12 @@ internal static class RoguelikePets {
 
         return pet;
     }
+
+    /// <summary>The pet's given name ("Fluffy Moonbeam"), or empty.</summary>
+    internal static string NameOf(WizClientObjectItem pet)
+        => pet?.m_inactiveBehaviors?.OfType<ClientPetNameBehavior>().FirstOrDefault() is { } name && name.m_nameKeys != 0
+            ? Imlight.CoreLib.Shared.Resources.WizardNameBank.GetPetEnglishName(name.m_nameKeys)?.Trim() ?? ""
+            : "";
 
     /// <summary>The age name of a pet ("Mega").</summary>
     internal static string AgeOf(WizClientObjectItem pet)

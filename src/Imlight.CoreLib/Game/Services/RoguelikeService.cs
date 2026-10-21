@@ -866,7 +866,8 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         });
 
         var talents = RoguelikePets.ShownTalents(pet);
-        InformGameClient($"A pet found you! It is {RoguelikePets.AgeOf(pet)}" +
+        var petName = RoguelikePets.NameOf(pet);
+        InformGameClient($"A pet found you{(string.IsNullOrEmpty(petName) ? "" : $": {petName}")}! It is {RoguelikePets.AgeOf(pet)}" +
                          (string.IsNullOrEmpty(talents) ? "." : $", with {talents}.") + " It is in your backpack.",
                          isImportant: true);
         Logger.Information("[Roguelike] {0} got pet {1} ({2}): {3}.",
