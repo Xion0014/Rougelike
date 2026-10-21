@@ -37,6 +37,7 @@ internal static class IniFile {
         string[] keys = [
             "Roguelike.StreetMinutes", "Roguelike.ArcEndTiers", "Roguelike.XpMultiplier", "Roguelike.GoldMultiplier",
             "Roguelike.BossTrainingPoints", "Roguelike.MaxStockLevel", "Roguelike.CrownDropChance", "Roguelike.NoCrowns",
+            "Roguelike.CreatureCritByTier", "Roguelike.CreatureBlockByTier", "Roguelike.MaxSpellDamage", "Roguelike.BannedSpells",
             "Character.StartingPotions", "Character.MaxInventoryItems",
             "Randomizer.RandomizeSchool", "Randomizer.RandomizeSpells", "Randomizer.RandomizeDrops",
             "Randomizer.CreaturesChangeEverySpawn", "Randomizer.RandomizeCreatureDecks", "Randomizer.RandomizeItemCards",

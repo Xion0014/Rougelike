@@ -80,14 +80,16 @@ internal static class CombatCriticals {
     /// CreatureBlockByTier. A blocked critical does normal damage.
     /// </summary>
     private static readonly bool s_simpleCrits = Imlight.Common.ConfigurationManager.GetValue("Roguelike.SimpleCriticals", true);
-    private static readonly int[] s_creatureCrit = ParsePercents(
-        Imlight.Common.ConfigurationManager.GetValue("Roguelike.CreatureCritByTier", "5, 10, 15, 20, 25, 30, 35, 40, 45, 50"));
-    private static readonly int[] s_creatureBlock = ParsePercents(
-        Imlight.Common.ConfigurationManager.GetValue("Roguelike.CreatureBlockByTier", "5, 10, 15, 20, 25, 30, 35, 40, 45, 50"));
+    private static readonly float[] s_creatureCrit = ParsePercents(
+        Imlight.Common.ConfigurationManager.GetValue("Roguelike.CreatureCritByTier", "0, 2.5, 5, 10, 20, 30, 35, 40, 45, 50"));
+    private static readonly float[] s_creatureBlock = ParsePercents(
+        Imlight.Common.ConfigurationManager.GetValue("Roguelike.CreatureBlockByTier", "0, 2.5, 5, 10, 20, 30, 35, 40, 45, 50"));
 
-    private static int[] ParsePercents(string list)
+    // Percents may have decimals (2.5).
+    private static float[] ParsePercents(string list)
         => [.. (list ?? "").Split(',', StringSplitOptions.RemoveEmptyEntries)
-            .Select(p => int.TryParse(p.Trim(), out var v) ? Math.Clamp(v, 0, 100) : 0)];
+            .Select(p => float.TryParse(p.Trim(), System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out var v)
+                ? Math.Clamp(v, 0f, 100f) : 0f)];
 
     /// <summary>The run whose rules a battle between these two follows (either side's wizard on a run).</summary>
     private static Imlight.CoreLib.WizardData.Models.Player.RoguelikeRun RunOf(CombatDuelSubCircle a, CombatDuelSubCircle b)
@@ -98,7 +100,7 @@ internal static class CombatCriticals {
     internal static bool UsesSimpleCriticals(CombatDuelSubCircle caster, CombatDuelSubCircle target)
         => s_simpleCrits && RunOf(caster, target) is not null;
 
-    private static float TierPercent(int[] table, int tier)
+    private static float TierPercent(float[] table, int tier)
         => table.Length == 0 ? 0f : table[Math.Clamp(tier, 1, table.Length) - 1] / 100f;
 
     /// <summary>
