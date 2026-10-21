@@ -30,6 +30,7 @@ namespace Imlight.CoreLib.Game.Commands.Protocols;
 ///   .run return        Go back to the run's current street, boss or shop zone.
 ///   .run here          Show the current zone's full name.
 ///   .run music [off|on] Another random track, or run music off/on for you.
+///   .run jewel [shape] Get a random jewel or pin, of a shape if named (staff only).
 ///   .run pet [age]     Get a run pet, random or of an age (staff only).
 ///   .run goto &lt;tier&gt; [street|boss|shop]  Jump to a tier's phase, for testing (staff only).
 ///   .run zones &lt;text&gt;  List zone names containing the text (staff only), for filling in [Roguelike].
@@ -67,6 +68,10 @@ internal class CommandRunProtocol : CommandProtocol {
         "on" => "on",
         _ => "",
     });
+
+    [Command("jewel")]
+    [AuthRequired(AuthLevel.QualityAssurance)]
+    private void JewelCommand([Remainder] string shape = "") => Send("jewel", shape);
 
     [Command("pet")]
     [AuthRequired(AuthLevel.QualityAssurance)]

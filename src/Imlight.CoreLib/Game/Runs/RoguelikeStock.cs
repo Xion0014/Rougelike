@@ -301,8 +301,22 @@ internal static class RoguelikeStock {
             return null;
         }
 
-        var level = Math.Max(1, (int) wizard.MagicSchoolBehavior.Level);
-        var fits = s_jewels.Value.Where(j => j.Level <= level).ToList();
+        return PickJewel(wizard);
+    }
+
+    /// <summary>
+    /// A random jewel or pin the wizard has the level for, of a shape when one is named (square, circle, triangle,
+    /// tear, pet or pin). Null when none fits.
+    /// </summary>
+    internal static uint? PickJewel(Wizard wizard, string shape = null) {
+        var level = Math.Max(1, (int) (wizard?.MagicSchoolBehavior.Level ?? 1));
+        var fits = s_jewels.Value
+            .Where(j => j.Level <= level
+                        && (string.IsNullOrEmpty(shape)
+                            || CoreObjectFactory.GetCoreTemplate(j.Id) is WizItemTemplate t
+                               && Imlight.CoreLib.Shared.Items.JewelSockets.GetShape(t) is { } s
+                               && Imlight.CoreLib.Shared.Items.JewelSockets.ShapeName(s).Contains(shape, StringComparison.OrdinalIgnoreCase)))
+            .ToList();
 
         return fits.Count == 0 ? null : fits[Random.Shared.Next(fits.Count)].Id;
     }

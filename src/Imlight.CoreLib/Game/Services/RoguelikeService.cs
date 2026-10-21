@@ -319,10 +319,7 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         }
 
         if (mobs.Length > 0 && RoguelikeStock.RollJewel(wizard) is { } jewelId) {
-            GiveCrownDrop(wizard, jewelId);
-            var jewelName = Imlight.CoreLib.Shared.Resources.CoreObjectFactory.GetCoreTemplate(jewelId) is WizItemTemplate jewel
-                ? Imlight.CoreLib.Shared.Resources.Locale.GetEnglishName(jewel.m_displayName.ToString()) : null;
-            finds.Add($"A jewel dropped{(string.IsNullOrEmpty(jewelName) ? "" : $": {jewelName}")}! Socket it into your gear.");
+            finds.Add(GiveJewel(wizard, jewelId));
         }
 
         if (mobs.Length > 0 && RoguelikeBoosts.RollAfterBattle(wizard) is { } potion) {
@@ -444,6 +441,17 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
             case "logout":
                 // Sent by this service's own timer, once the farewell has had a moment on screen.
                 CloseSession();
+                break;
+            case "jewel":
+                // Staff test: ".run jewel" gives a random jewel or pin, ".run jewel circle" (square, triangle, tear,
+                // pet, pin) one of that shape.
+                if (RoguelikeStock.PickJewel(wizard, message.Argument?.Trim()) is { } testJewel) {
+                    InformGameClient(GiveJewel(wizard, testJewel));
+                }
+                else {
+                    InformGameClient("No jewel fits that (or your level). Try .run jewel square, circle, triangle, tear, pet or pin.");
+                }
+
                 break;
             case "pet":
                 // Staff test: ".run pet" gives a random run pet, ".run pet mega" (or 1 to 7) one of that age.
@@ -879,6 +887,18 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
                          isImportant: true);
         Logger.Information("[Roguelike] {0} got pet {1} ({2}): {3}.",
             Logger.Args(wizard.CharId, pet.m_templateID.Full, RoguelikePets.AgeOf(pet), talents));
+    }
+
+    /// <summary>Gives a jewel or pin and returns the line that tells of it.</summary>
+    private string GiveJewel(Wizard wizard, uint jewelId) {
+        GiveCrownDrop(wizard, jewelId);
+        var template = Imlight.CoreLib.Shared.Resources.CoreObjectFactory.GetCoreTemplate(jewelId) as WizItemTemplate;
+        var jewelName = template is null ? null : Imlight.CoreLib.Shared.Resources.Locale.GetEnglishName(template.m_displayName.ToString());
+        var shape = template is not null && Imlight.CoreLib.Shared.Items.JewelSockets.GetShape(template) is { } s
+            ? Imlight.CoreLib.Shared.Items.JewelSockets.ShapeName(s) : "jewel";
+        Logger.Information("[Roguelike] {0} got jewel {1} ({2}, {3}).", Logger.Args(wizard.CharId, jewelId, jewelName, shape));
+
+        return $"A {shape} jewel dropped{(string.IsNullOrEmpty(jewelName) ? "" : $": {jewelName}")}! Socket it into your gear.";
     }
 
     private void GiveCrownDrop(Wizard wizard, uint templateId) {
