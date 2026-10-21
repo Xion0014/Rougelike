@@ -910,6 +910,21 @@ public class CombatDuelSubCircle {
             ? genericPips + (powerPips * 2)
             : genericPips + powerPips;
 
+        // On a run the game lets school pips left over after the spell's school cost pay its rank, like power pips
+        // (a card it offers would otherwise be cast as a pass).
+        if (AnyPipPaysSchoolCosts && spell.m_pipCost is not null) {
+            var pips = CombatParticipant.m_pipCount;
+            var leftover = s_pipSchools.Sum(school => SchoolPips(pips, school) ?? 0)
+                           - SchoolPipCosts(spell.m_pipCost).Sum(c => c.Cost);
+            if (leftover < 0) {
+                // Power pips paid the rest of the school cost.
+                totalPips -= (isMastered ? 2 : 1) * Math.Min(powerPips, -leftover);
+            }
+            else {
+                totalPips += (isMastered ? 2 : 1) * leftover;
+            }
+        }
+
         return totalPips >= spellRank && HasSchoolPipsForSpell(spell) && HasManaForSpell(spell);
     }
 
@@ -1039,7 +1054,16 @@ public class CombatDuelSubCircle {
                 spellRank--;
             }
             else if (pipCount.m_powerPips == 0 && pipCount.m_genericPips == 0) {
-                break;
+                // On a run, school pips left after the school cost pay the rest, like power pips.
+                var fullest = AnyPipPaysSchoolCosts
+                    ? s_pipSchools.OrderByDescending(s => SchoolPips(pipCount, s) ?? 0).First()
+                    : (MagicSchool?) null;
+                if (fullest is not { } fromSchool || (SchoolPips(pipCount, fromSchool) ?? 0) == 0) {
+                    break;
+                }
+
+                SetSchoolPips(pipCount, fromSchool, (byte) (SchoolPips(pipCount, fromSchool)!.Value - 1));
+                spellRank = (byte) Math.Max(0, spellRank - (isMastered ? 2 : 1));
             }
         }
     }

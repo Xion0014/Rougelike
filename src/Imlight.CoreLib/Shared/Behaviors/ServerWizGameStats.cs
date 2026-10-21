@@ -188,6 +188,38 @@ public class ServerWizGameStats : IClientTypeProvider<WizGameStats> {
         return copy;
     }
 
+    /// <summary>
+    /// Clears what gear, pets and jewels add, so the stats can be added up again. Without it every rebuild added the
+    /// gear on top of the last one: logging in rebuilt twice, so 67% resist was 134% in battle (immune; Justin,
+    /// 2026-10-20).
+    /// </summary>
+    internal void ClearEquipmentStats() {
+        m_dmgBonusPercent = null;
+        m_dmgBonusFlat = null;
+        m_accBonusPercent = null;
+        m_apBonusPercent = null;
+        m_dmgReducePercent = null;
+        m_dmgReduceFlat = null;
+        m_criticalHitRatingBySchool = null;
+        m_blockRatingBySchool = null;
+        m_dmgBonusPercentAll = 0;
+        m_dmgBonusFlatAll = 0;
+        m_accBonusPercentAll = 0;
+        m_apBonusPercentAll = 0;
+        m_dmgReducePercentAll = 0;
+        m_dmgReduceFlatAll = 0;
+        m_healBonusPercentAll = 0;
+        m_healIncBonusPercentAll = 0;
+        m_powerPipBonusPercentAll = 0;
+        m_stunResistancePercent = 0;
+        m_criticalHitRatingAll = 0;
+        m_blockRatingAll = 0;
+        m_startingPips = 0;
+        m_startingPowerPips = 0;
+        m_balanceMastery = m_deathMastery = m_fireMastery = m_iceMastery = 0;
+        m_lifeMastery = m_mythMastery = m_stormMastery = 0;
+    }
+
     internal void SetBaseStats() {
         var baseStats = MagicLevelsConfig.GetPlayerLevelInfo(MagicSchool, Level);
 

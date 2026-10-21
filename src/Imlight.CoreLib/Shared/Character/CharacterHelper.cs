@@ -70,6 +70,7 @@ internal static class CharacterHelper {
 
         // Reset the base stats to the default values.
         wizard.GameStats.SetBaseStats();
+        wizard.GameStats.ClearEquipmentStats();
         wizard.GameEffects = [];
 
         // Iterate through the equipped items and apply their effects.

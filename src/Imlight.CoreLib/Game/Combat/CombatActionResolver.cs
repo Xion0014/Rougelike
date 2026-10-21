@@ -82,8 +82,8 @@ internal static class CombatActionResolver {
             // A roguelike run: only attacks crit, for double damage, unless the target blocks it.
             var spellSchool = MagicSchools.GetMagicSchool(action.Spell.m_magicSchoolID)?.m_schoolName;
             var isAttack = critPrimaryTarget.OccupiedTeam != action.SpellCaster.OccupiedTeam
-                           && action.SpellTemplate.m_effects.Any(x => x.m_effectType is kSpellEffects.kDamage
-                                                                     or kSpellEffects.kDamagePerTotalPipPower);
+                           && action.SpellTemplate.m_effects.SelectMany(AllEffects)
+                               .Any(x => x?.m_effectType is kSpellEffects.kDamage or kSpellEffects.kDamagePerTotalPipPower);
             if (spellSchool is not null && isAttack) {
                 (landedCrit, blockedCrit) = CombatCriticals.RollSimpleCritical(action.SpellCaster, critPrimaryTarget, spellSchool);
                 critMultiplier = landedCrit && !blockedCrit ? 2f : 1f;
@@ -230,6 +230,29 @@ internal static class CombatActionResolver {
         CheckForPolarCombatActionTargets(ref combatAction, action.SpellTemplate);
 
         return spellWorthCasting;
+    }
+
+    /// <summary>An effect and every effect inside it (random, variable, list, count-based and conditional effects).</summary>
+    private static IEnumerable<SpellEffect> AllEffects(SpellEffect effect) {
+        if (effect is null) {
+            yield break;
+        }
+
+        yield return effect;
+        var inner = effect switch {
+            RandomSpellEffect random => random.m_effectList,
+            VariableSpellEffect variable => variable.m_effectList,
+            EffectListSpellEffect list => list.m_effectList,
+            CountBasedSpellEffect count => count.m_effectList,
+            ConditionalSpellEffect conditional => conditional.m_elements?.Select(e => e?.m_pEffect),
+            _ => null,
+        };
+
+        foreach (var child in inner ?? []) {
+            foreach (var nested in AllEffects(child)) {
+                yield return nested;
+            }
+        }
     }
 
     /// <summary>
