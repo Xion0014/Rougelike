@@ -1,0 +1,43 @@
+; The launcher's credits. Edit freely: it is shown exactly as written, in this order.
+;   # Heading       a section title
+;   Q: name         a name or title, shown in gold
+;   anything else   a paragraph (leave a blank line between paragraphs)
+;   ; comment       not shown
+
+# Spiral Roguelike
+
+Q: Xion0014
+Roguelike design, tiers, bosses, testing and the Spiral Roguelike launcher.
+
+Q: Claude (Anthropic)
+Coding help across the roguelike mode and the launcher.
+
+# Built on Imlight
+
+Q: Revive101 and the Imlight team
+Imlight, the open source Wizard101 server this is built on, and SpiralDB, the world data it runs on.
+
+Q: Jooty
+Imlight and Imcodec, the tools that read and write the game's data.
+
+Q: Jay, Phill, gmrush, Joji, Jeff, phazejeff and every Imlight contributor
+The server's systems: combat, quests, shops, pets, housing, the setup and much more.
+
+Q: Niduus
+The Imlight fork this roguelike started from: pets, jewels, shop windows, the zone teleport command and many fixes.
+
+# Made with
+
+Q: Libraries
+Akka.NET, RavenDB, Avalonia and .NET.
+
+Q: Fonts
+Luckiest Guy by Astigmatic (Apache License 2.0) and Fredoka by Milena Brandão and Hafontia (SIL Open Font License 1.1).
+
+# Thanks
+
+Q: Everyone who tested a run
+Every bug report, log file and screenshot made this better.
+
+Q: Wizard101
+Wizard101 is a trademark of KingsIsle Entertainment. Spiral Roguelike is a free fan project, not made or endorsed by KingsIsle, and you need your own copy of the game to play.

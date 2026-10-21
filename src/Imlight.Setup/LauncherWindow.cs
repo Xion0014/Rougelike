@@ -113,6 +113,14 @@ internal sealed partial class LauncherWindow : Window {
     private readonly Border _logsPill;
     private readonly Border _setupLogPill;
     private readonly Border _gameFolderPill;
+    private readonly Border _faqPill;
+    private readonly Border _creditsPill;
+
+    // The FAQ and credits, shown over the card.
+    private readonly Border _book;
+    private readonly TextBlock _bookTitle = new() { FontSize = 30 };
+    private readonly StackPanel _bookPages = new() { Spacing = 6 };
+    private readonly ScrollViewer _bookScroll = new() { MaxHeight = 430 };
 
     // The panels at the bottom.
     private readonly Border _wizardPanel;
@@ -173,7 +181,18 @@ internal sealed partial class LauncherWindow : Window {
             return Task.CompletedTask;
         });
         _gameFolderPill = Pill("Choose my Wizard101 folder", ChooseGameFolderAsync);
-        _pills.Children.AddRange([_updatePill, _sleepPill, _logsPill, _setupLogPill, _gameFolderPill]);
+        _faqPill = Pill("? FAQ", () => {
+            OpenBook("Questions & answers", "faq.txt");
+
+            return Task.CompletedTask;
+        });
+        _creditsPill = Pill("♥ Credits", () => {
+            OpenBook("Credits", "credits.txt");
+
+            return Task.CompletedTask;
+        });
+        _pills.Children.AddRange([_updatePill, _sleepPill, _logsPill, _setupLogPill, _gameFolderPill, _faqPill, _creditsPill]);
+        _book = Book();
         foreach (var pill in _pills.Children) {
             pill.Margin = new Thickness(5, 4);
         }
@@ -196,6 +215,7 @@ internal sealed partial class LauncherWindow : Window {
             Children = {
                 _sky,
                 BuildLayout(),
+                _book,
             },
         };
 
@@ -929,6 +949,142 @@ internal sealed partial class LauncherWindow : Window {
             },
         },
     };
+
+    // ---------------------------------------------------------------------
+    // FAQ and credits
+    // ---------------------------------------------------------------------
+
+    /// <summary>The panel the FAQ and credits open in: a scrolling page over the card, closed by its button or a click outside.</summary>
+    private Border Book() {
+        _bookTitle.FontFamily = TITLE_FONT;
+        _bookTitle.Foreground = GOLD;
+        _bookTitle.Effect = new DropShadowEffect { OffsetX = 0, OffsetY = 3, BlurRadius = 0, Color = Color.Parse("#8A3FD1"), Opacity = 1 };
+        _bookScroll.Content = _bookPages;
+        var close = Pill("Close", () => {
+            CloseBook();
+
+            return Task.CompletedTask;
+        }, gold: true);
+        close.HorizontalAlignment = HorizontalAlignment.Right;
+        var header = new Grid { ColumnDefinitions = new ColumnDefinitions("*,Auto"), Margin = new Thickness(0, 0, 0, 10) };
+        Grid.SetColumn(close, 1);
+        header.Children.AddRange([_bookTitle, close]);
+
+        var page = new Border {
+            Width = 680,
+            HorizontalAlignment = HorizontalAlignment.Center,
+            VerticalAlignment = VerticalAlignment.Center,
+            Background = new SolidColorBrush(Color.Parse("#F21A0F3D")),
+            BorderBrush = new SolidColorBrush(Color.Parse("#80FFD45C")),
+            BorderThickness = new Thickness(2),
+            CornerRadius = new CornerRadius(26),
+            Padding = new Thickness(28, 20, 20, 22),
+            BoxShadow = BoxShadows.Parse("0 16 50 0 #80000000"),
+            Child = new StackPanel { Children = { header, _bookScroll } },
+        };
+        // Clicks on the page stay on the page; a click on the dimmed sky around it closes it.
+        page.PointerPressed += (_, e) => e.Handled = true;
+
+        var shade = new Border {
+            Background = new SolidColorBrush(Color.Parse("#990A0620")),
+            IsVisible = false,
+            Child = page,
+        };
+        shade.PointerPressed += (_, _) => CloseBook();
+
+        return shade;
+    }
+
+    private void OpenBook(string title, string file) {
+        _bookTitle.Text = title;
+        _bookPages.Children.Clear();
+        foreach (var block in ReadBook(file)) {
+            _bookPages.Children.Add(block);
+        }
+
+        _bookScroll.Offset = new Vector(0, 0);
+        _book.IsVisible = true;
+    }
+
+    private void CloseBook() => _book.IsVisible = false;
+
+    /// <summary>
+    /// Turns faq.txt or credits.txt into text: "# " headings, "Q: " lines in gold, paragraphs (lines next to each other
+    /// join up), and ";" comments left out.
+    /// </summary>
+    private static List<Control> ReadBook(string file) {
+        string text;
+        try {
+            using var stream = AssetLoader.Open(new Uri($"{ASSETS}/{file}"));
+            using var reader = new StreamReader(stream);
+            text = reader.ReadToEnd();
+        }
+        catch (Exception) {
+            return [Small($"{file} is missing from this build.")];
+        }
+
+        var blocks = new List<Control>();
+        var paragraph = new List<string>();
+        void EndParagraph() {
+            if (paragraph.Count > 0) {
+                blocks.Add(new TextBlock {
+                    Text = string.Join(" ", paragraph),
+                    FontSize = 14,
+                    Foreground = TEXT,
+                    TextWrapping = TextWrapping.Wrap,
+                    LineHeight = 20,
+                    Margin = new Thickness(0, 0, 8, 6),
+                });
+                paragraph.Clear();
+            }
+        }
+
+        foreach (var raw in text.Split('\n')) {
+            var line = raw.TrimEnd('\r').Trim();
+            if (line.StartsWith(';')) {
+                continue;
+            }
+
+            if (line.Length == 0) {
+                EndParagraph();
+
+                continue;
+            }
+
+            if (line.StartsWith("# ", StringComparison.Ordinal)) {
+                EndParagraph();
+                blocks.Add(new TextBlock {
+                    Text = "✦ " + line[2..].Trim(),
+                    FontSize = 19,
+                    FontWeight = FontWeight.Bold,
+                    Foreground = new SolidColorBrush(Color.Parse("#B9A2FF")),
+                    Margin = new Thickness(0, blocks.Count == 0 ? 0 : 14, 0, 2),
+                });
+
+                continue;
+            }
+
+            if (line.StartsWith("Q:", StringComparison.Ordinal)) {
+                EndParagraph();
+                blocks.Add(new TextBlock {
+                    Text = line[2..].Trim(),
+                    FontSize = 15,
+                    FontWeight = FontWeight.Bold,
+                    Foreground = GOLD,
+                    TextWrapping = TextWrapping.Wrap,
+                    Margin = new Thickness(0, 6, 8, 0),
+                });
+
+                continue;
+            }
+
+            paragraph.Add(line);
+        }
+
+        EndParagraph();
+
+        return blocks;
+    }
 
     private static TextBlock Small(string text) => new() { Text = text, FontSize = 13, Foreground = SOFT, TextWrapping = TextWrapping.Wrap };
 
