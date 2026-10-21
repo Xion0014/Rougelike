@@ -76,8 +76,20 @@ internal static class CombatActionResolver {
         // multiplier varies by the crit/block ratio. Heals crit with no block side.
         var critMultiplier = 1f;
         var landedCrit = false;
+        var blockedCrit = false;
         var critPrimaryTarget = action.SelectedTarget;
-        if (critPrimaryTarget is not null) {
+        if (critPrimaryTarget is not null && CombatCriticals.UsesSimpleCriticals(action.SpellCaster, critPrimaryTarget)) {
+            // A roguelike run: only attacks crit, for double damage, unless the target blocks it.
+            var spellSchool = MagicSchools.GetMagicSchool(action.Spell.m_magicSchoolID)?.m_schoolName;
+            var isAttack = critPrimaryTarget.OccupiedTeam != action.SpellCaster.OccupiedTeam
+                           && action.SpellTemplate.m_effects.Any(x => x.m_effectType is kSpellEffects.kDamage
+                                                                     or kSpellEffects.kDamagePerTotalPipPower);
+            if (spellSchool is not null && isAttack) {
+                (landedCrit, blockedCrit) = CombatCriticals.RollSimpleCritical(action.SpellCaster, critPrimaryTarget, spellSchool);
+                critMultiplier = landedCrit && !blockedCrit ? 2f : 1f;
+            }
+        }
+        else if (critPrimaryTarget is not null) {
             var spellSchool = MagicSchools.GetMagicSchool(action.Spell.m_magicSchoolID)?.m_schoolName;
             if (spellSchool is not null) {
                 var isHealCast = action.SpellTemplate.m_effects
@@ -202,7 +214,7 @@ internal static class CombatActionResolver {
             combatAction.m_CritHitList = [.. critEligibleTargetSlots.Select(slot => new TargetCritHit {
                 m_target = slot,
                 m_mult = landedCrit ? critMultiplier : 0f,
-                m_blocked = false,
+                m_blocked = blockedCrit,
             })];
 
             if (landedCrit) {

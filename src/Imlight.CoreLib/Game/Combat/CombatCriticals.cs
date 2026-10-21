@@ -68,6 +68,61 @@ internal static class CombatCriticals {
         return Math.Min(MAX_CHANCE, rating / (rating + GetRatingK(level)));
     }
 
+    // ---------------------------------------------------------------------
+    // Roguelike critical hits: linear chances, double damage, a separate block roll
+    // ---------------------------------------------------------------------
+
+    /// <summary>
+    /// [Roguelike] SimpleCriticals: on a run, critical hits are simple. A wizard's chance is their critical rating
+    /// over 1000 (100 = 10%, 1000 = 100%); a creature's is CreatureCritByTier for the run's tier. Only attacks crit,
+    /// for double damage. A critical can then be blocked: a wizard's block rating over 1000, a creature's
+    /// CreatureBlockByTier. A blocked critical does normal damage.
+    /// </summary>
+    private static readonly bool s_simpleCrits = Imlight.Common.ConfigurationManager.GetValue("Roguelike.SimpleCriticals", true);
+    private static readonly int[] s_creatureCrit = ParsePercents(
+        Imlight.Common.ConfigurationManager.GetValue("Roguelike.CreatureCritByTier", "5, 10, 15, 20, 25, 30, 35, 40, 45, 50"));
+    private static readonly int[] s_creatureBlock = ParsePercents(
+        Imlight.Common.ConfigurationManager.GetValue("Roguelike.CreatureBlockByTier", "5, 10, 15, 20, 25, 30, 35, 40, 45, 50"));
+
+    private static int[] ParsePercents(string list)
+        => [.. (list ?? "").Split(',', StringSplitOptions.RemoveEmptyEntries)
+            .Select(p => int.TryParse(p.Trim(), out var v) ? Math.Clamp(v, 0, 100) : 0)];
+
+    /// <summary>The run whose rules a battle between these two follows (either side's wizard on a run).</summary>
+    private static Imlight.CoreLib.WizardData.Models.Player.RoguelikeRun RunOf(CombatDuelSubCircle a, CombatDuelSubCircle b)
+        => (a?._wizard?.Roguelike ?? b?._wizard?.Roguelike) is { } run && Imlight.CoreLib.Game.Runs.RoguelikeConfig.Enabled
+            ? run : null;
+
+    /// <summary>True when this cast follows the run's simple critical rules.</summary>
+    internal static bool UsesSimpleCriticals(CombatDuelSubCircle caster, CombatDuelSubCircle target)
+        => s_simpleCrits && RunOf(caster, target) is not null;
+
+    private static float TierPercent(int[] table, int tier)
+        => table.Length == 0 ? 0f : table[Math.Clamp(tier, 1, table.Length) - 1] / 100f;
+
+    /// <summary>
+    /// Rolls a simple critical for an attack. Returns (landed, blocked): a landed, unblocked critical doubles the damage.
+    /// </summary>
+    internal static (bool Landed, bool Blocked) RollSimpleCritical(CombatDuelSubCircle caster, CombatDuelSubCircle target, string school) {
+        var run = RunOf(caster, target);
+        if (run is null) {
+            return (false, false);
+        }
+
+        var critChance = caster._wizard is not null
+            ? GetCriticalRating(caster, school) / 1000f
+            : TierPercent(s_creatureCrit, run.Tier);
+        if (!Rolls(Math.Clamp(critChance, 0f, 1f))) {
+            return (false, false);
+        }
+
+        var blockChance = target._wizard is not null
+            ? GetBlockRating(target, school) / 1000f
+            : TierPercent(s_creatureBlock, run.Tier);
+
+        return (true, Rolls(Math.Clamp(blockChance, 0f, 1f)));
+    }
+
     internal static bool RollsCritical(CombatDuelSubCircle caster, CombatDuelSubCircle target, string school, bool isHeal) {
         // One combined roll: the target's block is part of the crit chance, so a
         // separate block roll does not exist. Heals have no block side; they roll
