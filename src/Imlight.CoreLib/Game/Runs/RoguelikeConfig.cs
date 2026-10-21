@@ -50,6 +50,12 @@ internal sealed record RoguelikeTier(int Number, string Street, string Boss) {
     /// </summary>
     public bool BossSwapOwnStats { get; init; }
 
+    /// <summary>TierNBossCreatures = Random: the boss zone's other creatures are swapped like a street's.</summary>
+    public bool RandomBossZoneCreatures { get; init; }
+
+    /// <summary>TierNBossDeck = Random: the boss zone's bosses fight with a random deck (a bigger one).</summary>
+    public bool RandomBossDeck { get; init; }
+
     /// <summary>Quests handed to the wizard when they reach this tier's boss zone (TierNBossQuests).</summary>
     public IReadOnlyList<string> BossQuests { get; init; } = [];
 
@@ -311,6 +317,9 @@ internal static class RoguelikeConfig {
     internal static readonly string[] BattleMusicTracks = SplitList(ConfigurationManager.GetValue(
         "Roguelike.BattleMusicTracks", "|Music|WorldData|WC/Combat1Test.ogg, |Music|WorldData|WC/WC_HauntedWay_Combat.ogg, |Music|WorldData|MB/MarleyCombatM.mp3, |DragonSpire|WorldData|Sound/Music/DragonSpyreCombat.mp3, |Music|WorldData|MS/SB/GNT_SB_Combat.mp3, |Zafaria|WorldData|Sound/Music/ZF_Combat.mp3, |Music|WorldData|AV/AV_Combat.mp3, |Music|WorldData|AZ/AZ_Combat.mp3, |Music|WorldData|KR/KR_CombatBastion.mp3, |Music|WorldData|KR/KR_CombatArachna.mp3, |Music|WorldData|PL/PL_Walruskberg_Combat.mp3, |Music|WorldData|PL/PL_FrozenCombat.mp3, |Music|WorldData|MR/MR_CityCombat.mp3, |Music|WorldData|MR/MR_CanyonDesert_Combat.mp3, |Music|WorldData|EM/EM_Zanadu_Combat.ogg, |Music|WorldData|EM/EM_FlotsamStorm_Combat.ogg, |Music|WorldData|EM/EM_2/EM_Reverie_Combat.ogg, |Music|WorldData|KM/KM_CityCombat.ogg, |Music|WorldData|KM/KM_RuralCombat.ogg, |Music|WorldData|LM/LM_JunglePulp_Combat.ogg, |Music|WorldData|DM/DM_Graveholm_Combat.ogg, |Music|WorldData|AQ/AQ_Combat.mp3"));
 
+    /// <summary>The game text the "continue or take a break" question shows, as a yes/no window (ArcPromptLine).</summary>
+    internal static readonly string ArcPromptLine = ConfigurationManager.GetValue("Roguelike.ArcPromptLine", "WizQst1293E3_00000014");
+
     internal static readonly uint StartDialogActor = (uint) ConfigurationManager.GetValue("Roguelike.StartDialogActor", 38168);
 
     /// <summary>
@@ -375,6 +384,10 @@ internal static class RoguelikeConfig {
                 StreetSeconds = minutes > 0 ? minutes * 60 : StreetSeconds,
                 BossSwap = ulong.TryParse(StripKey(ConfigurationManager.GetValue($"Roguelike.Tier{i}BossSwap", "") ?? "").Trim(),
                                           out var swap) ? swap : 0,
+                RandomBossZoneCreatures = string.Equals(ConfigurationManager.GetValue($"Roguelike.Tier{i}BossCreatures", "")?.Trim(),
+                                                        "Random", StringComparison.OrdinalIgnoreCase),
+                RandomBossDeck = string.Equals(ConfigurationManager.GetValue($"Roguelike.Tier{i}BossDeck", "")?.Trim(),
+                                               "Random", StringComparison.OrdinalIgnoreCase),
                 BossSwapOwnStats = string.Equals(ConfigurationManager.GetValue($"Roguelike.Tier{i}BossSwapStats", "")?.Trim(),
                                                  "Own", StringComparison.OrdinalIgnoreCase),
             });

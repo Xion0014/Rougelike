@@ -85,6 +85,9 @@ public class RoguelikeRun {
     public bool MountGiven { get; set; }
 
     /// <summary>Creatures defeated during the whole run.</summary>
+    /// <summary>The run cleared its last tier and still owes the wizard the "continue or take a break" choice.</summary>
+    public bool ArcPromptPending { get; set; }
+
     public int Kills { get; set; }
 
     /// <summary>Bosses defeated during the whole run.</summary>

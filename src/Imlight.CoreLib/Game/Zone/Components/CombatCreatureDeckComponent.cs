@@ -92,6 +92,20 @@ internal sealed class CombatCreatureDeckComponent : ZoneEntityComponent, ICompon
             }
         }
 
+        // A boss in a tier's boss zone may fight with a random deck too (TierNBossDeck = Random), a bigger one.
+        if (Imlight.CoreLib.Game.Runs.RoguelikeCreatures.WantsRandomBossDeck(entity)
+            && allBehaviors.OfType<NPCBehaviorTemplate>().FirstOrDefault() is { m_bossMob: true } boss) {
+            foreach (var spellId in Imlight.CoreLib.Game.Runs.RoguelikeStock.RollCreatureDeck(boss.m_nLevel, boss.m_schoolOfFocus, isBoss: true)) {
+                if (SpellFactory.GetSpell(spellId) is not null) {
+                    Spells.Add(new SpellData { m_templateID = spellId, m_quantity = 9999 });
+                }
+            }
+
+            if (Spells.Count > 0) {
+                return;
+            }
+        }
+
         // MobDeckBehaviorTemplate stores spell names directly, if it exists.
         var mobDeck = allBehaviors.OfType<MobDeckBehaviorTemplate>().FirstOrDefault();
         if (mobDeck != null) {

@@ -541,6 +541,18 @@ internal class QuestService(SessionActor sessionActor) : MessageService(sessionA
         var wizard = GetActiveWizard();
         var questName = message.QuestName?.Trim() ?? string.Empty;
 
+        // "Quest@Goal 3" (roguelike boss quests): completes the quest's goals quietly until that goal is active.
+        string advanceTo = null;
+        if (message.Action == "advanceto") {
+            var at = questName.IndexOf('@');
+            if (at <= 0) {
+                return;
+            }
+
+            advanceTo = questName[(at + 1)..].Trim();
+            questName = questName[..at].Trim();
+        }
+
         switch (message.Action) {
             case "list":
                 CommandListQuests(wizard);
@@ -571,6 +583,20 @@ internal class QuestService(SessionActor sessionActor) : MessageService(sessionA
         }
 
         switch (message.Action) {
+            case "advanceto":
+                for (var step = 0; step < 32 && wizard.HasQuest(questName); step++) {
+                    if (qInstance.IsGoalActive(advanceTo)) {
+                        break;
+                    }
+
+                    if (ActiveGoals(qInstance, qTemplate).FirstOrDefault() is not { } current) {
+                        break;
+                    }
+
+                    CompleteGoal(qInstance, current, showCompletionDialogue: false);
+                }
+
+                break;
             case "completegoal":
                 CommandCompleteGoal(qInstance, qTemplate);
                 break;

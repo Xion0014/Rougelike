@@ -128,6 +128,7 @@ internal static class RoguelikeCreatures {
     /// RandomDungeonCreatures) any place the wizard goes to while the street phase is on.</summary>
     private static bool IsRunZone(RunInfo info, string zonePath)
         => string.Equals(info.Street, zonePath, StringComparison.OrdinalIgnoreCase)
+           || IsRandomBossZone(info, zonePath)
            || (s_streetDungeons && info.Run is { Phase: RoguelikePhase.Street } && !RoguelikeConfig.IsBlockedZone(zonePath));
 
     // Characters picked on the character screen whose game attach has not happened yet.
@@ -262,6 +263,23 @@ internal static class RoguelikeCreatures {
         }
 
         s_statSources[spawnGlobalId] = originalTemplateId;
+    }
+
+    // The run's boss zone, when its tier asks for its creatures (TierNBossCreatures) or bosses' decks to be random.
+    private static RoguelikeTier BossZoneTier(RunInfo info, string zonePath)
+        => info?.Run is { Phase: RoguelikePhase.Boss } run && RoguelikeConfig.GetTier(run.Tier) is { } tier
+           && string.Equals(RoguelikeConfig.ResolveZone(tier.Boss), zonePath, StringComparison.OrdinalIgnoreCase)
+            ? tier : null;
+
+    private static bool IsRandomBossZone(RunInfo info, string zonePath)
+        => BossZoneTier(info, zonePath) is { RandomBossZoneCreatures: true };
+
+    /// <summary>True when this boss is in its run's boss zone and the tier gives bosses a random deck (TierNBossDeck).</summary>
+    internal static bool WantsRandomBossDeck(Zone.Core.ZoneEntity entity) {
+        var zone = entity?.Zone;
+        return Active && zone is not null && zone.OwnerCharId != 0
+               && s_runs.TryGetValue(zone.OwnerCharId, out var info)
+               && BossZoneTier(info, zone.ZonePath) is { RandomBossDeck: true };
     }
 
     /// <summary>True when a run swapped this creature in (so it fights with a random deck, RandomCreatureDecks).</summary>

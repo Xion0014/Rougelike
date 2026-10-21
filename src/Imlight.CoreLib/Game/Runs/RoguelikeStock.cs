@@ -333,6 +333,7 @@ internal static class RoguelikeStock {
     // Spells up to this many levels above the creature's own can turn up, so low creatures still get a few.
     private static readonly int s_creatureLevelLead = Math.Max(0, ConfigurationManager.GetValue("Roguelike.CreatureDeckLevelLead", 2));
 
+    private static readonly int s_bossDeckExtra = Math.Clamp(ConfigurationManager.GetValue("Roguelike.BossDeckExtra", 3), 0, 10);
     private static readonly string[] s_attackTypes = ["Damage", "AOE", "Steal"];
     private static readonly string[] s_supportTypes = ["Heal", "Charm", "Ward", "Curse", "Global"];
 
@@ -341,7 +342,7 @@ internal static class RoguelikeStock {
     /// (blades, shields, heals, traps, globals), all spells the trainers teach at up to the creature's level, of
     /// its school where there are enough. Empty when nothing fits.
     /// </summary>
-    internal static List<uint> RollCreatureDeck(int level, string school) {
+    internal static List<uint> RollCreatureDeck(int level, string school, bool isBoss = false) {
         var deck = new List<uint>();
         try {
             var cap = Math.Max(1, level) + s_creatureLevelLead;
@@ -374,8 +375,9 @@ internal static class RoguelikeStock {
                 }
             }
 
-            Take(s_attackTypes, s_creatureAttacks);
-            Take(s_supportTypes, s_creatureSupport);
+            // Bosses get BossDeckExtra more of each.
+            Take(s_attackTypes, s_creatureAttacks + (isBoss ? s_bossDeckExtra : 0));
+            Take(s_supportTypes, s_creatureSupport + (isBoss ? s_bossDeckExtra : 0));
         }
         catch (Exception ex) {
             Logger.Warning("Roguelike could not build a creature deck. {Message}", Logger.Args(ex.Message));
