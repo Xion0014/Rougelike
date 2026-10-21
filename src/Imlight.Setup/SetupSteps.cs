@@ -492,7 +492,13 @@ internal sealed class SetupSteps : IDisposable {
         try {
             File.Copy(self, target, overwrite: true);
         }
-        catch (IOException) when (File.Exists(target) && !File.Exists(aside)) {
+        catch (IOException) when (File.Exists(target)) {
+            // The installed copy is running (the app or launcher that started this update): Windows lets a running
+            // program be renamed, so move it aside. An older one still running keeps the .old name, so use another.
+            if (File.Exists(aside)) {
+                aside = $"{target}.{DateTime.Now:yyyyMMddHHmmss}.old";
+            }
+
             File.Move(target, aside);
             File.Copy(self, target);
         }

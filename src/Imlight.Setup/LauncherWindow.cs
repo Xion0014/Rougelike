@@ -683,14 +683,18 @@ internal sealed partial class LauncherWindow : Window {
         var lines = new List<string>();
         int exitCode;
         try {
-            var startInfo = new ProcessStartInfo(self) {
-                WorkingDirectory = Path.GetDirectoryName(self)!,
+            // Never run the update from the installed exe: the update replaces that very file. Run the newest release
+            // from the temp folder (or, offline, a temp copy of this launcher).
+            _setupDetail.Text = "Fetching the newest launcher…";
+            var runner = await SelfUpdate.DownloadLatestAsync() ?? CopyToTemp(self);
+            var startInfo = new ProcessStartInfo(runner) {
+                WorkingDirectory = Path.GetDirectoryName(runner)!,
                 UseShellExecute = false,
                 CreateNoWindow = true,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
             };
-            if (Path.GetFileNameWithoutExtension(self).Equals("dotnet", StringComparison.OrdinalIgnoreCase)) {
+            if (Path.GetFileNameWithoutExtension(runner).Equals("dotnet", StringComparison.OrdinalIgnoreCase)) {
                 startInfo.ArgumentList.Add(Environment.GetCommandLineArgs()[0]);
             }
 
@@ -838,6 +842,23 @@ internal sealed partial class LauncherWindow : Window {
         _pills.IsVisible = true;
         ShowInstalledState();
         _statusTimer.Start();
+    }
+
+    /// <summary>A copy of this launcher in the temp folder to run the setup from, or the launcher itself if it cannot be copied.</summary>
+    private static string CopyToTemp(string self) {
+        if (Path.GetFileNameWithoutExtension(self).Equals("dotnet", StringComparison.OrdinalIgnoreCase)) {
+            return self;
+        }
+
+        try {
+            var copy = Path.Combine(Path.GetTempPath(), $"{Path.GetFileNameWithoutExtension(Edition.RELEASE_ASSET)}-setup-{SelfUpdate.CurrentVersion}.exe");
+            File.Copy(self, copy, overwrite: true);
+
+            return copy;
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException) {
+            return self;
+        }
     }
 
     private static string RandomPassword() => Convert.ToHexString(System.Security.Cryptography.RandomNumberGenerator.GetBytes(12));
