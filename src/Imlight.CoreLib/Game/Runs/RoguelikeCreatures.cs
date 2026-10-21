@@ -210,16 +210,19 @@ internal static class RoguelikeCreatures {
         }
 
         // The tier's boss zone may put another boss in the boss's place (TierNBossSwap).
-        if (info.Run is { Phase: RoguelikePhase.Boss } bossRun && IsBoss(templateId)
-            && RoguelikeConfig.GetTier(bossRun.Tier) is { BossSwap: > 0 } tier
-            && string.Equals(RoguelikeConfig.ResolveZone(tier.Boss), zonePath, StringComparison.OrdinalIgnoreCase)
-            && CoreObjectFactory.GetCoreTemplate(tier.BossSwap) is GameObjectTemplate) {
-            mapped = tier.BossSwap;
-            if (tier.BossSwapOwnStats) {
-                s_ownStats.TryAdd(mapped, 0);
-            }
+        if (BossZoneTier(info, zonePath) is { BossSwap: > 0 } tier) {
+            var isBoss = IsBoss(templateId);
+            var swapFound = CoreObjectFactory.GetCoreTemplate(tier.BossSwap) is GameObjectTemplate;
+            Logger.Information("[Roguelike] Boss zone {0}: creature {1} (boss: {2}); swap to {3} (found: {4}).",
+                Logger.Args(zonePath, templateId, isBoss, tier.BossSwap, swapFound));
+            if (isBoss && swapFound) {
+                mapped = tier.BossSwap;
+                if (tier.BossSwapOwnStats) {
+                    s_ownStats.TryAdd(mapped, 0);
+                }
 
-            return mapped != templateId;
+                return mapped != templateId;
+            }
         }
 
         if (!IsRunZone(info, zonePath)) {
@@ -354,9 +357,11 @@ internal static class RoguelikeCreatures {
         return defeatedTemplateIds.Count(id => !IsBoss(id));
     }
 
+    // A boss: flagged so (any NPC behavior), or named one ("GH-Bear-Warrior-1-GHBoss-R5").
     private static bool IsBoss(ulong templateId)
         => CoreObjectFactory.GetCoreTemplate(templateId) is GameObjectTemplate template
-           && template.m_behaviors.OfType<NPCBehaviorTemplate>().FirstOrDefault() is { m_bossMob: true };
+           && (template.m_behaviors.OfType<NPCBehaviorTemplate>().Any(npc => npc.m_bossMob)
+               || ((string) template.m_objectName ?? "").Contains("Boss", StringComparison.OrdinalIgnoreCase));
 
     /// <summary>
     /// The display name key of the creature that replaced a bounty goal's creature on the wizard's run, or null.
