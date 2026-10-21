@@ -117,7 +117,7 @@ internal static class RoguelikeStock {
     /// The vendor's stock as this wizard sees it. Each gear slot becomes random gear of the same slot, for the
     /// wizard's school or any school, within the wizard's level window. Anything else is left as it is.
     /// </summary>
-    internal static List<GID> ShopFor(Wizard wizard, ulong vendorTemplateId, IReadOnlyList<GID> original) {
+    internal static List<GID> ShopFor(Wizard wizard, ulong vendorTemplateId, IReadOnlyList<GID> original, string shopTitle = null) {
         if (!ShopsActiveFor(wizard) || original is null) {
             return original?.ToList() ?? [];
         }
@@ -127,7 +127,7 @@ internal static class RoguelikeStock {
             return pets;
         }
 
-        if (JewelShopFor(wizard, vendorTemplateId, original) is { } jewels) {
+        if (JewelShopFor(wizard, vendorTemplateId, original, shopTitle) is { } jewels) {
             return jewels;
         }
 
@@ -199,6 +199,19 @@ internal static class RoguelikeStock {
         return count > 0 && count * 2 >= original.Count;
     }
 
+    /// <summary>
+    /// [Roguelike] JewelShops: vendors that sell random jewels on a run even with no stock of their own, by NPC
+    /// template id or shop title key. Default: Katherine RockHammer's Jewel Works in the Shopping District.
+    /// </summary>
+    private static readonly HashSet<string> s_jewelShops = new(
+        ConfigurationManager.GetValue("Roguelike.JewelShops", "WizardShops_00000180")
+            .Split([',', ';', ' '], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries),
+        StringComparer.OrdinalIgnoreCase);
+
+    private static bool IsJewelShop(ulong vendorTemplateId, string shopTitle)
+        => s_jewelShops.Contains(vendorTemplateId.ToString())
+           || (!string.IsNullOrEmpty(shopTitle) && s_jewelShops.Contains(shopTitle));
+
     private static bool IsJewelTemplate(uint id)
         => CoreObjectFactory.GetCoreTemplate(id) is WizItemTemplate t && Imlight.CoreLib.Shared.Items.JewelSockets.IsJewel(t);
 
@@ -234,18 +247,19 @@ internal static class RoguelikeStock {
     /// <see cref="JewelShopRange"/> levels below to that many above the wizard, never above
     /// <see cref="JewelShopMaxLevel"/>. Null when this is not a jewel vendor.
     /// </summary>
-    private static List<GID> JewelShopFor(Wizard wizard, ulong vendorTemplateId, IReadOnlyList<GID> original) {
-        if (!MostlyOf(original, IsJewelTemplate)) {
+    private static List<GID> JewelShopFor(Wizard wizard, ulong vendorTemplateId, IReadOnlyList<GID> original, string shopTitle) {
+        if (!MostlyOf(original, IsJewelTemplate) && !IsJewelShop(vendorTemplateId, shopTitle)) {
             return null;
         }
 
         var level = Math.Max(1, (int) wizard.MagicSchoolBehavior.Level);
         var high = Math.Min(level + JewelShopRange, JewelShopMaxLevel);
         var low = Math.Max(1, Math.Min(level - JewelShopRange, high));
-        var count = JewelShopCount > 0 ? JewelShopCount : original.Count(g => IsJewelTemplate(g.MParts.TemplateId));
+        var vendorCount = original.Count(g => IsJewelTemplate(g.MParts.TemplateId));
+        var count = JewelShopCount > 0 ? JewelShopCount : vendorCount > 0 ? vendorCount : 15;
 
         var random = new Random(Seed(wizard, "jewelshop", vendorTemplateId));
-        var upper = original.First(g => IsJewelTemplate(g.MParts.TemplateId)).Full & 0xFFFFFFFF00000000UL;
+        var upper = original.Where(g => IsJewelTemplate(g.MParts.TemplateId)).Select(g => g.Full).FirstOrDefault() & 0xFFFFFFFF00000000UL;
         var picks = s_jewels.Value
             .Where(j => j.Level >= low && j.Level <= high)
             .OrderBy(_ => random.Next())

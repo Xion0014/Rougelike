@@ -82,15 +82,7 @@ internal sealed class InteractVendorComponent(ZoneEntity entity) : ZoneEntityCom
         || WorldVendorLocations.IsVendor(goTemplate.m_templateID));
 
     public override void OnStart() {
-        if (!NpcInventoryCollection.TryGetNpcInventory(Entity.ActiveGameObject.m_templateID, out var inventory)) {
-            Logger.Error("Failed to get vendor inventory for NPC {0}",
-                Logger.Args(Entity.ActiveGameObject.m_templateID));
-
-            return;
-        }
-
-        _inventory = inventory.Inventory;
-
+        // The shop's own title and type come from its template, so a vendor with no stock still says what it sells.
         var shoppingBehavior = Entity.Template?.m_behaviors?.OfType<WizShoppingBehaviorTemplate>().FirstOrDefault();
         if (shoppingBehavior != null) {
             if (!string.IsNullOrWhiteSpace(shoppingBehavior.m_shopTitle)) {
@@ -99,6 +91,16 @@ internal sealed class InteractVendorComponent(ZoneEntity entity) : ZoneEntityCom
             _shopType = shoppingBehavior.m_shopType;
             _csrTestShop = shoppingBehavior.m_CSRTestShop;
         }
+
+        if (!NpcInventoryCollection.TryGetNpcInventory(Entity.ActiveGameObject.m_templateID, out var inventory)) {
+            Logger.Error("Failed to get vendor inventory for NPC {0}",
+                Logger.Args(Entity.ActiveGameObject.m_templateID));
+            _inventory = [];
+
+            return;
+        }
+
+        _inventory = inventory.Inventory ?? [];
 
         if (!string.IsNullOrWhiteSpace(inventory.ShopTitle)) {
             _shopTitle = inventory.ShopTitle;
@@ -128,7 +130,7 @@ internal sealed class InteractVendorComponent(ZoneEntity entity) : ZoneEntityCom
 
     private List<GID> StockFor(Wizard wizard)
         => Imlight.CoreLib.Game.Runs.RoguelikeStock.ShopsActiveFor(wizard)
-            ? Imlight.CoreLib.Game.Runs.RoguelikeStock.ShopFor(wizard, Entity.ActiveGameObject.m_templateID, _inventory)
+            ? Imlight.CoreLib.Game.Runs.RoguelikeStock.ShopFor(wizard, Entity.ActiveGameObject.m_templateID, _inventory, _shopTitle)
             : _inventory;
 
     private void SendShopOfferings(IActorRef playerActor, Wizard wizard) {
