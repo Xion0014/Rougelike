@@ -806,7 +806,7 @@ internal static class RoguelikeStock {
     private static bool HasAdjective(ulong templateId, string adjective)
         => templateId <= uint.MaxValue
            && CoreObjectFactory.GetCoreTemplate((uint) templateId) is WizItemTemplate template
-           && template.m_adjectiveList?.Any(a => string.Equals(a?.ToString(), adjective, StringComparison.OrdinalIgnoreCase)) == true;
+           && template.m_adjectiveList?.Any(a => string.Equals(a.ToString(), adjective, StringComparison.OrdinalIgnoreCase)) == true;
 
     /// <summary>
     /// True when a run pet shop may sell this pet: not crown-only, not an exclusive (No Sell, pack and hatch-only
