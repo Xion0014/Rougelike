@@ -255,6 +255,15 @@ internal sealed class WoodenChestComponent(ZoneEntity entity) : ZoneEntityCompon
             ItemTemplateID = (uint) pet.m_templateID,
         });
 
+        // A pet has no loot window, so say what was in the chest.
+        var name = Imlight.CoreLib.Game.Runs.RoguelikePets.NameOf(pet);
+        var talents = Imlight.CoreLib.Game.Runs.RoguelikePets.ShownTalents(pet);
+        playerActor.Tell(new EXTENDEDBASE_2_PROTOCOL.MSG_SERVERMESSAGE {
+            Message = $"The chest held a pet{(string.IsNullOrEmpty(name) ? "" : $": {name}")}! It is {Imlight.CoreLib.Game.Runs.RoguelikePets.AgeOf(pet)}"
+                      + (string.IsNullOrEmpty(talents) ? "." : $", with {talents}.") + " It is in your backpack.",
+            Modal = 1,
+        });
+
         return true;
     }
 

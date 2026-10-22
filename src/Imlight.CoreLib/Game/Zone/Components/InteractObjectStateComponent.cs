@@ -74,7 +74,9 @@ internal sealed class InteractObjectStateComponent(ZoneEntity entity)
         : (Entity.Template as GameObjectTemplate)?.m_objectName.ToString();
 
     public static bool ShouldAttachToEntity(CoreTemplate template)
-        => template is GameObjectTemplate go && GetStateOptions(go).Any(ChangesWorld);
+        => template is GameObjectTemplate go && GetStateOptions(go).Any(ChangesWorld)
+           // The wooden chests open with WoodenChestComponent alone, so pressing X has one thing to do.
+           && !WoodenChestComponent.ShouldAttachToEntity(template);
 
     public IEnumerable<ServiceOptionBase> GetServiceOptions(Wizard playerCharacter)
         => GetOfferedOptions(playerCharacter).Any()
