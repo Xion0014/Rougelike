@@ -79,7 +79,7 @@ internal sealed partial class LauncherWindow : Window {
         "Hiding jewels in the chests…",
         "Stocking the shops with random gear…",
         "Rolling the dice for your first run…",
-        "Polishing the tiers, one through ten…",
+        "Polishing the tiers…",
         "Feeding the pets. They are always hungry…",
         "Reading your game's old scrolls…",
     ];
@@ -135,6 +135,7 @@ internal sealed partial class LauncherWindow : Window {
     private readonly List<(string Section, string Key, ToggleSwitch Switch)> _switches = [];
     private bool _loadingSwitches;
 
+    private readonly (List<string> Worlds, HashSet<int> Bosses) _tiers;
     private bool _busy;
     private bool _closeAnyway;
     private string? _setupLogPath;
@@ -231,6 +232,7 @@ internal sealed partial class LauncherWindow : Window {
 
         _wizardPanel = WizardPanel();
         _magicPanel = MagicPanel();
+        _tiers = ReadTiers();
 
         Content = new Grid {
             Children = {
@@ -313,7 +315,7 @@ internal sealed partial class LauncherWindow : Window {
             },
         };
         var tagline = new TextBlock {
-            Text = "TEN TIERS  ·  ONE LIFE  ·  EVERY RUN RESHUFFLED",
+            Text = $"{CountWord(_tiers.Worlds.Count)} TIERS  ·  ONE LIFE  ·  EVERY RUN RESHUFFLED",
             FontFamily = HEADING_FONT,
             FontWeight = FontWeight.SemiBold,
             FontSize = 14,
@@ -424,18 +426,18 @@ internal sealed partial class LauncherWindow : Window {
 
     private static readonly string[] ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV"];
 
-    // The default tiers, for before the server is installed.
-    private static readonly string[] DEFAULT_WORLDS = [
-        "Wizard City", "Krokotopia", "Marleybone", "MooShu", "Dragonspyre", "Celestia", "Grizzleheim", "Avalon", "Azteca", "Wintertusk",
-    ];
+    // The default tiers, for before the server is installed (arc 1; arc 2's streets are not built yet).
+    private static readonly string[] DEFAULT_WORLDS = ["Wizard City", "Krokotopia", "Marleybone", "MooShu", "Dragonspyre"];
 
     /// <summary>
     /// The run's tiers as a row of waypoints, named after each tier's world (read from the server's TierN lines),
-    /// with the arcs' last bosses (ArcEndTiers, and the last tier) larger and lit.
+    /// with the arcs' last bosses (ArcEndTiers, and the last tier) larger and lit. Only tiers up to the last one with
+    /// a street are shown: boss-only tiers ("none" for the street) are not ready to play yet.
     /// </summary>
     private Control TierMap() {
-        var (worlds, bosses) = ReadTiers();
-        const double width = 860;
+        var (worlds, bosses) = _tiers;
+        // Fewer tiers sit closer together, centred.
+        var width = Math.Min(860, 60 + 150.0 * Math.Max(1, worlds.Count - 1));
         var canvas = new Canvas { Width = width, Height = 84, HorizontalAlignment = HorizontalAlignment.Center };
         var step = worlds.Count > 1 ? (width - 60) / (worlds.Count - 1) : 0;
         var line = new Border {
@@ -499,11 +501,17 @@ internal sealed partial class LauncherWindow : Window {
         return canvas;
     }
 
+    private static string CountWord(int n) => n switch {
+        1 => "ONE", 2 => "TWO", 3 => "THREE", 4 => "FOUR", 5 => "FIVE", 6 => "SIX", 7 => "SEVEN", 8 => "EIGHT", 9 => "NINE",
+        10 => "TEN", 11 => "ELEVEN", 12 => "TWELVE", _ => n.ToString(),
+    };
+
     private (List<string> Worlds, HashSet<int> Bosses) ReadTiers() {
         var worlds = new List<string>();
         var bosses = new HashSet<int>();
         try {
             if (_manager.IsInstalled) {
+                var lastWithStreet = 0;
                 for (var tier = 1; tier <= ROMAN.Length; tier++) {
                     var line = _manager.GetSetting("Roguelike", $"Tier{tier}");
                     if (string.IsNullOrWhiteSpace(line)) {
@@ -513,6 +521,14 @@ internal sealed partial class LauncherWindow : Window {
                     var parts = line.Split(',', StringSplitOptions.TrimEntries);
                     var zone = parts.Length > 1 ? parts[1] : parts[0];
                     worlds.Add(WorldName(zone));
+                    if (parts.Length > 1 && !parts[0].Equals("none", StringComparison.OrdinalIgnoreCase) && parts[0].Length > 0) {
+                        lastWithStreet = tier;
+                    }
+                }
+
+                // Boss-only tiers after the last street are not ready to play, so they are left off the map.
+                if (lastWithStreet > 0 && lastWithStreet < worlds.Count) {
+                    worlds.RemoveRange(lastWithStreet, worlds.Count - lastWithStreet);
                 }
 
                 foreach (var end in (_manager.GetSetting("Roguelike", "ArcEndTiers") ?? "5").Split(',', StringSplitOptions.RemoveEmptyEntries)) {
@@ -528,9 +544,9 @@ internal sealed partial class LauncherWindow : Window {
 
         if (worlds.Count == 0) {
             worlds.AddRange(DEFAULT_WORLDS);
-            bosses.Add(5);
         }
 
+        bosses.RemoveWhere(b => b > worlds.Count);
         bosses.Add(worlds.Count);
 
         return (worlds, bosses);

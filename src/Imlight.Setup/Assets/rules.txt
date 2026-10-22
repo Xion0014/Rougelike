@@ -31,7 +31,7 @@ Use the Tome of Travels again to start the next tier's street. Want to shop some
 # Good to know
 
 Q: Arcs
-After the last boss of an arc you get a choice: carry on into the next arc, or take a break. Your run waits for you.
+Arc 1 runs from Wizard City to Malistaire in Dragonspyre. After its last boss you can take a break, and your run waits for you.
 
 Q: One life?
 With Die = Delete on (under Run options), a wizard who dies in battle and is still dead when the battle ends is gone for good. Fleeing doesn't count.
