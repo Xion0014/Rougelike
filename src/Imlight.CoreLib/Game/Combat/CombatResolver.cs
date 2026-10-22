@@ -280,6 +280,7 @@ public class CombatResolver(Duel duel, CombatDuelSubCircle[] actorSubCircles) {
         foreach (var delayed in due) {
             _delayedCasts.Remove(delayed);
             var action = delayed.Action;
+            RetargetTeamSpell(action);
             if (!caster.IsAlive || action.SelectedTarget is null || !action.SelectedTarget.IsAlive
                 || !action.SelectedTarget.AddedToDuel) {
                 continue;
@@ -313,6 +314,35 @@ public class CombatResolver(Duel duel, CombatDuelSubCircle[] actorSubCircles) {
         return cinematicTime;
     }
 
+    /// <summary>
+    /// The game names one target even for a spell that hits a whole side (all enemies, all allies) or only touches the
+    /// caster. When that target has died, the spell is aimed at a living member of the same side instead, so it is
+    /// cast rather than passed. Spells with any single-target effect keep their target.
+    /// </summary>
+    private void RetargetTeamSpell(QueuedCombatAction action) {
+        var target = action.SelectedTarget;
+        if (target is null || action.Spell is null || (target.IsAlive && target.AddedToDuel)) {
+            return;
+        }
+
+        var effects = (action.SpellTemplate?.m_effects ?? [])
+            .SelectMany(CombatActionResolver.AllEffects)
+            .Where(effect => effect is not null)
+            .ToList();
+        if (effects.Count == 0 || effects.Any(effect => effect.m_effectTarget is not (kEffectTarget.kEnemyTeam
+                or kEffectTarget.kEnemyTeamAllAtOnce or kEffectTarget.kFriendlyTeam or kEffectTarget.kFriendlyTeamAllAtOnce
+                or kEffectTarget.kSelf or kEffectTarget.kGlobal or kEffectTarget.kInvalidTarget))) {
+            return;
+        }
+
+        var living = ActiveSubCircles.FirstOrDefault(x => x.OccupiedTeam == target.OccupiedTeam && x.IsAlive && x.AddedToDuel);
+        if (living is not null) {
+            Logger.Debug("Duel {0} | Slot {1} | The spell's target is gone; it goes to slot {2} of the same side.",
+                Logger.Args(_duel.m_duelID.Full, action.SpellCaster.SlotIndex, living.SlotIndex));
+            action.SelectedTarget = living;
+        }
+    }
+
     private float ProcessQueuedAction(QueuedCombatAction action, CombatActionListObj combatActionList, float cinematicTimeSoFar) {
         var cinematicTime = 0.0f;
         {
@@ -337,6 +367,9 @@ public class CombatResolver(Duel duel, CombatDuelSubCircle[] actorSubCircles) {
 
                 return cinematicTime;
             }
+
+            // An all-enemies (or all-allies) spell still goes off when the creature it was aimed at has died.
+            RetargetTeamSpell(action);
 
             // If our target is gone or we're stunned, pass the turn.
             if (    action.SpellCaster.CombatParticipant.m_stunned > 0 
