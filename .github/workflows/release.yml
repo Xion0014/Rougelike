@@ -94,7 +94,7 @@ jobs:
             -p:ImlightBranch=${{ steps.version.outputs.branch }} -o out/manager
           Copy-Item out/manager/ImlightManager.exe release/
 
-      - name: Build SpiralRoguelike.exe
+      - name: Build the Spiral Gauntlet launcher
         # The playful roguelike launcher: installs the roguelike server on the player's PC, updates it and plays on it.
         shell: pwsh
         run: |
@@ -102,6 +102,8 @@ jobs:
             -p:PublishSingleFile=true -p:Version=${{ steps.version.outputs.version }} -p:ImlightEdition=Roguelike `
             -p:ImlightBranch=${{ steps.version.outputs.branch }} -o out/roguelike
           Copy-Item out/roguelike/SpiralRoguelike.exe release/
+          # The launcher is now called Spiral Gauntlet; installed launchers still update from SpiralRoguelike.exe.
+          Copy-Item out/roguelike/SpiralRoguelike.exe release/SpiralGauntlet.exe
 
       - name: Add the generator inputs
         if: env.GENERATOR_INPUTS != ''
@@ -141,7 +143,7 @@ jobs:
           $tag = "${{ steps.version.outputs.tag }}"
           $branch = "${{ steps.version.outputs.branch }}"
           $commit = "${{ github.sha }}".Substring(0, 7)
-          $notes = "Built from $branch at $commit. Players: download SpiralRoguelike.exe and press Begin; it sets up the " +
+          $notes = "Built from $branch at $commit. Players: download SpiralGauntlet.exe and press the big button; it sets up the " +
                    "roguelike on your own PC from your Wizard101 files and keeps itself updated. Server owners: ImlightManager.exe " +
                    "installs the roguelike server from the $branch branch with the full control panel."
           if (-not $env:GENERATOR_INPUTS) {

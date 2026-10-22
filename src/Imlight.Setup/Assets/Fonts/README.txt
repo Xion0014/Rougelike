@@ -1,7 +1,6 @@
-Fonts used by the Spiral Roguelike launcher window.
+Fonts used by the Spiral Gauntlet launcher window.
 
-Luckiest Guy  (LuckiestGuy-Regular.ttf)  by Astigmatic, Apache License 2.0 (LICENSE-Apache-2.0.txt).
-Fredoka       (Fredoka-Medium.ttf, Fredoka-Bold.ttf) by Milena Brandao and Hafontia, SIL Open Font License 1.1
-              (LICENSE-OFL-Fredoka.txt).
+Cinzel and Cinzel Decorative (Cinzel-Bold.ttf, Cinzel-SemiBold.ttf, CinzelDecorative-Bold.ttf) by Natanael Gama,
+SIL Open Font License 1.1 (LICENSE-OFL-Cinzel.txt). From Google Fonts, through the @expo-google-fonts npm packages.
 
-Both come from Google Fonts, through the @expo-google-fonts npm packages.
+Body text uses Inter, which Avalonia ships (Avalonia.Fonts.Inter).

@@ -440,7 +440,8 @@ internal sealed class SetupSteps : IDisposable {
 
         // The app holds everything, so its desktop shortcut is the only one. Earlier versions added a
         // Start menu folder and more shortcuts; they are removed.
-        foreach (var old in new[] { InstalledCommands.PANEL_SHORTCUT, InstalledCommands.START_SHORTCUT, InstalledCommands.PLAY_SHORTCUT }) {
+        // "Spiral Roguelike.lnk" is the launcher's shortcut from before it was renamed Spiral Gauntlet.
+        foreach (var old in new[] { InstalledCommands.PANEL_SHORTCUT, InstalledCommands.START_SHORTCUT, InstalledCommands.PLAY_SHORTCUT, "Spiral Roguelike.lnk" }) {
             File.Delete(Path.Combine(desktop, old));
         }
 

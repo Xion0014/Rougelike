@@ -6,7 +6,7 @@
 
 # Getting started
 
-Q: What is Spiral Roguelike?
+Q: What is Spiral Gauntlet?
 A roguelike way to play Wizard101 on your own PC. Every run is different: the creatures, their decks, the spells trainers teach, shop stock, pets, jewels and even the music are reshuffled. Clear tiers of streets and bosses, grow stronger, and see how far you get.
 
 Q: Do I need my own copy of Wizard101?
@@ -16,10 +16,10 @@ Q: Why does the first setup take so long?
 The first time, the launcher downloads the newest roguelike, reads your game's files and builds your own server from them. That takes a few minutes. Later updates are quicker.
 
 Q: How do I log in?
-Press Play, then type any name and password at the game's login screen. The first time you use a name, a new account is made for it.
+Press Begin Run, then type any name and password at the game's login screen. The first time you use a name, a new account is made for it.
 
 Q: Is my account protected by a password?
-Not at first. The game never sends your real password to the server, so a brand-new account lets any password in. Set a secret word in the launcher's "Your wizard's secret word" box (while the server is awake) and from then on only that one works.
+Not at first. The game never sends your real password to the server, so a brand-new account lets any password in. Seal a secret word in the launcher's "Secret word" box (while the server is awake) and from then on only that one works.
 
 # Safety
 
@@ -30,12 +30,12 @@ Q: Why does a Wizard101 web page open when I quit the game?
 That is the game itself: it opens its website in your browser whenever it closes, the same as with the normal launcher. It is only a web page; the game does not log in or send anything.
 
 Q: Can I play with friends?
-Spiral Roguelike is made for playing on your own PC. Each player runs their own server.
+Spiral Gauntlet is made for playing on your own PC. Each player runs their own server.
 
 # Runs
 
 Q: What happens when my wizard dies?
-That depends on Die = Delete under Run magic. When it is on, a wizard who dies in battle and is still dead when the battle ends is gone for good. When it is off, you can try again.
+That depends on Die = Delete under Run options. When it is on, a wizard who dies in battle and is still dead when the battle ends is gone for good. When it is off, you can try again.
 
 Q: What do I start with?
 Just your deck and the mount your run gives you. Everything else you find, win or buy along the way.
@@ -43,16 +43,16 @@ Just your deck and the mount your run gives you. Everything else you find, win o
 Q: Where do pets and jewels come from?
 Battles can drop them, bosses more often. The Pet Shop and RockHammer's Jewel Works in the Shopping District sell random ones too; a pet's age, talents and name are rolled when you buy it.
 
-Q: What does "Run magic" change?
+Q: What do the "Run options" change?
 Random music plays a different song in each area, and random battle music does the same for fights. Die = Delete is explained above. Changes take effect the next time the server wakes up.
 
 # Troubleshooting
 
 Q: The launcher says Wizard101 can't be found.
-Press Begin again and choose your Wizard101 folder when asked (the folder that has the Bin and Data folders inside).
+Press "Find Wizard101" in the launcher and choose your Wizard101 folder, then press the big button again (the folder that has the Bin and Data folders inside).
 
 Q: The game says my login is invalid.
-Make sure the status light is green ("Ready for adventure!") before logging in. If you set a secret word for that name, use it.
+Make sure the light by the button is green ("The gates are open") before logging in. If you set a secret word for that name, use it.
 
 Q: Something went wrong. How do I get help?
-Open "Server logs" in the launcher and share the newest log file (and the setup log, if setup stopped) when asking for help.
+Press "Logs" in the launcher and share the newest log file (and the setup log, if setup stopped) when asking for help.

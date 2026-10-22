@@ -47,7 +47,9 @@ internal static class Edition {
     // server on the player's own PC, keeps it updated, and plays Wizard101 on it. Accounts are made at first login.
     internal const bool IS_MANAGER = true;
     internal const bool IS_ROGUELIKE = true;
-    internal const string NAME = "Spiral Roguelike";
+    // Spiral Gauntlet. The file and folder names keep the first name (SpiralRoguelike), so installs and their
+    // updates carry on; releases also carry the launcher as SpiralGauntlet.exe for new downloads.
+    internal const string NAME = "Spiral Gauntlet";
     internal const string DEFAULT_REPOSITORY = "Xion0014/Rougelike";
     internal const string INSTALL_FOLDER_NAME = "SpiralRoguelike";
     internal const string RELEASE_ASSET = "SpiralRoguelike.exe";

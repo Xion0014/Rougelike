@@ -4,10 +4,10 @@
 ;   anything else   a paragraph (leave a blank line between paragraphs)
 ;   ; comment       not shown
 
-# Spiral Roguelike
+# Spiral Gauntlet
 
 Q: Xion0014
-Roguelike design, tiers, bosses, testing and the Spiral Roguelike launcher.
+Roguelike design, tiers, bosses, testing and the Spiral Gauntlet launcher.
 
 Q: Claude (Anthropic)
 Coding help across the roguelike mode and the launcher.
@@ -32,7 +32,7 @@ Q: Libraries
 Akka.NET, RavenDB, Avalonia and .NET.
 
 Q: Fonts
-Luckiest Guy by Astigmatic (Apache License 2.0) and Fredoka by Milena Brandão and Hafontia (SIL Open Font License 1.1).
+Cinzel and Cinzel Decorative by Natanael Gama (SIL Open Font License 1.1), and Inter.
 
 # Thanks
 
@@ -40,4 +40,4 @@ Q: Everyone who tested a run
 Every bug report, log file and screenshot made this better.
 
 Q: Wizard101
-Wizard101 is a trademark of KingsIsle Entertainment. Spiral Roguelike is a free fan project, not made or endorsed by KingsIsle, and you need your own copy of the game to play.
+Wizard101 is a trademark of KingsIsle Entertainment. Spiral Gauntlet is a free fan project, not made or endorsed by KingsIsle, and you need your own copy of the game to play.

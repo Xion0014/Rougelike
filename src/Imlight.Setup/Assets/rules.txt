@@ -34,7 +34,7 @@ Q: Arcs
 After the last boss of an arc you get a choice: carry on into the next arc, or take a break. Your run waits for you.
 
 Q: One life?
-With Die = Delete on (under Run magic), a wizard who dies in battle and is still dead when the battle ends is gone for good. Fleeing doesn't count.
+With Die = Delete on (under Run options), a wizard who dies in battle and is still dead when the battle ends is gone for good. Fleeing doesn't count.
 
 Q: Stat potions
 Won battles often give a stat potion that is drunk on the spot: a random stat (health, mana, damage, resist, critical and more) goes up for the rest of the run.

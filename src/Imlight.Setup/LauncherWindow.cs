@@ -39,48 +39,49 @@ using Path = System.IO.Path;
 namespace Imlight.Setup;
 
 /// <summary>
-/// The roguelike launcher's window: a night sky with a big Play button. The first time, the same button sets the
+/// The roguelike launcher's window (Spiral Gauntlet): a torchlit dungeon with the run's tiers mapped across it and a big
+/// Begin Run button. The first time, the same button sets the
 /// server up (the setup steps run in the background and show here); after that it wakes the server and opens
 /// Wizard101 on it. It also updates, sets a password for a wizard's account, and flips a few run options.
 /// </summary>
 internal sealed partial class LauncherWindow : Window {
 
-    // Colors.
-    private static readonly Color SKY_TOP = Color.Parse("#1A0F3D");
-    private static readonly Color SKY_MID = Color.Parse("#3A1A6B");
-    private static readonly Color SKY_BOTTOM = Color.Parse("#16305A");
-    private static readonly IBrush GOLD = new SolidColorBrush(Color.Parse("#FFD45C"));
-    private static readonly IBrush TEXT = new SolidColorBrush(Color.Parse("#F4ECFF"));
-    private static readonly IBrush SOFT = new SolidColorBrush(Color.Parse("#CDBDF5"));
-    private static readonly IBrush FAINT = new SolidColorBrush(Color.Parse("#9B8CC4"));
-    private static readonly IBrush CARD = new SolidColorBrush(Color.Parse("#C7241450"));
-    private static readonly IBrush PANEL = new SolidColorBrush(Color.Parse("#B3140C32"));
-    private static readonly IBrush PILL = new SolidColorBrush(Color.Parse("#1FFFFFFF"));
-    private static readonly IBrush PILL_HOVER = new SolidColorBrush(Color.Parse("#36FFFFFF"));
-    private static readonly IBrush PILL_EDGE = new SolidColorBrush(Color.Parse("#30FFFFFF"));
-    private static readonly IBrush ERROR = new SolidColorBrush(Color.Parse("#FF9C9C"));
-    private static readonly Color ORB_READY = Color.Parse("#5EE08A");
-    private static readonly Color ORB_WAKING = Color.Parse("#FFC24A");
-    private static readonly Color ORB_ASLEEP = Color.Parse("#A99BD6");
-    private static readonly Color ORB_PROBLEM = Color.Parse("#FF7A7A");
+    // Colors: torchlit stone, old gold and ember red.
+    private static readonly Color GOLD_COLOR = Color.Parse("#E9C46A");
+    private static readonly IBrush GOLD = new SolidColorBrush(GOLD_COLOR);
+    private static readonly IBrush GOLD_DIM = new SolidColorBrush(Color.Parse("#C99A3E"));
+    private static readonly IBrush BRASS = new SolidColorBrush(Color.Parse("#6E5428"));
+    private static readonly IBrush TEXT = new SolidColorBrush(Color.Parse("#EFE6D6"));
+    private static readonly IBrush SOFT = new SolidColorBrush(Color.Parse("#B9A68A"));
+    private static readonly IBrush FAINT = new SolidColorBrush(Color.Parse("#7A6A52"));
+    private static readonly IBrush PANEL = new SolidColorBrush(Color.Parse("#E0150F0F"));
+    private static readonly IBrush PILL = new SolidColorBrush(Color.Parse("#0AFFFFFF"));
+    private static readonly IBrush PILL_HOVER = new SolidColorBrush(Color.Parse("#1FE9C46A"));
+    private static readonly IBrush PILL_EDGE = BRASS;
+    private static readonly IBrush ERROR = new SolidColorBrush(Color.Parse("#FF8A72"));
+    private static readonly Color ORB_READY = Color.Parse("#7BD389");
+    private static readonly Color ORB_WAKING = Color.Parse("#FFB04A");
+    private static readonly Color ORB_ASLEEP = Color.Parse("#8C7E6A");
+    private static readonly Color ORB_PROBLEM = Color.Parse("#FF6A4D");
 
     private static readonly string ASSETS = $"avares://{typeof(LauncherWindow).Assembly.GetName().Name}/Assets";
-    private static readonly FontFamily TITLE_FONT = new($"{ASSETS}/Fonts#Luckiest Guy");
-    private static readonly FontFamily BODY_FONT = new($"{ASSETS}/Fonts#Fredoka");
+    private static readonly FontFamily TITLE_FONT = new($"{ASSETS}/Fonts#Cinzel Decorative");
+    private static readonly FontFamily HEADING_FONT = new($"{ASSETS}/Fonts#Cinzel");
+    private static readonly FontFamily BODY_FONT = new("fonts:Inter#Inter");
 
     private const int SETUP_STEPS = 7;
 
     // Little lines shown while the server is being set up.
     private static readonly string[] SETUP_TIPS = [
-        "Polishing the crystal balls…",
-        "Teaching the pixies their lines…",
-        "Shuffling the spell decks…",
-        "Hiding jewels under the cobblestones…",
-        "Waking the bosses (gently)…",
-        "Brewing a fresh batch of mana…",
-        "Counting the stars. There are a lot…",
-        "Feeding the pets. They are always hungry…",
+        "Lighting the torches…",
+        "Shuffling the creatures' decks…",
+        "Sharpening the bosses…",
+        "Hiding jewels in the chests…",
+        "Stocking the shops with random gear…",
         "Rolling the dice for your first run…",
+        "Polishing the tiers, one through ten…",
+        "Feeding the pets. They are always hungry…",
+        "Reading your game's old scrolls…",
     ];
 
     private readonly ServerManager _manager;
@@ -89,22 +90,20 @@ internal sealed partial class LauncherWindow : Window {
     private readonly DispatcherTimer _skyTimer = new() { Interval = TimeSpan.FromMilliseconds(50) };
     private readonly DispatcherTimer _tipTimer = new() { Interval = TimeSpan.FromSeconds(4) };
 
-    // Sky.
+    // Embers drifting up from the torches.
     private readonly Canvas _sky = new() { IsHitTestVisible = false };
-    private readonly List<Ellipse> _stars = [];
-    private readonly List<(TextBlock Glyph, double Speed, double Sway)> _sparkles = [];
-    private readonly Control _moon;
+    private readonly List<(Ellipse Ember, double Speed, double Sway)> _embers = [];
     private double _skyTime;
 
     // The card in the middle.
-    private readonly Border _orb = new() { Width = 14, Height = 14, CornerRadius = new CornerRadius(7), VerticalAlignment = VerticalAlignment.Center };
-    private readonly TextBlock _statusText = new() { FontSize = 17, VerticalAlignment = VerticalAlignment.Center };
+    private readonly Border _orb = new() { Width = 10, Height = 10, CornerRadius = new CornerRadius(5), VerticalAlignment = VerticalAlignment.Center };
+    private readonly TextBlock _statusText = new() { FontSize = 14, VerticalAlignment = VerticalAlignment.Center };
     private readonly Border _playButton;
-    private readonly TextBlock _playLabel = new() { Text = "PLAY", FontSize = 44, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
-    private readonly TextBlock _hint = new() { FontSize = 14, TextWrapping = TextWrapping.Wrap, TextAlignment = TextAlignment.Center, MaxWidth = 470 };
+    private readonly TextBlock _playLabel = new() { Text = "BEGIN RUN", FontSize = 26, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, LetterSpacing = 4 };
+    private readonly TextBlock _hint = new() { FontSize = 13, TextWrapping = TextWrapping.Wrap, TextAlignment = TextAlignment.Center, MaxWidth = 490 };
     private readonly StackPanel _setupBox = new() { Spacing = 8, IsVisible = false };
     private readonly TextBlock _setupStep = new() { FontSize = 15, TextAlignment = TextAlignment.Center };
-    private readonly ProgressBar _setupProgress = new() { Minimum = 0, Maximum = SETUP_STEPS, Height = 14, MinHeight = 14, CornerRadius = new CornerRadius(7), Width = 420 };
+    private readonly ProgressBar _setupProgress = new() { Minimum = 0, Maximum = SETUP_STEPS, Height = 10, MinHeight = 10, CornerRadius = new CornerRadius(0), Width = 420 };
     private readonly TextBlock _setupTip = new() { FontSize = 13, TextAlignment = TextAlignment.Center };
     private readonly TextBlock _setupDetail = new() { FontSize = 11, TextAlignment = TextAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis, MaxWidth = 460 };
     private readonly WrapPanel _pills = new() { HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0, 14, 0, 0) };
@@ -120,7 +119,7 @@ internal sealed partial class LauncherWindow : Window {
 
     // The FAQ and credits, shown over the card.
     private readonly Border _book;
-    private readonly TextBlock _bookTitle = new() { FontSize = 30 };
+    private readonly TextBlock _bookTitle = new() { FontSize = 28 };
     private readonly StackPanel _bookPages = new() { Spacing = 6 };
     private readonly ScrollViewer _bookScroll = new() { MaxHeight = 430 };
     private readonly StackPanel _bookAnswer = new() { Orientation = Orientation.Horizontal, Spacing = 10, HorizontalAlignment = HorizontalAlignment.Right, Margin = new Thickness(0, 14, 8, 0) };
@@ -131,8 +130,8 @@ internal sealed partial class LauncherWindow : Window {
     // The panels at the bottom.
     private readonly Border _wizardPanel;
     private readonly Border _magicPanel;
-    private readonly TextBox _username = new() { Watermark = "Wizard login name", CornerRadius = new CornerRadius(12) };
-    private readonly TextBox _password = new() { Watermark = "Secret word", PasswordChar = '•', CornerRadius = new CornerRadius(12) };
+    private readonly TextBox _username = new() { Watermark = "Login name", CornerRadius = new CornerRadius(0) };
+    private readonly TextBox _password = new() { Watermark = "Secret word", PasswordChar = '•', CornerRadius = new CornerRadius(0) };
     private readonly List<(string Section, string Key, ToggleSwitch Switch)> _switches = [];
     private bool _loadingSwitches;
 
@@ -153,10 +152,17 @@ internal sealed partial class LauncherWindow : Window {
         WindowStartupLocation = WindowStartupLocation.CenterScreen;
         FontFamily = BODY_FONT;
         Foreground = TEXT;
-        Background = new LinearGradientBrush {
-            StartPoint = new RelativePoint(0, 0, RelativeUnit.Relative),
-            EndPoint = new RelativePoint(0.6, 1, RelativeUnit.Relative),
-            GradientStops = { new GradientStop(SKY_TOP, 0), new GradientStop(SKY_MID, 0.45), new GradientStop(SKY_BOTTOM, 1) },
+        // Torchlight on stone: warm in the middle, dark at the edges.
+        Background = new RadialGradientBrush {
+            Center = new RelativePoint(0.5, 0.55, RelativeUnit.Relative),
+            GradientOrigin = new RelativePoint(0.5, 0.55, RelativeUnit.Relative),
+            RadiusX = new RelativeScalar(0.65, RelativeUnit.Relative),
+            RadiusY = new RelativeScalar(0.6, RelativeUnit.Relative),
+            GradientStops = {
+                new GradientStop(Color.Parse("#3A2216"), 0),
+                new GradientStop(Color.Parse("#1D1414"), 0.55),
+                new GradientStop(Color.Parse("#0C090C"), 1),
+            },
         };
         try {
             Icon = new WindowIcon(AssetLoader.Open(new Uri($"{ASSETS}/launcher.ico")));
@@ -165,60 +171,59 @@ internal sealed partial class LauncherWindow : Window {
             // Only the editions built with the icon have it.
         }
 
-        _moon = Moon();
         _playButton = PlayButton();
-        _updatePill = Pill("✦ Check for updates", CheckForUpdatesAsync);
-        _sleepPill = Pill("☾ Put the server to sleep", () => {
-            Hint(_manager.StopServer() == "The server was stopped." ? "The server is fast asleep. Press Play to wake it." : "The server was already asleep.");
+        _updatePill = Pill("Updates", CheckForUpdatesAsync);
+        _sleepPill = Pill("Rest the server", () => {
+            Hint(_manager.StopServer() == "The server was stopped." ? "The server rests. Begin a run to wake it." : "The server was already resting.");
 
             return Task.CompletedTask;
         });
-        _logsPill = Pill("Server logs", () => {
+        _logsPill = Pill("Logs", () => {
             Directory.CreateDirectory(_manager.LogFolder);
             ServerManager.Open(_manager.LogFolder);
 
             return Task.CompletedTask;
         });
-        _setupLogPill = Pill("Open the setup log", () => {
+        _setupLogPill = Pill("Setup log", () => {
             if (_setupLogPath is not null && File.Exists(_setupLogPath)) {
                 ServerManager.Open(_setupLogPath);
             }
 
             return Task.CompletedTask;
         });
-        _gameFolderPill = Pill("Choose my Wizard101 folder", ChooseGameFolderAsync);
-        _rulesPill = Pill("★ Rules", () => {
+        _gameFolderPill = Pill("Find Wizard101", ChooseGameFolderAsync);
+        _rulesPill = Pill("Rules", () => {
             OpenBook("How a run works", "rules.txt");
 
             return Task.CompletedTask;
         });
-        _noticePill = Pill("AI notice", () => {
+        _noticePill = Pill("AI Notice", () => {
             OpenBook("Please read", "notice.txt");
 
             return Task.CompletedTask;
         });
-        _faqPill = Pill("? FAQ", () => {
+        _faqPill = Pill("FAQ", () => {
             OpenBook("Questions & answers", "faq.txt");
 
             return Task.CompletedTask;
         });
-        _creditsPill = Pill("♥ Credits", () => {
+        _creditsPill = Pill("Credits", () => {
             OpenBook("Credits", "credits.txt");
 
             return Task.CompletedTask;
         });
-        _pills.Children.AddRange([_updatePill, _sleepPill, _logsPill, _setupLogPill, _gameFolderPill, _rulesPill, _faqPill, _creditsPill, _noticePill]);
+        _pills.Children.AddRange([_rulesPill, _faqPill, _creditsPill, _noticePill, _updatePill, _sleepPill, _logsPill, _setupLogPill, _gameFolderPill]);
         _book = Book();
         foreach (var pill in _pills.Children) {
-            pill.Margin = new Thickness(5, 4);
+            pill.Margin = new Thickness(4, 4);
         }
 
         _setupProgress.Foreground = new LinearGradientBrush {
             StartPoint = new RelativePoint(0, 0, RelativeUnit.Relative),
             EndPoint = new RelativePoint(1, 0, RelativeUnit.Relative),
-            GradientStops = { new GradientStop(Color.Parse("#B08AFF"), 0), new GradientStop(Color.Parse("#FFD45C"), 1) },
+            GradientStops = { new GradientStop(Color.Parse("#9B2A18"), 0), new GradientStop(Color.Parse("#E9C46A"), 1) },
         };
-        _setupProgress.Background = new SolidColorBrush(Color.Parse("#33FFFFFF"));
+        _setupProgress.Background = new SolidColorBrush(Color.Parse("#2A1E18"));
         _setupStep.Foreground = TEXT;
         _setupTip.Foreground = SOFT;
         _setupDetail.Foreground = FAINT;
@@ -230,6 +235,7 @@ internal sealed partial class LauncherWindow : Window {
         Content = new Grid {
             Children = {
                 _sky,
+                Vignette(),
                 BuildLayout(),
                 _book,
             },
@@ -285,48 +291,66 @@ internal sealed partial class LauncherWindow : Window {
 
     private Control BuildLayout() {
         var title = new TextBlock {
-            Text = Edition.NAME,
+            Text = Edition.NAME.ToUpperInvariant(),
             FontFamily = TITLE_FONT,
-            FontSize = 64,
+            FontSize = 56,
+            LetterSpacing = 3,
             Foreground = GOLD,
             HorizontalAlignment = HorizontalAlignment.Center,
-            Effect = new DropShadowEffect { OffsetX = 0, OffsetY = 5, BlurRadius = 0, Color = Color.Parse("#8A3FD1"), Opacity = 1 },
+            Effect = new DropShadowEffect { OffsetX = 0, OffsetY = 0, BlurRadius = 22, Color = GOLD_COLOR, Opacity = 0.35 },
+        };
+        var rule = new Border {
+            Width = 420,
+            Height = 1,
+            Margin = new Thickness(0, 6, 0, 0),
+            HorizontalAlignment = HorizontalAlignment.Center,
+            Background = new LinearGradientBrush {
+                StartPoint = new RelativePoint(0, 0, RelativeUnit.Relative),
+                EndPoint = new RelativePoint(1, 0, RelativeUnit.Relative),
+                GradientStops = {
+                    new GradientStop(Colors.Transparent, 0), new GradientStop(Color.Parse("#C99A3E"), 0.5), new GradientStop(Colors.Transparent, 1),
+                },
+            },
         };
         var tagline = new TextBlock {
-            Text = "✦  Every run a new adventure: spells, pets and bosses reshuffled  ✦",
-            FontSize = 18,
+            Text = "TEN TIERS  ·  ONE LIFE  ·  EVERY RUN RESHUFFLED",
+            FontFamily = HEADING_FONT,
+            FontWeight = FontWeight.SemiBold,
+            FontSize = 14,
+            LetterSpacing = 4,
             Foreground = SOFT,
             HorizontalAlignment = HorizontalAlignment.Center,
-            Margin = new Thickness(0, 4, 0, 0),
+            Margin = new Thickness(0, 8, 0, 0),
         };
 
         _statusText.Foreground = TEXT;
         _hint.Foreground = SOFT;
-        var status = new Border {
-            Background = new SolidColorBrush(Color.Parse("#14FFFFFF")),
-            CornerRadius = new CornerRadius(20),
-            Padding = new Thickness(14, 6),
+        var status = new StackPanel {
+            Orientation = Orientation.Horizontal,
+            Spacing = 10,
             HorizontalAlignment = HorizontalAlignment.Center,
-            Child = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 10, Children = { _orb, _statusText } },
+            Children = { _orb, _statusText },
         };
 
         var card = new Border {
-            Background = CARD,
-            BorderBrush = new SolidColorBrush(Color.Parse("#59FFD45C")),
-            BorderThickness = new Thickness(2),
-            CornerRadius = new CornerRadius(26),
-            Padding = new Thickness(28, 22),
-            Width = 560,
-            HorizontalAlignment = HorizontalAlignment.Center,
-            BoxShadow = BoxShadows.Parse("0 12 40 0 #59000000"),
+            Background = new LinearGradientBrush {
+                StartPoint = new RelativePoint(0, 0, RelativeUnit.Relative),
+                EndPoint = new RelativePoint(0, 1, RelativeUnit.Relative),
+                GradientStops = { new GradientStop(Color.Parse("#EB261C1A"), 0), new GradientStop(Color.Parse("#EB161010"), 1) },
+            },
+            BorderBrush = BRASS,
+            BorderThickness = new Thickness(1),
+            Padding = new Thickness(28, 20),
+            Width = 580,
+            BoxShadow = BoxShadows.Parse("0 18 40 0 #80000000"),
             Child = new StackPanel {
-                Spacing = 14,
+                Spacing = 12,
                 Children = { status, _playButton, _setupBox, _hint, _pills },
             },
         };
 
         var version = new TextBlock {
-            Text = $"v{SelfUpdate.CurrentVersion}  ·  plays on your own Wizard101, never the live game",
+            Text = $"v{SelfUpdate.CurrentVersion}  ·  {Edition.NAME} plays on your own Wizard101, never the live game",
             FontSize = 11,
             Foreground = FAINT,
             HorizontalAlignment = HorizontalAlignment.Center,
@@ -334,7 +358,7 @@ internal sealed partial class LauncherWindow : Window {
 
         var bottom = new Grid {
             ColumnDefinitions = new ColumnDefinitions("*,24,*"),
-            Margin = new Thickness(24, 0),
+            Margin = new Thickness(36, 0),
         };
         Grid.SetColumn(_wizardPanel, 0);
         Grid.SetColumn(_magicPanel, 2);
@@ -342,33 +366,217 @@ internal sealed partial class LauncherWindow : Window {
         bottom.Children.Add(_magicPanel);
 
         var root = new Grid {
-            RowDefinitions = new RowDefinitions("Auto,Auto,*,Auto,Auto"),
-            Margin = new Thickness(0, 30, 0, 8),
+            RowDefinitions = new RowDefinitions("Auto,Auto,Auto,Auto,*,Auto,Auto"),
+            Margin = new Thickness(0, 24, 0, 8),
         };
         Place(root, title, 0);
-        Place(root, tagline, 1);
-        Place(root, WithCenter(card), 2);
-        Place(root, bottom, 3);
-        Place(root, WithMargin(version, new Thickness(0, 10, 0, 0)), 4);
+        Place(root, rule, 1);
+        Place(root, tagline, 2);
+        Place(root, WithMargin(TierMap(), new Thickness(0, 18, 0, 0)), 3);
+        Place(root, WithCenter(Bracketed(card)), 4);
+        Place(root, bottom, 5);
+        Place(root, WithMargin(version, new Thickness(0, 10, 0, 0)), 6);
 
         return root;
     }
 
-    private Border PlayButton() {
-        _playLabel.FontFamily = TITLE_FONT;
-        _playLabel.Foreground = new SolidColorBrush(Color.Parse("#4A1D00"));
-        var button = new Border {
-            Width = 320,
-            Height = 86,
-            CornerRadius = new CornerRadius(43),
-            HorizontalAlignment = HorizontalAlignment.Center,
-            Cursor = new Cursor(StandardCursorType.Hand),
+    /// <summary>Gold corner brackets on the card, like a framed plate.</summary>
+    private static Control Bracketed(Control card) {
+        Border Corner(HorizontalAlignment h, VerticalAlignment v) => new() {
+            Width = 16,
+            Height = 16,
+            HorizontalAlignment = h,
+            VerticalAlignment = v,
+            Margin = new Thickness(-3),
+            BorderBrush = GOLD,
+            BorderThickness = new Thickness(
+                h == HorizontalAlignment.Left ? 2 : 0, v == VerticalAlignment.Top ? 2 : 0,
+                h == HorizontalAlignment.Right ? 2 : 0, v == VerticalAlignment.Bottom ? 2 : 0),
+            IsHitTestVisible = false,
+        };
+
+        return new Grid {
+            Children = {
+                card,
+                Corner(HorizontalAlignment.Left, VerticalAlignment.Top),
+                Corner(HorizontalAlignment.Right, VerticalAlignment.Top),
+                Corner(HorizontalAlignment.Left, VerticalAlignment.Bottom),
+                Corner(HorizontalAlignment.Right, VerticalAlignment.Bottom),
+            },
+        };
+    }
+
+    /// <summary>Dark edges over the background, so the light falls in the middle.</summary>
+    private static Control Vignette() => new Border {
+        IsHitTestVisible = false,
+        Background = new RadialGradientBrush {
+            Center = new RelativePoint(0.5, 0.5, RelativeUnit.Relative),
+            GradientOrigin = new RelativePoint(0.5, 0.5, RelativeUnit.Relative),
+            RadiusX = new RelativeScalar(0.75, RelativeUnit.Relative),
+            RadiusY = new RelativeScalar(0.75, RelativeUnit.Relative),
+            GradientStops = { new GradientStop(Colors.Transparent, 0.55), new GradientStop(Color.Parse("#A6000000"), 1) },
+        },
+    };
+
+    // ---------------------------------------------------------------------
+    // The tier map
+    // ---------------------------------------------------------------------
+
+    private static readonly string[] ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV"];
+
+    // The default tiers, for before the server is installed.
+    private static readonly string[] DEFAULT_WORLDS = [
+        "Wizard City", "Krokotopia", "Marleybone", "MooShu", "Dragonspyre", "Celestia", "Grizzleheim", "Avalon", "Azteca", "Wintertusk",
+    ];
+
+    /// <summary>
+    /// The run's tiers as a row of waypoints, named after each tier's world (read from the server's TierN lines),
+    /// with the arcs' last bosses (ArcEndTiers, and the last tier) larger and lit.
+    /// </summary>
+    private Control TierMap() {
+        var (worlds, bosses) = ReadTiers();
+        const double width = 860;
+        var canvas = new Canvas { Width = width, Height = 84, HorizontalAlignment = HorizontalAlignment.Center };
+        var step = worlds.Count > 1 ? (width - 60) / (worlds.Count - 1) : 0;
+        var line = new Border {
+            Width = width - 60,
+            Height = 2,
             Background = new LinearGradientBrush {
                 StartPoint = new RelativePoint(0, 0, RelativeUnit.Relative),
-                EndPoint = new RelativePoint(0, 1, RelativeUnit.Relative),
-                GradientStops = { new GradientStop(Color.Parse("#FFE58A"), 0), new GradientStop(Color.Parse("#FFB52E"), 1) },
+                EndPoint = new RelativePoint(1, 0, RelativeUnit.Relative),
+                GradientStops = {
+                    new GradientStop(Color.Parse("#7A5A24"), 0), new GradientStop(Color.Parse("#C99A3E"), 0.5), new GradientStop(Color.Parse("#7A5A24"), 1),
+                },
             },
-            BoxShadow = BoxShadows.Parse("0 6 0 0 #C06A00, 0 10 24 0 #73FFB42E"),
+        };
+        Canvas.SetLeft(line, 30);
+        Canvas.SetTop(line, 34);
+        canvas.Children.Add(line);
+
+        for (var i = 0; i < worlds.Count; i++) {
+            var x = 30 + i * step;
+            var boss = bosses.Contains(i + 1);
+            var size = boss ? 24.0 : 18.0;
+            var node = new Border {
+                Width = size,
+                Height = size,
+                Background = new SolidColorBrush(Color.Parse(boss ? "#5A1D14" : "#1B1412")),
+                BorderBrush = boss ? GOLD : GOLD_DIM,
+                BorderThickness = new Thickness(2),
+                RenderTransform = TransformOperations.Parse("rotate(45deg)"),
+                BoxShadow = boss ? BoxShadows.Parse("0 0 14 2 #99E9783C") : default,
+            };
+            Canvas.SetLeft(node, x - size / 2);
+            Canvas.SetTop(node, 35 - size / 2);
+            canvas.Children.Add(node);
+
+            var numeral = new TextBlock {
+                Text = i < ROMAN.Length ? ROMAN[i] : (i + 1).ToString(),
+                FontFamily = HEADING_FONT,
+                FontWeight = FontWeight.Bold,
+                FontSize = 11,
+                Foreground = GOLD_DIM,
+                Width = 40,
+                TextAlignment = TextAlignment.Center,
+            };
+            Canvas.SetLeft(numeral, x - 20);
+            Canvas.SetTop(numeral, 2);
+            canvas.Children.Add(numeral);
+
+            var label = new TextBlock {
+                Text = worlds[i],
+                FontSize = 11,
+                Foreground = SOFT,
+                Width = 96,
+                TextAlignment = TextAlignment.Center,
+                TextTrimming = TextTrimming.CharacterEllipsis,
+            };
+            Canvas.SetLeft(label, x - 48);
+            Canvas.SetTop(label, 56);
+            canvas.Children.Add(label);
+        }
+
+        return canvas;
+    }
+
+    private (List<string> Worlds, HashSet<int> Bosses) ReadTiers() {
+        var worlds = new List<string>();
+        var bosses = new HashSet<int>();
+        try {
+            if (_manager.IsInstalled) {
+                for (var tier = 1; tier <= ROMAN.Length; tier++) {
+                    var line = _manager.GetSetting("Roguelike", $"Tier{tier}");
+                    if (string.IsNullOrWhiteSpace(line)) {
+                        break;
+                    }
+
+                    var parts = line.Split(',', StringSplitOptions.TrimEntries);
+                    var zone = parts.Length > 1 ? parts[1] : parts[0];
+                    worlds.Add(WorldName(zone));
+                }
+
+                foreach (var end in (_manager.GetSetting("Roguelike", "ArcEndTiers") ?? "5").Split(',', StringSplitOptions.RemoveEmptyEntries)) {
+                    if (int.TryParse(end.Trim(), out var n)) {
+                        bosses.Add(n);
+                    }
+                }
+            }
+        }
+        catch (Exception) {
+            worlds.Clear();
+        }
+
+        if (worlds.Count == 0) {
+            worlds.AddRange(DEFAULT_WORLDS);
+            bosses.Add(5);
+        }
+
+        bosses.Add(worlds.Count);
+
+        return (worlds, bosses);
+    }
+
+    /// <summary>The world a zone path is in, as players know it ("DragonSpire/DS_..." is Dragonspyre).</summary>
+    private static string WorldName(string zone) {
+        if (zone.Contains("GH_HFjord", StringComparison.OrdinalIgnoreCase) || zone.Contains("Wintertusk", StringComparison.OrdinalIgnoreCase)) {
+            return "Wintertusk";
+        }
+
+        var folder = zone.Split('/')[0];
+
+        return folder switch {
+            "WizardCity" => "Wizard City",
+            "DragonSpire" => "Dragonspyre",
+            "MooShu" => "MooShu",
+            "" => "?",
+            _ => Regex.Replace(folder, "(?<=[a-z])(?=[A-Z])", " "),
+        };
+    }
+
+    private Border PlayButton() {
+        _playLabel.FontFamily = HEADING_FONT;
+        _playLabel.FontWeight = FontWeight.Bold;
+        _playLabel.Foreground = new SolidColorBrush(Color.Parse("#FFF3DC"));
+        _playLabel.Effect = new DropShadowEffect { OffsetX = 0, OffsetY = 2, BlurRadius = 2, Color = Colors.Black, Opacity = 0.5 };
+        var normal = new LinearGradientBrush {
+            StartPoint = new RelativePoint(0, 0, RelativeUnit.Relative),
+            EndPoint = new RelativePoint(0, 1, RelativeUnit.Relative),
+            GradientStops = { new GradientStop(Color.Parse("#B2361F"), 0), new GradientStop(Color.Parse("#6E1610"), 1) },
+        };
+        var lit = new LinearGradientBrush {
+            StartPoint = new RelativePoint(0, 0, RelativeUnit.Relative),
+            EndPoint = new RelativePoint(0, 1, RelativeUnit.Relative),
+            GradientStops = { new GradientStop(Color.Parse("#CC4426"), 0), new GradientStop(Color.Parse("#841C13"), 1) },
+        };
+        var button = new Border {
+            Width = 340,
+            Height = 66,
+            HorizontalAlignment = HorizontalAlignment.Center,
+            Cursor = new Cursor(StandardCursorType.Hand),
+            Background = normal,
+            BorderBrush = GOLD,
+            BorderThickness = new Thickness(2),
+            BoxShadow = BoxShadows.Parse("0 0 22 0 #73DC5A28, 0 4 0 0 #3A0C08"),
             Child = _playLabel,
             RenderTransform = TransformOperations.Parse("scale(1)"),
             Transitions = [
@@ -378,13 +586,17 @@ internal sealed partial class LauncherWindow : Window {
         };
         button.PointerEntered += (_, _) => {
             if (!_busy) {
-                button.RenderTransform = TransformOperations.Parse("scale(1.05)");
+                button.Background = lit;
+                button.RenderTransform = TransformOperations.Parse("scale(1.03)");
             }
         };
-        button.PointerExited += (_, _) => button.RenderTransform = TransformOperations.Parse("scale(1)");
-        button.PointerPressed += (_, _) => button.RenderTransform = TransformOperations.Parse("scale(0.97)");
+        button.PointerExited += (_, _) => {
+            button.Background = normal;
+            button.RenderTransform = TransformOperations.Parse("scale(1)");
+        };
+        button.PointerPressed += (_, _) => button.RenderTransform = TransformOperations.Parse("scale(0.98)");
         button.PointerReleased += async (_, _) => {
-            button.RenderTransform = TransformOperations.Parse("scale(1.05)");
+            button.RenderTransform = TransformOperations.Parse("scale(1.03)");
             await OnPlayAsync();
         };
 
@@ -392,16 +604,16 @@ internal sealed partial class LauncherWindow : Window {
     }
 
     private Border WizardPanel() {
-        var save = Pill("Save", SavePasswordAsync, gold: true);
+        var save = Pill("Seal", SavePasswordAsync, gold: true);
         var row = new Grid { ColumnDefinitions = new ColumnDefinitions("*,8,*,8,Auto"), Margin = new Thickness(0, 8, 0, 0) };
         Grid.SetColumn(_username, 0);
         Grid.SetColumn(_password, 2);
         Grid.SetColumn(save, 4);
         row.Children.AddRange([_username, _password, save]);
 
-        return InfoPanel("Your wizard's secret word", new StackPanel {
+        return InfoPanel("Secret word", new StackPanel {
             Children = {
-                Small("Log in with any name: a new account is made for it the first time. It lets any password in until you set one here " +
+                Small("Log in with any name: an account is made the first time. It lets any password in until you seal one here " +
                       "(the server must be awake)."),
                 row,
             },
@@ -413,92 +625,60 @@ internal sealed partial class LauncherWindow : Window {
         foreach (var (section, key, name) in new[] {
                      ("Roguelike", "RandomMusic", "Random music"),
                      ("Roguelike", "RandomBattleMusic", "Random battle music"),
-                     ("Die Delete", "Enabled", "Die = Delete (one life only!)"),
+                     ("Die Delete", "Enabled", "Die = Delete (one life)"),
                  }) {
             var toggle = new ToggleSwitch { OnContent = null, OffContent = null, MinWidth = 0, HorizontalAlignment = HorizontalAlignment.Right };
             toggle.IsCheckedChanged += (_, _) => SaveSwitch(section, key, name, toggle.IsChecked == true);
             _switches.Add((section, key, toggle));
             var line = new Grid { ColumnDefinitions = new ColumnDefinitions("*,Auto") };
-            var label = new TextBlock { Text = name, FontSize = 14, VerticalAlignment = VerticalAlignment.Center, Foreground = TEXT };
+            var label = new TextBlock { Text = name, FontSize = 13, VerticalAlignment = VerticalAlignment.Center, Foreground = TEXT };
             Grid.SetColumn(toggle, 1);
             line.Children.AddRange([label, toggle]);
             rows.Children.Add(line);
         }
 
-        return InfoPanel("Run magic", rows);
+        return InfoPanel("Run options", rows);
     }
 
     // ---------------------------------------------------------------------
-    // Sky
+    // Embers
     // ---------------------------------------------------------------------
-
-    private static Control Moon() {
-        var crescent = new CombinedGeometry(GeometryCombineMode.Exclude,
-            new EllipseGeometry(new Rect(0, 0, 92, 92)),
-            new EllipseGeometry(new Rect(26, -14, 92, 92)));
-
-        return new Avalonia.Controls.Shapes.Path {
-            Data = crescent,
-            Fill = new SolidColorBrush(Color.Parse("#FFE9A3")),
-            Effect = new DropShadowEffect { OffsetX = 0, OffsetY = 0, BlurRadius = 28, Color = Color.Parse("#FFD45C"), Opacity = 0.55 },
-        };
-    }
 
     private void BuildSky() {
-        for (var i = 0; i < 110; i++) {
-            var size = 0.8 + _random.NextDouble() * 2.4;
-            var star = new Ellipse {
+        for (var i = 0; i < 46; i++) {
+            var size = 1.2 + _random.NextDouble() * 2.6;
+            var ember = new Ellipse {
                 Width = size,
                 Height = size,
-                Fill = Brushes.White,
-                Opacity = 0.25 + _random.NextDouble() * 0.75,
-                Transitions = [new DoubleTransition { Property = OpacityProperty, Duration = TimeSpan.FromMilliseconds(900) }],
+                Fill = new SolidColorBrush(Color.Parse(_random.Next(3) == 0 ? "#FFD27A" : "#FF9A3C")),
+                Opacity = 0.25 + _random.NextDouble() * 0.7,
+                Effect = new DropShadowEffect { OffsetX = 0, OffsetY = 0, BlurRadius = 6, Color = Color.Parse("#FF8C28"), Opacity = 0.8 },
+                Transitions = [new DoubleTransition { Property = OpacityProperty, Duration = TimeSpan.FromMilliseconds(500) }],
             };
-            Canvas.SetLeft(star, _random.NextDouble() * Width);
-            Canvas.SetTop(star, _random.NextDouble() * (Height - 120));
-            _stars.Add(star);
-            _sky.Children.Add(star);
+            Canvas.SetLeft(ember, _random.NextDouble() * Width);
+            Canvas.SetTop(ember, _random.NextDouble() * Height);
+            _embers.Add((ember, 0.2 + _random.NextDouble() * 0.7, _random.NextDouble() * Math.PI * 2));
+            _sky.Children.Add(ember);
         }
-
-        // A few sparkles that float up past the card and wrap round.
-        var colors = new[] { "#FFE9A3", "#D9C8FF", "#FFFFFF", "#B3E5FF" };
-        for (var i = 0; i < 12; i++) {
-            var glyph = new TextBlock {
-                Text = "✦",
-                FontSize = 8 + _random.NextDouble() * 12,
-                Foreground = new SolidColorBrush(Color.Parse(colors[i % colors.Length])),
-                Opacity = 0.35 + _random.NextDouble() * 0.4,
-            };
-            Canvas.SetLeft(glyph, _random.NextDouble() * Width);
-            Canvas.SetTop(glyph, _random.NextDouble() * Height);
-            _sparkles.Add((glyph, 0.25 + _random.NextDouble() * 0.6, _random.NextDouble() * Math.PI * 2));
-            _sky.Children.Add(glyph);
-        }
-
-        Canvas.SetLeft(_moon, Width - 170);
-        Canvas.SetTop(_moon, 34);
-        _sky.Children.Add(_moon);
     }
 
     private void AnimateSky() {
         _skyTime += 0.05;
 
-        // Twinkle: a few stars pick a new brightness and fade to it.
-        for (var i = 0; i < 4; i++) {
-            _stars[_random.Next(_stars.Count)].Opacity = 0.15 + _random.NextDouble() * 0.85;
+        // A few embers flicker each tick.
+        for (var i = 0; i < 3; i++) {
+            _embers[_random.Next(_embers.Count)].Ember.Opacity = 0.2 + _random.NextDouble() * 0.8;
         }
 
-        _moon.RenderTransform = new TranslateTransform(0, Math.Sin(_skyTime * 0.8) * 6);
-
-        foreach (var (glyph, speed, sway) in _sparkles) {
-            var top = Canvas.GetTop(glyph) - speed;
-            if (top < -20) {
+        foreach (var (ember, speed, sway) in _embers) {
+            var top = Canvas.GetTop(ember) - speed;
+            if (top < -10) {
                 top = Height + 10;
-                Canvas.SetLeft(glyph, _random.NextDouble() * Width);
+                Canvas.SetLeft(ember, _random.NextDouble() * Width);
             }
 
-            Canvas.SetTop(glyph, top);
-            glyph.RenderTransform = new TranslateTransform(Math.Sin(_skyTime + sway) * 6, 0);
+            Canvas.SetTop(ember, top);
+            ember.RenderTransform = new TranslateTransform(Math.Sin(_skyTime * 0.9 + sway) * 8, 0);
         }
     }
 
@@ -509,8 +689,8 @@ internal sealed partial class LauncherWindow : Window {
     /// <summary>Shows Play (installed) or Begin (not yet), and which pills and panels apply.</summary>
     private void ShowInstalledState() {
         var installed = _manager.IsInstalled;
-        _playLabel.Text = installed ? "PLAY" : "BEGIN!";
-        _playLabel.FontSize = installed ? 44 : 40;
+        _playLabel.Text = installed ? "BEGIN RUN" : "FORGE THE GAUNTLET";
+        _playLabel.FontSize = installed ? 26 : 20;
         _updatePill.IsVisible = installed;
         _sleepPill.IsVisible = installed;
         _logsPill.IsVisible = installed;
@@ -519,8 +699,8 @@ internal sealed partial class LauncherWindow : Window {
         _wizardPanel.IsVisible = installed;
         _magicPanel.IsVisible = installed;
         if (!installed) {
-            SetOrb(ORB_ASLEEP, "A new adventure awaits!");
-            Hint("Press Begin to set everything up. It builds your own roguelike server from your Wizard101 files, " +
+            SetOrb(ORB_ASLEEP, "The gauntlet is not yet built");
+            Hint("Press the button to set everything up. It builds your own server from your Wizard101 files, " +
                  "which takes a few minutes the first time.");
         }
         else {
@@ -538,13 +718,13 @@ internal sealed partial class LauncherWindow : Window {
             SetOrb(ORB_PROBLEM, "Wizard101 can't be found");
         }
         else if (status.Running && status.Ready) {
-            SetOrb(ORB_READY, "Ready for adventure!");
+            SetOrb(ORB_READY, "The gates are open");
         }
         else if (status.Running) {
-            SetOrb(ORB_WAKING, "The server is waking up…");
+            SetOrb(ORB_WAKING, "The torches are being lit…");
         }
         else {
-            SetOrb(ORB_ASLEEP, "The server is asleep. Press Play to wake it!");
+            SetOrb(ORB_ASLEEP, "The gauntlet rests. Begin a run to wake it.");
         }
 
         _sleepPill.IsVisible = status.Running;
@@ -747,7 +927,7 @@ internal sealed partial class LauncherWindow : Window {
         if (exitCode == 0 && _manager.IsInstalled) {
             _setupProgress.Value = SETUP_STEPS;
             _setupStep.Text = "All done! ✦";
-            SetOrb(ORB_READY, "Ready for adventure!");
+            SetOrb(ORB_READY, "The gates are open");
             Hint("Opening your launcher…");
             await Task.Delay(1200);
             RestartIntoInstalledCopy();
@@ -770,7 +950,7 @@ internal sealed partial class LauncherWindow : Window {
         _playButton.IsVisible = true;
         _pills.IsVisible = true;
         ShowInstalledState();
-        SetOrb(ORB_PROBLEM, "A spell fizzled");
+        SetOrb(ORB_PROBLEM, "Something went wrong");
         Hint(reason + (reason.Contains("Wizard101", StringComparison.OrdinalIgnoreCase) && !_manager.IsInstalled
             ? " You can point to your Wizard101 folder below, then press Begin again."
             : " Press the button to try again."), isError: true);
@@ -940,21 +1120,24 @@ internal sealed partial class LauncherWindow : Window {
     // ---------------------------------------------------------------------
 
     private Border Pill(string text, Func<Task> action, bool gold = false, bool evenWhenBusy = false) {
+        // Small engraved plates; "gold" ones (Seal, Close, I understand) are ember red with a gold edge.
         var label = new TextBlock {
-            Text = text,
-            FontSize = 14,
-            Foreground = gold ? new SolidColorBrush(Color.Parse("#4A1D00")) : TEXT,
-            FontWeight = gold ? FontWeight.Bold : FontWeight.Medium,
+            Text = text.ToUpperInvariant(),
+            FontFamily = HEADING_FONT,
+            FontSize = 12,
+            LetterSpacing = 1,
+            Foreground = gold ? new SolidColorBrush(Color.Parse("#FFF3DC")) : new SolidColorBrush(Color.Parse("#D9C9A8")),
+            FontWeight = FontWeight.SemiBold,
             VerticalAlignment = VerticalAlignment.Center,
         };
-        var normal = gold ? new SolidColorBrush(Color.Parse("#FFC847")) : PILL;
-        var hover = gold ? new SolidColorBrush(Color.Parse("#FFD978")) : PILL_HOVER;
+        var normal = gold ? new SolidColorBrush(Color.Parse("#7A1A12")) : PILL;
+        var hover = gold ? new SolidColorBrush(Color.Parse("#9A2618")) : PILL_HOVER;
         var pill = new Border {
             Background = normal,
-            BorderBrush = gold ? Brushes.Transparent : PILL_EDGE,
+            BorderBrush = gold ? GOLD : PILL_EDGE,
             BorderThickness = new Thickness(1),
-            CornerRadius = new CornerRadius(16),
-            Padding = new Thickness(14, 7),
+            CornerRadius = new CornerRadius(0),
+            Padding = new Thickness(12, 6),
             Cursor = new Cursor(StandardCursorType.Hand),
             Child = label,
         };
@@ -984,15 +1167,18 @@ internal sealed partial class LauncherWindow : Window {
 
     private static Border InfoPanel(string heading, Control content) => new() {
         Background = PANEL,
-        BorderBrush = new SolidColorBrush(Color.Parse("#40B496FF")),
+        BorderBrush = new SolidColorBrush(Color.Parse("#4D3A20")),
         BorderThickness = new Thickness(1),
-        CornerRadius = new CornerRadius(18),
+        CornerRadius = new CornerRadius(0),
         Padding = new Thickness(16, 12),
         VerticalAlignment = VerticalAlignment.Bottom,
         Child = new StackPanel {
             Spacing = 4,
             Children = {
-                new TextBlock { Text = heading, FontSize = 16, FontWeight = FontWeight.Bold, Foreground = GOLD },
+                new TextBlock {
+                    Text = heading.ToUpperInvariant(), FontFamily = HEADING_FONT, FontSize = 14, LetterSpacing = 2,
+                    FontWeight = FontWeight.Bold, Foreground = GOLD,
+                },
                 content,
             },
         },
@@ -1006,7 +1192,7 @@ internal sealed partial class LauncherWindow : Window {
     private Border Book() {
         _bookTitle.FontFamily = TITLE_FONT;
         _bookTitle.Foreground = GOLD;
-        _bookTitle.Effect = new DropShadowEffect { OffsetX = 0, OffsetY = 3, BlurRadius = 0, Color = Color.Parse("#8A3FD1"), Opacity = 1 };
+        _bookTitle.Effect = new DropShadowEffect { OffsetX = 0, OffsetY = 0, BlurRadius = 16, Color = GOLD_COLOR, Opacity = 0.3 };
         _bookScroll.Content = _bookPages;
         var close = Pill("Close", () => {
             CloseBook();
@@ -1015,7 +1201,7 @@ internal sealed partial class LauncherWindow : Window {
         }, gold: true, evenWhenBusy: true);
         close.HorizontalAlignment = HorizontalAlignment.Right;
         _bookClose = close;
-        var understood = Pill("I understand, let's play", async () => {
+        var understood = Pill("I understand", async () => {
             NoticeSeen = true;
             CloseBook();
             if (_updateAfterNotice) {
@@ -1038,10 +1224,10 @@ internal sealed partial class LauncherWindow : Window {
             Width = 680,
             HorizontalAlignment = HorizontalAlignment.Center,
             VerticalAlignment = VerticalAlignment.Center,
-            Background = new SolidColorBrush(Color.Parse("#F21A0F3D")),
-            BorderBrush = new SolidColorBrush(Color.Parse("#80FFD45C")),
-            BorderThickness = new Thickness(2),
-            CornerRadius = new CornerRadius(26),
+            Background = new SolidColorBrush(Color.Parse("#F71A1312")),
+            BorderBrush = BRASS,
+            BorderThickness = new Thickness(1),
+            CornerRadius = new CornerRadius(0),
             Padding = new Thickness(28, 20, 20, 22),
             BoxShadow = BoxShadows.Parse("0 16 50 0 #80000000"),
             Child = new StackPanel { Children = { header, _bookScroll, _bookAnswer } },
@@ -1050,7 +1236,7 @@ internal sealed partial class LauncherWindow : Window {
         page.PointerPressed += (_, e) => e.Handled = true;
 
         var shade = new Border {
-            Background = new SolidColorBrush(Color.Parse("#990A0620")),
+            Background = new SolidColorBrush(Color.Parse("#B3050304")),
             IsVisible = false,
             Child = page,
         };
@@ -1159,10 +1345,12 @@ internal sealed partial class LauncherWindow : Window {
             if (line.StartsWith("# ", StringComparison.Ordinal)) {
                 EndParagraph();
                 blocks.Add(new TextBlock {
-                    Text = "✦ " + line[2..].Trim(),
-                    FontSize = 19,
+                    Text = line[2..].Trim().ToUpperInvariant(),
+                    FontFamily = HEADING_FONT,
+                    LetterSpacing = 2,
+                    FontSize = 15,
                     FontWeight = FontWeight.Bold,
-                    Foreground = new SolidColorBrush(Color.Parse("#B9A2FF")),
+                    Foreground = GOLD_DIM,
                     Margin = new Thickness(0, blocks.Count == 0 ? 0 : 14, 0, 2),
                 });
 

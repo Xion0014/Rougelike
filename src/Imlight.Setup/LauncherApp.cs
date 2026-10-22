@@ -28,7 +28,7 @@ using Avalonia.Themes.Fluent;
 namespace Imlight.Setup;
 
 /// <summary>
-/// The roguelike launcher (SpiralRoguelike.exe): one playful window that installs the roguelike server on this PC,
+/// The roguelike launcher (Spiral Gauntlet): one window that installs the roguelike server on this PC,
 /// keeps it updated, and plays Wizard101 on it. Unlike the manager it opens before anything is installed.
 /// </summary>
 internal sealed class LauncherApp : Application {
@@ -67,14 +67,14 @@ internal sealed class LauncherApp : Application {
         RequestedThemeVariant = ThemeVariant.Dark;
         Name = Edition.NAME;
 
-        // Purple switches, sliders and focus rings instead of the default blue.
-        Resources["SystemAccentColor"] = Color.Parse("#9B6BFF");
-        Resources["SystemAccentColorLight1"] = Color.Parse("#B08AFF");
-        Resources["SystemAccentColorLight2"] = Color.Parse("#C6A9FF");
-        Resources["SystemAccentColorLight3"] = Color.Parse("#DCC9FF");
-        Resources["SystemAccentColorDark1"] = Color.Parse("#7F4FE6");
-        Resources["SystemAccentColorDark2"] = Color.Parse("#6638C7");
-        Resources["SystemAccentColorDark3"] = Color.Parse("#4D25A0");
+        // Ember red switches, sliders and focus rings instead of the default blue.
+        Resources["SystemAccentColor"] = Color.Parse("#B2361F");
+        Resources["SystemAccentColorLight1"] = Color.Parse("#C9563A");
+        Resources["SystemAccentColorLight2"] = Color.Parse("#DE8A5E");
+        Resources["SystemAccentColorLight3"] = Color.Parse("#E9C46A");
+        Resources["SystemAccentColorDark1"] = Color.Parse("#8E2617");
+        Resources["SystemAccentColorDark2"] = Color.Parse("#6E1610");
+        Resources["SystemAccentColorDark3"] = Color.Parse("#4A0E0A");
     }
 
     public override void OnFrameworkInitializationCompleted() {
