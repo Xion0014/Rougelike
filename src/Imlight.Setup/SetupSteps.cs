@@ -458,19 +458,57 @@ internal sealed class SetupSteps : IDisposable {
             (Path.Combine(desktop, InstalledCommands.APP_SHORTCUT), exe, ""),
         };
 
+        // The shortcut names its icon file outright: Windows keeps showing a cached icon for an exe whose icon changed.
+        var icon = WriteIcon();
+
         // Windows has no .NET API for shortcuts; the shell's scripting object makes them.
         var script = string.Join("\n", shortcuts.Select(s =>
             $"$s = $shell.CreateShortcut('{Escape(s.Path)}'); $s.TargetPath = '{Escape(s.Target)}'; " +
             $"$s.Arguments = '{Escape(s.Arguments)}'; $s.WorkingDirectory = '{Escape(_options.InstallFolder)}'; " +
             // The app opens its own window, so its console starts minimized.
-            (s.Target == exe && s.Arguments.Length == 0 ? "$s.WindowStyle = 7; " : "") + "$s.Save()"));
+            (s.Target == exe && s.Arguments.Length == 0 ? "$s.WindowStyle = 7; " : "") +
+            (icon is not null ? $"$s.IconLocation = '{Escape(icon)},0'; " : "") + "$s.Save()"));
         var exitCode = await ProcessRunner.RunAsync("powershell",
             ["-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", "$shell = New-Object -ComObject WScript.Shell\n" + script]);
         if (exitCode != 0) {
             SetupLog.Info($"The desktop shortcut could not be created. Open \"{exe}\" instead.");
         }
 
+        // Ask Windows to redraw icons it has cached, so the new one shows straight away.
+        if (icon is not null) {
+            try {
+                await ProcessRunner.RunAsync("ie4uinit.exe", ["-show"]);
+            }
+            catch (Exception ex) {
+                SetupLog.Detail($"The icon cache was not refreshed: {ex.Message}");
+            }
+        }
+
         static string Escape(string value) => value.Replace("'", "''");
+    }
+
+    /// <summary>
+    /// Writes the launcher's icon into the install folder (named after the program, so a new name is a new file and
+    /// Windows shows it fresh) and returns its path, or null for builds without one.
+    /// </summary>
+    private string? WriteIcon() {
+        try {
+            using var source = typeof(SetupSteps).Assembly.GetManifestResourceStream("launcher.ico");
+            if (source is null || !Edition.IS_ROGUELIKE) {
+                return null;
+            }
+
+            var path = Path.Combine(_options.InstallFolder, Edition.NAME.Replace(" ", "") + ".ico");
+            using var target = File.Create(path);
+            source.CopyTo(target);
+
+            return path;
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException) {
+            SetupLog.Detail($"The icon could not be written: {ex.Message}");
+
+            return null;
+        }
     }
 
     /// <summary>

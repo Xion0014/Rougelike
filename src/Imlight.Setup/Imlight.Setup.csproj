@@ -32,6 +32,8 @@
     <!-- The launcher window's fonts (see Assets\Fonts\README.txt) and icon. -->
     <AvaloniaResource Include="Assets\**\*.ttf" />
     <AvaloniaResource Include="Assets\launcher.ico" />
+    <!-- Also written next to the installed launcher, so the desktop shortcut points at the icon itself. -->
+    <EmbeddedResource Include="Assets\launcher.ico" LogicalName="launcher.ico" />
     <!-- The launcher's FAQ and credits pages: edit these text files to change them. -->
     <AvaloniaResource Include="Assets\faq.txt" />
     <AvaloniaResource Include="Assets\credits.txt" />
