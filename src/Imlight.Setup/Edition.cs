@@ -21,7 +21,7 @@ using System.Linq;
 namespace Imlight.Setup;
 
 /// <summary>
-/// The builds of this program (and SpiralRoguelike, built with -p:ImlightEdition=Roguelike). ImlightSetup installs original Imlight; ImlightManager (built with
+/// The builds of this program (and SpiralGauntlet, built with -p:ImlightEdition=Roguelike). ImlightSetup installs original Imlight; ImlightManager (built with
 /// -p:ImlightEdition=Manager) installs the Xion0014/Rougelike fork, which adds roguelike mode, the
 /// randomizer and ID lookup. They install side by side under different names.
 /// </summary>
@@ -47,14 +47,13 @@ internal static class Edition {
     // server on the player's own PC, keeps it updated, and plays Wizard101 on it. Accounts are made at first login.
     internal const bool IS_MANAGER = true;
     internal const bool IS_ROGUELIKE = true;
-    // Spiral Gauntlet. The file and folder names keep the first name (SpiralRoguelike), so installs and their
-    // updates carry on; releases also carry the launcher as SpiralGauntlet.exe for new downloads.
+    // Spiral Gauntlet. The install folder keeps the first name (SpiralRoguelike), so existing installs carry on.
     internal const string NAME = "Spiral Gauntlet";
     internal const string DEFAULT_REPOSITORY = "Xion0014/Rougelike";
     internal const string INSTALL_FOLDER_NAME = "SpiralRoguelike";
-    internal const string RELEASE_ASSET = "SpiralRoguelike.exe";
+    internal const string RELEASE_ASSET = "SpiralGauntlet.exe";
     internal const string REGISTRY_KEY = "SpiralRoguelike";
-    internal const string INSTALLED_EXE = "SpiralRoguelike.exe";
+    internal const string INSTALLED_EXE = "SpiralGauntlet.exe";
 #elif MANAGER_EDITION
     internal const bool IS_MANAGER = true;
     internal const bool IS_ROGUELIKE = false;

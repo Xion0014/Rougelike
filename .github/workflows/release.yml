@@ -101,9 +101,7 @@ jobs:
           dotnet publish src/Imlight.Setup/Imlight.Setup.csproj -c Release -r win-x64 --self-contained true `
             -p:PublishSingleFile=true -p:Version=${{ steps.version.outputs.version }} -p:ImlightEdition=Roguelike `
             -p:ImlightBranch=${{ steps.version.outputs.branch }} -o out/roguelike
-          Copy-Item out/roguelike/SpiralRoguelike.exe release/
-          # The launcher is now called Spiral Gauntlet; installed launchers still update from SpiralRoguelike.exe.
-          Copy-Item out/roguelike/SpiralRoguelike.exe release/SpiralGauntlet.exe
+          Copy-Item out/roguelike/SpiralGauntlet.exe release/
 
       - name: Add the generator inputs
         if: env.GENERATOR_INPUTS != ''

@@ -21,9 +21,9 @@
     <DefineConstants>$(DefineConstants);MANAGER_EDITION</DefineConstants>
   </PropertyGroup>
 
-  <!-- dotnet publish -p:ImlightEdition=Roguelike builds SpiralRoguelike.exe, the playful roguelike launcher. -->
+  <!-- dotnet publish -p:ImlightEdition=Roguelike builds SpiralGauntlet.exe, the roguelike launcher. -->
   <PropertyGroup Condition="'$(ImlightEdition)' == 'Roguelike'">
-    <AssemblyName>SpiralRoguelike</AssemblyName>
+    <AssemblyName>SpiralGauntlet</AssemblyName>
     <DefineConstants>$(DefineConstants);MANAGER_EDITION;ROGUELIKE_EDITION</DefineConstants>
     <ApplicationIcon>Assets\launcher.ico</ApplicationIcon>
   </PropertyGroup>

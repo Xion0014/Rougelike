@@ -423,6 +423,18 @@ internal sealed class SetupSteps : IDisposable {
         var exe = Path.Combine(_options.InstallFolder, InstalledCommands.INSTALLED_EXE);
         InstallSelf(exe);
 
+        // The launcher used to be installed as SpiralRoguelike.exe; the shortcut now points at SpiralGauntlet.exe.
+        if (Edition.IS_ROGUELIKE) {
+            foreach (var oldName in new[] { "SpiralRoguelike.exe", "SpiralRoguelike.exe.old" }) {
+                try {
+                    File.Delete(Path.Combine(_options.InstallFolder, oldName));
+                }
+                catch (Exception ex) when (ex is IOException or UnauthorizedAccessException) {
+                    // Still running (the launcher that started this update); removed next time.
+                }
+            }
+        }
+
         // Left behind by the first version of setup.
         foreach (var old in new[] { "Start Imlight Server.cmd", "Update Imlight.exe" }) {
             File.Delete(Path.Combine(_options.InstallFolder, old));
