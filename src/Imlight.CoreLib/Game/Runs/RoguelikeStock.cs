@@ -610,6 +610,10 @@ internal static class RoguelikeStock {
     }
 
     /// <summary>A random piece of the gear random shops sell, in the wizard's level window.</summary>
+    /// <summary>A random piece of gear for a chest: ordinary or crown gear, half and half, in the wizard's level range.</summary>
+    internal static uint? PickChestGear(Wizard wizard)
+        => Random.Shared.Next(2) == 0 ? PickCrownGear(wizard) ?? PickGear(wizard) : PickGear(wizard) ?? PickCrownGear(wizard);
+
     private static uint? PickGear(Wizard wizard) {
         var (low, high) = LevelWindow(wizard);
         var school = wizard.MagicSchoolBehavior.MagicSchool.ToString();

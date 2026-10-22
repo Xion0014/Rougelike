@@ -21,7 +21,8 @@
  * 
  * PURPOSE:
  * This component handles the interaction logic for wooden chests in the game.
- * The gold value is randomly generated between 10 and 100.
+ * The gold value is randomly generated between 10 and 100. On a roguelike server a chest instead holds one
+ * random reward (ChestRewards): gold, gear, a jewel, a spell or a pet.
  * 
  * USAGE EXAMPLE:
  * 
@@ -95,10 +96,14 @@ internal sealed class WoodenChestComponent(ZoneEntity entity) : ZoneEntityCompon
 
         _hasInteracted = true;
 
-        var goldAmount = Random.Shared.Next(10, 101);
+        // On a roguelike server a chest holds one random reward; elsewhere, a little gold.
+        if (Imlight.CoreLib.Game.Runs.RoguelikeConfig.Enabled && playerCharacter?.Roguelike is not null) {
+            GiveRunReward(playerActor, playerCharacter);
+        }
+        else {
+            GiveGold(playerActor, playerCharacter, Random.Shared.Next(10, 101));
+        }
 
-        SendLoot(playerActor, goldAmount);
-        UpdateGold(playerActor, playerCharacter, goldAmount);
         PlaySound(playerActor);
         TriggerChestAnimation();
 
@@ -160,14 +165,97 @@ internal sealed class WoodenChestComponent(ZoneEntity entity) : ZoneEntityCompon
         playerActor.Tell(loot);
     }
 
-    private static void UpdateGold(IActorRef playerActor, Wizard playerCharacter, int goldAmount) {
-        var updateGold = new WIZARD_12_PROTOCOL.MSG_UPDATEGOLD {
-            Gold = goldAmount,
-            MaxGold = playerCharacter.GameStats.m_baseGoldPouch
-        };
+    private void GiveGold(IActorRef playerActor, Wizard playerCharacter, int goldAmount) {
+        SendLoot(playerActor, goldAmount);
 
-        playerActor.Tell(updateGold);
-        playerCharacter.AddGold(goldAmount);
+        // Adds the gold, then tells the game the wizard's new total. (This used to send the chest's amount as the
+        // total, which showed a second line that set the wizard's gold to it.)
+        Imlight.CoreLib.Game.DropTables.LootGranter.UpdateWizardGold(playerActor, playerCharacter, goldAmount);
+    }
+
+    // ---------------------------------------------------------------------
+    // Roguelike chests
+    // ---------------------------------------------------------------------
+
+    /// <summary>
+    /// [Roguelike] ChestRewards: how likely each reward of a street chest is, as "kind:weight" pairs. Kinds: gold
+    /// (ChestGoldMin to ChestGoldMax, not multiplied), gear (ordinary or crown, the wizard's level range), jewel
+    /// (a jewel or pin), spell (one the wizard can learn) and pet (a run pet, rolled like a dropped one).
+    /// </summary>
+    private static readonly (string Kind, int Weight)[] s_chestRewards = ParseWeights(
+        ConfigurationManager.GetValue("Roguelike.ChestRewards", "gold:35, gear:25, jewel:20, spell:10, pet:10"));
+    private static readonly int s_chestGoldMin = Math.Max(0, ConfigurationManager.GetValue("Roguelike.ChestGoldMin", 1000));
+    private static readonly int s_chestGoldMax = Math.Max(s_chestGoldMin, ConfigurationManager.GetValue("Roguelike.ChestGoldMax", 10000));
+
+    private static (string, int)[] ParseWeights(string text)
+        => [.. (text ?? "").Split(',', StringSplitOptions.RemoveEmptyEntries)
+            .Select(part => part.Split(':', 2))
+            .Where(pair => pair.Length == 2 && int.TryParse(pair[1].Trim(), out var w) && w > 0)
+            .Select(pair => (pair[0].Trim().ToLowerInvariant(), int.Parse(pair[1].Trim())))];
+
+    private void GiveRunReward(IActorRef playerActor, Wizard wizard) {
+        // Whatever the roll, a reward that cannot be given (nothing fits the wizard's level) falls back to gold.
+        var kind = RollKind();
+        var given = kind switch {
+            "gear" => GiveItem(playerActor, wizard, Imlight.CoreLib.Game.Runs.RoguelikeStock.PickChestGear(wizard)),
+            "jewel" => GiveItem(playerActor, wizard, Imlight.CoreLib.Game.Runs.RoguelikeStock.PickJewel(wizard)),
+            "spell" => GiveItem(playerActor, wizard, Imlight.CoreLib.Game.Runs.RoguelikeStock.RollSpellToLearn(wizard, 100)),
+            "pet" => GivePet(playerActor, wizard),
+            _ => false,
+        };
+        if (!given) {
+            kind = "gold";
+            GiveGold(playerActor, wizard, Random.Shared.Next(s_chestGoldMin, s_chestGoldMax + 1));
+        }
+
+        Logger.Information("[Roguelike] {0} opened a chest: {1}.", Logger.Args(wizard.CharId, kind));
+    }
+
+    private static string RollKind() {
+        var total = s_chestRewards.Sum(r => r.Weight);
+        if (total <= 0) {
+            return "gold";
+        }
+
+        var roll = Random.Shared.Next(total);
+        foreach (var (kind, weight) in s_chestRewards) {
+            if (roll < weight) {
+                return kind;
+            }
+
+            roll -= weight;
+        }
+
+        return "gold";
+    }
+
+    // Gear, jewels and spells go through the loot window like any drop (a spell shows "New Spell Learned").
+    private static bool GiveItem(IActorRef playerActor, Wizard wizard, uint? templateId) {
+        if (templateId is not { } id) {
+            return false;
+        }
+
+        var loot = new Imlight.CoreLib.WizardData.Models.World.DropTableResult();
+        loot.Items.Add(new Imlight.CoreLib.WizardData.Models.World.DropItemResult { ItemId = id.ToString(), Quantity = 1 });
+        Imlight.CoreLib.Game.DropTables.LootGranter.GrantAndDisplay(playerActor, wizard, loot);
+
+        return true;
+    }
+
+    private static bool GivePet(IActorRef playerActor, Wizard wizard) {
+        var pet = Imlight.CoreLib.Game.Runs.RoguelikePets.Build(wizard);
+        if (pet is null || !wizard.AddPetToInventory(pet)) {
+            return false;
+        }
+
+        Imlight.CoreLib.Shared.Items.ItemSync.SendAdded(playerActor, wizard, pet);
+        playerActor.Tell(new WIZARD2_53_PROTOCOL.MSG_ITEMACQUISITION {
+            ItemGlobalID = pet.m_globalID,
+            ItemLocation = 1,
+            ItemTemplateID = (uint) pet.m_templateID,
+        });
+
+        return true;
     }
 
     private static void PlaySound(IActorRef playerActor) {
