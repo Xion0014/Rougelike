@@ -30,9 +30,10 @@ internal static class IniFile {
     /// <summary>
     /// The roguelike launcher's run design: the tiers (every TierN... key), how long streets last, where arcs end, the
     /// rewards, shop and drop levels, potions, backpack size, randomizer and pip rules. Each update takes these from the release, so every player
-    /// runs the same tiers; the switches players flip themselves (music, Die = Delete) are left alone.
+    /// runs the same tiers; the switches players flip themselves (music, Die = Delete) are left alone, and so are the
+    /// settings in <paramref name="keep"/> (Section.Key: the ones the player changed in the launcher's Settings page).
     /// </summary>
-    internal static int CopyRunDesign(List<string> lines, IReadOnlyList<string> defaults) {
+    internal static int CopyRunDesign(List<string> lines, IReadOnlyList<string> defaults, IReadOnlySet<string>? keep = null) {
         // Section.Key, plus every [Roguelike] TierN... key.
         string[] keys = [
             "Roguelike.StreetMinutes", "Roguelike.ArcEndTiers", "Roguelike.XpMultiplier", "Roguelike.GoldMultiplier",
@@ -67,6 +68,10 @@ internal static class IniFile {
             var isTier = section.Equals("Roguelike", StringComparison.OrdinalIgnoreCase)
                 && key.Length > 4 && key.StartsWith("Tier", StringComparison.OrdinalIgnoreCase) && char.IsDigit(key[4]);
             if (!isTier && !keys.Contains($"{section}.{key}", StringComparer.OrdinalIgnoreCase)) {
+                continue;
+            }
+
+            if (keep?.Contains($"{section}.{key}") == true) {
                 continue;
             }
 

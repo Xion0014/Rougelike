@@ -213,7 +213,13 @@ internal sealed partial class LauncherWindow : Window {
 
             return Task.CompletedTask;
         });
-        _pills.Children.AddRange([_rulesPill, _faqPill, _creditsPill, _noticePill, _updatePill, _sleepPill, _logsPill, _setupLogPill, _gameFolderPill]);
+        _settingsPill = Pill("Settings", () => {
+            OpenSettings();
+
+            return Task.CompletedTask;
+        });
+        _pills.Children.AddRange([_rulesPill, _faqPill, _creditsPill, _noticePill, _settingsPill, _updatePill, _sleepPill, _logsPill, _setupLogPill, _gameFolderPill]);
+        BuildSettingsActions();
         _book = Book();
         foreach (var pill in _pills.Children) {
             pill.Margin = new Thickness(4, 4);
@@ -708,6 +714,7 @@ internal sealed partial class LauncherWindow : Window {
         _playLabel.Text = installed ? "BEGIN RUN" : "FORGE THE GAUNTLET";
         _playLabel.FontSize = installed ? 26 : 20;
         _updatePill.IsVisible = installed;
+        _settingsPill.IsVisible = installed;
         _sleepPill.IsVisible = installed;
         _logsPill.IsVisible = installed;
         _setupLogPill.IsVisible = _setupLogPath is not null;
@@ -1246,7 +1253,7 @@ internal sealed partial class LauncherWindow : Window {
             CornerRadius = new CornerRadius(0),
             Padding = new Thickness(28, 20, 20, 22),
             BoxShadow = BoxShadows.Parse("0 16 50 0 #80000000"),
-            Child = new StackPanel { Children = { header, _bookScroll, _bookAnswer } },
+            Child = new StackPanel { Children = { header, _bookScroll, _settingsStatus, _bookAnswer, _settingsActions } },
         };
         // Clicks on the page stay on the page; a click on the dimmed sky around it closes it.
         page.PointerPressed += (_, e) => e.Handled = true;
@@ -1272,6 +1279,8 @@ internal sealed partial class LauncherWindow : Window {
     private void OpenBook(string title, string file, bool mustAnswer = false) {
         _bookMustAnswer = mustAnswer;
         _bookAnswer.IsVisible = mustAnswer;
+        _settingsActions.IsVisible = false;
+        _settingsStatus.IsVisible = false;
         if (_bookClose is not null) {
             _bookClose.IsVisible = !mustAnswer;
         }

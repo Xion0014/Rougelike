@@ -46,6 +46,9 @@ Battles can drop them, bosses more often. The Pet Shop and RockHammer's Jewel Wo
 Q: What do the "Run options" change?
 Random music plays a different song in each area, and random battle music does the same for fights. Die = Delete is explained above. Changes take effect the next time the server wakes up.
 
+Q: Can I change the gold, experience or drop rates?
+Yes. Press "Settings" in the launcher to change the run's rates and chances: experience and gold multipliers, drop chances, chest rewards, creature critical and block, street time, shops, pets and pips. Your changes are kept when the launcher updates, and "Restore defaults" puts back the values the gauntlet ships with. Like the run options, they take effect the next time the server wakes up.
+
 # Troubleshooting
 
 Q: The launcher says Wizard101 can't be found.

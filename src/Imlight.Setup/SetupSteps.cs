@@ -346,11 +346,17 @@ internal sealed class SetupSteps : IDisposable {
         if (existingConfig && File.Exists(defaults)) {
             var lines = File.ReadAllLines(ConfigFile).ToList();
             var added = IniFile.AddMissing(lines, File.ReadAllLines(defaults));
-            var refreshed = Edition.IS_ROGUELIKE ? IniFile.CopyRunDesign(lines, File.ReadAllLines(defaults)) : 0;
+            var keep = PlayerSettings.Changed(Path.GetDirectoryName(ConfigFile)!);
+            var refreshed = Edition.IS_ROGUELIKE ? IniFile.CopyRunDesign(lines, File.ReadAllLines(defaults), keep) : 0;
             if (added > 0 || refreshed > 0) {
                 File.WriteAllLines(ConfigFile, lines);
                 SetupLog.Detail($"Added {added} new settings to Config\\Imlight.ini and refreshed {refreshed} run settings.");
             }
+        }
+
+        // The release's own values, so the launcher's Settings page can put a setting back to them.
+        if (File.Exists(defaults)) {
+            File.Copy(defaults, PlayerSettings.DefaultsFile(Path.GetDirectoryName(ConfigFile)!), overwrite: true);
         }
 
         Directory.Delete(staging, recursive: true);
