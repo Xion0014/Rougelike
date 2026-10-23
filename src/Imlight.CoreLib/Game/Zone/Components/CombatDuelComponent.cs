@@ -1877,6 +1877,23 @@ internal sealed class CombatDuelComponent(ZoneEntity entity)
             }
             SendCurrentCombatHand(caster);
 
+            // Say why, or the card just sits there unchanged.
+            try {
+                var name = Imlight.CoreLib.Shared.Resources.Locale.GetEnglishName(enchantTemplate.m_displayName.ToString());
+                name = string.IsNullOrWhiteSpace(name) ? enchantTemplate.m_name.ToString() : name.Trim();
+                var why = target is null ? "there is no card there"
+                    : target.m_enchantment != 0 ? "that card is already enchanted (one enchantment per card)"
+                    : "it does not change that card (a damage enchantment only goes on damage spells, a heal one on heals, and so on)";
+                caster.ParticipantActor?.Tell(new EXTENDEDBASE_2_PROTOCOL.MSG_SERVERMESSAGE {
+                    Message = $"{name} can't go there: {why}.",
+                    Modal = 0,
+                });
+            }
+            catch (Exception ex) {
+                Logger.Error("Duel {0} | Slot {1} | could not explain the failed enchantment: {2}",
+                    Logger.Args(Duel.m_duelID.Full, caster.SlotIndex, ex));
+            }
+
             return true;
         }
 

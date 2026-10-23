@@ -32,8 +32,10 @@ internal static class CombatEnchantments {
 
     // These are methods, not static sets: a static field that fails to set up breaks the whole class for
     // the rest of the run, and enchantments then fail without a word in the log.
+    // Delayed damage (Whiplash and the like) and split damage are damage too.
     private static bool IsDamage(kSpellEffects type) => type is kSpellEffects.kDamage or kSpellEffects.kDamageNoCrit
-        or kSpellEffects.kStealHealth or kSpellEffects.kDamageOverTime or kSpellEffects.kMaxHealthDamage;
+        or kSpellEffects.kStealHealth or kSpellEffects.kDamageOverTime or kSpellEffects.kMaxHealthDamage
+        or kSpellEffects.kDeferredDamage or kSpellEffects.kDivideDamage;
 
     private static bool IsHeal(kSpellEffects type) => type is kSpellEffects.kHeal or kSpellEffects.kHealOverTime;
 
