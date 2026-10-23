@@ -557,6 +557,12 @@ internal static class CombatEffectApplicator {
 
         target.DamageParticipant(reducedDamage);
 
+        // What the server worked out, to compare with the number the game shows (the game works out its own).
+        Logger.Information("Duel {0} | Slot {1} took {2} {3} damage ({4} before its {5:0.#}% resist and {6} flat resist): {7}/{8} health left.",
+            Logger.Args(target._duelActor?.Duel?.m_duelID.Full, target.SlotIndex, reducedDamage, damageType, damage,
+                        damageReductionPercent * 100, damageReductionFlat,
+                        target.ParticipantGameStats?.m_currentHitpoints, target.ParticipantGameStats?.m_baseHitpoints));
+
         return reducedDamage;
     }
 
