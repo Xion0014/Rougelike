@@ -421,6 +421,13 @@ internal class CombatService(SessionActor sessionActor) : MessageService(session
 
         SendAddEffects(addedEffects);
         if (item != null) {
+            // Tell this player too (Niduus/Imlight #191): without it the game thinks the mount is still off after a
+            // lost battle, and putting it on again from the backpack added its speed a second time.
+            SendToSocket(new GAME_5_PROTOCOL.MSG_EQUIPITEM() {
+                ItemID = item.m_globalID,
+                SlotName = "Mount",
+                IsEquip = 1
+            });
             BroadcastEquipItem(item);
         }
 
@@ -543,7 +550,7 @@ internal class CombatService(SessionActor sessionActor) : MessageService(session
     private void SetNoAggroGrace() {
         var wizard = GetActiveWizard();
         var charObjId = GetActiveGameObject().m_globalID;
-        var effectInternalId = wizard.GameEffects.Count + 1;
+        var effectInternalId = wizard.NextEffectId();
 
         var epoch = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
         var endTime = epoch + NO_AGGRO_EFFECT_DURATION_IN_SECONDS;
