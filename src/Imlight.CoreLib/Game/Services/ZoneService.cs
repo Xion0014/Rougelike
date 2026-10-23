@@ -80,6 +80,8 @@ internal class ZoneService(SessionActor sessionActor) : MessageService(sessionAc
     private readonly bool _randomBackflips
         = ConfigurationManager.Settings["April Fools.RandomBackFlips"].AsBool();
     private readonly ZoneTransferGate _transferGate = new();
+    private string _arrivalLocation;
+    private DateTime _lastBlockedTravel = DateTime.MinValue;
     private uint _currentDynamicZoneId;
     private HouseEntry _pendingHouseEntry;
 
@@ -209,10 +211,28 @@ internal class ZoneService(SessionActor sessionActor) : MessageService(sessionAc
         if (message.SendToClient && Imlight.CoreLib.Game.Runs.RoguelikeConfig.IsBlockedZone(message.DestinationZone)
             && Imlight.CoreLib.Game.Runs.RoguelikeConfig.TravelBlockedFor(GetActiveWizard())
             && !Imlight.CoreLib.Game.Runs.RoguelikeConfig.IsStaffTeleport(GetActiveWizard()?.CharId ?? 0)) {
+            InformGameClient(Imlight.CoreLib.Game.Runs.RoguelikeConfig.TravelBlockedText);
+
+            // Walked into a way out (the Shopping District's tunnel to the Commons): back to where the wizard arrived in
+            // this zone, not to the zone's start, which can be that very tunnel, so they were sent round and round.
+            var now = DateTime.UtcNow;
+            var bouncing = now - _lastBlockedTravel < TimeSpan.FromSeconds(5);
+            _lastBlockedTravel = now;
+            if (_arrivalLocation is not null && !Imlight.CoreLib.Game.Runs.RoguelikeConfig.IsBlockedZone(GetActiveWizard().Zone)) {
+                Logger.Information("Session {SessionId}: {Zone} is closed during a run; the wizard goes back to where they arrived ({Location}).",
+                    Logger.Args(SessionActor.SessionID, message.DestinationZone, _arrivalLocation));
+                if (!bouncing) {
+                    DoTeleport(_arrivalLocation);
+                }
+
+                return;
+            }
+
             Logger.Information("Session {SessionId}: {Zone} is closed during a run; sending the wizard back to their run.",
                 Logger.Args(SessionActor.SessionID, message.DestinationZone));
-            InformGameClient(Imlight.CoreLib.Game.Runs.RoguelikeConfig.TravelBlockedText);
-            TellOtherServices(new SERVICE_101_PROTOCOL.MSG_ROGUELIKE_COMMAND { Action = "return" });
+            if (!bouncing) {
+                TellOtherServices(new SERVICE_101_PROTOCOL.MSG_ROGUELIKE_COMMAND { Action = "return" });
+            }
 
             return;
         }
@@ -238,7 +258,9 @@ internal class ZoneService(SessionActor sessionActor) : MessageService(sessionAc
             // Check if the destination zone is the same as the current zone. If so, just teleport the player.
             var wizard = GetActiveWizard();
             if (message.DestinationZone == wizard.Zone && message.HouseLotGid == wizard.AttachedLotGid) {
-                DoTeleport(message.DestinationLocation);
+                // The zone worked out the spot: a named location ("Start") read as coordinates was 0,0,0.
+                DoTeleport(Util.GetCompactStringFromVector(zoneDetails.Location,
+                                                           new Imcodec.Math.Vector3(0, 0, zoneDetails.Orientation)));
 
                 return;
             }
@@ -571,6 +593,11 @@ internal class ZoneService(SessionActor sessionActor) : MessageService(sessionAc
     private void ReceiveAddPlayerRsp(ZONE_102_PROTOCOL.MSG_ADDPLAYERRSP message) {
         // I've just been added to a zone. I need to spawn myself for all the other players.
         SpawnMyself();
+
+        // Where the wizard arrived, so a closed way out on a run can put them back here.
+        if (GetActiveWizard() is { } arrived) {
+            _arrivalLocation = Util.GetCompactStringFromVector(arrived.Location, arrived.Orientation);
+        }
 
         // Dismount in no-mount zones, re-equip on leaving (EquipmentService owns the reconcile).
         SessionActor.ActorRef.Tell(new ZONE_102_PROTOCOL.MSG_ENFORCEINTERIORMOUNT());
