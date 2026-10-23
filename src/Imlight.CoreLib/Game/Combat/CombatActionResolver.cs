@@ -106,7 +106,22 @@ internal static class CombatActionResolver {
 
         var critEligibleTargetSlots = new List<int>();
 
-        foreach (var spellEffect in action.SpellTemplate.m_effects) {
+        // The effects to go off, in order. A conditional effect ("if the target has a charm...") is replaced, when it
+        // is reached, by the effect of its first element whose requirements hold, for the participant it was checked on.
+        var pending = action.SpellTemplate.m_effects
+            .Select(e => (Effect: e, Selected: action.SelectedTarget, Only: (CombatDuelSubCircle) null)).ToList();
+
+        for (var index = 0; index < pending.Count; index++) {
+            var (spellEffect, selectedTarget, onlyTarget) = pending[index];
+            if (spellEffect is null) {
+                continue;
+            }
+
+            if (spellEffect is ConditionalSpellEffect conditional) {
+                pending.InsertRange(index + 1, ExpandConditional(conditional, action.SpellCaster, selectedTarget, onlyTarget));
+                continue;
+            }
+
             // An effect like Blade Dance's rolls its own effect for each target, not one for all of them.
             if (spellEffect is RandomPerTargetSpellEffect perTarget && perTarget.m_effectList is { Count: > 0 }) {
                 if (ApplyRandomPerTargetEffect(perTarget, action, ref combatAction, ref cinematicTime, allEffects)) {
@@ -175,7 +190,12 @@ internal static class CombatActionResolver {
 
             charmsAffectingThisSpell = CombatCharms.FindAppliedCharms(action.SpellCaster, [.. allEffects]);
 
-            var targets = GetEffectTargets(chosenEffect, action.SpellCaster, action.SelectedTarget);
+            var targets = GetEffectTargets(chosenEffect, action.SpellCaster, selectedTarget);
+            // Inside a team-wide conditional, a team-wide effect goes only on the participant the condition held for.
+            if (onlyTarget is not null && IsGroupTarget(chosenEffect.m_effectTarget)) {
+                targets = [.. targets.Where(t => t == onlyTarget)];
+            }
+
             if (targets.Length == 0) {
                 continue;
             }
@@ -231,6 +251,39 @@ internal static class CombatActionResolver {
 
         return spellWorthCasting;
     }
+
+    /// <summary>
+    /// A conditional effect: for each participant it is checked against, the first element whose requirements hold
+    /// goes off (as "if, else if"). The game resolves these itself, so before this the game showed Kraken (and Chromatic
+    /// Shield, Arch Master and the Fusion spells) landing while the server applied nothing, and the boss "came back".
+    /// </summary>
+    private static IEnumerable<(SpellEffect Effect, CombatDuelSubCircle Selected, CombatDuelSubCircle Only)> ExpandConditional(
+        ConditionalSpellEffect conditional, CombatDuelSubCircle caster, CombatDuelSubCircle selected, CombatDuelSubCircle only) {
+        var elements = (conditional.m_elements ?? []).Where(e => e?.m_pEffect is not null).ToList();
+        if (elements.Count == 0) {
+            return [];
+        }
+
+        // A team-wide conditional checks each participant on its own; a single one checks the card's target.
+        var group = IsGroupTarget(conditional.m_effectTarget);
+        CombatDuelSubCircle[] checkedOn = group
+            ? [.. GetEffectTargets(conditional, caster, selected).Where(t => only is null || t == only)]
+            : [conditional.m_effectTarget == kEffectTarget.kSelf ? caster : selected ?? caster];
+
+        var chosen = new List<(SpellEffect, CombatDuelSubCircle, CombatDuelSubCircle)>();
+        foreach (var target in checkedOn) {
+            var element = elements.FirstOrDefault(e => CombatRequirements.Met(e.m_pReqs, caster, target));
+            if (element is not null) {
+                chosen.Add((element.m_pEffect, target, group ? target : only));
+            }
+        }
+
+        return chosen;
+    }
+
+    private static bool IsGroupTarget(kEffectTarget target) => target is kEffectTarget.kEnemyTeam
+        or kEffectTarget.kEnemyTeamAllAtOnce or kEffectTarget.kFriendlyTeam or kEffectTarget.kFriendlyTeamAllAtOnce
+        or kEffectTarget.kMultiTargetEnemy or kEffectTarget.kMultiTargetFriendly;
 
     /// <summary>An effect and every effect inside it (random, variable, list, count-based and conditional effects).</summary>
     internal static IEnumerable<SpellEffect> AllEffects(SpellEffect effect) {
