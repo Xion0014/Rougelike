@@ -38,6 +38,7 @@
  */
 
 using Imcodec.ObjectProperty.TypeCache;
+using Imlight.Common;
 using System;
 using System.Linq;
 
