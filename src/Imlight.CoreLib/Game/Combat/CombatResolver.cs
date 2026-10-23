@@ -562,19 +562,30 @@ public class CombatResolver(Duel duel, CombatDuelSubCircle[] actorSubCircles) {
     /// caster. When that target has died, the spell is aimed at a living member of the same side instead, so it is
     /// cast rather than passed. Spells with any single-target effect keep their target.
     /// </summary>
+    private static bool IsWrapper(SpellEffect effect) => effect is RandomSpellEffect or VariableSpellEffect
+        or EffectListSpellEffect or CountBasedSpellEffect or ConditionalSpellEffect or RandomPerTargetSpellEffect
+        or TargetCountSpellEffect;
+
     private void RetargetTeamSpell(QueuedCombatAction action) {
         var target = action.SelectedTarget;
         if (target is null || action.Spell is null || (target.IsAlive && target.AddedToDuel)) {
             return;
         }
 
+        // Only the effects that do something count: a wrapper (random, X-pip, list, conditional) can carry a
+        // single-enemy target of its own while every effect inside it hits the whole side, as many shadow AoEs do.
         var effects = (action.SpellTemplate?.m_effects ?? [])
             .SelectMany(CombatActionResolver.AllEffects)
-            .Where(effect => effect is not null)
+            .Where(effect => effect is not null && !IsWrapper(effect))
             .ToList();
         if (effects.Count == 0 || effects.Any(effect => effect.m_effectTarget is not (kEffectTarget.kEnemyTeam
                 or kEffectTarget.kEnemyTeamAllAtOnce or kEffectTarget.kFriendlyTeam or kEffectTarget.kFriendlyTeamAllAtOnce
+                or kEffectTarget.kMultiTargetEnemy or kEffectTarget.kMultiTargetFriendly or kEffectTarget.kAtLeastOneEnemy
                 or kEffectTarget.kSelf or kEffectTarget.kGlobal or kEffectTarget.kInvalidTarget))) {
+            Logger.Debug("Duel {0} | Slot {1} | The spell's target is gone and it has single-target effects ({2}).",
+                Logger.Args(_duel.m_duelID.Full, action.SpellCaster.SlotIndex,
+                            string.Join(", ", effects.Select(e => $"{e.GetType().Name} {e.m_effectType} {e.m_effectTarget}"))));
+
             return;
         }
 
