@@ -260,13 +260,256 @@ public class CombatResolver(Duel duel, CombatDuelSubCircle[] actorSubCircles) {
         var cinematicTime = 0.0f;
         var instantCinematics = _subCircles[0]._duelActor.CheatInstantCinematics;
 
+        _petCastsThisRound.Clear();
+        PetCastCards.Clear();
         foreach (var action in _queuedCombatActions) {
-            cinematicTime += CastDelayed(action.SpellCaster, atStart: true, combatActionList, cinematicTime);
-            cinematicTime += ProcessQueuedAction(action, combatActionList, cinematicTime);
-            cinematicTime += CastDelayed(action.SpellCaster, atStart: false, combatActionList, cinematicTime);
+            cinematicTime += WithPetMayCasts(() => CastDelayed(action.SpellCaster, atStart: true, combatActionList, cinematicTime),
+                combatActionList, cinematicTime);
+            cinematicTime += WithPetMayCasts(() => ProcessQueuedAction(action, combatActionList, cinematicTime),
+                combatActionList, cinematicTime);
+            cinematicTime += WithPetMayCasts(() => CastDelayed(action.SpellCaster, atStart: false, combatActionList, cinematicTime),
+                combatActionList, cinematicTime);
         }
 
         return instantCinematics ? 0 : cinematicTime;
+    }
+
+    // ---------------------------------------------------------------------
+    // Pet May Casts (ported from Niduus's fork; [PetCasting] in Imlight.ini)
+    // ---------------------------------------------------------------------
+
+    // How many May Casts each owner's pet has done this round ([PetCasting] MaxPerRound).
+    private readonly Dictionary<CombatDuelSubCircle, int> _petCastsThisRound = [];
+
+    /// <summary>
+    /// This round's pet May Cast cards per owner. The game casts only cards it finds in the caster's hand, so the duel
+    /// sends the owner a hand holding them before the round's actions (CombatDuelComponent).
+    /// </summary>
+    internal readonly Dictionary<CombatDuelSubCircle, List<Spell>> PetCastCards = [];
+
+    /// <summary>
+    /// Runs one step of the round, then lets pets May Cast for what happened in it: a spell cast on their side, a
+    /// teammate taking damage or being healed, or a pass. A May Cast can set off more ([PetCasting] Chain).
+    /// </summary>
+    private float WithPetMayCasts(Func<float> step, CombatActionListObj combatActionList, float cinematicTimeSoFar) {
+        if (!PetMayCasts.Enabled || PetMayCasts.MaxPerRound == 0) {
+            return step();
+        }
+
+        var health = HealthNow();
+        var before = combatActionList.m_actionList.Count;
+        var cinematicTime = step();
+
+        try {
+            for (var link = 0; link <= PetMayCasts.MaxChain; link++) {
+                var nextHealth = HealthNow();
+                var nextBefore = combatActionList.m_actionList.Count;
+                var time = PetMayCast(health, before, combatActionList, cinematicTimeSoFar + cinematicTime);
+                if (time <= 0) {
+                    break;
+                }
+
+                cinematicTime += time;
+                if (!PetMayCasts.Chain) {
+                    break;
+                }
+
+                health = nextHealth;
+                before = nextBefore;
+            }
+        }
+        catch (Exception e) {
+            Logger.Error("Duel {0} | Pet May Cast failed: {1}", Logger.Args(_duel.m_duelID.Full, e));
+        }
+
+        return cinematicTime;
+    }
+
+    private bool BattleDecided()
+        => _subCircles.Where(c => c.Occupied && c.AddedToDuel && c.IsAlive).Select(c => c.OccupiedTeam).Distinct().Count() < 2;
+
+    private Dictionary<CombatDuelSubCircle, int> HealthNow()
+        => _subCircles.Where(c => c.Occupied && c.AddedToDuel && c.ParticipantGameStats is not null)
+            .ToDictionary(c => c, c => c.ParticipantGameStats.m_currentHitpoints);
+
+    private float PetMayCast(Dictionary<CombatDuelSubCircle, int> health, int before, CombatActionListObj combatActionList,
+                             float cinematicTimeSoFar) {
+        var cast = new HashSet<CombatTeam>();
+        var damaged = new HashSet<CombatTeam>();
+        var healed = new HashSet<CombatTeam>();
+        var passed = new HashSet<CombatTeam>();
+        for (var i = before; i < combatActionList.m_actionList.Count; i++) {
+            var done = combatActionList.m_actionList[i];
+            if (done.m_spell is null
+                    && _subCircles.FirstOrDefault(c => c.Occupied && c.SlotIndex == done.m_spellCaster) is { } passer) {
+                passed.Add(passer.OccupiedTeam);
+            }
+
+            if (done.m_spell is not null && done.m_spellHits == (char) 1 && (PetMayCasts.Chain || !done.m_petCast)
+                    && _subCircles.FirstOrDefault(c => c.Occupied && c.SlotIndex == done.m_spellCaster) is { } caster) {
+                cast.Add(caster.OccupiedTeam);
+
+                // A damage or heal spell landing on a teammate counts even when gear took all of it.
+                var effects = (CoreObjectFactory.GetCoreTemplate(done.m_spell.m_templateID) as SpellTemplate)?.m_effects ?? [];
+                var damages = effects.Any(e => e is not null && s_damageEffects.Contains(e.m_effectType));
+                var heals = effects.Any(e => e is not null && s_healEffects.Contains(e.m_effectType));
+                foreach (var slot in done.m_targetSubcircleList ?? []) {
+                    if (_subCircles.FirstOrDefault(c => c.Occupied && c.SlotIndex == slot) is not { } hit) {
+                        continue;
+                    }
+
+                    if (damages) {
+                        damaged.Add(hit.OccupiedTeam);
+                    }
+
+                    if (heals) {
+                        healed.Add(hit.OccupiedTeam);
+                    }
+                }
+            }
+        }
+
+        foreach (var (circle, hitpoints) in health) {
+            var now = circle.ParticipantGameStats?.m_currentHitpoints ?? hitpoints;
+            if (now < hitpoints) {
+                damaged.Add(circle.OccupiedTeam);
+            }
+            else if (now > hitpoints) {
+                healed.Add(circle.OccupiedTeam);
+            }
+        }
+
+        // Nothing happened, or the battle is already won or lost.
+        if (cast.Count + damaged.Count + healed.Count + passed.Count == 0 || BattleDecided()) {
+            return 0;
+        }
+
+        var cinematicTime = 0.0f;
+        var owners = _subCircles.Where(c => c.Occupied && c.AddedToDuel && c.IsAlive && c._wizard is not null).ToList();
+        foreach (var owner in owners) {
+            var team = owner.OccupiedTeam;
+            if (!cast.Contains(team) && !damaged.Contains(team) && !healed.Contains(team) && !passed.Contains(team)) {
+                continue;
+            }
+
+            var used = _petCastsThisRound.GetValueOrDefault(owner);
+            foreach (var mayCast in PetMayCasts.ForWizard(owner._wizard).OrderBy(_ => Random.Shared.Next())) {
+                if (used >= PetMayCasts.MaxPerRound || !owner.IsAlive) {
+                    break;
+                }
+
+                var chances = PetMayCasts.Chances(mayCast);
+                var reason = cast.Contains(team) && PetMayCasts.Roll(chances.Cast) ? "a cast"
+                    : damaged.Contains(team) && PetMayCasts.Roll(chances.Damage) ? "damage"
+                    : healed.Contains(team) && PetMayCasts.Roll(chances.Heal) ? "a heal"
+                    : passed.Contains(team) && PetMayCasts.Roll(chances.Pass) ? "a pass"
+                    : null;
+                if (reason is null) {
+                    continue;
+                }
+
+                var time = CastPetSpell(owner, mayCast, reason, combatActionList, cinematicTimeSoFar + cinematicTime);
+                if (time > 0) {
+                    cinematicTime += time;
+                    used++;
+                }
+            }
+
+            _petCastsThisRound[owner] = used;
+        }
+
+        return cinematicTime;
+    }
+
+    private static readonly HashSet<kSpellEffects> s_damageEffects = [
+        kSpellEffects.kDamage, kSpellEffects.kDamageNoCrit, kSpellEffects.kDamageOverTime, kSpellEffects.kMaxHealthDamage,
+        kSpellEffects.kStealHealth, kSpellEffects.kDamagePerTotalPipPower, kSpellEffects.kMinionRankDamage,
+        kSpellEffects.kDeferredDamage, kSpellEffects.kDivideDamage,
+    ];
+
+    private static readonly HashSet<kSpellEffects> s_healEffects = [
+        kSpellEffects.kHeal, kSpellEffects.kHealOverTime, kSpellEffects.kHealPercent, kSpellEffects.kMaxHealthHeal,
+        kSpellEffects.kSetHealPercent,
+    ];
+
+    private static readonly HashSet<kEffectTarget> s_enemyTargets = [
+        kEffectTarget.kEnemySingle, kEffectTarget.kEnemyTeam, kEffectTarget.kEnemyTeamAllAtOnce,
+        kEffectTarget.kAtLeastOneEnemy, kEffectTarget.kPreselectedEnemySingle, kEffectTarget.kMultiTargetEnemy,
+        kEffectTarget.kEnemyMinion,
+    ];
+
+    /// <summary>The target of a pet's free cast: the owner, or an enemy (the owner's own pick if it is one) for a card that hits enemies.</summary>
+    private CombatDuelSubCircle PickPetTarget(CombatDuelSubCircle owner, SpellTemplate template) {
+        if (!(template.m_effects ?? []).Any(effect => effect is not null && s_enemyTargets.Contains(effect.m_effectTarget))) {
+            return owner;
+        }
+
+        var picked = _queuedCombatActions.FirstOrDefault(a => a.SpellCaster == owner)?.SelectedTarget;
+        if (picked is not null && picked.IsAlive && picked.AddedToDuel && picked.OccupiedTeam != owner.OccupiedTeam) {
+            return picked;
+        }
+
+        return owner._duelActor.ActiveSubCircles
+            .FirstOrDefault(c => c.IsAlive && c.AddedToDuel && c.OccupiedTeam != owner.OccupiedTeam);
+    }
+
+    private float CastPetSpell(CombatDuelSubCircle owner, PetMayCasts.MayCast mayCast, string reason,
+                               CombatActionListObj combatActionList, float cinematicTimeSoFar) {
+        // The game's pet copy of the card, free: the pip cost comes off the copy (see ShowInHand).
+        var card = SpellFactory.GetSpell(mayCast.SpellTemplateId);
+        var spell = card is null ? null : (PetMayCasts.AsItemCard ? card with { m_itemCard = true } : card)
+            with { m_pipCost = new SpellRank() };
+        if (spell is null || CoreObjectFactory.GetCoreTemplate(spell.m_templateID) is not SpellTemplate template) {
+            return 0;
+        }
+
+        var target = PickPetTarget(owner, template);
+        if (target is null || !target.IsAlive || !target.AddedToDuel) {
+            return 0;
+        }
+
+        Logger.Information("Duel {0} | Slot {1} | Pet May Cast {2} casts {3} on slot {4} after {5}.",
+            Logger.Args(_duel.m_duelID.Full, owner.SlotIndex, mayCast.Talent, mayCast.SpellName, target.SlotIndex, reason));
+        owner._duelActor.CurrentActionCinematicOffsetSeconds = cinematicTimeSoFar;
+        var action = new QueuedCombatAction { SpellCaster = owner, SelectedTarget = target, Spell = spell, SpellTemplate = template };
+        var before = combatActionList.m_actionList.Count;
+        var cinematicTime = Math.Min(HandleSuccessfulAction(action, combatActionList, alreadyPaid: true), PetMayCasts.CastSeconds);
+        ShowInHand(owner, spell, template, combatActionList, before);
+        for (var i = before; i < combatActionList.m_actionList.Count; i++) {
+            combatActionList.m_actionList[i].m_forceSpell = PetMayCasts.ForceSpell;
+            // Flagged as the pet's, the game plays it with the pet's May Cast animation.
+            if (PetMayCasts.ShowAsPetCast) {
+                combatActionList.m_actionList[i].m_petCast = true;
+                combatActionList.m_actionList[i].m_petCasted = true;
+                combatActionList.m_actionList[i].m_petCastTarget = target.SlotIndex;
+            }
+        }
+
+        return cinematicTime;
+    }
+
+    /// <summary>
+    /// Puts a pet's free cast into its owner's hand for the game, which skips spells it can't find there, and takes its
+    /// pip cost off the copy the game plays (after resolving: the server reads m_regularAdjust as a damage/heal bonus).
+    /// </summary>
+    private void ShowInHand(CombatDuelSubCircle owner, Spell spell, SpellTemplate template, CombatActionListObj combatActionList, int before) {
+        if (!PetCastCards.TryGetValue(owner, out var cards)) {
+            PetCastCards[owner] = cards = [];
+        }
+
+        var rank = template?.m_spellRank?.m_spellRank ?? 0;
+        if (PetMayCasts.ZeroCost && rank > 0) {
+            var free = spell with { m_regularAdjust = spell.m_regularAdjust - rank };
+            for (var i = before; i < combatActionList.m_actionList.Count; i++) {
+                if (ReferenceEquals(combatActionList.m_actionList[i].m_spell, spell)) {
+                    combatActionList.m_actionList[i].m_spell = free;
+                }
+            }
+
+            spell = free;
+        }
+
+        cards.Add(spell);
     }
 
     /// <summary>

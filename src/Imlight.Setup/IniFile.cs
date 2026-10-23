@@ -39,6 +39,8 @@ internal static class IniFile {
             "Roguelike.BossTrainingPoints", "Roguelike.MaxStockLevel", "Roguelike.CrownDropChance", "Roguelike.NoCrowns",
             "Roguelike.CreatureCritByTier", "Roguelike.CreatureBlockByTier", "Roguelike.MaxSpellDamage", "Roguelike.BannedSpells",
             "Roguelike.ChestRewards", "Roguelike.ChestGoldMin", "Roguelike.ChestGoldMax",
+            "Roguelike.PetMayCastShare", "PetCasting.Enabled", "PetCasting.OnCast", "PetCasting.OnDamage", "PetCasting.OnHeal",
+            "PetCasting.OnPass", "PetCasting.MaxPerRound", "PetCasting.ShowAsPetCast",
             "Character.StartingPotions", "Character.MaxInventoryItems",
             "Randomizer.RandomizeSchool", "Randomizer.RandomizeSpells", "Randomizer.RandomizeDrops",
             "Randomizer.CreaturesChangeEverySpawn", "Randomizer.RandomizeCreatureDecks", "Randomizer.RandomizeItemCards",

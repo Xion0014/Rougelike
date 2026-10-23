@@ -44,6 +44,15 @@ internal static class RoguelikePets {
     private static readonly int s_poolSize = Math.Clamp(ConfigurationManager.GetValue("Roguelike.PetTalentPool", 10), 5, 30);
 
     private static readonly Lazy<List<string>> s_statTalents = new(BuildStatTalents, LazyThreadSafetyMode.ExecutionAndPublication);
+
+    /// <summary>
+    /// [Roguelike] PetMayCastShare: the chance (0 to 100) that each talent in a run pet's pool is a May Cast talent
+    /// (Guardian Wall: May Cast Tower Shield, and the like; [PetCasting] sets how often they go off). The rest are stat
+    /// talents. 0 keeps pets to stat talents only.
+    /// </summary>
+    private static readonly int s_mayCastShare = Math.Clamp(ConfigurationManager.GetValue("Roguelike.PetMayCastShare", 30), 0, 100);
+
+    private static readonly Lazy<List<string>> s_mayCastTalents = new(BuildMayCastTalents, LazyThreadSafetyMode.ExecutionAndPublication);
     private static readonly Lazy<List<uint>> s_pets = new(BuildPetPool, LazyThreadSafetyMode.ExecutionAndPublication);
 
     /// <summary>Rolls the battle's pet drop. Null when nothing drops.</summary>
@@ -79,10 +88,19 @@ internal static class RoguelikePets {
             return null;
         }
 
-        // A pool of stat talents only: the talents come out of it as the pet ages, up to five at Mega.
+        // A pool of stat and May Cast talents (PetMayCastShare): the talents come out of it as the pet ages, up to
+        // five at Mega.
         var talents = s_statTalents.Value;
         if (talents.Count > 0) {
-            behavior.m_allTalents = [.. talents.OrderBy(_ => Random.Shared.Next()).Take(s_poolSize).Select(PetData.TalentId)];
+            var stats = new Queue<string>(talents.OrderBy(_ => Random.Shared.Next()));
+            var mayCasts = new Queue<string>(s_mayCastTalents.Value.OrderBy(_ => Random.Shared.Next()));
+            var pool = new List<string>();
+            while (pool.Count < s_poolSize && (stats.Count > 0 || mayCasts.Count > 0)) {
+                var wantMayCast = mayCasts.Count > 0 && (stats.Count == 0 || Random.Shared.Next(100) < s_mayCastShare);
+                pool.Add(wantMayCast ? mayCasts.Dequeue() : stats.Dequeue());
+            }
+
+            behavior.m_allTalents = [.. pool.Select(PetData.TalentId)];
             behavior.m_expressedTalents = [];
         }
 
@@ -140,6 +158,29 @@ internal static class RoguelikePets {
         }
 
         Logger.Information("Roguelike: {0} stat talents for dropped pets.", Logger.Args(list.Count));
+
+        return list;
+    }
+
+    // May Cast talents whose card the server can cast.
+    private static List<string> BuildMayCastTalents() {
+        var list = new List<string>();
+        if (s_mayCastShare <= 0 || !Imlight.CoreLib.Game.Combat.PetMayCasts.Enabled) {
+            return list;
+        }
+
+        try {
+            foreach (var talent in PetData.AllTalents.OfType<PetTalentTemplate>()) {
+                if (!string.IsNullOrEmpty(talent.m_talentName) && Imlight.CoreLib.Game.Combat.PetMayCasts.IsCastable(talent)) {
+                    list.Add(talent.m_talentName);
+                }
+            }
+        }
+        catch (Exception ex) {
+            Logger.Error("Roguelike could not read the May Cast talents. {0}", Logger.Args(ex.Message));
+        }
+
+        Logger.Information("Roguelike: {0} May Cast talents for run pets.", Logger.Args(list.Count));
 
         return list;
     }

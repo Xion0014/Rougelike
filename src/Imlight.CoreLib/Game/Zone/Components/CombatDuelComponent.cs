@@ -576,10 +576,18 @@ internal sealed class CombatDuelComponent(ZoneEntity entity)
         Duel.m_duelPhase = kDuelPhase.kPhase_Execution;
         SendCombatPhase((byte) Duel.m_duelPhase);
 
+        // The hands the game holds now, before the round uses up its cards (see SendHandWith).
+        var handsBeforeRound = SnapshotHands();
+
         // Determine how long the cinematics will take.
         var cinematicTimeInSeconds = CombatResolver.ApplyQueuedCombatActions(out var actions);
         var actionExecutionTime = TimeSpan.FromSeconds(cinematicTimeInSeconds);
         Duel.m_executionPhaseTimer = (float) actionExecutionTime.TotalSeconds;
+
+        // Pet May Cast cards go into their owner's hand first, or the game skips them.
+        foreach (var (owner, cards) in CombatResolver.PetCastCards) {
+            SendHandWith(owner, cards, handsBeforeRound.GetValueOrDefault(owner));
+        }
 
         // Serialize the combat actions and send them to the clients.
         if (!_serializer.Serialize(actions, _combatParticipantHandFlags, out var buffer)) {
@@ -1304,6 +1312,56 @@ internal sealed class CombatDuelComponent(ZoneEntity entity)
             };
 
             participantActor.Tell(msg);
+        });
+    }
+
+    private Dictionary<CombatDuelSubCircle, List<Spell>> SnapshotHands() {
+        var hands = new Dictionary<CombatDuelSubCircle, List<Spell>>();
+        try {
+            foreach (var circle in SubCircles) {
+                if (circle is null || circle.IsAiCreature || circle.ParticipantActor is null) {
+                    continue;
+                }
+
+                hands[circle] = [.. circle.GetCurrentHand().m_spellList ?? []];
+            }
+        }
+        catch (Exception ex) {
+            Logger.Error("Duel {0} | Could not note the hands before the round: {1}", Logger.Args(SigilId, ex));
+        }
+
+        return hands;
+    }
+
+    /// <summary>
+    /// The hand the game held this round plus the pet May Cast cards, sent to the game only (the server's hand stays as
+    /// it is), before the round's actions: the game casts only cards it finds in the caster's hand, so it must still
+    /// hold the cards played this round too (ported from Niduus's fork).
+    /// </summary>
+    private void SendHandWith(CombatDuelSubCircle circle, List<Spell> extra, List<Spell> handBeforeRound = null) {
+        if (circle is null || circle.IsAiCreature || circle.ParticipantActor is null) {
+            return;
+        }
+
+        var current = circle.GetCurrentHand().m_spellList ?? [];
+        List<Spell> cards = [.. handBeforeRound ?? current];
+        if (handBeforeRound is not null) {
+            cards.AddRange(current.Where(c => !handBeforeRound.Any(b => ReferenceEquals(b, c))));
+        }
+
+        var hand = new Hand { m_spellList = [.. cards, .. extra] };
+        if (!_serializer.Serialize(hand, _combatParticipantHandFlags, out var buffer)) {
+            Logger.Error("Failed to serialize pet cast hand for duel {0}", Logger.Args(SigilId));
+
+            return;
+        }
+
+        circle.ParticipantActor.Tell(new DOODLEDOUG_MESSAGES_51_PROTOCOL.MSG_COMBATHAND {
+            DeckCount = (byte) circle.AvailableSpells,
+            TotalDeckCount = (ushort) circle.TotalSpells,
+            TreasureCardCount = (ushort) circle.VaultRemainingCount,
+            ParticipantID = circle.ParticipantObject.m_globalID,
+            HandData = buffer,
         });
     }
 

@@ -109,6 +109,15 @@ internal class SpellFactory : RootDirectoryResourceSingleton<SpellFactory>, IMem
         return templates;
     }
 
+    /// <summary>True when the game has a spell template of this name.</summary>
+    internal static bool Exists(string spellName) {
+        if (s_spellTemplates.Count == 0) {
+            _ = Instance;
+        }
+
+        return !string.IsNullOrEmpty(spellName) && s_spellTemplates.ContainsKey(StringHash.Compute(spellName));
+    }
+
     /// <summary>
     /// Retrieves a spell by its name.
     /// </summary>
