@@ -126,9 +126,14 @@ internal static class RoguelikeConfig {
     /// <summary>Gold given for beating any tier's boss, as it is (no multiplier). TierNBossGold sets one tier's own.</summary>
     internal static readonly int BossGold = Math.Max(0, ConfigurationManager.GetValue("Roguelike.BossGold", 0));
 
-    /// <summary>The gold a tier's boss gives: its TierNBossGold, else BossGold.</summary>
+    /// <summary>BossGoldFromTier: the first tier whose boss gives BossGold (earlier bosses give none unless their own
+    /// TierNBossGold is set).</summary>
+    internal static readonly int BossGoldFromTier = Math.Max(1, ConfigurationManager.GetValue("Roguelike.BossGoldFromTier", 1));
+
+    /// <summary>The gold a tier's boss gives: its TierNBossGold, else BossGold from BossGoldFromTier on.</summary>
     internal static int BossGoldFor(int tierNumber)
-        => GetTier(tierNumber) is { BossGold: >= 0 } tier ? tier.BossGold : BossGold;
+        => GetTier(tierNumber) is { BossGold: >= 0 } tier ? tier.BossGold
+           : tierNumber >= BossGoldFromTier ? BossGold : 0;
 
     /// <summary>
     /// FlatRatesFromTier: from this tier's boss on (the boss fight, the shops after it and every later tier), experience

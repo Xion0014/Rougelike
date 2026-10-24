@@ -5,6 +5,12 @@
 ;   anything else     one change (leave a blank line between changes)
 ;   ; comment         not shown
 
+# v1.0.128 (October 24, 2026)
+
+Q: Changed
+
+Boss gold (100,000) starts at tier 6's boss; tiers 1 to 5's bosses no longer give it. Settings has "Boss gold from tier".
+
 # v1.0.127 (October 24, 2026)
 
 Q: Fixed

@@ -70,6 +70,7 @@ internal static class PlayerSettings {
             new("Roguelike", "XpMultiplier", "Experience multiplier", "Experience from battles, drops and quests is multiplied by this.", SettingKind.Decimal, 0, 1000),
             new("Roguelike", "GoldMultiplier", "Gold multiplier", "Gold from battles, quests and gold wisps (not from selling) is multiplied by this.", SettingKind.Decimal, 0, 10000),
             new("Roguelike", "BossGold", "Gold per boss", "Gold every tier's boss gives, as it is (not multiplied).", SettingKind.Whole, 0, 100000000),
+            new("Roguelike", "BossGoldFromTier", "Boss gold from tier", "The first tier whose boss gives the gold per boss.", SettingKind.Whole, 1, 100),
             new("Roguelike", "FlatRatesFromTier", "x1 rates from tier", "From this tier's boss on, battles give experience and gold at x1 (the bosses give the levels instead). 0: never.", SettingKind.Whole, 0, 100),
             new("Roguelike", "BossTrainingPoints", "Training points per boss", "Training points for beating each tier's boss.", SettingKind.Whole, 0, 100),
             new("Roguelike", "BoostChance", "Stat potion chance (%)", "The chance a won battle gives a stat potion.", SettingKind.Whole, 0, 100),
