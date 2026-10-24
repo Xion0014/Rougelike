@@ -5,6 +5,12 @@
 ;   anything else     one change (leave a blank line between changes)
 ;   ; comment         not shown
 
+# v1.0.125 (October 24, 2026)
+
+Q: Fixed
+
+Gear cards you cross out in your deck stay crossed out after changing zones, and stay out of battle. Every zone change used to add another copy of each gear card, and crossing out several copies of the same card only kept one crossed out. (Ported from Niduus's fork.)
+
 # v1.0.124 (October 24, 2026)
 
 Q: Testing
