@@ -430,10 +430,21 @@ internal static class RoguelikeConfig {
                 parts[0] = "";
             }
 
-            if (parts.Length != 2) {
-                Logger.Warning("[Roguelike] Tier{0} needs a street and a boss zone separated by a comma. Tiers stop here.",
+            // Forgiving with hand-edited lines: a zone alone is a boss with no street, and extra parts are left out,
+            // so one odd line does not end the run at the tier before it.
+            if (parts.Length == 1) {
+                Logger.Warning("[Roguelike] Tier{0} names only one zone ({1}); it is used as the boss, with no street.",
+                    Logger.Args(i, parts[0]));
+                parts = ["", parts[0]];
+            }
+            else if (parts.Length > 2) {
+                Logger.Warning("[Roguelike] Tier{0} has more than a street and a boss zone; only the first two are used.",
                     Logger.Args(i));
-                break;
+                parts = [parts[0], parts[1]];
+            }
+
+            if (parts.Length == 2 && parts[0].Trim() is "none" or "-" or "None") {
+                parts[0] = "";
             }
 
             var minutes = ConfigurationManager.GetValue($"Roguelike.Tier{i}Minutes", 0);
@@ -460,6 +471,9 @@ internal static class RoguelikeConfig {
         }
 
         if (tiers.Count > 0) {
+            Logger.Information("[Roguelike] {0} tiers: {1}.", Logger.Args(tiers.Count,
+                string.Join("; ", tiers.Select(t => $"{t.Number}: {(string.IsNullOrEmpty(t.Street) ? "no street" : t.Street)} -> {t.Boss}"))));
+
             return tiers;
         }
 

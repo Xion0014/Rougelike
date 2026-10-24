@@ -1011,7 +1011,10 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         }
 
         if (parts.Length == 0 || !int.TryParse(parts[0], out var tier) || tier < 1 || tier > RoguelikeConfig.TierCount) {
-            InformGameClient($"Usage: .run goto <tier 1-{RoguelikeConfig.TierCount}> [street|boss|shop]");
+            // No angle brackets: the game's chat reads them as markup and drops what is inside.
+            InformGameClient(parts.Length > 0 && int.TryParse(parts[0], out var asked) && asked > RoguelikeConfig.TierCount
+                ? $"This server has {RoguelikeConfig.TierCount} tiers, so there is no tier {asked}. Check Tier{asked} under [Roguelike] in Imlight.ini (the server log says what it read)."
+                : $"Usage: .run goto (tier 1-{RoguelikeConfig.TierCount}) [street|boss|shop], for example .run goto 6 boss");
 
             return;
         }
