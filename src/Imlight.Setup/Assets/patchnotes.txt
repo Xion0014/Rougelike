@@ -1,0 +1,106 @@
+; The launcher's Patch notes page, newest first. It also goes out with every release as PatchNotes.txt, and the
+; release's own notes on GitHub are its section here. Same format as the other pages:
+;   # vX.Y.Z (date)   one release; the heading must start with the version, like "# v1.0.123"
+;   Q: line           a group within a release (New, Changed, Fixed), shown in gold
+;   anything else     one change (leave a blank line between changes)
+;   ; comment         not shown
+
+# v1.0.123 (October 24, 2026)
+
+Q: New
+
+Patch notes! This page in the launcher (the "Patch notes" button), a PatchNotes.txt with every release, and each release's notes on GitHub.
+
+# v1.0.122 (October 24, 2026)
+
+Q: Fixed
+
+.run goto now says how many tiers the server has when you ask for one past the last. Before, the game's chat swallowed that part of the message, so the command looked broken.
+
+A tier line in Imlight.ini with a typo no longer ends the run at the tier before it: a line with one zone counts as a boss with no street, and extra parts are ignored. The server log lists every tier it read when it starts.
+
+# v1.0.121 (October 24, 2026)
+
+Q: New
+
+Settings has a Creatures section. Random creatures (on or off) swaps a street's creatures for random ones of a similar level. Random creature decks keeps creatures fighting with random decks, even with Random creatures off.
+
+# v1.0.120 (October 24, 2026)
+
+Q: Fixed
+
+The tutorial battle no longer logs errors when it hands out its scripted cards.
+
+# v1.0.119 (October 24, 2026)
+
+Q: Changed
+
+Arc 2 is a boss rush: every tier from 6 on goes straight from the shops to its boss.
+
+Every tier's boss gives 100,000 gold.
+
+Bosses give the levels for the next tier: Malistaire 630,000 experience (to level 60), then 1.1M (70), 3M (80), 5.5M (90), 11M (100) and 18M (110) for tiers 6 to 10.
+
+From the Malistaire fight on, battles give experience and gold at x1, since the bosses give the levels. Tier 5's street keeps its x20 experience.
+
+Tier 6's boss is Mithraya, the Sun boss of Celestia's Test of the Spheres.
+
+Settings has "Gold per boss" and "x1 rates from tier".
+
+# v1.0.118 (October 23, 2026)
+
+Q: Changed
+
+Tier 6's boss became Mithraya.
+
+# v1.0.117 (October 23, 2026)
+
+Q: Changed
+
+Tier 6 tried Celestia's District of the Stars as a street. Its quests turned out to be broken, so arc 2 became a boss rush in v1.0.119.
+
+# v1.0.116 (October 23, 2026)
+
+Q: Fixed
+
+All-enemies spells (like big shadow AoEs) no longer pass when the enemy they were aimed at died earlier in the round. They go off at the enemies still standing.
+
+# v1.0.115 (October 23, 2026)
+
+Q: Fixed
+
+Walking into the Shopping District's tunnel to the Commons no longer sends you round and round forever. A closed way out puts you back where you arrived.
+
+Teleports to a named spot in the zone you are already in go to that spot, not to the middle of the map.
+
+# v1.0.114 (October 23, 2026)
+
+Q: Fixed
+
+Mount speed no longer stacks up battle after battle. (Speed already stacked goes away when you relog.)
+
+After a lost battle, the game knows your mount is back on, so putting it on again no longer adds its speed twice.
+
+# v1.0.113 (October 23, 2026)
+
+Q: New
+
+The launcher has a Settings page: experience and gold multipliers, drop chances, chests, creature critical and block, street time, shops, pets and pips. Your changes are kept through updates, and Restore defaults puts back the release's values.
+
+# v1.0.112 (October 23, 2026)
+
+Q: Fixed
+
+The server builds again (v1.0.110 and v1.0.111 did not build on your PC).
+
+# v1.0.111 (October 22, 2026)
+
+Q: Fixed
+
+Bosses no longer "come back to life" after Kraken. Spells built on conditions (Kraken, Chromatic Shield, Arch Master, the Fusion spells and others) did nothing on the server while the game showed them hitting.
+
+# v1.0.110 (October 22, 2026)
+
+Q: Changed
+
+The server log records every hit with the damage the server worked out and the health left, to compare with what the game shows.

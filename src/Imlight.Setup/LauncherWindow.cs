@@ -116,6 +116,7 @@ internal sealed partial class LauncherWindow : Window {
     private readonly Border _faqPill;
     private readonly Border _creditsPill;
     private readonly Border _noticePill;
+    private readonly Border _patchNotesPill;
 
     // The FAQ and credits, shown over the card.
     private readonly Border _book;
@@ -213,12 +214,17 @@ internal sealed partial class LauncherWindow : Window {
 
             return Task.CompletedTask;
         });
+        _patchNotesPill = Pill("Patch notes", () => {
+            OpenBook("Patch notes", "patchnotes.txt");
+
+            return Task.CompletedTask;
+        });
         _settingsPill = Pill("Settings", () => {
             OpenSettings();
 
             return Task.CompletedTask;
         });
-        _pills.Children.AddRange([_rulesPill, _faqPill, _creditsPill, _noticePill, _settingsPill, _updatePill, _sleepPill, _logsPill, _setupLogPill, _gameFolderPill]);
+        _pills.Children.AddRange([_rulesPill, _faqPill, _patchNotesPill, _creditsPill, _noticePill, _settingsPill, _updatePill, _sleepPill, _logsPill, _setupLogPill, _gameFolderPill]);
         BuildSettingsActions();
         _book = Book();
         foreach (var pill in _pills.Children) {

@@ -147,5 +147,24 @@ jobs:
           if (-not $env:GENERATOR_INPUTS) {
             $notes += " The launcher in this release cannot update the server by itself; use ImlightManager.exe."
           }
+
+          # Patch notes (src/Imlight.Setup/Assets/patchnotes.txt): the whole file goes out as PatchNotes.txt, and this
+          # release's own section leads its notes on GitHub.
+          $lines = Get-Content src/Imlight.Setup/Assets/patchnotes.txt | Where-Object { -not $_.StartsWith(';') }
+          ($lines -join "`n").Trim() | Set-Content release/PatchNotes.txt -Encoding utf8
+          $section = @()
+          $inSection = $false
+          foreach ($line in $lines) {
+            if ($line.StartsWith('# ')) {
+              $inSection = $line -match "^# $([regex]::Escape($tag))(\s|$)"
+              continue
+            }
+            if ($inSection) {
+              $section += $(if ($line.StartsWith('Q:')) { "### " + $line.Substring(2).Trim() } elseif ($line.Trim()) { "- " + $line.Trim() } else { "" })
+            }
+          }
+          if ($section.Count -gt 0) {
+            $notes = "## What's new in $tag`n" + ($section -join "`n").Trim() + "`n`nEvery change so far is in PatchNotes.txt and on the launcher's Patch notes page.`n`n" + $notes
+          }
           gh release create $tag (Get-ChildItem release/*).FullName --title "$tag (roguelike)" --notes $notes `
             --target "${{ github.sha }}" --latest
