@@ -1367,7 +1367,7 @@ internal sealed class CombatDuelComponent(ZoneEntity entity)
 
     internal void SendCurrentCombatHand(CombatDuelSubCircle circle) {
         // As-is, no draw or refill, so a discarded slot stays visibly open for the vault draw.
-        if (circle is null || circle.IsAiCreature) {
+        if (circle is null || circle.IsAiCreature || circle.ParticipantObject is null || circle.ParticipantActor is null) {
             return;
         }
 

@@ -199,7 +199,7 @@ public class CombatDuelSubCircle {
 
     internal Hand GetCurrentHand() {
         // As-is, no draw or refill: a discard frees a slot this turn and the client must see it open.
-        return new() { m_spellList = _combatDeck.LastGivenHand ?? [] };
+        return new() { m_spellList = _combatDeck?.LastGivenHand ?? [] };
     }
 
     /// <summary>

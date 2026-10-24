@@ -133,7 +133,7 @@ internal sealed class TutorialDuelDirector {
             return;
         }
 
-        var recipient = _duel.SubCircles.FirstOrDefault(x => x.ParticipantActor == sender);
+        var recipient = _duel.SubCircles.FirstOrDefault(x => x is not null && x.ParticipantActor == sender);
         if (message.RecipientTemplateId != 1) {
             recipient = _duel.SubCircles.FirstOrDefault(x => x is not null && x.ParticipantObject is not null
                 && x.ParticipantObject.m_templateID == message.RecipientTemplateId);
@@ -162,7 +162,7 @@ internal sealed class TutorialDuelDirector {
             return;
         }
 
-        var caster = _duel.SubCircles.FirstOrDefault(x => x.ParticipantActor == sender);
+        var caster = _duel.SubCircles.FirstOrDefault(x => x is not null && x.ParticipantActor == sender);
         if (caster is null) {
             Logger.Warning("Duel {0} | Tutorial pip grant from an actor that is not in the duel.",
                 Logger.Args(_duel.Duel.m_duelID.Full));
