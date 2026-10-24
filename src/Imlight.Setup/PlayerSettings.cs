@@ -94,6 +94,10 @@ internal static class PlayerSettings {
             new("Roguelike", "CreatureCritByTier", "Creature crit by tier (%)", "Each tier's creature crit chance, tier 1 first, comma-separated.", SettingKind.Text),
             new("Roguelike", "CreatureBlockByTier", "Creature block by tier (%)", "Each tier's creature block chance, tier 1 first, comma-separated.", SettingKind.Text),
         ]),
+        ("Creatures", [
+            new("Roguelike", "SwapStreetCreatures", "Random creatures", "On: streets and their dungeons show random creatures of a similar level. Off: they keep their own creatures.", SettingKind.Switch),
+            new("Roguelike", "RandomCreatureDecks", "Random creature decks", "On: street creatures (bosses aside) fight with a random deck of normal spells for their level and school.", SettingKind.Switch),
+        ]),
         ("The run", [
             new("Roguelike", "StreetMinutes", "Minutes per street", "How long each street lasts before the boss (tiers with their own time keep it).", SettingKind.Whole, 1, 240),
             new("Roguelike", "StartingSpells", "Starting spells", "Random spells a new wizard starts with.", SettingKind.Whole, 0, 50),

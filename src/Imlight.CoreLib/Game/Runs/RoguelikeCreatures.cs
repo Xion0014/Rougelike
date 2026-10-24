@@ -94,6 +94,12 @@ internal static class RoguelikeCreatures {
     private static bool Active => RoguelikeConfig.Enabled && RandomStreetCreatures;
 
     /// <summary>
+    /// [Roguelike] SwapStreetCreatures: true (default), a run's street (and its dungeons) show other creatures of a
+    /// similar level. False: the creatures stay the street's own, and only their decks are random (RandomCreatureDecks).
+    /// </summary>
+    internal static readonly bool SwapStreetCreatures = ConfigurationManager.GetValue("Roguelike.SwapStreetCreatures", true);
+
+    /// <summary>
     /// Records where the wizard's run is, so their private street spawns the run's creatures. Called whenever the
     /// run starts, moves to a new tier, or the wizard arrives somewhere.
     /// </summary>
@@ -234,6 +240,12 @@ internal static class RoguelikeCreatures {
             return false;
         }
 
+        // SwapStreetCreatures off: every creature stays itself, but is still marked as the run's, so it fights with a
+        // random deck (RandomCreatureDecks).
+        if (!SwapStreetCreatures) {
+            return RoguelikeStock.RandomCreatureDecks;
+        }
+
         var seed = SeededShuffle.Mix(info.Seed ^ SeededShuffle.Mix((ulong) info.Tier) ^ SeededShuffle.Fnv1a("street"));
         if (s_anyCreature) {
             mapped = s_everySpawn ? Randomizer.PickCreature(templateId) : Randomizer.MapCreatureSeeded(templateId, seed);
@@ -275,7 +287,9 @@ internal static class RoguelikeCreatures {
 
     /// <summary>Remembers which creature a run-swapped spawn stands in for.</summary>
     internal static void RememberStatSource(ulong spawnGlobalId, ulong originalTemplateId, ulong spawnedTemplateId = 0) {
-        if (!s_keepStats || s_ownStats.ContainsKey(spawnedTemplateId)) {
+        // A creature that kept its place (SwapStreetCreatures off) is remembered as itself, for its random deck.
+        var keptItself = spawnedTemplateId == originalTemplateId;
+        if ((!s_keepStats && !keptItself) || s_ownStats.ContainsKey(spawnedTemplateId)) {
             return;
         }
 
