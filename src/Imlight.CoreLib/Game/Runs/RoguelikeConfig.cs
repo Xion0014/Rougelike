@@ -65,6 +65,12 @@ internal sealed record RoguelikeTier(int Number, string Street, string Boss) {
     /// <summary>TierNXp: this tier's experience multiplier (0: XpMultiplier).</summary>
     public double Xp { get; init; }
 
+    /// <summary>TierNBossExp: experience given, as it is (no multiplier), for beating this tier's boss.</summary>
+    public int BossExp { get; init; }
+
+    /// <summary>TierNBossGold: gold given for beating this tier's boss (-1: BossGold).</summary>
+    public int BossGold { get; init; } = -1;
+
     /// <summary>TierNBossCreatures = Random: the boss zone's other creatures are swapped like a street's.</summary>
     public bool RandomBossZoneCreatures { get; init; }
 
@@ -114,13 +120,32 @@ internal static class RoguelikeConfig {
 
     private static bool IsOnRun(Wizard wizard) => Enabled && wizard?.Roguelike is not null;
 
+    /// <summary>Gold given for beating any tier's boss, as it is (no multiplier). TierNBossGold sets one tier's own.</summary>
+    internal static readonly int BossGold = Math.Max(0, ConfigurationManager.GetValue("Roguelike.BossGold", 0));
+
+    /// <summary>The gold a tier's boss gives: its TierNBossGold, else BossGold.</summary>
+    internal static int BossGoldFor(int tierNumber)
+        => GetTier(tierNumber) is { BossGold: >= 0 } tier ? tier.BossGold : BossGold;
+
+    /// <summary>
+    /// FlatRatesFromTier: from this tier's boss on (the boss fight, the shops after it and every later tier), experience
+    /// and gold are earned at x1, since the bosses' TierNBossExp gives the levels instead. 0: never.
+    /// </summary>
+    internal static readonly int FlatRatesFromTier = Math.Max(0, ConfigurationManager.GetValue("Roguelike.FlatRatesFromTier", 0));
+
+    /// <summary>True when this wizard's run has reached FlatRatesFromTier's boss.</summary>
+    internal static bool OnFlatRates(Wizard wizard)
+        => FlatRatesFromTier > 0 && wizard?.Roguelike is { } run
+           && (run.Tier > FlatRatesFromTier || (run.Tier == FlatRatesFromTier && run.Phase != RoguelikePhase.Street));
+
     /// <summary>Earned experience, scaled for a wizard on a run.</summary>
     internal static int ScaleXp(Wizard wizard, int xp)
         => xp > 0 && IsOnRun(wizard) ? (int) Math.Min(int.MaxValue, Math.Round(xp * XpMultiplierFor(wizard))) : xp;
 
     /// <summary>The run's experience multiplier: the tier's own (TierNXp), else XpMultiplier.</summary>
     internal static double XpMultiplierFor(Wizard wizard)
-        => wizard?.Roguelike is { } run && GetTier(run.Tier) is { Xp: > 0 } tier ? tier.Xp : XpMultiplier;
+        => OnFlatRates(wizard) ? 1.0
+           : wizard?.Roguelike is { } run && GetTier(run.Tier) is { Xp: > 0 } tier ? tier.Xp : XpMultiplier;
 
     /// <summary>
     /// [Roguelike] ArcEndTiers: the tiers that end an arc (5: Arc 1 ends with Malistaire). After one, the wizard is asked
@@ -134,7 +159,8 @@ internal static class RoguelikeConfig {
 
     /// <summary>Earned gold, scaled for a wizard on a run.</summary>
     internal static int ScaleGold(Wizard wizard, int gold)
-        => gold > 0 && IsOnRun(wizard) ? (int) Math.Min(int.MaxValue, Math.Round(gold * GoldMultiplier)) : gold;
+        => gold > 0 && IsOnRun(wizard) && !OnFlatRates(wizard)
+            ? (int) Math.Min(int.MaxValue, Math.Round(gold * GoldMultiplier)) : gold;
 
     /// <summary>Every new run starts with a random mount in the wizard's backpack.</summary>
     internal static readonly bool GiveMount = ConfigurationManager.GetValue("Roguelike.GiveMount", true);
@@ -428,6 +454,8 @@ internal static class RoguelikeConfig {
                     .Select(id => ulong.TryParse(StripKey(id).Trim(), out var v) ? v : 0).Where(v => v != 0)],
                 Level = Math.Max(0, ConfigurationManager.GetValue($"Roguelike.Tier{i}Level", 0)),
                 Xp = Math.Max(0, ConfigurationManager.GetValue($"Roguelike.Tier{i}Xp", 0.0)),
+                BossExp = Math.Max(0, ConfigurationManager.GetValue($"Roguelike.Tier{i}BossExp", 0)),
+                BossGold = ConfigurationManager.GetValue($"Roguelike.Tier{i}BossGold", -1),
             });
         }
 

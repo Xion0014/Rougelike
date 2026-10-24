@@ -806,6 +806,7 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         run.ArcPromptPending = run.Phase == RoguelikePhase.Complete || RoguelikeConfig.ArcEndTiers.Contains(run.Tier);
         WizardCollection.UpdateCharacterRoguelike(wizard);
         GiveBossTrainingPoints(wizard);
+        GiveBossRewards(wizard, run.Tier);
 
         // Streets are too short to finish every quest; the boss settles them all, with their rewards.
         if (RoguelikeConfig.CompleteQuestsAfterBoss) {
@@ -824,6 +825,38 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         }
 
         PlaceAfterBattle();
+    }
+
+    /// <summary>
+    /// The boss's own reward, as it is (no multiplier): BossGold (or TierNBossGold) and TierNBossExp, which gives the
+    /// levels the next tier needs once the run stops levelling wizards through battles (FlatRatesFromTier).
+    /// </summary>
+    private void GiveBossRewards(Wizard wizard, int tier) {
+        var gold = RoguelikeConfig.BossGoldFor(tier);
+        var exp = RoguelikeConfig.GetTier(tier)?.BossExp ?? 0;
+        if (gold <= 0 && exp <= 0) {
+            return;
+        }
+
+        if (gold > 0) {
+            Imlight.CoreLib.Game.DropTables.LootGranter.UpdateWizardGold(SessionActor.ActorRef, wizard, gold);
+        }
+
+        if (exp > 0) {
+            SessionActor.ActorRef.Tell(new CHARACTER_103_PROTOCOL.MSG_GAINXP { XP = exp });
+        }
+
+        var parts = new List<string>();
+        if (gold > 0) {
+            parts.Add($"{gold:N0} gold");
+        }
+
+        if (exp > 0) {
+            parts.Add($"{exp:N0} experience");
+        }
+
+        Logger.Information("[Roguelike] {0} beat tier {1}'s boss: {2}.", Logger.Args(wizard.CharId, tier, string.Join(" and ", parts)));
+        InformGameClient($"Boss reward: {string.Join(" and ", parts)}!", isImportant: true);
     }
 
     /// <summary>Hands out the run's random mount, once per run.</summary>

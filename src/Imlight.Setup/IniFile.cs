@@ -37,7 +37,7 @@ internal static class IniFile {
         // Section.Key, plus every [Roguelike] TierN... key.
         string[] keys = [
             "Roguelike.StreetMinutes", "Roguelike.ArcEndTiers", "Roguelike.XpMultiplier", "Roguelike.GoldMultiplier",
-            "Roguelike.BossTrainingPoints", "Roguelike.MaxStockLevel", "Roguelike.CrownDropChance", "Roguelike.NoCrowns",
+            "Roguelike.BossTrainingPoints", "Roguelike.BossGold", "Roguelike.FlatRatesFromTier", "Roguelike.MaxStockLevel", "Roguelike.CrownDropChance", "Roguelike.NoCrowns",
             "Roguelike.CreatureCritByTier", "Roguelike.CreatureBlockByTier", "Roguelike.MaxSpellDamage", "Roguelike.BannedSpells",
             "Roguelike.ChestRewards", "Roguelike.ChestGoldMin", "Roguelike.ChestGoldMax",
             "Roguelike.PetMayCastShare", "PetCasting.Enabled", "PetCasting.OnCast", "PetCasting.OnDamage", "PetCasting.OnHeal",
@@ -49,6 +49,7 @@ internal static class IniFile {
             "Battle.GainSchoolPips", "Battle.AnySchoolPips", "Archmastery.AllLevels",
         ];
         var changed = 0;
+        var tierKeys = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         string? section = null;
         foreach (var line in defaults) {
             var trimmed = line.Trim();
@@ -71,6 +72,10 @@ internal static class IniFile {
                 continue;
             }
 
+            if (isTier) {
+                tierKeys.Add(key);
+            }
+
             if (keep?.Contains($"{section}.{key}") == true) {
                 continue;
             }
@@ -83,7 +88,46 @@ internal static class IniFile {
             changed++;
         }
 
+        // A TierN... setting the release no longer has (a tier that lost its street quests) is emptied, so the tiers
+        // stay exactly the release's.
+        if (tierKeys.Count > 0) {
+            // Only for tiers the release has: a tier the player added themselves is theirs.
+            static string TierOf(string key) => new(key.TakeWhile((c, i) => i < 4 || char.IsDigit(c)).ToArray());
+            var releaseTiers = new HashSet<string>(tierKeys.Select(TierOf), StringComparer.OrdinalIgnoreCase);
+            foreach (var key in TierKeysIn(lines).Where(k => !tierKeys.Contains(k) && releaseTiers.Contains(TierOf(k))).ToList()) {
+                if (keep?.Contains($"Roguelike.{key}") == true || string.IsNullOrEmpty(GetFrom(lines, "Roguelike", key))) {
+                    continue;
+                }
+
+                Set(lines, "Roguelike", key, "");
+                changed++;
+            }
+        }
+
         return changed;
+    }
+
+    // The [Roguelike] TierN... keys in a file.
+    private static IEnumerable<string> TierKeysIn(List<string> lines) {
+        var inSection = false;
+        foreach (var line in lines) {
+            var trimmed = line.Trim();
+            if (trimmed.StartsWith('[') && trimmed.EndsWith(']')) {
+                inSection = trimmed[1..^1].Trim().Equals("Roguelike", StringComparison.OrdinalIgnoreCase);
+
+                continue;
+            }
+
+            var equals = trimmed.IndexOf('=');
+            if (!inSection || trimmed.StartsWith(';') || equals <= 0) {
+                continue;
+            }
+
+            var key = trimmed[..equals].Trim();
+            if (key.Length > 4 && key.StartsWith("Tier", StringComparison.OrdinalIgnoreCase) && char.IsDigit(key[4])) {
+                yield return key;
+            }
+        }
     }
 
     /// <summary>
