@@ -32,6 +32,7 @@ namespace Imlight.CoreLib.Game.Commands.Protocols;
 ///   .run music [off|on] Another random track, or run music off/on for you.
 ///   .run jewel [shape] Get a random jewel or pin, of a shape if named (staff only).
 ///   .run pet [age]     Get a run pet, random or of an age (staff only).
+///   .run pwn [giant]   Learn the Pwn developer spell (staff only, temporary, for testing).
 ///   .run goto &lt;tier&gt; [street|boss|shop]  Jump to a tier's phase, for testing (staff only).
 ///   .run zones &lt;text&gt;  List zone names containing the text (staff only), for filling in [Roguelike].
 /// </summary>
@@ -76,6 +77,11 @@ internal class CommandRunProtocol : CommandProtocol {
     [Command("pet")]
     [AuthRequired(AuthLevel.QualityAssurance)]
     private void PetCommand([Remainder] string age = "") => Send("pet", age);
+
+    // TEMPORARY test command: teaches the Pwn developer spell. Remove once testing is done.
+    [Command("pwn")]
+    [AuthRequired(AuthLevel.QualityAssurance)]
+    private void PwnCommand([Remainder] string which = "") => Send("pwn", which);
 
     [Command("goto")]
     [AuthRequired(AuthLevel.QualityAssurance)]

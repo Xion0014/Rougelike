@@ -471,6 +471,20 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
 
                 GiveRunPet(wizard, petAge);
                 break;
+            case "pwn": {
+                // TEMPORARY staff test: teaches the Pwn developer spell (".run pwn giant" for Giant Pwn). Remove with
+                // the command once testing is done.
+                var pwnName = string.Equals(message.Argument?.Trim(), "giant", StringComparison.OrdinalIgnoreCase) ? "GiantPwn" : "Pwn";
+                if (Imlight.CoreLib.Game.Spells.SpellFactory.GetSpell(pwnName) is { } pwn) {
+                    TeachSpell(wizard, pwn.m_templateID);
+                    InformGameClient($"{pwnName} learned. Put it in your deck from your spellbook.");
+                }
+                else {
+                    InformGameClient($"The {pwnName} spell was not found in the game data.");
+                }
+
+                break;
+            }
             case "goto":
                 GotoPhase(wizard, message.Argument);
                 break;

@@ -5,6 +5,12 @@
 ;   anything else     one change (leave a blank line between changes)
 ;   ; comment         not shown
 
+# v1.0.124 (October 24, 2026)
+
+Q: Testing
+
+Staff test command .run pwn teaches the Pwn developer spell (.run pwn giant for Giant Pwn). Temporary: it goes away once testing is done.
+
 # v1.0.123 (October 24, 2026)
 
 Q: New
