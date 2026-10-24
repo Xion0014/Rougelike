@@ -5,6 +5,14 @@
 ;   anything else     one change (leave a blank line between changes)
 ;   ; comment         not shown
 
+# v1.0.127 (October 24, 2026)
+
+Q: Fixed
+
+Tier 9 (Xibalba): the boss no longer turns into an ordinary creature. It becomes a random boss of a similar level, with the health of Xibalba's own boss.
+
+Creatures shown with the game's "Boss" title count as bosses everywhere on a run (they stay bosses and end tiers), and "Minion" creatures are no longer picked to stand in for street creatures.
+
 # v1.0.126 (October 24, 2026)
 
 Q: New

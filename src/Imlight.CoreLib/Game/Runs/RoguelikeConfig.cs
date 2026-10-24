@@ -44,6 +44,9 @@ internal sealed record RoguelikeTier(int Number, string Street, string Boss) {
     /// </summary>
     public ulong BossSwap { get; init; }
 
+    /// <summary>TierNBossSwap = Random: each boss in the boss zone becomes a random boss of a similar level.</summary>
+    public bool RandomBossSwap { get; init; }
+
     /// <summary>
     /// TierNBossSwapStats: "Own" makes the swapped-in boss fight with its own health, level and deck (Jade Oni's
     /// 8,000 health); anything else keeps the replaced boss's.
@@ -453,6 +456,8 @@ internal static class RoguelikeConfig {
                 BossQuests = SplitList(ConfigurationManager.GetValue($"Roguelike.Tier{i}BossQuests", "")),
                 FinalBoss = StripKey(ConfigurationManager.GetValue($"Roguelike.Tier{i}Boss", "") ?? "").Trim(),
                 StreetSeconds = minutes > 0 ? minutes * 60 : StreetSeconds,
+                RandomBossSwap = string.Equals(StripKey(ConfigurationManager.GetValue($"Roguelike.Tier{i}BossSwap", "") ?? "").Trim(),
+                                               "Random", StringComparison.OrdinalIgnoreCase),
                 BossSwap = ulong.TryParse(StripKey(ConfigurationManager.GetValue($"Roguelike.Tier{i}BossSwap", "") ?? "").Trim(),
                                           out var swap) ? swap : 0,
                 RandomBossZoneCreatures = string.Equals(ConfigurationManager.GetValue($"Roguelike.Tier{i}BossCreatures", "")?.Trim(),
@@ -558,7 +563,7 @@ internal static class RoguelikeConfig {
         var template = CoreObjectFactory.GetCoreTemplate(mobTemplateId) as GameObjectTemplate;
         var npc = template?.m_behaviors?.OfType<NPCBehaviorTemplate>().FirstOrDefault();
 
-        return npc?.m_bossMob == true;
+        return Imlight.CoreLib.Game.Randomization.Randomizer.IsBossNpc(npc);
     }
 
 }

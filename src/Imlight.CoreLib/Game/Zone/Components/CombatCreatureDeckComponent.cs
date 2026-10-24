@@ -80,7 +80,8 @@ internal sealed class CombatCreatureDeckComponent : ZoneEntityComponent, ICompon
         // A creature a roguelike run swapped in fights with a random deck of normal spells for its level and school.
         if (Imlight.CoreLib.Game.Runs.RoguelikeStock.RandomCreatureDecks
             && Imlight.CoreLib.Game.Runs.RoguelikeCreatures.IsRunSwapped(entity)
-            && allBehaviors.OfType<NPCBehaviorTemplate>().FirstOrDefault() is { m_bossMob: false } npc) {
+            && allBehaviors.OfType<NPCBehaviorTemplate>().FirstOrDefault() is { } npc
+            && !Imlight.CoreLib.Game.Randomization.Randomizer.IsBossNpc(npc)) {
             foreach (var spellId in Imlight.CoreLib.Game.Runs.RoguelikeStock.RollCreatureDeck(npc.m_nLevel, npc.m_schoolOfFocus)) {
                 if (SpellFactory.GetSpell(spellId) is not null) {
                     Spells.Add(new SpellData { m_templateID = spellId, m_quantity = 9999 });
@@ -93,7 +94,8 @@ internal sealed class CombatCreatureDeckComponent : ZoneEntityComponent, ICompon
         }
 
         // A boss in a tier's boss zone may fight with a random deck too (TierNBossDeck = Random), a bigger one.
-        if (allBehaviors.OfType<NPCBehaviorTemplate>().FirstOrDefault() is { m_bossMob: true } boss
+        if (allBehaviors.OfType<NPCBehaviorTemplate>().FirstOrDefault() is { } boss
+            && Imlight.CoreLib.Game.Randomization.Randomizer.IsBossNpc(boss)
             && Imlight.CoreLib.Game.Runs.RoguelikeCreatures.RandomBossDeckLevel(entity, boss.m_nLevel) is { } deckLevel) {
             foreach (var spellId in Imlight.CoreLib.Game.Runs.RoguelikeStock.RollCreatureDeck(deckLevel, boss.m_schoolOfFocus, isBoss: true)) {
                 if (SpellFactory.GetSpell(spellId) is not null) {

@@ -538,6 +538,48 @@ public static class Randomizer {
         return new SeededShuffle(entries);
     }
 
+    private const int MOB_TITLE_BOSS = 3;
+    private const int MOB_TITLE_MINION = 4;
+
+    /// <summary>True for a boss: flagged as one, or shown with the "Boss" title.</summary>
+    internal static bool IsBossNpc(NPCBehaviorTemplate npc)
+        => npc is not null && (npc.m_bossMob || (int) npc.m_mobTitle == MOB_TITLE_BOSS);
+
+    // Every boss in the game files with its level, for runs that put a random boss in a boss's place.
+    private static readonly Lazy<(ulong Id, int Level)[]> s_bosses = new(BuildBossList, LazyThreadSafetyMode.ExecutionAndPublication);
+
+    private static (ulong Id, int Level)[] BuildBossList() {
+        var bosses = new List<(ulong Id, int Level)>();
+        foreach (var id in Imlight.CoreLib.Game.Zone.AprilFools.CreatureList.TemplateIDs) {
+            if (CoreObjectFactory.GetCoreTemplate(id) is GameObjectTemplate template
+                && template.m_behaviors.OfType<NPCBehaviorTemplate>().FirstOrDefault() is { } npc && IsBossNpc(npc)
+                && template.m_behaviors.OfType<DuelistBehaviorTemplate>().Any()) {
+                bosses.Add(((ulong) id, npc.m_nLevel));
+            }
+        }
+
+        return [.. bosses.OrderBy(b => b.Id)];
+    }
+
+    /// <summary>
+    /// A random boss for a boss of <paramref name="level"/>, picked by <paramref name="seed"/>: one within 10 levels
+    /// when there is any, else the closest levels. 0 when the game files have no bosses.
+    /// </summary>
+    internal static ulong PickBoss(int level, ulong seed, ulong except = 0) {
+        var bosses = s_bosses.Value.Where(b => b.Id != except).ToArray();
+        if (bosses.Length == 0) {
+            return 0;
+        }
+
+        var near = bosses.Where(b => Math.Abs(b.Level - level) <= 10).ToArray();
+        if (near.Length == 0) {
+            var closest = bosses.Min(b => Math.Abs(b.Level - level));
+            near = [.. bosses.Where(b => Math.Abs(b.Level - level) <= closest + 5)];
+        }
+
+        return near[(int) (SeededShuffle.Mix(seed) % (ulong) near.Length)].Id;
+    }
+
     private static SeededShuffle BuildCreaturePool() {
         var entries = new List<(ulong, string)>();
         foreach (var id in Imlight.CoreLib.Game.Zone.AprilFools.CreatureList.TemplateIDs) {
@@ -550,8 +592,13 @@ public static class Randomizer {
                 continue;
             }
 
-            // Bosses only swap with bosses.
-            var rank = npc.m_bossMob ? "boss" : "mob";
+            // Minions (the "Minion" title) only stand next to their boss; they never stand in for a creature.
+            if ((int) npc.m_mobTitle == MOB_TITLE_MINION) {
+                continue;
+            }
+
+            // Bosses only swap with bosses. Some bosses are only marked by their title.
+            var rank = IsBossNpc(npc) ? "boss" : "mob";
             entries.Add((id, $"{rank}:{LevelBand(npc.m_nLevel)}"));
         }
 

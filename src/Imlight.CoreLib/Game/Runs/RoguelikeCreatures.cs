@@ -83,7 +83,8 @@ internal static class RoguelikeCreatures {
         var roster = templateIds
             .Distinct()
             .Where(id => CoreObjectFactory.GetCoreTemplate(id) is GameObjectTemplate template
-                         && template.m_behaviors.OfType<NPCBehaviorTemplate>().FirstOrDefault() is { m_bossMob: false }
+                         && template.m_behaviors.OfType<NPCBehaviorTemplate>().FirstOrDefault() is { } rosterNpc
+                         && !Randomizer.IsBossNpc(rosterNpc) && (int) rosterNpc.m_mobTitle != 4
                          && template.m_behaviors.OfType<DuelistBehaviorTemplate>().Any())
             .OrderBy(id => id)
             .ToArray();
@@ -212,6 +213,22 @@ internal static class RoguelikeCreatures {
                 }
 
                 return mapped != templateId;
+            }
+        }
+
+        // TierNBossSwap = Random: each boss in the tier's boss zone becomes a random boss of a similar level, with the
+        // health, level and deck of the boss it stands in for (SwappedCreaturesKeepStats), picked by the run's seed.
+        if (BossZoneTier(info, zonePath) is { RandomBossSwap: true } randomTier && IsBoss(templateId)
+            && CoreObjectFactory.GetCoreTemplate(templateId) is GameObjectTemplate bossTemplate
+            && bossTemplate.m_behaviors.OfType<NPCBehaviorTemplate>().FirstOrDefault() is { } bossNpc) {
+            var pick = Randomizer.PickBoss(bossNpc.m_nLevel,
+                SeededShuffle.Mix(info.Seed ^ SeededShuffle.Mix((ulong) randomTier.Number) ^ SeededShuffle.Mix(templateId)), templateId);
+            Logger.Information("[Roguelike] Boss zone {0}: boss {1} (level {2}) shows up as random boss {3}.",
+                Logger.Args(zonePath, templateId, bossNpc.m_nLevel, pick));
+            if (pick != 0) {
+                mapped = pick;
+
+                return true;
             }
         }
 
@@ -374,7 +391,7 @@ internal static class RoguelikeCreatures {
     // A boss: flagged so (any NPC behavior), or named one ("GH-Bear-Warrior-1-GHBoss-R5").
     private static bool IsBoss(ulong templateId)
         => CoreObjectFactory.GetCoreTemplate(templateId) is GameObjectTemplate template
-           && (template.m_behaviors.OfType<NPCBehaviorTemplate>().Any(npc => npc.m_bossMob)
+           && (template.m_behaviors.OfType<NPCBehaviorTemplate>().Any(Randomizer.IsBossNpc)
                || ((string) template.m_objectName ?? "").Contains("Boss", StringComparison.OrdinalIgnoreCase));
 
     /// <summary>
