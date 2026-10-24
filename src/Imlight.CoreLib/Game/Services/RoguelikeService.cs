@@ -471,6 +471,21 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
 
                 GiveRunPet(wizard, petAge);
                 break;
+            case "cards": {
+                // What each piece of equipped gear's cards really are on this run (their tooltips show the gear's own).
+                var lines = new List<string>();
+                foreach (var item in wizard.EquipmentBehavior.EquippedItems ?? []) {
+                    if (Imlight.CoreLib.Shared.Items.ItemHelper.GetItemTemplate(item) is { } gear
+                        && Imlight.CoreLib.Game.Randomization.Randomizer.DescribeRunItemCards(wizard, gear) is { } gearCards) {
+                        string key = gear.m_displayName;
+                        lines.Add($"{(string.IsNullOrEmpty(key) ? "Gear" : Imlight.CoreLib.Shared.Resources.Locale.GetEnglishName(key) ?? "Gear")}: {gearCards}");
+                    }
+                }
+
+                InformGameClient(lines.Count == 0 ? "None of your gear's cards are swapped." : "Your gear's cards on this run:\n" + string.Join("\n", lines),
+                                 isImportant: true);
+                break;
+            }
             case "pwn": {
                 // TEMPORARY staff test: teaches the Pwn developer spell (".run pwn giant" for Giant Pwn). Remove with
                 // the command once testing is done.

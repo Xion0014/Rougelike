@@ -307,6 +307,46 @@ public static class Randomizer {
     }
 
     /// <summary>
+    /// What a piece of gear's cards are on this wizard's run (the game's tooltip still shows the gear's own), as
+    /// "Card x2 (instead of Original)" per card, or null when the gear gives no cards or none are swapped.
+    /// </summary>
+    internal static string DescribeRunItemCards(Wizard wizard, WizItemTemplate template) {
+        if (!RunItemCards || wizard?.Roguelike is null || template?.m_equipEffects is null) {
+            return null;
+        }
+
+        var cards = new List<string>();
+        var anySwapped = false;
+        foreach (var info in template.m_equipEffects.OfType<ProvideSpellEffectInfo>()) {
+            if (Imlight.CoreLib.Game.Spells.SpellFactory.GetSpell((string) info.m_spellName) is not { } original) {
+                continue;
+            }
+
+            var swappedId = MapRunItemCard(wizard, (uint) template.m_templateID, original.m_templateID);
+            anySwapped |= swappedId != original.m_templateID;
+            var count = info.m_numSpells > 1 ? $" x{info.m_numSpells}" : "";
+            var instead = swappedId != original.m_templateID ? $" (instead of {SpellName(original.m_templateID)})" : "";
+            cards.Add($"{SpellName(swappedId)}{count}{instead}");
+        }
+
+        return anySwapped && cards.Count > 0 ? string.Join(", ", cards) : null;
+    }
+
+    private static string SpellName(uint spellTemplateId) {
+        if (Imlight.CoreLib.Shared.Resources.CoreObjectFactory.GetCoreTemplate(spellTemplateId) is SpellTemplate spell) {
+            string key = spell.m_displayName;
+            if (!string.IsNullOrEmpty(key) && Locale.GetEnglishName(key) is { Length: > 0 } shown) {
+                return shown;
+            }
+
+            string name = spell.m_name;
+            return name;
+        }
+
+        return spellTemplateId.ToString();
+    }
+
+    /// <summary>
     /// How many pips a participant gains this round: usually one, sometimes none, two or three.
     /// </summary>
     internal static int RollPipGain() {

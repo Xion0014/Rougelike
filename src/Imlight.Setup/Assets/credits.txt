@@ -26,6 +26,9 @@ The server's systems: combat, quests, shops, pets, housing, the setup and much m
 Q: Niduus
 The Imlight fork this roguelike started from: pets, jewels, shop windows, the zone teleport command and many fixes.
 
+Q: ljste (Spiral Shuffle)
+Spiral Shuffle, the Revive101 randomizer, whose random item cards showed how much it helps to see what your gear's card really is.
+
 # Made with
 
 Q: Libraries

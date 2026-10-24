@@ -29,6 +29,7 @@ namespace Imlight.CoreLib.Game.Commands.Protocols;
 ///   .run train         After a boss, go to the spell trainers (Ravenwood).
 ///   .run return        Go back to the run's current street, boss or shop zone.
 ///   .run here          Show the current zone's full name.
+///   .run cards         What each piece of equipped gear's cards are on this run.
 ///   .run music [off|on] Another random track, or run music off/on for you.
 ///   .run jewel [shape] Get a random jewel or pin, of a shape if named (staff only).
 ///   .run pet [age]     Get a run pet, random or of an age (staff only).
@@ -55,6 +56,9 @@ internal class CommandRunProtocol : CommandProtocol {
 
     [Command("stats")]
     private void StatsCommand() => Send("stats");
+
+    [Command("cards")]
+    private void CardsCommand() => Send("cards");
 
     [Command("here")]
     private void HereCommand() => Send("here");

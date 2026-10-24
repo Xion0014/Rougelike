@@ -5,6 +5,16 @@
 ;   anything else     one change (leave a blank line between changes)
 ;   ; comment         not shown
 
+# v1.0.126 (October 24, 2026)
+
+Q: New
+
+Putting on gear tells you in chat what its cards really are on your run, like "Wand of X gives you on this run: Fire Cat x2 (instead of Thunder Snake)". The gear's tooltip still shows its usual card, since that comes from the game's own files.
+
+.run cards lists the real cards of all the gear you have on.
+
+Credits now thank ljste's Spiral Shuffle, which inspired this.
+
 # v1.0.125 (October 24, 2026)
 
 Q: Fixed

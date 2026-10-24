@@ -42,5 +42,8 @@ Won battles often give a stat potion that is drunk on the spot: a random stat (h
 Q: Your stats
 The Crown Shop button shows your stats in chat during a run (there are no crowns on a run).
 
+Q: Gear cards
+On a run, the cards your gear gives are swapped for random ones of the same type and pip cost (the gear's tooltip still shows its own). When you put gear on, chat tells you what its cards really are.
+
 Q: Handy commands
-Type .run status to see where your run stands, and .run stats for your stats.
+Type .run status to see where your run stands, .run stats for your stats, and .run cards for what your gear's cards are on this run.
