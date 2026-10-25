@@ -5,6 +5,12 @@
 ;   anything else     one change (leave a blank line between changes)
 ;   ; comment         not shown
 
+# v1.0.129 (October 24, 2026)
+
+Q: Fixed
+
+Gear "Extract ... Animus" cards (like Extract Gobbler) did nothing and passed your turn. Gear now gives a +100 damage enchantment (Strong) in their place, and .run cards and the equip message say so. Relog or change zones for gear you already wear.
+
 # v1.0.128 (October 24, 2026)
 
 Q: Changed

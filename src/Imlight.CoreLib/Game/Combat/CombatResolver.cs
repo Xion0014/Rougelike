@@ -851,7 +851,7 @@ public class CombatResolver(Duel duel, CombatDuelSubCircle[] actorSubCircles) {
                 Logger.Args(_duel.m_duelID.Full, action.SpellCaster.SlotIndex, action.Spell.m_templateID, targetsStringForLog, critSuffix));
         }
         else {
-            Logger.Debug("Duel {0} | Slot {1} | Spell {3} not worth casting. Passing turn.",
+            Logger.Debug("Duel {0} | Slot {1} | Spell {2} not worth casting. Passing turn.",
                 Logger.Args(_duel.m_duelID.Full, action.SpellCaster.SlotIndex, action.Spell.m_templateID));
             combatAction.m_spell = null;
         }

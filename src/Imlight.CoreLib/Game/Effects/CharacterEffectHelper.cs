@@ -102,6 +102,9 @@ internal static class CharacterEffectHelper {
                     }
                 }
 
+                // Cards that do nothing here (Extract ... Animus) are given as a +100 damage enchantment instead.
+                provideSpellEffect.m_spellName = Imlight.CoreLib.Game.Randomization.Randomizer.UsableCardName(provideSpellEffect.m_spellName);
+
                 var spells = SpellFactory.CreateSpellsFromEffect(provideSpellEffect);
 
                 if (spells is null) {

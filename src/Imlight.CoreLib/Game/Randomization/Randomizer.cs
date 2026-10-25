@@ -307,6 +307,45 @@ public static class Randomizer {
     }
 
     /// <summary>
+    /// True for a card that does nothing in battle here: the gear "Extract ... Animus" cards (kCollectEssence), which
+    /// collect animus from a creature in the live game. Casting one only passed the turn.
+    /// </summary>
+    internal static bool IsUnusableCard(SpellTemplate spell)
+        => spell?.m_effects is not null
+           && spell.m_effects.SelectMany(Imlight.CoreLib.Game.Combat.CombatActionResolver.AllEffects)
+               .Any(effect => effect?.m_effectType == kSpellEffects.kCollectEssence);
+
+    // The +100 damage enchantment an unusable card becomes: Strong when it is +100, else any trainer +100 damage enchant.
+    private static readonly Lazy<SpellTemplate> s_plus100Enchant = new(() => {
+        static bool Plus100(SpellTemplate spell) => !spell.m_Treasure && spell.m_effects is not null
+            && spell.m_effects.SelectMany(Imlight.CoreLib.Game.Combat.CombatActionResolver.AllEffects)
+                .Any(effect => effect?.m_effectType == kSpellEffects.kModifyCardDamage && effect.m_effectParam == 100);
+
+        var all = Imlight.CoreLib.Game.Spells.SpellFactory.AllSpellTemplates();
+        var strong = all.Where(s => string.Equals((string) s.Template.m_name, "Strong", StringComparison.OrdinalIgnoreCase))
+            .Select(s => s.Template).FirstOrDefault();
+        var pick = strong is not null && Plus100(strong) ? strong
+            : all.Where(s => Plus100(s.Template)
+                             && !Imlight.CoreLib.Game.Zone.Components.InteractTrainerComponent.IsDevOrMonsterSpell(s.Path, s.Template))
+                 .Select(s => s.Template).OrderBy(s => (string) s.m_name, StringComparer.Ordinal).FirstOrDefault()
+              ?? strong;
+        Logger.Information("Unusable gear cards (Extract ... Animus) become {0}.", Logger.Args((string) pick?.m_name ?? "nothing"));
+
+        return pick;
+    }, LazyThreadSafetyMode.ExecutionAndPublication);
+
+    /// <summary>The spell name a gear card is given as: a +100 damage enchantment for an unusable card, else itself.</summary>
+    internal static string UsableCardName(string spellName) {
+        var spell = Imlight.CoreLib.Game.Spells.SpellFactory.GetSpell(spellName);
+        if (spell is null || CoreObjectFactory.GetCoreTemplate(spell.m_templateID) is not SpellTemplate template
+            || !IsUnusableCard(template) || s_plus100Enchant.Value is not { } enchant) {
+            return spellName;
+        }
+
+        return enchant.m_name;
+    }
+
+    /// <summary>
     /// What a piece of gear's cards are on this wizard's run (the game's tooltip still shows the gear's own), as
     /// "Card x2 (instead of Original)" per card, or null when the gear gives no cards or none are swapped.
     /// </summary>
@@ -323,6 +362,12 @@ public static class Randomizer {
             }
 
             var swappedId = MapRunItemCard(wizard, (uint) template.m_templateID, original.m_templateID);
+            // An unusable card (Extract ... Animus) is given as a +100 damage enchantment.
+            if (CoreObjectFactory.GetCoreTemplate(swappedId) is SpellTemplate given
+                && Imlight.CoreLib.Game.Spells.SpellFactory.GetSpell(UsableCardName(given.m_name)) is { } usable) {
+                swappedId = usable.m_templateID;
+            }
+
             anySwapped |= swappedId != original.m_templateID;
             var count = info.m_numSpells > 1 ? $" x{info.m_numSpells}" : "";
             var instead = swappedId != original.m_templateID ? $" (instead of {SpellName(original.m_templateID)})" : "";
