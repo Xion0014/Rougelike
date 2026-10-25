@@ -121,7 +121,8 @@ internal static class PetMayCasts {
             }
 
             var mayCast = new MayCast(talentName, Key(cardName), spellName, spell.m_templateID);
-            Logger.Information("Pet May Cast {0} casts {1} ({2}); setting PetCasting.{3}.",
+            // Read once per talent when the server first needs it (not a cast): which card the talent would cast.
+            Logger.Debug("Pet May Cast talent {0} would cast {1} ({2}) when it goes off; its chances: PetCasting.{3}.",
                 Logger.Args(talentName, spellName, spell.m_templateID, mayCast.Key));
 
             return mayCast;

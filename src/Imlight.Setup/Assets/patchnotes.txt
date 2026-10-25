@@ -5,6 +5,12 @@
 ;   anything else     one change (leave a blank line between changes)
 ;   ; comment         not shown
 
+# v1.0.131 (October 24, 2026)
+
+Q: Changed
+
+The server log no longer lists every May Cast talent in the game as "Pet May Cast ... casts ..." when it starts, which looked like a pet casting spells it doesn't have. Real May Casts in battle are still logged ("Duel ... | Pet May Cast ... casts ... after a cast").
+
 # v1.0.130 (October 24, 2026)
 
 Q: Fixed
