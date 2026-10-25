@@ -1,0 +1,34 @@
+{
+  // Wally (Rank 23, Death, 16,150 health), Wallaru. Wally: Brace and a Real and two Fake Wallys; Colossafrog for a Fake one hit, Supernova and Expel when the Real one is found.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1619194,
+  "Name": "Wally (Rank 23)",
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002950"},
+        {"Do": "Cast", "Spell": "Brace", "SpellID": 455179500, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Summon Minions", "SpellID": 1202962898, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Summon Minions", "SpellID": 1660379602, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Summon Minions", "SpellID": 1660379602, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Brace, the Real Wally and two Fakes." },
+
+    { "When": "AllyHit", "Category": "Damage", "Creature": 1616637,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002951"},
+        {"Do": "Cast", "Spell": "Colossafrog", "SpellID": 164715309, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A Fake Wally hurt (an all-enemies hit too): Colossafrog." },
+
+    { "When": "AllyHit", "Category": "Damage", "SingleTarget": true, "Creature": 1616639,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002952"},
+        {"Do": "Cast", "Spell": "Supernova", "SpellID": 1039118069, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Expel", "SpellID": 343003124, "Target": "AllAllies", "DispelImmune": false}
+      ],
+      "Notes": "The Real Wally hurt by a single-target hit: found." }
+  ]
+}

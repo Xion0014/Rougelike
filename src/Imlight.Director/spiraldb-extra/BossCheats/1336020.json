@@ -1,0 +1,32 @@
+{
+  // Howling Chaney (Rank 13, Life, 20,000 health), Unknown. Howling Chaney: Gnomes! for a heal, Lifespear every 2 rounds, Life Fuel every 3.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1336020,
+  "Name": "Howling Chaney (Rank 13)",
+  "ShadowPips": 1,
+  "Cheats": [
+    { "When": "PlayerHeals",
+      "Actions": [
+        {"Do": "Interrupt"},
+        {"Do": "Say", "Line": "CombatMessages_00000505"},
+        {"Do": "Cast", "Spell": "Gnomes!", "SpellID": 1237811201, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A heal: it fizzles and Gnomes! goes on the caster." },
+
+    { "When": "RoundStart", "Round": 2, "Every": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000506"},
+        {"Do": "Cast", "Spell": "Lifespear", "SpellID": 2050867, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Every 2 rounds: Lifespear." },
+
+    { "When": "RoundStart", "Round": 3, "Every": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000512"},
+        {"Do": "Cast", "Spell": "Life Fuel", "SpellID": 602417171, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Every 3 rounds: Life Fuel on a wizard." }
+  ]
+}

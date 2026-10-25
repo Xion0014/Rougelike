@@ -1,0 +1,68 @@
+{
+  // Rage (Rank 23, Fire, 14,295 health), Unknown. Rage: Combustion, Triage and Scald by pips, Detonate for a big spell, Firecharm, and answers to pacify and threat spells.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1619098,
+  "Name": "Rage (Rank 23)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003017"},
+        {"Do": "Cast", "Spell": "Combustion", "SpellID": 1552306018, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Combustion." },
+
+    { "When": "PlayerGlobals",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Combustion", "SpellID": 1552306018, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Its global replaced: cast again." },
+
+    { "When": "RoundStart", "HasWho": "AnyEnemy", "HasKind": "DoT",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Triage", "SpellID": 1907249548, "Target": "Matched", "DispelImmune": false}
+      ],
+      "Notes": "Each round: Triage on a wizard with a DoT." },
+
+    { "When": "Pips", "Pips": 6, "PipsOf": "Enemy",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Scald", "SpellID": 73862227, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A wizard with 6 pips or more at a round's start: Scald." },
+
+    { "When": "PlayerCasts", "CostMin": 7,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Detonate", "SpellID": 2033788231, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A spell of more than 6 pips: Detonate on the caster." },
+
+    { "When": "PlayerCasts", "Category": "Blade,Trap,Aura", "Chance": 50,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Firecharm", "SpellID": 1682457287, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A blade, trap or aura: sometimes (50%, a guess) Firecharm." },
+
+    { "When": "PlayerCasts", "Spells": ["Pacify"], "AnyVersion": true, "Mark": "pacified", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Quench", "SpellID": 426483971, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A pacify spell again: Quench on itself." },
+
+    { "When": "PlayerCasts", "Spells": ["Pacify"], "AnyVersion": true, "Once": true,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Pacify", "SpellID": 1236958192, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Triple Quench", "SpellID": 1168620005, "Target": "Self", "DispelImmune": false},
+        {"Do": "Mark", "Mark": "pacified", "Target": "Self"}
+      ],
+      "Notes": "A first pacify spell: Pacify and Triple Quench on itself." },
+
+    { "When": "PlayerCasts", "Spells": ["Taunt"], "AnyVersion": true,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Taunt", "SpellID": 90594324, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Fuel", "SpellID": 2040394379, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A threat spell: Taunt, then Fuel on the wizard." }
+  ]
+}

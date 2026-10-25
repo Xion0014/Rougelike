@@ -1,0 +1,12 @@
+{
+  // Meowiarty (Rank 12, Myth, 7,990 health), Meowiarty Archmage Duel. Meowiarty: comes into a battle with its minions.
+  // From Wizard404's data on the gauntlets (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove).
+  // Built first from blocks that were there, then from the new universal blocks each Notes names (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1340297,
+  "Name": "Meowiarty (Rank 12)",
+  "Cheats": [
+    { "When": "Passive", "Passive": "Minions", "Brings": ["1336738", "1336736"], "BringsRandom": ["1336744", "1336740", "1336742"], "BringsCount": 1,
+      "Notes": "It fights with Midnighter and O'Leary Thug and 1 of Dr. Von Katzenstein, Gibson O'Leary and Jacques the Scratcher at random (Wizard404: its minions and pool). New block: comes with." }
+  ]
+}

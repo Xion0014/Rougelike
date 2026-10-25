@@ -1,0 +1,53 @@
+{
+  // Astraeus (Rank 14, Star, 30,720 health), Mithraya Rematch. Astraeus: an aura each of the first five rounds, and Supernovas as he falls.
+  // From Wizard404's data on the gauntlets (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove).
+  // Built first from blocks that were there, then from the new universal blocks each Notes names (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1663252,
+  "Name": "Astraeus (Rank 14)",
+  "Cheats": [
+    { "When": "RoundStart", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003316"},
+        {"Do": "Cast", "Spell": "Reinforce", "SpellID": 19986937, "Target": "AllAllies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Bulwark", "SpellID": 101311641, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Reinforce on its side and Bulwark on every wizard. Existing blocks." },
+
+    { "When": "RoundStart", "Round": 2,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Reinforce", "SpellID": 19988473, "Target": "AllAllies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Bulwark", "SpellID": 2046172008, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Round 2: Reinforce on its side and Bulwark on every wizard. Existing blocks." },
+
+    { "When": "RoundStart", "Round": 3,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Reinforce", "SpellID": 19987961, "Target": "AllAllies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Bulwark", "SpellID": 101311640, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Round 3: Reinforce on its side and Bulwark on every wizard. Existing blocks." },
+
+    { "When": "RoundStart", "Round": 4,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Reinforce", "SpellID": 19985401, "Target": "AllAllies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Bulwark", "SpellID": 2046172005, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Round 4: Reinforce on its side and Bulwark on every wizard. Existing blocks." },
+
+    { "When": "RoundStart", "Round": 5,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Reinforce", "SpellID": 19984889, "Target": "AllAllies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Bulwark", "SpellID": 101311643, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Round 5: Reinforce on its side and Bulwark on every wizard. Existing blocks." },
+
+    { "When": "BossDefeated",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003318"},
+        {"Do": "Cast", "Spell": "Supernova", "SpellID": 51401116, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Supernova", "SpellID": 970688856, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Defeated: two Supernovas take the auras off (Wizard404: needs confirming)." }
+  ]
+}

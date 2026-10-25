@@ -1,0 +1,22 @@
+{
+  // Druj (Rank 15, Death, 7,650 health), Mirage. Druj: his pet's Age of Reckoning, Deathblade and Ghoul.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1391194,
+  "Name": "Druj (Rank 15)",
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Age of Reckoning", "SpellID": 750478271, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Age of Reckoning." },
+
+    { "When": "RoundStart", "Round": 4, "Every": 4,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Deathblade", "SpellID": 2136741217, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Ghoul", "SpellID": 1041517095, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Every 4 rounds (a guess): Deathblade and Ghoul." }
+  ]
+}

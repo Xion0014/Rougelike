@@ -1,0 +1,208 @@
+{
+  // The Headmaster (Rank 999, Star, 9,040 health), Empyrea. The Headmaster: four polymorph lessons, then shields put back when damaged without Homework.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  // Checked against its Wizard101 Central page (saved 2026-10-24): a wrong roll-call answer (an Attendance card for another number than the wizards) gets Crow.
+  "TemplateID": 1437113,
+  "Name": "The Headmaster (Rank 999)",
+  "ShadowPips": 7,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001233"},
+        {"Do": "Cast", "Spell": "Insane Bolt", "SpellID": 470751974, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Insane Bolt on them." },
+
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001238"},
+        {"Do": "Cast", "Spell": "All Shields", "SpellID": 583645588, "Target": "Self", "DispelImmune": false},
+        {"Do": "Polymorph", "Spell": "Polymorph - Egg", "SpellID": 156518785, "Target": "AllEnemies"}
+      ],
+      "Notes": "Round 1: All Shields, and the wizards become Students (roll call)." },
+
+    { "When": "PlayerPasses", "FromRound": 1, "ToRound": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001300"},
+        {"Do": "Cast", "Spell": "Crow", "SpellID": 1301689000, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: a wizard passes, Crow." },
+
+    { "When": "PlayerCasts", "Spells": ["Fake Attendance"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001236"},
+        {"Do": "Cast", "Spell": "Immolate", "SpellID": 774630451, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "Fake Attendance on another wizard: Immolate." },
+
+    { "When": "PlayerCasts", "Spells": ["Wand-Shadow-Attendance-2", "Wand-Shadow-Attendance-3", "Wand-Shadow-Attendance-4"], "FromRound": 1, "ToRound": 1, "PlayersMin": 1, "PlayersMax": 1, "Fizzle": "Any",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001239"},
+        {"Do": "Cast", "Spell": "Crow", "SpellID": 1301689000, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "Roll call with 1 wizard(s): an Attendance card for another number is wrong: Crow (Central: the answer is how many wizards there are)." },
+
+    { "When": "PlayerCasts", "Spells": ["Wand-Shadow-Attendance-1", "Wand-Shadow-Attendance-3", "Wand-Shadow-Attendance-4"], "FromRound": 1, "ToRound": 1, "PlayersMin": 2, "PlayersMax": 2, "Fizzle": "Any",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001239"},
+        {"Do": "Cast", "Spell": "Crow", "SpellID": 1301689000, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "Roll call with 2 wizard(s): an Attendance card for another number is wrong: Crow (Central: the answer is how many wizards there are)." },
+
+    { "When": "PlayerCasts", "Spells": ["Wand-Shadow-Attendance-1", "Wand-Shadow-Attendance-2", "Wand-Shadow-Attendance-4"], "FromRound": 1, "ToRound": 1, "PlayersMin": 3, "PlayersMax": 3, "Fizzle": "Any",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001239"},
+        {"Do": "Cast", "Spell": "Crow", "SpellID": 1301689000, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "Roll call with 3 wizard(s): an Attendance card for another number is wrong: Crow (Central: the answer is how many wizards there are)." },
+
+    { "When": "PlayerCasts", "Spells": ["Wand-Shadow-Attendance-1", "Wand-Shadow-Attendance-2", "Wand-Shadow-Attendance-3"], "FromRound": 1, "ToRound": 1, "PlayersMin": 4, "PlayersMax": 4, "Fizzle": "Any",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001239"},
+        {"Do": "Cast", "Spell": "Crow", "SpellID": 1301689000, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "Roll call with 4 wizard(s): an Attendance card for another number is wrong: Crow (Central: the answer is how many wizards there are)." },
+
+    { "When": "RoundStart", "Round": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001234"},
+        {"Do": "Polymorph", "Spell": "Polymorph - Egg", "SpellID": 493352029, "Target": "AllEnemies"}
+      ],
+      "Notes": "Round 2: Students again (homework)." },
+
+    { "When": "PlayerCasts", "Spells": ["Homework"], "AnyVersion": true, "OnBoss": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001235"}
+      ],
+      "Notes": "Homework on him." },
+
+    { "When": "PlayerCasts", "Spells": ["Copy"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001236"},
+        {"Do": "Cast", "Spell": "Frostbite", "SpellID": 121470718, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "Copy on another wizard: Frostbite." },
+
+    { "When": "RoundStart", "Round": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001241"},
+        {"Do": "Polymorph", "Spell": "Polymorph - Egg", "SpellID": 529290799, "Target": "AllEnemies"}
+      ],
+      "Notes": "Round 3: the lecture." },
+
+    { "When": "PlayerPasses", "FromRound": 3, "ToRound": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001242"},
+        {"Do": "Cast", "Spell": "Cyclops", "SpellID": 1393651084, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "Round 3: a wizard passes, Cyclops." },
+
+    { "When": "PlayerCasts", "Spells": ["Doze Off"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001243"},
+        {"Do": "Cast", "Spell": "Leprechaun", "SpellID": 1220557512, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Cyclops", "SpellID": 1393651084, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "Doze Off on themself." },
+
+    { "When": "RoundStart", "Round": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001244"},
+        {"Do": "Say", "Line": "CombatMessages_00001303"},
+        {"Do": "Polymorph", "Spell": "Polymorph - Egg", "SpellID": 459984764, "Target": "AllEnemies"},
+        {"Do": "PickOne", "Count": 6},
+        {"Do": "Cast", "Spell": "Furnace", "SpellID": 1466828077, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Sleet Storm", "SpellID": 1014701155, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Galvanic Field", "SpellID": 525167823, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Reliquary", "SpellID": 1391330914, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Devotion", "SpellID": 1382941957, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Virulence", "SpellID": 80561492, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Round 4: pop quiz, a random school aura on the wizards." },
+
+    { "When": "PlayerCasts", "Spells": ["Cheat"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001302"},
+        {"Do": "Cast", "Spell": "Impede", "SpellID": 1906062967, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "Cheat on another wizard: Impede." },
+
+    { "When": "RoundEnd", "Round": 5,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Hatch", "SpellID": 775973598, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "End of round 5: Hatch, normal combat starts." },
+
+    { "When": "PlayerCasts", "Spells": ["Shatter"], "FromRound": 6,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001300"},
+        {"Do": "Cast", "Spell": "All Shields", "SpellID": 583645588, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "After the lessons, Shatter: All Shields." },
+
+    { "When": "PlayerCasts", "Spells": ["Steal Ward"], "FromRound": 6,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001300"},
+        {"Do": "Cast", "Spell": "Steal Ward", "SpellID": 1036430384, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "Steal Ward: his own." },
+
+    { "When": "PlayerCasts", "Spells": ["Double Steal Ward"], "FromRound": 6,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001300"},
+        {"Do": "Cast", "Spell": "Double Steal Ward", "SpellID": 1322822120, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "Double Steal Ward: his own." },
+
+    { "When": "BossHit", "School": "Fire", "FromRound": 6,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001300"},
+        {"Do": "Cast", "Spell": "Fire Shield", "SpellID": 1496565571, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Hit with Fire damage (not Homework): Fire Shield back on." },
+
+    { "When": "BossHit", "School": "Ice", "FromRound": 6,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001300"},
+        {"Do": "Cast", "Spell": "Snow Shield", "SpellID": 583638140, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Hit with Ice damage (not Homework): Snow Shield back on." },
+
+    { "When": "BossHit", "School": "Storm", "FromRound": 6,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001300"},
+        {"Do": "Cast", "Spell": "Storm Shield", "SpellID": 653852217, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Hit with Storm damage (not Homework): Storm Shield back on." },
+
+    { "When": "BossHit", "School": "Myth", "FromRound": 6,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001300"},
+        {"Do": "Cast", "Spell": "Myth Shield", "SpellID": 1496669514, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Hit with Myth damage (not Homework): Myth Shield back on." },
+
+    { "When": "BossHit", "School": "Life", "FromRound": 6,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001300"},
+        {"Do": "Cast", "Spell": "Life Shield", "SpellID": 1496553289, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Hit with Life damage (not Homework): Life Shield back on." },
+
+    { "When": "BossHit", "School": "Death", "FromRound": 6,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001300"},
+        {"Do": "Cast", "Spell": "Death Shield", "SpellID": 648791056, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Hit with Death damage (not Homework): Death Shield back on." },
+
+    { "When": "BossHit", "School": "Balance", "FromRound": 6,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001300"},
+        {"Do": "Cast", "Spell": "Stone Wall", "SpellID": 1042049892, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Hit with Balance damage (not Homework): Stone Wall back on." }
+  ]
+}

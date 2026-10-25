@@ -1,0 +1,55 @@
+{
+  // The Bundozer (Rank 19, Sun, 11,070 health), Karamelle. The Bundozer: Mass Supernova after each Natural Attack, Disarm for a blade, and a warning every third round.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1505755,
+  "Name": "The Bundozer (Rank 19)",
+  "ShadowPips": 1,
+  "Cheats": [
+    { "When": "ICast", "Spells": ["Natural Attack"],
+      "Actions": [
+        {"Do": "InTurn", "Count": 3},
+        {"Do": "Cast", "Spell": "Mass Supernova 33%", "SpellID": 1650354187, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Mass Supernova 66%", "SpellID": 1996384267, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Mass Supernova 99%", "SpellID": 1260283915, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "After its Natural Attack: Mass Supernova 33%, 66%, then 99%." },
+
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001599"},
+        {"Do": "Cast", "Spell": "Natural Attack", "SpellID": 1102272390, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A late wizard: Natural Attack." },
+
+    { "When": "PlayerCasts", "Category": "Blade",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001603"},
+        {"Do": "Cast", "Spell": "Disarm", "SpellID": 1185700500, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "A blade: Disarm on whoever got it." },
+
+    { "When": "RoundEnd", "Round": 3, "Every": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001600"},
+        {"Do": "Mark", "Mark": "warned", "Target": "Self"}
+      ],
+      "Notes": "End of every third round: a warning." },
+
+    { "When": "BossHit", "Category": "Damage", "Mark": "warned", "MarkWho": "Self", "FromRound": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001601"},
+        {"Do": "Unmark", "Mark": "warned", "Target": "Self"}
+      ],
+      "Notes": "Hit the round after: the attack is stopped." },
+
+    { "When": "RoundEnd", "Round": 4, "Every": 3, "Mark": "warned", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001602"},
+        {"Do": "Cast", "Spell": "Natural Attack", "SpellID": 1102272390, "Target": "WeakestEnemy", "DispelImmune": false},
+        {"Do": "Unmark", "Mark": "warned", "Target": "Self"}
+      ],
+      "Notes": "Not hit the round after: Natural Attack on the weakest wizard." }
+  ]
+}

@@ -1,0 +1,145 @@
+{
+  // Treemugger (Rank 19, Life, 11,650 health), Karamelle. Treemugger: Stun for a late wizard, Mana Burn, Impede, and pips that grow each round.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1505851,
+  "Name": "Treemugger (Rank 19)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001581"},
+        {"Do": "Cast", "Spell": "Stun", "SpellID": 1863780109, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Stun on them." },
+
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001582"},
+        {"Do": "Cast", "Spell": "Mana Burn", "SpellID": 1417174012, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Impede", "SpellID": 161904631, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Blinding Light", "SpellID": 82987470, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Mana Burn, Impede and Blinding Light on all wizards." },
+
+    { "When": "PlayerCasts", "HasWho": "Caster", "HasSpell": "Impede", "HasNot": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001583"},
+        {"Do": "Cast", "Spell": "Impede", "SpellID": 161904631, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard without Impede casts: Impede again." },
+
+    { "When": "RoundEnd", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001584"},
+        {"Do": "Cast", "Spell": "Mana Burn", "SpellID": 1417174012, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Donate Power", "SpellID": 1807086701, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "End of round 1: Mana Burn, then Donate Power (+1 pips)." },
+
+    { "When": "RoundEnd", "Round": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001585"},
+        {"Do": "Cast", "Spell": "Mana Burn", "SpellID": 1417174012, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Donate Power", "SpellID": 1807086689, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "End of round 2: Mana Burn, then Donate Power (+2 pips)." },
+
+    { "When": "RoundEnd", "Round": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001584"},
+        {"Do": "Cast", "Spell": "Mana Burn", "SpellID": 1417174012, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Donate Power", "SpellID": 1807086693, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "End of round 3: Mana Burn, then Donate Power (+3 pips)." },
+
+    { "When": "RoundEnd", "Round": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001585"},
+        {"Do": "Cast", "Spell": "Mana Burn", "SpellID": 1417174012, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Donate Power", "SpellID": 1807086713, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "End of round 4: Mana Burn, then Donate Power (+4 pips)." },
+
+    { "When": "RoundEnd", "Round": 5,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001584"},
+        {"Do": "Cast", "Spell": "Mana Burn", "SpellID": 1417174012, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Donate Power", "SpellID": 1807086717, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "End of round 5: Mana Burn, then Donate Power (+5 pips)." },
+
+    { "When": "RoundEnd", "Round": 6,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001585"},
+        {"Do": "Cast", "Spell": "Mana Burn", "SpellID": 1417174012, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Donate Power", "SpellID": 1807086705, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "End of round 6: Mana Burn, then Donate Power (+6 pips)." },
+
+    { "When": "RoundEnd", "Round": 7,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001584"},
+        {"Do": "Cast", "Spell": "Mana Burn", "SpellID": 1417174012, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Donate Power", "SpellID": 1807086709, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "End of round 7: Mana Burn, then Donate Power (+7 pips)." },
+
+    { "When": "RoundEnd", "Round": 8,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001585"},
+        {"Do": "Cast", "Spell": "Mana Burn", "SpellID": 1417174012, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Donate Power", "SpellID": 1807086665, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "End of round 8: Mana Burn, then Donate Power (+8 pips)." },
+
+    { "When": "RoundEnd", "Round": 9,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001584"},
+        {"Do": "Cast", "Spell": "Mana Burn", "SpellID": 1417174012, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Donate Power", "SpellID": 1807086669, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "End of round 9: Mana Burn, then Donate Power (+9 pips)." },
+
+    { "When": "RoundEnd", "Round": 10,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001585"},
+        {"Do": "Cast", "Spell": "Mana Burn", "SpellID": 1417174012, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Donate Power", "SpellID": 1807088749, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "End of round 10: Mana Burn, then Donate Power (+10 pips)." },
+
+    { "When": "RoundEnd", "Round": 11,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001584"},
+        {"Do": "Cast", "Spell": "Mana Burn", "SpellID": 1417174012, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Donate Power", "SpellID": 1807088877, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "End of round 11: Mana Burn, then Donate Power (+11 pips)." },
+
+    { "When": "RoundEnd", "Round": 12,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001585"},
+        {"Do": "Cast", "Spell": "Mana Burn", "SpellID": 1417174012, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Donate Power", "SpellID": 1807089005, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "End of round 12: Mana Burn, then Donate Power (+12 pips)." },
+
+    { "When": "RoundEnd", "Round": 13,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001584"},
+        {"Do": "Cast", "Spell": "Mana Burn", "SpellID": 1417174012, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Donate Power", "SpellID": 1807089133, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "End of round 13: Mana Burn, then Donate Power (+13 pips)." },
+
+    { "When": "RoundEnd", "Round": 14,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001585"},
+        {"Do": "Cast", "Spell": "Mana Burn", "SpellID": 1417174012, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Donate Power", "SpellID": 1807089261, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "End of round 14: Mana Burn, then Donate Power (+14 pips)." }
+  ]
+}

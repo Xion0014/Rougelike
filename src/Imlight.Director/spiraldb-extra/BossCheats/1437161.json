@@ -1,0 +1,60 @@
+{
+  // Aethyr Titan (Rank 999, Shadow, 500,000 health), Empyrea. Aethyr Titan: Equalize, Donate Power each round, and the wizards become the Scion.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  // Checked against its Wizard101 Central page (saved 2026-10-24): the second polymorph at about 20% health, with his health back to full.
+  "TemplateID": 1437161,
+  "Name": "Aethyr Titan (Rank 999)",
+  "ShadowPips": 7,
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Equalize", "SpellID": 1158040997, "Target": "", "DispelImmune": false},
+        {"Do": "Polymorph", "Spell": "Polymorph", "SpellID": 1280475664, "Target": "AllEnemies"},
+        {"Do": "Cast", "Spell": "Mastery Aura", "SpellID": 186950361, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Equalize, and each wizard becomes the Scion with Mastery Aura." },
+
+    { "When": "PlayerGlobals",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Equalize", "SpellID": 1158040997, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Its global replaced: Equalize again." },
+
+    { "When": "RoundStart",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Donate Power", "SpellID": 2080248675, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Each round: Donate Power (14 pips to all)." },
+
+    { "When": "PlayerHealthBelow", "Percent": 25,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Dryad", "SpellID": 2100445853, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "The Scion low (under 25%, a guess): Dryad heals it to full." },
+
+    { "When": "PlayerCasts", "Spells": ["Scion of Elements"],
+      "Actions": [
+        {"Do": "Cast", "Spell": "Woolly Mammoth", "SpellID": 1513760255, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Storm Owl", "SpellID": 192933179, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Scorching Scimitars", "SpellID": 925089150, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Scion of Elements: three spells." },
+
+    { "When": "PlayerCasts", "Spells": ["Scion of Spirits"],
+      "Actions": [
+        {"Do": "Cast", "Spell": "Witch's House Call", "SpellID": 900094735, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Gnomes!", "SpellID": 2013123863, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Qismah's Curse", "SpellID": 1056816153, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Scion of Spirits: three spells." },
+
+    { "When": "HealthBelow", "Percent": 20,
+      "Actions": [
+        {"Do": "HealthTo", "Amount": 100},
+        {"Do": "Polymorph", "Spell": "Polymorph", "SpellID": 1280475652, "Target": "AllEnemies"}
+      ],
+      "Notes": "Under about 20%: back to full, and the wizard becomes the second Scion (Scion of Elements or Spirits to finish him) (Central)." }
+  ]
+}

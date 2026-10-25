@@ -1,0 +1,91 @@
+{
+  // Shadow Self Magician (Rank 24, Shadow, 17,295 health), Darkmoor. Shadow Self Magician: invulnerable until all its HoTs are on it and all DoTs on the wizards.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  // Checked against its Wizard101 Central page (saved 2026-10-24): a DoT for each wizard in round 2; good charms and wards pull a HoT, bad ones push a DoT (Feint both); it comes back only if its defeater has no DoT.
+  "TemplateID": 1655790,
+  "Name": "Shadow Self Magician (Rank 24)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003963"},
+        {"Do": "Cast", "Spell": "Brace", "SpellID": 455179500, "Target": "Self", "DispelImmune": false},
+        {"Do": "Immune", "Rounds": 0, "Target": "Self"},
+        {"Do": "Mark", "Mark": "invulnerable", "Target": "Self"}
+      ],
+      "Notes": "Round 1: Brace and invulnerability." },
+
+    { "When": "RoundStart", "Round": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003965"},
+        {"Do": "Cast", "Spell": "Ember Blast", "SpellID": 500891066, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "MOB HoT", "SpellID": 500891062, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Round 2: one Ember Blast on itself for each wizard (more below), and MOB HoT on each wizard." },
+
+    { "When": "RoundStart", "Round": 2, "PlayersMin": 2,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Ember Blast", "SpellID": 500891066, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 2 with 2 or more wizards: one more Ember Blast on itself (Central: a DoT for each wizard)." },
+
+    { "When": "RoundStart", "Round": 2, "PlayersMin": 3,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Ember Blast", "SpellID": 500891066, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 2 with 3 or more wizards: one more Ember Blast on itself (Central: a DoT for each wizard)." },
+
+    { "When": "RoundStart", "Round": 2, "PlayersMin": 4,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Ember Blast", "SpellID": 500891066, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 2 with 4 or more wizards: one more Ember Blast on itself (Central: a DoT for each wizard)." },
+
+    { "When": "RoundEnd", "Round": 4, "Every": 2,
+      "Actions": [
+        {"Do": "PickOne", "Count": 2},
+        {"Do": "Cast", "Spell": "Ember Blast", "SpellID": 500891066, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "MOB HoT", "SpellID": 500891062, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Immune", "Rounds": 0, "Target": "Self"}
+      ],
+      "Notes": "End of round 4 and every other: one more DoT on itself or HoT on a wizard, and the invulnerability back." },
+
+    { "When": "PlayerCasts", "Category": "Blade, Shield",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003967"},
+        {"Do": "Cast", "Spell": "Push HOT", "SpellID": 157305101, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A good charm or ward (Central): Push HOT moves a HoT from the caster onto it." },
+
+    { "When": "PlayerCasts", "Category": "Trap, Weakness",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003967"},
+        {"Do": "Cast", "Spell": "Steal DOT", "SpellID": 742419762, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A bad charm or ward (Central): Steal DOT pushes a DoT from it onto the caster." },
+
+    { "When": "PlayerCasts", "Spells": ["Feint"], "AnyVersion": true,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Push HOT", "SpellID": 157305101, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "Feint (a trap on both the caster and it): also a HoT pulled, on top of the DoT pushed above (Central)." },
+
+    { "When": "RoundStart", "HasWho": "AnyEnemy", "HasKind": "HoT", "HasNot": true, "FromRound": 3, "Cooldown": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003968"},
+        {"Do": "Cast", "Spell": "Supernova", "SpellID": 1039118069, "Target": "Self", "DispelImmune": false},
+        {"Do": "RemoveWards", "Kind": "All", "Target": "Self"}
+      ],
+      "Notes": "No HoT left on a wizard and no DoT on it: Supernova takes the invulnerability off. New If: HasWho AnyEnemy." },
+
+    { "When": "BossDefeated", "HasWho": "Caster", "HasKind": "DoT", "HasNot": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003966"},
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 1641304242, "Target": "Self", "DispelImmune": false},
+        {"Do": "SetHealth", "Amount": 17295}
+      ],
+      "Notes": "Defeated by a wizard who has no DoT on them (Central): back with Blessing." }
+  ]
+}

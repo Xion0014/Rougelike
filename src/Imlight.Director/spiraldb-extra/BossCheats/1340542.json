@@ -1,0 +1,27 @@
+{
+  // Numbskull Ogre (Rank 14, Fire, 2,880 health), Polaris. Numbskull Ogre: Tower Shield on someone of its side under half, Smoke Screen every sixth round.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1340542,
+  "Name": "Numbskull Ogre (Rank 14)",
+  "Cheats": [
+    { "When": "AllyHealthBelow", "Percent": 50,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Tower Shield", "SpellID": 432324968, "Target": "Hit", "DispelImmune": false}
+      ],
+      "Notes": "Someone of its side drops under half: Tower Shield on them." },
+
+    { "When": "HealthBelow", "Percent": 50,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Tower Shield", "SpellID": 432324968, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Itself under half: Tower Shield." },
+
+    { "When": "RoundStart", "Round": 6, "Every": 6,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Smoke Screen", "SpellID": 496482937, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Every sixth round: Smoke Screen on the wizards." }
+  ]
+}

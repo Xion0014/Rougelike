@@ -1,0 +1,26 @@
+{
+  // Archmagus Lorcan (Rank 14, Balance, 17,665 health), Khrysalis. Archmagus Lorcan: two Elder Magi, who sacrifice to him in round 6.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1283377,
+  "Name": "Archmagus Lorcan (Rank 14)",
+  "ShadowPips": 1,
+  "Cheats": [
+    { "When": "RoundEnd", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000219"},
+        {"Do": "Minion", "Creature": 1206502},
+        {"Do": "Minion", "Creature": 1206502}
+      ],
+      "Notes": "End of round 1: two Elder Magi." },
+
+    { "When": "RoundEnd", "Round": 6,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000230"},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Sacrifice", "SpellID": 1186804439, "Target": "Owner", "DispelImmune": false, "Creature": 1206502},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Sacrifice", "SpellID": 1186804439, "Target": "Owner", "DispelImmune": false, "Creature": 1206502}
+      ],
+      "Notes": "End of round 6: the Elder Magi cast Sacrifice on him." }
+  ]
+}

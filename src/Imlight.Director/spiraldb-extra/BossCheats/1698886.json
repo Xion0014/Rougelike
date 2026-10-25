@@ -1,0 +1,17 @@
+{
+  // Lord Vlad (Rank 24, Death, 6,050 health), Darkmoor. Lord Vlad: a protected dispel when hit by a sun spell.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1698886,
+  "Name": "Lord Vlad (Rank 24)",
+  "Cheats": [
+    { "When": "BossHit", "Spells": ["Power Nova", "Ra", "Sun Serpent", "Celestial Calendar", "Climaclysm", "Phoebus' Will"], "AnyVersion": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003985"},
+        {"Do": "RemoveCharms", "Kind": "Bad", "Target": "Self"},
+        {"Do": "RemoveWards", "Kind": "Bad", "Target": "Self"}
+      ],
+      "Notes": "Hit by a sun spell: a protected dispel on itself (the spell is unknown; its bad charms and traps come off)." }
+  ]
+}

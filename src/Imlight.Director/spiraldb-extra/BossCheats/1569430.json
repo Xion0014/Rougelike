@@ -1,0 +1,17 @@
+{
+  // Tantrum (Rank 22, Death, 13,265 health), Novus. Tantrum: Equalize at random.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1569430,
+  "Name": "Tantrum (Rank 22)",
+  "ShadowPips": 1,
+  "Cheats": [
+    { "When": "RoundStart", "Chance": 20,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002442"},
+        {"Do": "Cast", "Spell": "Equalize", "SpellID": 476084250, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Randomly (20%): Equalize." }
+  ]
+}

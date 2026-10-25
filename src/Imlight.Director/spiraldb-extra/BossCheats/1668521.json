@@ -1,0 +1,37 @@
+{
+  // Mother Sunn (Rank 23, Sun, 21,000 health), Unknown. Mother Sunn (23): Ra for a wizard who did not hit, Scald every 2 rounds, Power Nova every 4.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1668521,
+  "Name": "Mother Sunn (Rank 23)",
+  "Cheats": [
+    { "When": "PlayerDamages",
+      "Actions": [
+        {"Do": "Mark", "Mark": "hit this round", "Target": "Caster"}
+      ],
+      "Notes": "A wizard's damage spell (DoTs do not count): marked for the round." },
+
+    { "When": "RoundEnd",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003508"},
+        {"Do": "Cast", "Spell": "Ra", "SpellID": 1421606520, "Target": "Unmarked", "DispelImmune": false, "Mark": "hit this round"},
+        {"Do": "Unmark", "Mark": "hit this round", "Target": "AllEnemies"}
+      ],
+      "Notes": "End of each round: Ra on each wizard who cast no damage spell, then the marks come off." },
+
+    { "When": "RoundStart", "Round": 2, "Every": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003436"},
+        {"Do": "Cast", "Spell": "Scald", "SpellID": 11164145, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Every 2 rounds: Scald." },
+
+    { "When": "RoundStart", "Round": 4, "Every": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003437"},
+        {"Do": "Cast", "Spell": "Power Nova", "SpellID": 1384882735, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Every 4 rounds: Power Nova." }
+  ]
+}

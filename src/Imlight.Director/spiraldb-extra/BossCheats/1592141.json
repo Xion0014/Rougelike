@@ -1,0 +1,12 @@
+{
+  // Huac Cries Blood (Rank 14, Fire, 20,345 health), Huac Cries Blood Rematch. Huac Cries Blood: comes into a battle with its minions.
+  // From Wizard404's data on the gauntlets (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove).
+  // Built first from blocks that were there, then from the new universal blocks each Notes names (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1592141,
+  "Name": "Huac Cries Blood (Rank 14)",
+  "Cheats": [
+    { "When": "Passive", "Passive": "Minions", "Brings": ["1592143", "1592145"],
+      "Notes": "It fights with Skurkis Screaming Moon and Yacate Farwalker (Wizard404: its minions). New block: comes with." }
+  ]
+}

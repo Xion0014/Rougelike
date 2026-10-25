@@ -1,0 +1,50 @@
+{
+  // Bort Shadowmane (Rank 17, Shadow, 15,000 health), Grandfather Spider Rematch. Bort Shadowmane: armor of a random school that comes back, and a second life while it is up.
+  // From Wizard404's data on the gauntlets (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove).
+  // Built first from blocks that were there, then from the new universal blocks each Notes names (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1668858,
+  "Name": "Bort Shadowmane (Rank 17)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000997"},
+        {"Do": "PickOne", "Count": 7},
+        {"Do": "AddCharm", "Kind": "Shield", "Amount": 80, "School": "Fire", "Target": "Self"},
+        {"Do": "AddCharm", "Kind": "Shield", "Amount": 80, "School": "Ice", "Target": "Self"},
+        {"Do": "AddCharm", "Kind": "Shield", "Amount": 80, "School": "Storm", "Target": "Self"},
+        {"Do": "AddCharm", "Kind": "Shield", "Amount": 80, "School": "Myth", "Target": "Self"},
+        {"Do": "AddCharm", "Kind": "Shield", "Amount": 80, "School": "Life", "Target": "Self"},
+        {"Do": "AddCharm", "Kind": "Shield", "Amount": 80, "School": "Death", "Target": "Self"},
+        {"Do": "AddCharm", "Kind": "Shield", "Amount": 80, "School": "Balance", "Target": "Self"}
+      ],
+      "Notes": "\"Check out my armor!\" Round 1: a -80% shield of a random school on himself (a shield of the cheat's own, as the spell is unconfirmed). Existing blocks." },
+
+    { "When": "RoundEnd", "HasWho": "Self", "HasKind": "Shield", "HasNot": true, "Cooldown": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003721"},
+        {"Do": "Wait", "Rounds": 2},
+        {"Do": "Say", "Line": "CombatMessages_00000997"},
+        {"Do": "PickOne", "Count": 7},
+        {"Do": "AddCharm", "Kind": "Shield", "Amount": 80, "School": "Fire", "Target": "Self"},
+        {"Do": "AddCharm", "Kind": "Shield", "Amount": 80, "School": "Ice", "Target": "Self"},
+        {"Do": "AddCharm", "Kind": "Shield", "Amount": 80, "School": "Storm", "Target": "Self"},
+        {"Do": "AddCharm", "Kind": "Shield", "Amount": 80, "School": "Myth", "Target": "Self"},
+        {"Do": "AddCharm", "Kind": "Shield", "Amount": 80, "School": "Life", "Target": "Self"},
+        {"Do": "AddCharm", "Kind": "Shield", "Amount": 80, "School": "Death", "Target": "Self"},
+        {"Do": "AddCharm", "Kind": "Shield", "Amount": 80, "School": "Balance", "Target": "Self"}
+      ],
+      "Notes": "\"You broke my armor, lucky guess!\" His shield is gone: 2 rounds later it is back, of a random school. New block: has a charm or ward." },
+
+    { "When": "BossDefeated", "HasWho": "Self", "HasKind": "Shield",
+      "Actions": [
+        {"Do": "SetHealth", "Amount": 15000},
+        {"Do": "Say", "Line": "CombatMessages_00000996"},
+        {"Do": "Cast", "Spell": "Elemental Shield", "SpellID": 751181746, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Spirit Shield", "SpellID": 878360657, "Target": "Self", "DispelImmune": false},
+        {"Do": "Pips", "Amount": 1, "Kind": "Shadow", "Target": "Summoner"}
+      ],
+      "Notes": "\"Poor showmanship!\" Defeated with a shield still on: back at full health, Elemental and Spirit Shield, and a shadow pip for Grandfather Spider. New block: has a charm or ward." }
+  ]
+}

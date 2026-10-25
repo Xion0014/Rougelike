@@ -1,0 +1,58 @@
+{
+  // Duck Savage (Rank 21, Ice, 16,120 health), Lemuria. Duck Savage: Stun for a late wizard, Frozen Armor, steals back her wards, tends her allies' HoTs and DoTs.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1593387,
+  "Name": "Duck Savage (Rank 21)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001863"},
+        {"Do": "Cast", "Spell": "Stun", "SpellID": 2514611, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Stun on them." },
+
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001864"},
+        {"Do": "Cast", "Spell": "Frozen Armor", "SpellID": 782566888, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Frozen Armor (5,000 absorb)." },
+
+    { "When": "PlayerCasts", "Spells": ["Steal Ward"], "OnBoss": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001866"},
+        {"Do": "Cast", "Spell": "Steal Ward", "SpellID": 531030646, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "Steal Ward on her: she steals them back." },
+
+    { "When": "RoundStart", "HasWho": "AnyAlly", "HasKind": "HoT", "Chance": 50,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001868"},
+        {"Do": "Cast", "Spell": "Duck Savage", "SpellID": 507214697, "Target": "Matched", "DispelImmune": false}
+      ],
+      "Notes": "An ally with a HoT: it lasts a round more." },
+
+    { "When": "RoundStart", "HasWho": "AnyAlly", "HasKind": "DoT",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001867"},
+        {"Do": "Cast", "Spell": "Cooldown", "SpellID": 1498819280, "Target": "Matched", "DispelImmune": false}
+      ],
+      "Notes": "An ally with a DoT: Cooldown takes it off." },
+
+    { "When": "RoundStart", "FromRound": 2, "HasWho": "Self", "HasKind": "Aura,Ward", "HasNot": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001865"},
+        {"Do": "Cast", "Spell": "Fortify", "SpellID": 1058059056, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Her Frozen Armor gone and no aura: Fortify." },
+
+    { "When": "ICast", "Spells": ["Natural Attack"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001869"}
+      ],
+      "Notes": "Her Natural Attack." }
+  ]
+}

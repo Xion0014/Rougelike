@@ -1,0 +1,58 @@
+{
+  // Medulla (Rank 18, Myth, 33,880 health), Empyrea. Medulla: Clear Mind cards that free her three, who then help the wizards.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1430018,
+  "Name": "Medulla (Rank 18)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "RoundEnd", "Round": 1,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Break Free!", "SpellID": 149035854, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "End of round 1: Break Free! gives each wizard three Clear Minds." },
+
+    { "When": "RoundStart", "AlliesDown": ["1391469"], "Chance": 50,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001183"},
+        {"Do": "Cast", "Spell": "Smoke Screen", "SpellID": 1792217836, "Target": "AllAllies", "DispelImmune": false}
+      ],
+      "Notes": "Pork freed: each round he may (50%) Smoke Screen Medulla's side." },
+
+    { "When": "RoundEnd", "AlliesDown": ["1391468"], "Chance": 50,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001182"},
+        {"Do": "Cast", "Spell": "Essence Cannon", "SpellID": 973333263, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Sparck freed: each round he may (50%) fire the Essence Cannon." },
+
+    { "When": "RoundStart", "AlliesDown": ["1391467"], "Chance": 50,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001184"},
+        {"Do": "Cast", "Spell": "Pigsie", "SpellID": 365129230, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Beans freed: he may (50%) cast Pigsie for the wizards." },
+
+    { "When": "MinionDefeated", "Creature": 1391469,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001174"},
+        {"Do": "Say", "Line": "CombatMessages_00001175"}
+      ],
+      "Notes": "Pork defeated." },
+
+    { "When": "MinionDefeated", "Creature": 1391468,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001176"},
+        {"Do": "Say", "Line": "CombatMessages_00001177"}
+      ],
+      "Notes": "Sparck defeated." },
+
+    { "When": "MinionDefeated", "Creature": 1391467,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001178"},
+        {"Do": "Say", "Line": "CombatMessages_00001179"}
+      ],
+      "Notes": "Beans defeated." }
+  ]
+}

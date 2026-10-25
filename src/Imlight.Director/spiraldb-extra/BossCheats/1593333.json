@@ -1,0 +1,40 @@
+{
+  // Dr. Neaux (Rank 22, Ice, 15,615 health), Night Mire Gauntlet. Dr. Neaux: Doom and Gloom, a formula, and poison every 3 rounds.
+  // From Wizard404's data on the gauntlets (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove).
+  // Built first from blocks that were there, then from the new universal blocks each Notes names (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1593333,
+  "Name": "Dr. Neaux (Rank 22)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "Passive", "Passive": "Minions", "Brings": ["1593331", "1593329"],
+      "Notes": "He fights with two Gussied-Up Gators (Wizard404: his minions). New block: comes with." },
+
+    { "When": "Passive", "Passive": "Minions", "Brings": [], "BringsRandom": ["1593327", "1593328", "1593325", "1593326"], "BringsCount": 1, "PlayersMin": 3,
+      "Notes": "With 3 or more wizards, one more of four Glowbug Zappers (Wizard404: his pool for 3 players). New block: comes with, and the existing how many players." },
+
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002654"},
+        {"Do": "Cast", "Spell": "Poison", "SpellID": 1119467121, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Doom and Gloom", "SpellID": 448970904, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A wizard who joins after round 1: Poison for 90% of their health, then Doom and Gloom. Existing blocks." },
+
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002655"},
+        {"Do": "Cast", "Spell": "Doom and Gloom", "SpellID": 448970904, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Failed Formulation", "SpellID": 2033606251, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Doom and Gloom, then Failed Formulation on every wizard. Existing blocks." },
+
+    { "When": "RoundStart", "Every": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002656"},
+        {"Do": "Cast", "Spell": "Poison", "SpellID": 1815497994, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Mass Infection", "SpellID": 2073045424, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Every 3 rounds: Poison (5% of their health) on every wizard and Mass Infection. Existing blocks." }
+  ]
+}

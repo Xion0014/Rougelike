@@ -1,0 +1,23 @@
+{
+  // Alyssa Crowly (Rank 24, Myth, 14,990 health), Darkmoor. Alyssa Crowly: Chromatic Dispel in round 1.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  // Checked against its Wizard101 Central page (saved 2026-10-24): her 'Why... isn't this working?' line when one of her dispels goes off (made as any fizzle).
+  "TemplateID": 1655805,
+  "Name": "Alyssa Crowly (Rank 24)",
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "Behold! The Mighty Magic of Beyond!"},
+        {"Do": "Cast", "Spell": "Chromatic Dispel", "SpellID": 1868381873, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Chromatic Dispel." },
+
+    { "When": "PlayerCasts", "Fizzle": "Fizzled",
+      "Actions": [
+        {"Do": "Say", "Line": "Why... isn't this working?"}
+      ],
+      "Notes": "A wizard's spell fizzles (one of her dispels going off): her line (Central)." }
+  ]
+}

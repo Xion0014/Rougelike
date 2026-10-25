@@ -1,0 +1,14 @@
+{
+  // Fairy (Balance) (Rank 7), a minion of the Fairy Queen in the Rattlebones Master Challenge (Epic_WC_Fairy_Minion_Balance_40).
+  // Made from the Rank 14 fairy's file: the game gives both ranks the same kind of trigger list (Epic_WC_FairyMinion_40),
+  // and Central's Rank 7 Death fairy page notes "a Sacrifice to heal the Fairy Queen". The game has one fairy Sacrifice,
+  // so it is the same spell as at Rank 14. Health (1,400) and stats are the game's own.
+  "TemplateID": 1214675,
+  "Name": "Fairy (Balance) (Rank 7)",
+  "Cheats": [
+    { "When": "HealthBelow", "Percent": 25,
+      "Casts": [ { "Spell": "Sacrifice - FairyMinion", "DispelImmune": false } ], "Target": "Summoner",
+      "Line": "CombatMessages_00000743",
+      "Notes": "\"I shall protect you at all costs, my queen!\" Under 25% health: Death damage to herself, 700 healing to the Fairy Queen. Nothing is cast when the Queen is gone." }
+  ]
+}

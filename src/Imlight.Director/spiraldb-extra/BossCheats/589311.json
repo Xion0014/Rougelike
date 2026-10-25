@@ -1,0 +1,48 @@
+{
+  // Yoshinobu (Rank 13, Storm, 7,390 health), Midnight Sun Pagoda. Yoshinobu and his three (589299 Hisamoto, 589303 Kensaburo, 589307 Takazane): a chain that changes as they fall.
+  // From Wizard404's data on the gauntlets (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove).
+  // Built first from blocks that were there, then from the new universal blocks each Notes names (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 589311,
+  "Name": "Yoshinobu (Rank 13)",
+  "Cheats": [
+    { "When": "Passive", "Passive": "Minions", "Brings": ["589299", "589303", "589307"],
+      "Notes": "He fights with Hisamoto, Kensaburo and Takazane (Wizard404: his minions). New block: comes with." },
+
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Mass Infection", "SpellID": 133227446, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Mass Infection, free. Existing blocks." },
+
+    { "When": "RoundStart", "Round": 1, "Every": 3,
+      "Actions": [
+        {"Do": "CastBy", "By": "Creature", "Spell": "Legion Shield", "SpellID": 3605232, "Target": "", "DispelImmune": false, "Creature": 589299}
+      ],
+      "Notes": "Round 1 and every 3 rounds: Hisamoto casts Legion Shield, free. New block: an ally casts." },
+
+    { "When": "PlayerCasts", "Category": "Damage", "OnBoss": true, "CostMin": 8, "AlliesUp": ["589299"],
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000161"},
+        {"Do": "Cast", "Spell": "Smoke Screen", "SpellID": 583267359, "Target": "Caster", "DispelImmune": false},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Rebirth", "SpellID": 881563736, "Target": "", "DispelImmune": false, "Creature": 589299},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Power Nova", "SpellID": 791558226, "Target": "", "DispelImmune": false, "Creature": 589303}
+      ],
+      "Notes": "\"Chain Reaction!\" A 8+ pip damage spell on him while Hisamoto stands: Smoke Screen, then Hisamoto's Rebirth, then Kensaburo's Power Nova. New blocks: these allies, an ally casts. \"A {pips} pip\" is read as {pips} or more (a guess)." },
+
+    { "When": "PlayerCasts", "Category": "Damage", "OnBoss": true, "CostMin": 8, "AlliesUp": ["589303"], "AlliesDown": ["589299"],
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000163"},
+        {"Do": "Cast", "Spell": "Storm Lord", "SpellID": 1935718089, "Target": "", "DispelImmune": false},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Minor Blessing", "SpellID": 316117315, "Target": "AllAllies", "DispelImmune": false, "Creature": 589303}
+      ],
+      "Notes": "\"The Chain Continues!\" The same once Hisamoto is down but Kensaburo stands: Storm Lord, then Kensaburo's Minor Blessing on each ally. New blocks: these allies, an ally casts." },
+
+    { "When": "PlayerCasts", "Category": "Damage", "OnBoss": true, "CostMin": 8, "AlliesDown": ["589299", "589303"],
+      "Actions": [
+        {"Do": "Cast", "Spell": "Storm Lord", "SpellID": 1935718089, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Ra", "SpellID": 1643564626, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Once both are down: Storm Lord, then Ra. New block: these allies." }
+  ]
+}

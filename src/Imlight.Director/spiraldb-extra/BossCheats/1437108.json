@@ -1,0 +1,24 @@
+{
+  // Capricorn the Gruff Goat (Rank 17, Life, 9,920 health), Empyrea. Capricorn the Gruff Goat: Goat Monk for a late wizard, Ion Wind every 3rd round.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1437108,
+  "Name": "Capricorn the Gruff Goat (Rank 17)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001380"},
+        {"Do": "Cast", "Spell": "Goat Monk", "SpellID": 1708440412, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Goat Monk on them." },
+
+    { "When": "RoundEnd", "Round": 3, "Every": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001381"},
+        {"Do": "Cast", "Spell": "Ion Wind", "SpellID": 2116100290, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "End of every 3rd round: Ion Wind (protected)." }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  // Mina Clarke (Rank 25, Death, 16,190 health), Darkmoor. Mina Clarke: a Darkmoor vampire.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  // Checked against its Wizard101 Central page (saved 2026-10-24): her minions get the steal Balanceblade and the sun-spell dispel too.
+  "TemplateID": 1698881,
+  "Name": "Mina Clarke (Rank 25)",
+  "Cheats": [
+    { "When": "BossHit", "Category": "Steal",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003986"},
+        {"Do": "Cast", "Spell": "Balanceblade", "SpellID": 578086463, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Hit by a steal: Balanceblade (protected) on itself." },
+
+    { "When": "AllyHit", "Category": "Steal",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003986"},
+        {"Do": "Cast", "Spell": "Balanceblade", "SpellID": 578086463, "Target": "Hit", "DispelImmune": false}
+      ],
+      "Notes": "Central: one of her minions hit by a steal: Balanceblade on that minion." },
+
+    { "When": "BossDefeated", "Category": "Steal",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003986"},
+        {"Do": "SetHealth", "Amount": 16190}
+      ],
+      "Notes": "Defeated by a steal: back to full health (Minor Blessing's version is unknown)." },
+
+    { "When": "BossHit", "Spells": ["Power Nova", "Ra", "Sun Serpent", "Celestial Calendar", "Climaclysm", "Phoebus' Will"], "AnyVersion": true,
+      "Actions": [
+        {"Do": "Say", "Line": "Is that the sun?!"},
+        {"Do": "RemoveCharms", "Kind": "Bad", "Target": "Self"},
+        {"Do": "RemoveWards", "Kind": "Bad", "Target": "Self"}
+      ],
+      "Notes": "Hit by a sun spell: a protected dispel on itself (the exact spell is unknown; here its bad charms and traps come off)." },
+
+    { "When": "AllyHit", "Spells": ["Power Nova", "Ra", "Sun Serpent", "Celestial Calendar", "Climaclysm", "Phoebus' Will"], "AnyVersion": true,
+      "Actions": [
+        {"Do": "Say", "Line": "Is that the sun?!"},
+        {"Do": "RemoveCharms", "Kind": "Bad", "Target": "Hit"},
+        {"Do": "RemoveWards", "Kind": "Bad", "Target": "Hit"}
+      ],
+      "Notes": "Central: one of her minions hit by a sun spell: the same dispel on that minion." }
+  ]
+}

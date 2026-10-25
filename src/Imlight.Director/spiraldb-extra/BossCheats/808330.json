@@ -1,0 +1,82 @@
+{
+  // Cronus (Rank 13, Sun, 24,000 health), Aquila. Cronus: Cronus Trap each round, Lord of Night in round 4, and answers to traps and to each school.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 808330,
+  "Name": "Cronus (Rank 13)",
+  "Cheats": [
+    { "When": "RoundStart", "Round": 4,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Lord of Night", "SpellID": 2067156952, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 4: Lord of Night, before his trap." },
+
+    { "When": "RoundStart",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Cronus Trap", "SpellID": 1914517123, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Each round: Cronus Trap on a wizard." },
+
+    { "When": "PlayerCasts", "Category": "Trap", "OnBoss": true,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Cronus Tag", "SpellID": 350226902, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A trap on him: Cronus Tag on himself." },
+
+    { "When": "BossHit", "HasWho": "Self", "HasKind": "Trap",
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000191"},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 2007994870, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Hurt while he has a trap: Cleanse Ward takes all traps off him." },
+
+    { "When": "BossHit", "School": "Fire", "HasWho": "Self", "HasKind": "Trap", "HasNot": true,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Natural Attack", "SpellID": 1779725745, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "Hurt by Fire with no trap on him: the Natural Attack of the school against it." },
+
+    { "When": "BossHit", "School": "Ice", "HasWho": "Self", "HasKind": "Trap", "HasNot": true,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Natural Attack", "SpellID": 522745146, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "Hurt by Ice with no trap on him: the Natural Attack of the school against it." },
+
+    { "When": "BossHit", "School": "Storm", "HasWho": "Self", "HasKind": "Trap", "HasNot": true,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Natural Attack", "SpellID": 1996780832, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "Hurt by Storm with no trap on him: the Natural Attack of the school against it." },
+
+    { "When": "BossHit", "School": "Myth", "HasWho": "Self", "HasKind": "Trap", "HasNot": true,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Natural Attack", "SpellID": 1040423339, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "Hurt by Myth with no trap on him: the Natural Attack of the school against it." },
+
+    { "When": "BossHit", "School": "Life", "HasWho": "Self", "HasKind": "Trap", "HasNot": true,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Natural Attack", "SpellID": 689989401, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "Hurt by Life with no trap on him: the Natural Attack of the school against it." },
+
+    { "When": "BossHit", "School": "Death", "HasWho": "Self", "HasKind": "Trap", "HasNot": true,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Natural Attack", "SpellID": 1593865531, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "Hurt by Death with no trap on him: the Natural Attack of the school against it." },
+
+    { "When": "BossHit", "School": "Balance", "HasWho": "Self", "HasKind": "Trap", "HasNot": true,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Natural Attack", "SpellID": 1040423339, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "Hurt by Balance with no trap on him: the Natural Attack of the school against it." },
+
+    { "When": "BossHit", "School": "Shadow", "HasWho": "Self", "HasKind": "Trap", "HasNot": true,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Natural Attack", "SpellID": 1040423339, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "Hurt by Shadow with no trap on him: the Natural Attack of the school against it." }
+  ]
+}

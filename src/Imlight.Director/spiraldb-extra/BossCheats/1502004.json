@@ -1,0 +1,80 @@
+{
+  // Time Butterfly (Rank 17, Myth, 11,825 health), Doomsday Krok Gauntlet. Time Butterfly: a summon cycle in three steps, and Blessing while a summon stands.
+  // From Wizard404's data on the gauntlets (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove).
+  // Built first from blocks that were there, then from the new universal blocks each Notes names (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1502004,
+  "Name": "Time Butterfly (Rank 17)",
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000932"},
+        {"Do": "Cast", "Spell": "Stun", "SpellID": 1863780109, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A late wizard: stunned for 2 rounds." },
+
+    { "When": "PlayerCasts", "Spells": ["Feint"], "AnyVersion": true, "OnBoss": true,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Swap Ward", "SpellID": 584566847, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A Feint on it (Mass Feint does not count): Swap Ward with that wizard." },
+
+    { "When": "RoundStart", "Every": 2,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Cosmetic Cast", "SpellID": 1983639969, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Empower", "SpellID": 587816220, "Target": "AllAllies", "DispelImmune": false},
+        {"Do": "FirstTurn", "Side": "Swap"}
+      ],
+      "Notes": "Every 2 rounds: Empower (a power pip) for all its allies, and the other side goes first. New: turn order swap." },
+
+    { "When": "BattleStart", "Phase": 1,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Summon Morganthe", "SpellID": 1817695891, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Phase 1: Young Morganthe." },
+
+    { "When": "MinionDefeated", "Creature": 1502655, "Phase": 1,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Summon Morganthe", "SpellID": 1817695891, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Summon Roberto", "SpellID": 820783162, "Target": "", "DispelImmune": false},
+        {"Do": "SetPhase", "Phase": 2}
+      ],
+      "Notes": "Young Morganthe falls: she comes back with Roberto (phase 2)." },
+
+    { "When": "MinionDefeated", "NoAllies": true, "Phase": 2,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Summon Morganthe", "SpellID": 1817695891, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Summon Roberto", "SpellID": 820783162, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Summon Broodmother", "SpellID": 1672140092, "Target": "", "DispelImmune": false},
+        {"Do": "SetPhase", "Phase": 3}
+      ],
+      "Notes": "Both fall: Young Morganthe, Roberto and Broodmother (phase 3). NoAllies now counts for this When too." },
+
+    { "When": "MinionDefeated", "NoAllies": true, "Phase": 3,
+      "Actions": [
+        {"Do": "SetPhase", "Phase": 4}
+      ],
+      "Notes": "All three fall: no more Blessing (phase 4)." },
+
+    { "When": "BossDefeated", "HasAllies": true, "Phase": 1,
+      "Actions": [
+        {"Do": "SetHealth", "Amount": 11825},
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 1022053292, "Target": "AllAllies", "DispelImmune": false}
+      ],
+      "Notes": "Phase 1: defeated while a minion stands, Blessing brings its side back to full." },
+
+    { "When": "BossDefeated", "HasAllies": true, "Phase": 2,
+      "Actions": [
+        {"Do": "SetHealth", "Amount": 11825},
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 1022053292, "Target": "AllAllies", "DispelImmune": false}
+      ],
+      "Notes": "Phase 2: defeated while a minion stands, Blessing brings its side back to full." },
+
+    { "When": "BossDefeated", "HasAllies": true, "Phase": 3,
+      "Actions": [
+        {"Do": "SetHealth", "Amount": 11825},
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 1022053292, "Target": "AllAllies", "DispelImmune": false}
+      ],
+      "Notes": "Phase 3: defeated while a minion stands, Blessing brings its side back to full." }
+  ]
+}

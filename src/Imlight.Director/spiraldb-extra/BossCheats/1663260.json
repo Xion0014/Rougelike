@@ -1,0 +1,33 @@
+{
+  // Pendragon (Rank 14, Death, 27,395 health), Pendragon Rematch. Pendragon, with the Black and White Dragons.
+  // From Wizard404's data on the gauntlets (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove).
+  // Built first from blocks that were there, then from the new universal blocks each Notes names (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1663260,
+  "Name": "Pendragon (Rank 14)",
+  "Cheats": [
+    { "When": "Passive", "Passive": "Minions", "Brings": ["1663262", "1663261"],
+      "Notes": "He fights with the White and Black Dragons (Wizard404: his minions). New block: comes with." },
+
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002940"},
+        {"Do": "Cast", "Spell": "Medusa", "SpellID": 0, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "\"Even stragglers will be devoured\" A late wizard: Medusa (which version is unconfirmed: the plain one)." },
+
+    { "When": "BossHit", "CostMin": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002937"},
+        {"Do": "Cast", "Spell": "Scarecrow", "SpellID": 463492169, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "\"Your power only feeds me\" Hit by a spell of more than 3 pips: Scarecrow. Existing blocks." },
+
+    { "When": "BossDefeated", "CostMin": 4,
+      "Actions": [
+        {"Do": "SetHealth", "Amount": 27395},
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 1641304242, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Defeated by a spell of more than 3 pips: he comes back with Blessing." }
+  ]
+}

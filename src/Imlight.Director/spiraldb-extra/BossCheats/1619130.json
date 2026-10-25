@@ -1,0 +1,66 @@
+{
+  // Judge Judi (Rank 23, Balance, 17,410 health), Unknown. Judge Judi: a rule every second round, and Sirocco Djinni for whoever breaks it.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1619130,
+  "Name": "Judge Judi (Rank 23)",
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002954"}
+      ],
+      "Notes": "Round 1: rules from round 2." },
+
+    { "When": "RoundStart", "Round": 2, "Every": 2,
+      "Actions": [
+        {"Do": "InTurn", "Count": 4, "Group": 2},
+        {"Do": "Say", "Line": "CombatMessages_00002958"},
+        {"Do": "Mark", "Mark": "rule minions", "Target": "Self"},
+        {"Do": "Say", "Line": "CombatMessages_00002956"},
+        {"Do": "Mark", "Mark": "rule no heals", "Target": "Self"},
+        {"Do": "Say", "Line": "CombatMessages_00002957"},
+        {"Do": "Mark", "Mark": "rule single", "Target": "Self"},
+        {"Do": "Say", "Line": "CombatMessages_00002959"},
+        {"Do": "Mark", "Mark": "rule no damage", "Target": "Self"}
+      ],
+      "Notes": "Every second round, one rule in turn: hit only her witnesses, no heals, only single-target hits, no hits." },
+
+    { "When": "RoundEnd",
+      "Actions": [
+        {"Do": "Unmark", "Mark": "rule minions", "Target": "Self"},
+        {"Do": "Unmark", "Mark": "rule no heals", "Target": "Self"},
+        {"Do": "Unmark", "Mark": "rule single", "Target": "Self"},
+        {"Do": "Unmark", "Mark": "rule no damage", "Target": "Self"}
+      ],
+      "Notes": "End of each round: the rule ends." },
+
+    { "When": "PlayerDamages", "OnBoss": true, "AlliesMin": 1, "Mark": "rule minions", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002955"},
+        {"Do": "Cast", "Spell": "Sirocco Djinni", "SpellID": 1166147461, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "Hitting her while a witness stands under 'No more witnesses!'." },
+
+    { "When": "PlayerHeals", "Mark": "rule no heals", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002955"},
+        {"Do": "Cast", "Spell": "Sirocco Djinni", "SpellID": 1166147461, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A heal (a pet's too) under 'Speed it up!'." },
+
+    { "When": "PlayerDamages", "MultiTarget": true, "Mark": "rule single", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002955"},
+        {"Do": "Cast", "Spell": "Sirocco Djinni", "SpellID": 1166147461, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A hit on more than one under 'Be direct!'." },
+
+    { "When": "PlayerDamages", "Mark": "rule no damage", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002955"},
+        {"Do": "Cast", "Spell": "Sirocco Djinni", "SpellID": 1166147461, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "Any hit under 'Pipe down!'." }
+  ]
+}

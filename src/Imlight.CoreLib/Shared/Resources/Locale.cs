@@ -91,6 +91,43 @@ internal class Locale : RootDirectoryResourceSingleton<Locale>, IMemoryStreamDis
     }
 
     /// <summary>
+    /// The game's own lines that hold every word of <paramref name="query"/>: a line equal to it first, then the
+    /// shortest, each with its key (Table_Id), which is what the game shows a line by. Ported from Niduus/Imlight, for
+    /// the boss cheats' Say lines written as words.
+    /// </summary>
+    public static List<(string Key, string Text)> Search(string query, int maxResults) {
+        if (s_data.Count == 0) {
+            _ = Instance;
+        }
+
+        static string Plain(string text) => text.Trim().TrimEnd('!', '.', '?').Trim();
+        var plainQuery = Plain(query ?? "");
+        var words = plainQuery.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (words.Length == 0) {
+            return [];
+        }
+
+        var found = new List<(string Key, string Text)>();
+        foreach (var (table, lines) in s_data) {
+            foreach (var (id, text) in lines) {
+                if (!string.IsNullOrEmpty(text) && text.Length <= 200
+                    && Array.TrueForAll(words, w => text.Contains(w, StringComparison.OrdinalIgnoreCase))) {
+                    found.Add(($"{table}_{id}", text));
+                }
+            }
+        }
+
+        found.Sort((a, b) => {
+            var exactA = Plain(a.Text).Equals(plainQuery, StringComparison.OrdinalIgnoreCase);
+            var exactB = Plain(b.Text).Equals(plainQuery, StringComparison.OrdinalIgnoreCase);
+
+            return exactA != exactB ? (exactA ? -1 : 1) : a.Text.Length.CompareTo(b.Text.Length);
+        });
+
+        return found.Count > maxResults ? found.GetRange(0, maxResults) : found;
+    }
+
+    /// <summary>
     /// Retrieves the English name associated with the specified key.
     /// </summary>
     /// <param name="key">The key used to retrieve the English name.</param>

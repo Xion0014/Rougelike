@@ -1,0 +1,81 @@
+{
+  // Xibalba Elemental (Rank 22, Death, 100 health), Unknown. Xibalba Elemental: Equalize, an immunity aura of all but one school, Deer Knight each round, and a new aura each time it is hurt.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1607012,
+  "Name": "Xibalba Elemental (Rank 22)",
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002827"},
+        {"Do": "Cast", "Spell": "Equalize", "SpellID": 1512762314, "Target": "", "DispelImmune": false},
+        {"Do": "PickOne", "Count": 7, "Group": 2},
+        {"Do": "Say", "Line": "CombatMessages_00002835"},
+        {"Do": "Cast", "Spell": "Brace", "SpellID": 355242286, "Target": "Self", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00002829"},
+        {"Do": "Cast", "Spell": "Brace", "SpellID": 514159993, "Target": "Self", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00002830"},
+        {"Do": "Cast", "Spell": "Brace", "SpellID": 506331205, "Target": "Self", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00002831"},
+        {"Do": "Cast", "Spell": "Brace", "SpellID": 231386029, "Target": "Self", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00002832"},
+        {"Do": "Cast", "Spell": "Brace", "SpellID": 515841365, "Target": "Self", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00002834"},
+        {"Do": "Cast", "Spell": "Brace", "SpellID": 514078033, "Target": "Self", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00002833"},
+        {"Do": "Cast", "Spell": "Brace", "SpellID": 210125681, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Equalize and one of seven Braces (-300% resist to all schools but one)." },
+
+    { "When": "RoundEnd",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002836"},
+        {"Do": "Cast", "Spell": "Deer Knight", "SpellID": 194680648, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "End of each round: Deer Knight." },
+
+    { "When": "BossHit", "Category": "Damage",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002828"},
+        {"Do": "Cast", "Spell": "Supernova", "SpellID": 1039118069, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Exit Combat", "SpellID": 2127696416, "Target": "Caster", "DispelImmune": false},
+        {"Do": "PickOne", "Count": 7, "Group": 2},
+        {"Do": "Say", "Line": "CombatMessages_00002835"},
+        {"Do": "Cast", "Spell": "Brace", "SpellID": 355242286, "Target": "Self", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00002829"},
+        {"Do": "Cast", "Spell": "Brace", "SpellID": 514159993, "Target": "Self", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00002830"},
+        {"Do": "Cast", "Spell": "Brace", "SpellID": 506331205, "Target": "Self", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00002831"},
+        {"Do": "Cast", "Spell": "Brace", "SpellID": 231386029, "Target": "Self", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00002832"},
+        {"Do": "Cast", "Spell": "Brace", "SpellID": 515841365, "Target": "Self", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00002834"},
+        {"Do": "Cast", "Spell": "Brace", "SpellID": 514078033, "Target": "Self", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00002833"},
+        {"Do": "Cast", "Spell": "Brace", "SpellID": 210125681, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Hurt: Supernova on itself, Exit Combat on the wizard, and a new aura." },
+
+    { "When": "BossHit", "Category": "Damage",
+      "Actions": [
+        {"Do": "InTurn", "Count": 7, "Group": 2},
+        {"Do": "Say"},
+        {"Do": "Say"},
+        {"Do": "Say"},
+        {"Do": "Say"},
+        {"Do": "Say"},
+        {"Do": "Say"},
+        {"Do": "Say"},
+        {"Do": "Say"},
+        {"Do": "Say"},
+        {"Do": "Say"},
+        {"Do": "Say"},
+        {"Do": "Say"},
+        {"Do": "Say", "Line": "CombatMessages_00002837"},
+        {"Do": "Cast", "Spell": "Doom and Gloom", "SpellID": 728541335, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Every seventh time it is hurt: Doom and Gloom (line 'I feel... mortality')." }
+  ]
+}

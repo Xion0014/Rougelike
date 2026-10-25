@@ -1,0 +1,27 @@
+{
+  // Zeus Sky Father (Rank 14, Myth, 22,000 health), Zeus Exalted Duel. Zeus Sky Father, with Cronus and two of the four gods. Wizard404 lists the gods' spells and lines but not when most go off: only the clear ones are made.
+  // From Wizard404's data on the gauntlets (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove).
+  // Built first from blocks that were there, then from the new universal blocks each Notes names (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1336710,
+  "Name": "Zeus Sky Father (Rank 14)",
+  "ShadowPips": 1,
+  "Cheats": [
+    { "When": "Passive", "Passive": "Minions", "Brings": ["1336727"], "BringsRandom": ["1336711", "1336726", "1336724", "1336725"], "BringsCount": 2,
+      "Notes": "He fights with Cronus and two of Apollo, Ares, Poseidon and Hades at random (Wizard404: his minions and pool). New block: comes with." },
+
+    { "When": "PlayerCasts", "Category": "Weakness", "OnBoss": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000708"},
+        {"Do": "Cast", "Spell": "Cleanse Charm", "SpellID": 1196233089, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "\"Did you think you could silence an Immortal?\" A weakness on him: Cleanse Charm (the moment is a guess)." },
+
+    { "When": "MinionDefeated",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000704"},
+        {"Do": "Cast", "Spell": "Natural Attack", "SpellID": 1850709106, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "\"Fallen Immortals must be avenged!\" One of his gods falls: Natural Attack." }
+  ]
+}

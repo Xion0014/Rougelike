@@ -1,0 +1,51 @@
+{
+  // Detolli the Destroyer (Rank 15, Fire, 10,160 health), Polaris. Detolli the Destroyer: Fuel for a late wizard, Firecharm for buffs, and his Scorcher.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1340785,
+  "Name": "Detolli the Destroyer (Rank 15)",
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "Tardiness will not be tolerated!"},
+        {"Do": "Cast", "Spell": "Fuel", "SpellID": 2563718, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Fuel on them." },
+
+    { "When": "PlayerCasts", "Category": "Blade,Global,Aura",
+      "Actions": [
+        {"Do": "Say", "Line": "Burn! Burn it all down!"},
+        {"Do": "Cast", "Spell": "Firecharm", "SpellID": 1682457287, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A blade, global or aura: Firecharm." },
+
+    { "When": "RoundEnd", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "We'll reduce this tower to cinders if we must!"},
+        {"Do": "Cast", "Spell": "Fire Elemental", "SpellID": 151339012, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "End of round 1: a Scorcher." },
+
+    { "When": "RoundStart", "Round": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "How about a bit of fire and brimstone?"},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Brimstone Revenant", "SpellID": 630452750, "Target": "Enemy", "DispelImmune": false, "Creature": 1369840}
+      ],
+      "Notes": "Round 2: the Scorcher's Brimstone Revenant." },
+
+    { "When": "RoundStart", "Round": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "You know nothing of fire!"},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Mass Fire Prism", "SpellID": 637639811, "Target": "", "DispelImmune": false, "Creature": 1369840}
+      ],
+      "Notes": "Round 3: Mass Fire Prism." },
+
+    { "When": "RoundEnd", "Round": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "Burn out, my friend, and give me a boost!"},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Sacrificing Power", "SpellID": 1842220044, "Target": "Owner", "DispelImmune": false, "Creature": 1369840}
+      ],
+      "Notes": "End of round 4: Sacrificing Power." }
+  ]
+}

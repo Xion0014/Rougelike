@@ -1,0 +1,17 @@
+{
+  // Hades the Unseen (Rank 14, Death, 18,000 health), Zeus Exalted Duel. Hades the Unseen.
+  // From Wizard404's data on the gauntlets (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove).
+  // Built first from blocks that were there, then from the new universal blocks each Notes names (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1336725,
+  "Name": "Hades the Unseen (Rank 14)",
+  "ShadowPips": 1,
+  "Cheats": [
+    { "When": "MinionDefeated", "Creature": 1336710,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000707"},
+        {"Do": "Cast", "Spell": "Wrath of Hades", "SpellID": 867562617, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "\"Zeus sends his regards from Tartarus!\" Zeus falls: Wrath of Hades (Wizard404: needs confirming)." }
+  ]
+}

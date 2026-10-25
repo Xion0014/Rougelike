@@ -1,0 +1,58 @@
+{
+  // Jake the Smoke Monster (Rank 23, Shadow, 16,150 health), Unknown. Jake the Smoke Monster: one blade, global and trap a round, Mass Supernova for an aura, and another Jake.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1619197,
+  "Name": "Jake the Smoke Monster (Rank 23)",
+  "Cheats": [
+    { "When": "PlayerCasts", "Mark": "blade this round", "MarkWho": "Self", "Category": "Blade,Global", "PlayersMin": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002968"},
+        {"Do": "Cast", "Spell": "Enfeeble", "SpellID": 129713464, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "A second blade or global this round: Enfeeble on all wizards." },
+
+    { "When": "PlayerCasts", "Mark": "blade this round", "MarkWho": "Self", "NotMarked": true, "Category": "Blade,Global", "PlayersMin": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002967"},
+        {"Do": "Mark", "Mark": "blade this round", "Target": "Self"}
+      ],
+      "Notes": "A first blade or global this round: a warning." },
+
+    { "When": "PlayerCasts", "Category": "Trap", "PlayersMin": 2, "Mark": "trap this round", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002968"},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 274322118, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A second trap this round: Cleanse Ward (all traps on his side)." },
+
+    { "When": "PlayerCasts", "Category": "Trap", "PlayersMin": 2, "Mark": "trap this round", "MarkWho": "Self", "NotMarked": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002967"},
+        {"Do": "Mark", "Mark": "trap this round", "Target": "Self"}
+      ],
+      "Notes": "A first trap this round: a warning." },
+
+    { "When": "RoundEnd",
+      "Actions": [
+        {"Do": "Unmark", "Mark": "blade this round", "Target": "Self"},
+        {"Do": "Unmark", "Mark": "trap this round", "Target": "Self"}
+      ],
+      "Notes": "End of each round: the count starts again." },
+
+    { "When": "PlayerAuras",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002963"},
+        {"Do": "Cast", "Spell": "Mass Supernova", "SpellID": 793827852, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "An aura: Mass Supernova." },
+
+    { "When": "MinionDefeated", "AlliesMax": 0,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002983"},
+        {"Do": "Minion", "Creature": 1628100}
+      ],
+      "Notes": "No minions left: another Jake the Smoke Monster." }
+  ]
+}

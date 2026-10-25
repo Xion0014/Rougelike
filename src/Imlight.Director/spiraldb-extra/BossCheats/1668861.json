@@ -1,0 +1,37 @@
+{
+  // Shadowwock (Rank 17, Shadow, 12,000 health), Grandfather Spider Rematch. Shadowwock: green, yellow and red light. Hurting anyone while the red aura is up is punished.
+  // From Wizard404's data on the gauntlets (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove).
+  // Built first from blocks that were there, then from the new universal blocks each Notes names (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1668861,
+  "Name": "Shadowwock (Rank 17)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "RoundStart", "Round": 1, "Every": 3,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Verdant Action Aura", "SpellID": 1662110910, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 1, 4, 7...: the green aura. Existing blocks." },
+
+    { "When": "RoundStart", "Round": 2, "Every": 3,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Golden Caution Aura", "SpellID": 1352491957, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 2, 5, 8...: the yellow aura." },
+
+    { "When": "RoundStart", "Round": 3, "Every": 3,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Screeching Crimson Aura", "SpellID": 1235686394, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 3, 6, 9...: the red aura." },
+
+    { "When": "PlayerCasts", "Category": "Damage", "HasWho": "Self", "HasSpell": "Screeching Crimson Aura",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003586"},
+        {"Do": "HealthTo", "Amount": 100, "Target": "Self"},
+        {"Do": "Cast", "Spell": "Fire Dragon", "SpellID": 755493642, "Target": "", "DispelImmune": false},
+        {"Do": "Pips", "Amount": 1, "Kind": "Shadow", "Target": "Summoner"}
+      ],
+      "Notes": "\"You lose!\" A wizard's damage spell lands while the red aura is on him: back to full health, Fire Dragon, and a shadow pip for Grandfather Spider. New block: has a charm or ward (from this spell)." }
+  ]
+}

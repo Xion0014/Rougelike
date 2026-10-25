@@ -1,0 +1,28 @@
+{
+  // Rattlebones (Rank 7), Rattlebones Master Challenge (housing gauntlet HOUSE_ULTRADUNGEON_Rattlebones_040;
+  // Heroic_WC_Rattlebones). From Wizard101 Central's page "Rattlebones (Rank 7)" (Niduus saved it, 2026-10-23), which
+  // holds the cheats of the whole fight. Made from his Rank 14 file (1340311.json). His health (6,400) and stats are
+  // the game's own. The page gives him no shadow pips, so none are set.
+  // Each cheat's spell can be dispelled as the page says (its school's dispel stops it): DispelImmune false.
+  "TemplateID": 1340305,
+  "Name": "Rattlebones (Rank 7)",
+  "Cheats": [
+    { "When": "Passive", "Passive": "Minions", "Brings": ["1340306"],
+      "Notes": "He fights with the Fairy Queen (Wizard404: his minion, 2026-10-24). A battle started against him brings her in: the room's own Queen first, else she is summoned. New block: comes with." },
+
+    { "When": "EnemyJoins", "Round": 1,
+      "Casts": [ { "Spell": "Mana Burn", "DispelImmune": false } ], "Target": "Caster",
+      "Line": "CombatMessages_00000676",
+      "Notes": "\"Tardiness will not be tolerated!\" A wizard who joins after the battle has begun gets Mana Burn, the one in his deck (Balance: Unbalance stops it)." },
+
+    { "When": "PlayerHeals",
+      "Casts": [ { "Spell": "Doom and Gloom - Nosferabbit", "DispelImmune": false } ],
+      "Line": "CombatMessages_00000675",
+      "Notes": "\"Let's dampen the Heals!\" A wizard's heal (a pet's too) gets a -75% Doom and Gloom, as in his deck (Death: Strangle stops it)." },
+
+    { "When": "PlayerCasts", "Spells": ["Feint"], "AnyVersion": true, "School": "Death", "OnBoss": true,
+      "Casts": [ { "Spell": "Swap Negative Wards-Rattlebones", "DispelImmune": false } ], "Target": "Caster",
+      "Line": "CombatMessages_00000674",
+      "Notes": "\"Why don't we trade?\" A Feint put on him: the traps swap so the bigger one is on that wizard (Melt stops it)." }
+  ]
+}

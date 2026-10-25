@@ -1,0 +1,34 @@
+{
+  // Frostbranch (Rank 9, Ice, 4,435 health), Grizzleheim. Frostbranch: two Smoke Screens, a Mark of Courage for a single hit, and Efreet for wizards without one every fifth round.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 346652,
+  "Name": "Frostbranch (Rank 9)",
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000076"},
+        {"Do": "Cast", "Spell": "Smoke Screen", "SpellID": 305778176, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Smoke Screen", "SpellID": 305778176, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: two Smoke Screens on all wizards." },
+
+    { "When": "PlayerCasts", "Category": "Damage", "OnBoss": true, "SingleTarget": true,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000078"},
+        {"Do": "Cast", "Spell": "Mark of Courage", "SpellID": 1353940952, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Mark", "Mark": "courage", "Target": "Caster"}
+      ],
+      "Notes": "A single-target hit on it: Mark of Courage on the wizard." },
+
+    { "When": "RoundStart", "Round": 5, "Every": 5,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000077"},
+        {"Do": "Cast", "Spell": "Efreet", "SpellID": 142916392, "Target": "Unmarked", "DispelImmune": false, "Mark": "courage"},
+        {"Do": "Cast", "Spell": "Earthquake", "SpellID": 230708968, "Target": "", "DispelImmune": false},
+        {"Do": "Unmark", "Mark": "courage", "Target": "AllEnemies"}
+      ],
+      "Notes": "Every fifth round: Efreet on each wizard without the mark, then Earthquake takes the marks off." }
+  ]
+}

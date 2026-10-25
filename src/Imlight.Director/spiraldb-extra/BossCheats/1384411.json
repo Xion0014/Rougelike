@@ -1,0 +1,37 @@
+{
+  // Neberyx (Rank 16, Shadow, 44,000 health), Dragonspyre. Neberyx: Insane Bolt on a late wizard, Earthquake for a blade or AoE.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1384411,
+  "Name": "Neberyx (Rank 16)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "Tardiness will not be tolerated!"},
+        {"Do": "Cast", "Spell": "Insane Bolt", "SpellID": 1378434197, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 2: Insane Bolt." },
+
+    { "When": "PlayerCasts", "Category": "Blade", "Chance": 50,
+      "Actions": [
+        {"Do": "Say", "Line": "Enough of this!"},
+        {"Do": "Cast", "Spell": "Earthquake", "SpellID": 1910200279, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A blade: sometimes (50%) Earthquake." },
+
+    { "When": "PlayerCasts", "Category": "Damage", "MultiTarget": true, "Chance": 50,
+      "Actions": [
+        {"Do": "Say", "Line": "Enough of this!"},
+        {"Do": "Cast", "Spell": "Earthquake", "SpellID": 1910200279, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A damage AoE: sometimes (50%) Earthquake." },
+
+    { "When": "ICast", "Spells": ["Natural Attack"],
+      "Actions": [
+        {"Do": "Say", "Line": "How do you like this?"}
+      ],
+      "Notes": "His Natural Attack: the line." }
+  ]
+}

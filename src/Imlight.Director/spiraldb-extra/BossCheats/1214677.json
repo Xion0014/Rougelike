@@ -1,0 +1,14 @@
+{
+  // Fairy (Fire) (Rank 7), a minion of the Fairy Queen in the Rattlebones Master Challenge (Epic_WC_Fairy_Minion_Fire_40).
+  // Made from the Rank 14 Fire fairy's file: the game has a Rank 7 Immolate for her, Immolate - FairyMinion_40 (1,050 Fire
+  // damage to herself, 400 to a wizard), and Central's page notes "an Immolate to attack Wizards". Health (1,400) and
+  // stats are the game's own.
+  "TemplateID": 1214677,
+  "Name": "Fairy (Fire) (Rank 7)",
+  "Cheats": [
+    { "When": "HealthBelow", "Percent": 25,
+      "Casts": [ { "Spell": "Immolate - FairyMinion_40", "DispelImmune": false } ], "Target": "LastAttacker",
+      "Line": "CombatMessages_00000744",
+      "Notes": "\"Ashes to ashes, we all burn down!\" Under 25% health: 1,050 Fire damage to herself and 400 to the wizard who last hurt her. Not cast when that wizard is defeated." }
+  ]
+}

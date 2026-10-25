@@ -1,0 +1,54 @@
+{
+  // Numbskull Chieftain (Rank 15, Life, 10,240 health), Polaris. Numbskull Chieftain: two warnings and Chivalrous Centaur for charms, shields for a jinx, Guiding Light for a heal.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1371170,
+  "Name": "Numbskull Chieftain (Rank 15)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "PlayerCharms", "Mark": "warned twice", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000789"},
+        {"Do": "Cast", "Spell": "Chivalrous Centaur", "SpellID": 146345865, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A third charm or later: Chivalrous Centaur on the caster." },
+
+    { "When": "PlayerCharms", "Mark": "warned once", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000788"},
+        {"Do": "Unmark", "Mark": "warned once", "Target": "Self"},
+        {"Do": "Mark", "Mark": "warned twice", "Target": "Self"}
+      ],
+      "Notes": "A second charm: the second warning." },
+
+    { "When": "PlayerCharms", "Once": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000787"},
+        {"Do": "Mark", "Mark": "warned once", "Target": "Self"}
+      ],
+      "Notes": "A first charm: a warning." },
+
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000676"},
+        {"Do": "Cast", "Spell": "Spirit Trap", "SpellID": 1376756333, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Spirit Trap on them." },
+
+    { "When": "PlayerCasts", "Category": "Trap", "OnBoss": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000790"},
+        {"Do": "Cast", "Spell": "Legend Shield", "SpellID": 337707760, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Dream Shield", "SpellID": 406227672, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A jinx on him: Legend Shield and Dream Shield." },
+
+    { "When": "PlayerHeals",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000791"},
+        {"Do": "Cast", "Spell": "Guiding Light", "SpellID": 1034298003, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A heal (a pet's too): his pet's Guiding Light (here: his own)." }
+  ]
+}

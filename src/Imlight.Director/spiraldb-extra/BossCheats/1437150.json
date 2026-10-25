@@ -1,0 +1,129 @@
+{
+  // Tumbler (Rank 17, Moon, 10,460 health), Empyrea. Tumbler: Mana Burn for a late wizard, Berserk in round 1, Fortify in round 4, both put back.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1437150,
+  "Name": "Tumbler (Rank 17)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001251"},
+        {"Do": "Cast", "Spell": "Mana Burn", "SpellID": 1527838769, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Mana Burn on them." },
+
+    { "When": "BattleStart", "PlayersMin": 1, "PlayersMax": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001252"},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1182965264, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 1, 1 wizard(s): Berserk." },
+
+    { "When": "BattleStart", "PlayersMin": 2, "PlayersMax": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001252"},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1018507804, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 1, 2 wizard(s): Berserk." },
+
+    { "When": "BattleStart", "PlayersMin": 3, "PlayersMax": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001252"},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1018509852, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 1, 3 wizard(s): Berserk." },
+
+    { "When": "BattleStart", "PlayersMin": 4, "PlayersMax": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001252"},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1018495516, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 1, 4 wizard(s): Berserk." },
+
+    { "When": "PlayerCasts", "Category": "Aura,Dispel", "OnBoss": true, "ToRound": 3, "PlayersMin": 1, "PlayersMax": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001361"},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1182965264, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Berserk taken off, 1 wizard(s): back on." },
+
+    { "When": "PlayerCasts", "Category": "Aura,Dispel", "OnBoss": true, "ToRound": 3, "PlayersMin": 2, "PlayersMax": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001361"},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1018507804, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Berserk taken off, 2 wizard(s): back on." },
+
+    { "When": "PlayerCasts", "Category": "Aura,Dispel", "OnBoss": true, "ToRound": 3, "PlayersMin": 3, "PlayersMax": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001361"},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1018509852, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Berserk taken off, 3 wizard(s): back on." },
+
+    { "When": "PlayerCasts", "Category": "Aura,Dispel", "OnBoss": true, "ToRound": 3, "PlayersMin": 4, "PlayersMax": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001361"},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1018495516, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Berserk taken off, 4 wizard(s): back on." },
+
+    { "When": "RoundStart", "Round": 4, "PlayersMin": 1, "PlayersMax": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001253"},
+        {"Do": "Cast", "Spell": "Fortify", "SpellID": 1057010479, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 4, 1 wizard(s): Fortify." },
+
+    { "When": "RoundStart", "Round": 4, "PlayersMin": 2, "PlayersMax": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001253"},
+        {"Do": "Cast", "Spell": "Fortify", "SpellID": 1862316847, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 4, 2 wizard(s): Fortify." },
+
+    { "When": "RoundStart", "Round": 4, "PlayersMin": 3, "PlayersMax": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001253"},
+        {"Do": "Cast", "Spell": "Fortify", "SpellID": 1065399087, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 4, 3 wizard(s): Fortify." },
+
+    { "When": "RoundStart", "Round": 4, "PlayersMin": 4, "PlayersMax": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001253"},
+        {"Do": "Cast", "Spell": "Fortify", "SpellID": 1870705455, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 4, 4 wizard(s): Fortify." },
+
+    { "When": "PlayerCasts", "Category": "Aura,Dispel", "OnBoss": true, "FromRound": 4, "PlayersMin": 1, "PlayersMax": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001254"},
+        {"Do": "Cast", "Spell": "Fortify", "SpellID": 1057010479, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Fortify taken off, 1 wizard(s): back on." },
+
+    { "When": "PlayerCasts", "Category": "Aura,Dispel", "OnBoss": true, "FromRound": 4, "PlayersMin": 2, "PlayersMax": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001254"},
+        {"Do": "Cast", "Spell": "Fortify", "SpellID": 1862316847, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Fortify taken off, 2 wizard(s): back on." },
+
+    { "When": "PlayerCasts", "Category": "Aura,Dispel", "OnBoss": true, "FromRound": 4, "PlayersMin": 3, "PlayersMax": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001254"},
+        {"Do": "Cast", "Spell": "Fortify", "SpellID": 1065399087, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Fortify taken off, 3 wizard(s): back on." },
+
+    { "When": "PlayerCasts", "Category": "Aura,Dispel", "OnBoss": true, "FromRound": 4, "PlayersMin": 4, "PlayersMax": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001254"},
+        {"Do": "Cast", "Spell": "Fortify", "SpellID": 1870705455, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Fortify taken off, 4 wizard(s): back on." }
+  ]
+}

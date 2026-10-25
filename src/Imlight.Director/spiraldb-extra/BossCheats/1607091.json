@@ -1,0 +1,29 @@
+{
+  // Crying Sky Revenant (Rank 12, , 1,945 health), Azteca. Crying Sky Revenant: Mass Chromatic Weakness, and storm answers to heals and DoTs over time.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1607091,
+  "Name": "Crying Sky Revenant (Rank 12)",
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Mass Chromatic Weakness", "SpellID": 1766001104, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Mass Chromatic Weakness." },
+
+    { "When": "PlayerCasts", "Category": "HoT",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002779"},
+        {"Do": "Cast", "Spell": "Mob Jinn's Restoration", "SpellID": 1100333471, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "A heal over time: Mob Jinn's Restoration." },
+
+    { "When": "PlayerCasts", "Category": "DoT",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002778"},
+        {"Do": "Cast", "Spell": "Mob Oni's Attrition", "SpellID": 1100267935, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "A damage over time: Mob Oni's Attrition." }
+  ]
+}

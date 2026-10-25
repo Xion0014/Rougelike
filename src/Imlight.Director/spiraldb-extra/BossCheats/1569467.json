@@ -1,0 +1,42 @@
+{
+  // Dasein Duelist (Rank 22, Fire, 15,320 health), Novus. Dasein Duelist: Hammer of Thor for a trap, and two Extra Lives.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1569467,
+  "Name": "Dasein Duelist (Rank 22)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "PlayerCasts", "Category": "Trap", "OnBoss": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002411"},
+        {"Do": "Cast", "Spell": "Hammer of Thor", "SpellID": 1513759780, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A trap on him: Hammer of Thor." },
+
+    { "When": "BossDefeated", "Mark": "life 1", "MarkWho": "Self", "MaxTimes": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002413"},
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 1891597766, "Target": "Self", "DispelImmune": false},
+        {"Do": "SetHealth", "Amount": 3830},
+        {"Do": "Cast", "Spell": "Rain of Fire", "SpellID": 1038559747, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Force Pass AOE", "SpellID": 423978274, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Wait", "Rounds": 1},
+        {"Do": "Cast", "Spell": "End Force Pass AOE", "SpellID": 1376816564, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Defeated the second time: back with 25%, Rain of Fire and a forced pass for the round." },
+
+    { "When": "BossDefeated", "Mark": "life 1", "MarkWho": "Self", "NotMarked": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002412"},
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 838600055, "Target": "Self", "DispelImmune": false},
+        {"Do": "SetHealth", "Amount": 7660},
+        {"Do": "Cast", "Spell": "Meteor Strike", "SpellID": 729953007, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Force Pass AOE", "SpellID": 423978274, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Mark", "Mark": "life 1", "Target": "Self"},
+        {"Do": "Wait", "Rounds": 1},
+        {"Do": "Cast", "Spell": "End Force Pass AOE", "SpellID": 1376816564, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Defeated the first time: back with 50%, Meteor Strike and a forced pass." }
+  ]
+}

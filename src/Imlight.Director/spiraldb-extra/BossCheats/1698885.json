@@ -1,0 +1,76 @@
+{
+  // Kain von Shane (Rank 25, Death, 16,190 health), Darkmoor. Kain von Shane: Dark Tribute for a Feint, answers to curses and heals, an interrupt cycle, and vampire answers.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1698885,
+  "Name": "Kain von Shane (Rank 25)",
+  "Cheats": [
+    { "When": "PlayerCasts", "Spells": ["Feint"], "OnBoss": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00004172"},
+        {"Do": "Cast", "Spell": "Dark Tribute", "SpellID": 973103412, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A Feint on him: Dark Tribute (Mass Feint does not count)." },
+
+    { "When": "PlayerCasts", "Category": "Weakness",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000543"},
+        {"Do": "Cast", "Spell": "Disarm", "SpellID": 1627273980, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A curse: Disarm on the wizard." },
+
+    { "When": "PlayerCasts", "Category": "Heal",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000568"},
+        {"Do": "Cast", "Spell": "Vampire", "SpellID": 1564216338, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A heal: Vampire on the wizard." },
+
+    { "When": "BossHit", "Category": "Damage",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00004176"},
+        {"Do": "Mark", "Mark": "hurt", "Target": "Self"}
+      ],
+      "Notes": "Hurt: the interrupt cycle is put back a round." },
+
+    { "When": "RoundStart", "Mark": "hurt", "MarkWho": "Self", "NotMarked": true,
+      "Actions": [
+        {"Do": "InTurn", "Count": 3, "Group": 2},
+        {"Do": "Say", "Line": "CombatMessages_00004173"},
+        {"Do": "Cast", "Spell": "Supercharge", "SpellID": 1478284873, "Target": "", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00004174"},
+        {"Do": "Cast", "Spell": "Chromatic Dispel", "SpellID": 1866943464, "Target": "", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00004175"},
+        {"Do": "Cast", "Spell": "Monster Mash", "SpellID": 674655375, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Each round he was not hurt the round before: the next of Supercharge, Chromatic Dispel, Monster Mash." },
+
+    { "When": "RoundStart",
+      "Actions": [
+        {"Do": "Unmark", "Mark": "hurt", "Target": "Self"}
+      ],
+      "Notes": "Then the mark comes off." },
+
+    { "When": "PlayerCasts", "Category": "Steal",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00004177"},
+        {"Do": "Cast", "Spell": "Balanceblade", "SpellID": 578086463, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A steal: Balanceblade." },
+
+    { "When": "BossDefeated", "Category": "Steal",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 1641304242, "Target": "Self", "DispelImmune": false},
+        {"Do": "SetHealth", "Amount": 16190}
+      ],
+      "Notes": "Defeated by a steal: Blessing brings him back." },
+
+    { "When": "BossHit", "Spells": ["Power Nova", "Ra", "Sun Serpent", "Celestial Calendar", "Climaclysm", "Phoebus' Will"], "AnyVersion": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00004178"},
+        {"Do": "Cast", "Spell": "Solar Urticaria", "SpellID": 415951031, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A sun spell: Solar Urticaria on himself." }
+  ]
+}

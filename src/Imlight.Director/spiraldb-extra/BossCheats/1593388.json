@@ -1,0 +1,38 @@
+{
+  // Mandar the Barbarian (Rank 21, Myth, 13,045 health), Lemuria. Mandar the Barbarian: Confusion for a late wizard, Frenzy, Earthquake, Blessing.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1593388,
+  "Name": "Mandar the Barbarian (Rank 21)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001870"},
+        {"Do": "Cast", "Spell": "Confusion", "SpellID": 351474253, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Confusion on them." },
+
+    { "When": "BossHit", "Chance": 25,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001873"},
+        {"Do": "Cast", "Spell": "Frenzy", "SpellID": 983539451, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Hurt (25%, a guess): Frenzy." },
+
+    { "When": "HealthBelow", "Percent": 50,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001872"},
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 1650901013, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Under half (a guess): Blessing." },
+
+    { "When": "RoundStart", "Round": 4, "Every": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001874"},
+        {"Do": "Cast", "Spell": "Earthquake", "SpellID": 1847470661, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Every 4th round (a guess): Earthquake." }
+  ]
+}

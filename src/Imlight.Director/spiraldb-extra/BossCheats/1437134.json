@@ -1,0 +1,34 @@
+{
+  // Helena (Rank 16, Storm, 3,200 health), Empyrea. Helena: traps on a late wizard, and a string of spells in round 1.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1437134,
+  "Name": "Helena (Rank 16)",
+  "ShadowPips": 1,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001262"},
+        {"Do": "Cast", "Spell": "Storm Trap", "SpellID": 109352373, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Weakness", "SpellID": 1911351883, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Impede", "SpellID": 1906062967, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Storm Trap, Weakness, Impede on them." },
+
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001263"},
+        {"Do": "Cast", "Spell": "Frenzy", "SpellID": 1215947162, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Supercharge", "SpellID": 1188527642, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Stormblade", "SpellID": 284506771, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Stormspear", "SpellID": 855105462, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Myth Shield", "SpellID": 1736563462, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Windstorm", "SpellID": 1226984598, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Mass Weakness", "SpellID": 1798627878, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Impede", "SpellID": 1063329014, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Lightning Strike", "SpellID": 2007634104, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: nine spells in order." }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  // Iron Face (Rank 22, Star, 100,000 health), Novus. Iron Face: Chi (-300% healing), Minor Flash above 60%, a random spell every two rounds.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1577318,
+  "Name": "Iron Face (Rank 22)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002434"},
+        {"Do": "Cast", "Spell": "Chi", "SpellID": 1060059515, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Chi." },
+
+    { "When": "RoundStart", "HealthAbove": 60,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002437"},
+        {"Do": "Cast", "Spell": "Minor Flash", "SpellID": 1247297962, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Above 60%: Minor Flash (5% to himself)." },
+
+    { "When": "RoundStart", "Round": 2, "Every": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002436"},
+        {"Do": "PickOne", "Count": 7},
+        {"Do": "Cast", "Spell": "Buck Gordon", "SpellID": 1120026730, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Dog Tracy", "SpellID": 38651116, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Duck Savage", "SpellID": 353417905, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Mandar", "SpellID": 1266877931, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Quartermane", "SpellID": 1012732538, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Solomon Crane", "SpellID": 830043635, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "The Bantam", "SpellID": 1581663620, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Every two rounds: one of seven spells." }
+  ]
+}

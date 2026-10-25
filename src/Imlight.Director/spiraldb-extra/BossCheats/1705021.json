@@ -1,0 +1,82 @@
+{
+  // Headless Horseman (Rank 25, Death, 150,000 health), Darkmoor. Headless Horseman: cleanses for feints and dispels, Deadzone, his AoE every 5 rounds, Natural Attack in between, Mortality at 6 curses.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1705021,
+  "Name": "Headless Horseman (Rank 25)",
+  "Cheats": [
+    { "When": "PlayerCasts", "Spells": ["Feint", "Backdraft"], "AnyVersion": true,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 2057931463, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A Feint or Backdraft: Cleanse Ward." },
+
+    { "When": "PlayerCasts", "Category": "Dispel",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Cleanse Charm", "SpellID": 1814943598, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A dispel: Cleanse Charm." },
+
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003877"},
+        {"Do": "Cast", "Spell": "Deadzone", "SpellID": 1515496444, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Deadzone." },
+
+    { "When": "RoundEnd", "Round": 1, "Every": 5,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003880"},
+        {"Do": "Cast", "Spell": "Headless Horseman", "SpellID": 1682344451, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "End of round 1 and every 5: Headless Horseman (545-605 to all)." },
+
+    { "When": "ICast", "Spells": ["Monster Mash", "Wraith"], "AnyVersion": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003475"},
+        {"Do": "Cast", "Spell": "Headless Horseman", "SpellID": 1682344451, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "After his Monster Mash or Wraith: Headless Horseman." },
+
+    { "When": "RoundEnd", "Round": 2, "Every": 5,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003876"},
+        {"Do": "Cast", "Spell": "Natural Attack", "SpellID": 681082500, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Mass Infection", "SpellID": 496512683, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "End of any other round: Natural Attack (666) on a wizard and Mass Infection." },
+
+    { "When": "RoundEnd", "Round": 3, "Every": 5,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003876"},
+        {"Do": "Cast", "Spell": "Natural Attack", "SpellID": 681082500, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Mass Infection", "SpellID": 496512683, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "" },
+
+    { "When": "RoundEnd", "Round": 4, "Every": 5,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003876"},
+        {"Do": "Cast", "Spell": "Natural Attack", "SpellID": 681082500, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Mass Infection", "SpellID": 496512683, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "" },
+
+    { "When": "RoundEnd", "Round": 5, "Every": 5,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003876"},
+        {"Do": "Cast", "Spell": "Natural Attack", "SpellID": 681082500, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Mass Infection", "SpellID": 496512683, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "" },
+
+    { "When": "RoundStart", "HasWho": "AnyEnemy", "HasKind": "Weakness", "HasCount": 6,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003878"},
+        {"Do": "Cast", "Spell": "Mortality", "SpellID": 1591233994, "Target": "Matched", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00003879"}
+      ],
+      "Notes": "A wizard with 6 curses at the start of a round: Mortality defeats them." }
+  ]
+}

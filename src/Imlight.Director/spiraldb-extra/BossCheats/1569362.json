@@ -1,0 +1,30 @@
+{
+  // Unformed Beast (Rank 19, Shadow, 13,210 health), Unknown. Unformed Beast: Arch Master, then a blade or shield at the end of round 1.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1569362,
+  "Name": "Unformed Beast (Rank 19)",
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002452"},
+        {"Do": "Cast", "Spell": "Arch Master", "SpellID": 459665641, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Arch Master (a spell of the wizard's school for them and itself)." },
+
+    { "When": "RoundEnd", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002404"},
+        {"Do": "PickOne", "Count": 7},
+        {"Do": "Cast", "Spell": "Balanceblade", "SpellID": 514206205, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Fire Shield", "SpellID": 1731855964, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Snow Shield", "SpellID": 1731424937, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Storm Shield", "SpellID": 406790657, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Myth Shield", "SpellID": 1732025431, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Life Shield", "SpellID": 1731876438, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Death Shield", "SpellID": 409737272, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "End of round 1: one of seven." }
+  ]
+}

@@ -1,0 +1,110 @@
+{
+  // Shane von Shane (Rank 15, Star, 21,200 health), Dungeons. Shane von Shane: answers to charms, curses, feints and heals; a storm cycle and a death cycle.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1336031,
+  "Name": "Shane von Shane (Rank 15)",
+  "ShadowPips": 3,
+  "Cheats": [
+    { "When": "PlayerCasts", "Category": "Charm",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000573"},
+        {"Do": "Cast", "Spell": "Supercharge", "SpellID": 1338514146, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A charm: Supercharge." },
+
+    { "When": "PlayerCasts", "Category": "Weakness", "SingleTarget": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000543"},
+        {"Do": "Cast", "Spell": "Dark Tribute", "SpellID": 973103412, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A single-target curse: Dark Tribute." },
+
+    { "When": "PlayerCasts", "Spells": ["Feint"], "OnBoss": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000566"},
+        {"Do": "Cast", "Spell": "Sacrifice", "SpellID": 761482201, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A Feint on him (not Mass Feint): Sacrifice." },
+
+    { "When": "PlayerCasts", "Category": "Heal",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000568"},
+        {"Do": "Cast", "Spell": "Vampire", "SpellID": 1564216338, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A heal: Vampire on the wizard." },
+
+    { "When": "RoundEnd", "Round": 1, "Every": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000575"},
+        {"Do": "Cast", "Spell": "Stormblade", "SpellID": 560043093, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Storm cycle, end of round 1 of each 4: Stormblade." },
+
+    { "When": "RoundEnd", "Round": 2, "Every": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000576"},
+        {"Do": "Cast", "Spell": "Stormspear", "SpellID": 1561184881, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Storm cycle, end of round 2 of each 4: Stormspear." },
+
+    { "When": "RoundEnd", "Round": 3, "Every": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000577"},
+        {"Do": "Cast", "Spell": "Galvanic Field", "SpellID": 1951458198, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Storm cycle, end of round 3 of each 4: Galvanic Field." },
+
+    { "When": "RoundEnd", "Round": 4, "Every": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000578"},
+        {"Do": "Cast", "Spell": "Natural Attack", "SpellID": 916503286, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Storm cycle, end of round 4 of each 4: Natural Attack." },
+
+    { "When": "BossHit", "Category": "Damage",
+      "Actions": [
+        {"Do": "Mark", "Mark": "hurt this round", "Target": "Self"}
+      ],
+      "Notes": "Hurt: marked for this round." },
+
+    { "When": "RoundStart", "FromRound": 2, "Mark": "hurt last round", "MarkWho": "Self", "NotMarked": true,
+      "Actions": [
+        {"Do": "InTurn", "Count": 3, "Group": 2},
+        {"Do": "Say", "Line": "CombatMessages_00000569"},
+        {"Do": "Cast", "Spell": "Vampire", "SpellID": 1564216338, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00000570"},
+        {"Do": "Cast", "Spell": "Dr. Von's Monster", "SpellID": 827227812, "Target": "", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00000571"},
+        {"Do": "Cast", "Spell": "Monster Mash", "SpellID": 239243697, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Death cycle, from round 2, each round after one he was not hurt: Vampire, Dr. Von's Monster, Monster Mash in turn." },
+
+    { "When": "BossHit", "Category": "Damage", "Cooldown": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000572"},
+        {"Do": "Say", "Line": "CombatMessages_00000574"},
+        {"Do": "Cast", "Spell": "Healing Current", "SpellID": 1442276777, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Hit with damage: Healing Current on himself." },
+
+    { "When": "RoundEnd", "Mark": "hurt this round", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Mark", "Mark": "hurt last round", "Target": "Self"}
+      ],
+      "Notes": "" },
+
+    { "When": "RoundStart", "Mark": "hurt this round", "MarkWho": "Self", "NotMarked": true,
+      "Actions": [
+        {"Do": "Unmark", "Mark": "hurt last round", "Target": "Self"}
+      ],
+      "Notes": "" },
+
+    { "When": "RoundEnd",
+      "Actions": [
+        {"Do": "Unmark", "Mark": "hurt this round", "Target": "Self"}
+      ],
+      "Notes": "End of each round: the mark comes off (after the cheats that look at it)." }
+  ]
+}

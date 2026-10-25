@@ -1,0 +1,53 @@
+{
+  // Dream Belloq (Rank 17, Balance, 300,000 health), Empyrea. Dream Belloq: summons a Belloq Image, Ra on a late wizard, and Ra on himself for each image that falls.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1437100,
+  "Name": "Dream Belloq (Rank 17)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001249"},
+        {"Do": "Cast", "Spell": "Minions - Dream Belloq", "SpellID": 432474376, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: an image joins." },
+
+    { "When": "RoundStart", "Round": 9, "Every": 8, "AlliesMax": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001249"},
+        {"Do": "Cast", "Spell": "Minions - Dream Belloq", "SpellID": 432474376, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Every 8 rounds (6-10) with a circle free: another image." },
+
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000921"},
+        {"Do": "Cast", "Spell": "Ra", "SpellID": 1893394787, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Minions - Dream Belloq", "SpellID": 432474376, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A late wizard: Ra and a new image." },
+
+    { "When": "MinionDefeated", "PlayersMax": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001250"},
+        {"Do": "Cast", "Spell": "Ra", "SpellID": 1539234411, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "An image falls, 1 wizard: Ra on himself." },
+
+    { "When": "MinionDefeated", "PlayersMin": 2, "PlayersMax": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001250"},
+        {"Do": "Cast", "Spell": "Ra", "SpellID": 388306588, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "2 wizards." },
+
+    { "When": "MinionDefeated", "PlayersMin": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001250"},
+        {"Do": "Cast", "Spell": "Ra", "SpellID": 1893394787, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "3-4 wizards." }
+  ]
+}

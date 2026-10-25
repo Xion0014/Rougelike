@@ -1,0 +1,24 @@
+{
+  // Codex of Contempt (Rank 15, Ice, 4,240 health), Mirage. Codex of Contempt: Mana Burn if another book falls first, a forced Distract.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1402230,
+  "Name": "Codex of Contempt (Rank 15)",
+  "ShadowPips": 1,
+  "Cheats": [
+    { "When": "MinionDefeated",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000983"},
+        {"Do": "Cast", "Spell": "Mana Burn", "SpellID": 309838857, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Another book falls before it: Mana Burn on each wizard." },
+
+    { "When": "RoundStart", "Round": 2, "Every": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000984"},
+        {"Do": "Cast", "Spell": "Distract", "SpellID": 54142419, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 2 and every 3rd: a wizard is made to cast Distract on it (here cast for them)." }
+  ]
+}

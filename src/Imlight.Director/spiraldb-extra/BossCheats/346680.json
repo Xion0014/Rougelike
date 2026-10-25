@@ -1,0 +1,30 @@
+{
+  // Kormak Shadowclaw (Rank 10, Storm, 4,555 health), Unknown. Kormak Shadowclaw: Tower Shield, recast when hit; a charm on an ally takes it off.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  // Checked against its Wizard101 Central page (saved 2026-10-24): the charm cheat only for a single-target charm on someone other than its caster (new If NotOnCaster).
+  "TemplateID": 346680,
+  "Name": "Kormak Shadowclaw (Rank 10)",
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000091"},
+        {"Do": "Cast", "Spell": "Tower Shield", "SpellID": 1005934076, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Tower Shield." },
+
+    { "When": "PlayerDamages", "OnBoss": true,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Tower Shield", "SpellID": 1005934076, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A hit on him: Tower Shield again." },
+
+    { "When": "PlayerCharms", "Category": "Blade", "SingleTarget": true, "NotOnCaster": true,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000092"},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 2007994870, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A single-target charm on another wizard than its caster (not Bladestorm and the like): Cleanse Ward on himself." }
+  ]
+}

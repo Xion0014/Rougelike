@@ -1,0 +1,71 @@
+{
+  // Hierarch Lucien (Rank 20, Storm, 10,155 health), Lemuria. Hierarch Lucien: orders to blade, then heal, then a beguiled AoE.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1530777,
+  "Name": "Hierarch Lucien (Rank 20)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001975"},
+        {"Do": "Cast", "Spell": "Overcast", "SpellID": 297008630, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Beguile", "SpellID": 591686509, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Overcast, Beguile on them." },
+
+    { "When": "RoundEnd", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001918"},
+        {"Do": "Mark", "Mark": "must blade", "Target": "AllEnemies"}
+      ],
+      "Notes": "End of round 1: wizards must blade." },
+
+    { "When": "PlayerCasts", "Category": "Blade", "FromRound": 2, "ToRound": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001977"},
+        {"Do": "Cast", "Spell": "Tower Shield", "SpellID": 432324968, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Unmark", "Mark": "must blade", "Target": "Caster"}
+      ],
+      "Notes": "A blade in round 2: Tower Shield." },
+
+    { "When": "RoundEnd", "Round": 2, "Mark": "must blade", "MarkWho": "AnyEnemy",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001978"},
+        {"Do": "Cast", "Spell": "Weakness", "SpellID": 980510719, "Target": "Marked", "DispelImmune": false},
+        {"Do": "Unmark", "Mark": "must blade", "Target": "Marked"}
+      ],
+      "Notes": "No blade: Weakness." },
+
+    { "When": "RoundEnd", "Round": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001917"},
+        {"Do": "Mark", "Mark": "must heal", "Target": "AllEnemies"}
+      ],
+      "Notes": "End of round 2: wizards must heal." },
+
+    { "When": "PlayerCasts", "Category": "Heal", "FromRound": 3, "ToRound": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001977"},
+        {"Do": "Cast", "Spell": "Lightning Strike", "SpellID": 189221944, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Unmark", "Mark": "must heal", "Target": "Caster"}
+      ],
+      "Notes": "A heal in round 3." },
+
+    { "When": "RoundEnd", "Round": 3, "Mark": "must heal", "MarkWho": "AnyEnemy",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001978"},
+        {"Do": "Cast", "Spell": "Black Mantle", "SpellID": 1379491543, "Target": "Marked", "DispelImmune": false},
+        {"Do": "Unmark", "Mark": "must heal", "Target": "Marked"}
+      ],
+      "Notes": "No heal: Black Mantle." },
+
+    { "When": "RoundStart", "Round": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002009"},
+        {"Do": "Cast", "Spell": "Beguile", "SpellID": 591686509, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Round 4: Beguile on a random wizard." }
+  ]
+}

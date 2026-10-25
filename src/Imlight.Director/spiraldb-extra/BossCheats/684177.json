@@ -1,0 +1,31 @@
+{
+  // Guaman Skyfall (Rank 13, Storm, 18,040 health), Azteca. Guaman Skyfall: Stun Block for a 0-pip wand hit, Leviathan for a single hit without the tag.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 684177,
+  "Name": "Guaman Skyfall (Rank 13)",
+  "Cheats": [
+    { "When": "PlayerCasts", "OnBoss": true, "Category": "Damage", "CostMax": -1,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000178"},
+        {"Do": "Cast", "Spell": "Stun Block", "SpellID": 1118793144, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Mark", "Mark": "stun block", "Target": "Caster"}
+      ],
+      "Notes": "A 0-pip hit on him: Stun Block on that wizard (the tag). CostMax -1 = 0 pips only." },
+
+    { "When": "PlayerCasts", "OnBoss": true, "Category": "Damage", "SingleTarget": true, "CostMin": 1, "Mark": "stun block", "MarkWho": "Caster",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 2007995204, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Unmark", "Mark": "stun block", "Target": "Caster"}
+      ],
+      "Notes": "The tagged wizard hits him with a single-target spell: the tag comes off." },
+
+    { "When": "PlayerCasts", "OnBoss": true, "Category": "Damage", "SingleTarget": true, "CostMin": 1, "Mark": "stun block", "MarkWho": "Caster", "NotMarked": true,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000179"},
+        {"Do": "Cast", "Spell": "Leviathan", "SpellID": 1307543796, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A single-target hit of 1 pip or more from a wizard without the tag: Leviathan on them." }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  // The Rat (Rank 19, Shadow, 20,000 health), The Rat Rematch. The Rat: comes into a battle with its minions.
+  // From Wizard404's data on the gauntlets (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove).
+  // Built first from blocks that were there, then from the new universal blocks each Notes names (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1668862,
+  "Name": "The Rat (Rank 19)",
+  "ShadowPips": 7,
+  "Cheats": [
+    { "When": "Passive", "Passive": "Minions", "Brings": ["1668863", "1668864", "1668865"],
+      "Notes": "It fights with Titan Experiment 07, Titan Experiment 34 and Titan Experiment 291 (Wizard404: its minions). New block: comes with." }
+  ]
+}

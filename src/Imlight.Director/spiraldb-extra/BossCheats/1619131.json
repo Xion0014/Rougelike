@@ -1,0 +1,46 @@
+{
+  // Luigi di Mario (Rank 23, Life, 19,815 health), Wallaru. Luigi di Mario: Constrain and Blinding Light for a shadow pip, a blade after his hits, Centaur or Earth Walker for fire damage.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1619131,
+  "Name": "Luigi di Mario (Rank 23)",
+  "Cheats": [
+    { "When": "Pips", "Pips": 1, "PipsKind": "Shadow", "PipsOf": "Enemy",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002949"},
+        {"Do": "Cast", "Spell": "Constrain", "SpellID": 2089454274, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Blinding Light", "SpellID": 1261981915, "Target": "Matched", "DispelImmune": false}
+      ],
+      "Notes": "A wizard with a shadow pip at a round's start: Constrain on all, Blinding Light on them." },
+
+    { "When": "ICast", "Category": "Damage",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002947"},
+        {"Do": "PickOne", "Count": 4},
+        {"Do": "Cast", "Spell": "Balanceblade", "SpellID": 1538644858, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Dragonblade", "SpellID": 736547457, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Lifeblade", "SpellID": 957307932, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Lifespear", "SpellID": 451690219, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "After his damage spell: one of four blades." },
+
+    { "When": "BossHit", "School": "Fire",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002948"},
+        {"Do": "PickOne", "Count": 2},
+        {"Do": "Cast", "Spell": "Centaur", "SpellID": 382287574, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Earth Walker", "SpellID": 1858570780, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Fire damage on him: Centaur or Earth Walker." },
+
+    { "When": "AllyHit", "School": "Fire",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002948"},
+        {"Do": "PickOne", "Count": 2},
+        {"Do": "Cast", "Spell": "Centaur", "SpellID": 382287574, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Earth Walker", "SpellID": 1858570780, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Fire damage on his side." }
+  ]
+}

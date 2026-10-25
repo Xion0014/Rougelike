@@ -1,0 +1,70 @@
+{
+  // The Hierophant of Destruction (Rank 24, Ice, 20,220 health), Darkmoor. The Hierophant of Destruction: force-cast gambits, minions matching her, Chain Lightning.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1655798,
+  "Name": "The Hierophant of Destruction (Rank 24)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003956"}
+      ],
+      "Notes": "Round 1: the line." },
+
+    { "When": "ICast", "Category": "Aura",
+      "Actions": [
+        {"Do": "PickOne", "Count": 3},
+        {"Do": "CastBy", "By": "Ally", "Spell": "Magnify", "SpellID": 927591397, "Target": "Self", "DispelImmune": false},
+        {"Do": "CastBy", "By": "Ally", "Spell": "Sleet Storm", "SpellID": 1000501217, "Target": "Self", "DispelImmune": false},
+        {"Do": "CastBy", "By": "Ally", "Spell": "Empowerment", "SpellID": 235884281, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Her aura: a minion casts an aura." },
+
+    { "When": "ICast", "Category": "Trap",
+      "Actions": [
+        {"Do": "PickOne", "Count": 2},
+        {"Do": "CastBy", "By": "Ally", "Spell": "Ice Trap", "SpellID": 415162663, "Target": "Receiver", "DispelImmune": false},
+        {"Do": "CastBy", "By": "Ally", "Spell": "Storm Trap", "SpellID": 82998574, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "Her jinx: a minion traps her target." },
+
+    { "When": "ICast", "Category": "Blade,Global",
+      "Actions": [
+        {"Do": "PickOne", "Count": 3},
+        {"Do": "CastBy", "By": "Ally", "Spell": "Balanceblade", "SpellID": 514206205, "Target": "Self", "DispelImmune": false},
+        {"Do": "CastBy", "By": "Ally", "Spell": "Iceblade", "SpellID": 2032132496, "Target": "Self", "DispelImmune": false},
+        {"Do": "CastBy", "By": "Ally", "Spell": "Stormblade", "SpellID": 2131701592, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Her charm or global: a minion blades." },
+
+    { "When": "PlayerCasts", "Chance": 20, "Fizzle": "Any",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003959"},
+        {"Do": "Cast", "Spell": "Chain Lightning", "SpellID": 1298343624, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "Now and then after a wizard's turn (20%, a guess): Chain Lightning." },
+
+    { "When": "RoundStart", "Round": 1, "Every": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003957"},
+        {"Do": "PickOne", "Count": 4},
+        {"Do": "Cast", "Spell": "Elemental Weakness", "SpellID": 211049911, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Elemental/Spirit Blade", "SpellID": 1444144084, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Deferred Damage", "SpellID": 1172967336, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Heal over Time", "SpellID": 1172967330, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Round 1 and every 3: a wizard is made to cast one of four hanging effects (here: cast for them)." },
+
+    { "When": "RoundEnd", "Round": 3, "Every": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003958"},
+        {"Do": "Cast", "Spell": "Hierophant - Clear Weaknesses", "SpellID": 255246297, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Hierophant - Clear Blades", "SpellID": 110596987, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Hierophant - Clear DOTs", "SpellID": 1471856458, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Hierophant - Clear HOTs", "SpellID": 1471856464, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "End of round 3 and every 3: what is left is cleared, 10% of the wizard's health each." }
+  ]
+}

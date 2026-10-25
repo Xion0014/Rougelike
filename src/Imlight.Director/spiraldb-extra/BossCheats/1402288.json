@@ -1,0 +1,30 @@
+{
+  // Endurzaga (Rank 16, Myth, 12,320 health), Mirage. Endurzaga: his pet's Draw Power, Pierce for a ward, Shift for an attack while he has a DoT.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1402288,
+  "Name": "Endurzaga (Rank 16)",
+  "Cheats": [
+    { "When": "RoundEnd", "Chance": 25,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000941"},
+        {"Do": "Cast", "Spell": "Draw Power", "SpellID": 1828184196, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Now and then (25%): Draw Power." },
+
+    { "When": "PlayerCasts", "Category": "Ward",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000939"},
+        {"Do": "Cast", "Spell": "Pierce", "SpellID": 1911022320, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "A ward: Pierce on it." },
+
+    { "When": "PlayerCasts", "Category": "Damage", "OnBoss": true, "HasWho": "Self", "HasKind": "DoT",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000940"},
+        {"Do": "Cast", "Spell": "Shift", "SpellID": 90320179, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "An attack on him with a DoT on him: Shift on the caster." }
+  ]
+}

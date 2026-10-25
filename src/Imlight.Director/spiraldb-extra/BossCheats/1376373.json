@@ -1,0 +1,16 @@
+{
+  // Dark Seraph (Rank 17, Shadow, 20,000 health), Polaris. Dark Seraph: AOE Absorb with each heal.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1376373,
+  "Name": "Dark Seraph (Rank 17)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "ICast", "Category": "Heal",
+      "Actions": [
+        {"Do": "Cast", "Spell": "AOE Absorb", "SpellID": 1176011181, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Its heal: AOE Absorb." }
+  ]
+}

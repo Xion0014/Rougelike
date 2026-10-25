@@ -1,0 +1,24 @@
+{
+  // Bat Bot (Rank 15, Ice, 4,665 health), Empyrea. Bat Bot: summons another Bat Bot, and every 5th round one becomes The Bat.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1430159,
+  "Name": "Bat Bot (Rank 15)",
+  "ShadowPips": 1,
+  "Cheats": [
+    { "When": "RoundEnd", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001128"},
+        {"Do": "Cast", "Spell": "Summon Minions", "SpellID": 1977679357, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "End of round 1: Summon Minions brings a Bat Bot." },
+
+    { "When": "RoundEnd", "Round": 5, "Every": 5,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001091"},
+        {"Do": "Polymorph", "Spell": "The Bat", "SpellID": 46916246, "Target": "Self"}
+      ],
+      "Notes": "End of every 5th round: it becomes The Bat." }
+  ]
+}

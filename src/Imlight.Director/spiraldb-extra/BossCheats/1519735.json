@@ -1,0 +1,33 @@
+{
+  // N. Bison (Rank 19, Myth, 10,350 health), Great Sky Train Robbery. N. Bison and his three: Ms. Felicity, Daniel McCoil and Kenny Rooster, who expel each other when low.
+  // From Wizard404's data on the gauntlets (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove).
+  // Built first from blocks that were there, then from the new universal blocks each Notes names (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1519735,
+  "Name": "N. Bison (Rank 19)",
+  "Cheats": [
+    { "When": "Passive", "Passive": "Minions", "Brings": ["1519730", "1519720", "1519725"],
+      "Notes": "He fights with Ms. Felicity, Daniel McCoil and Kenny Rooster (Wizard404: his minions). New block: comes with." },
+
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001784"},
+        {"Do": "Cast", "Spell": "Confusion", "SpellID": 351474253, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "\"Not enough on your own? Then fall!\" A late wizard: Confusion for 2 rounds." },
+
+    { "When": "RoundStart", "Round": 1, "Every": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001785"},
+        {"Do": "Cast", "Spell": "Confusion", "SpellID": 358654718, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "\"Bow before my Psycho Power!\" Round 1 and every 3 rounds (how often is unknown: a guess): Confusion on every wizard." },
+
+    { "When": "BossHit",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001786"},
+        {"Do": "Cast", "Spell": "Natural Attack", "SpellID": 197217431, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "\"PSYCHO DEFLECTION!\" He takes damage: Natural Attack (20% of a wizard's health)." }
+  ]
+}

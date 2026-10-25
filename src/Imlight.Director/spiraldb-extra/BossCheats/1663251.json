@@ -1,0 +1,27 @@
+{
+  // Ptolemos (Rank 14, Moon, 34,800 health), Mithraya Rematch. Ptolemos: a polymorph as Astraeus falls, and Hatch as he does.
+  // From Wizard404's data on the gauntlets (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove).
+  // Built first from blocks that were there, then from the new universal blocks each Notes names (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1663251,
+  "Name": "Ptolemos (Rank 14)",
+  "Cheats": [
+    { "When": "MinionDefeated", "Creature": 1663252,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003321"},
+        {"Do": "PickOne", "Count": 4},
+        {"Do": "Polymorph", "Spell": "Polymorph Colossus", "SpellID": 1787930693, "Target": "Enemy"},
+        {"Do": "Polymorph", "Spell": "Polymorph Elemental", "SpellID": 1989117861, "Target": "Enemy"},
+        {"Do": "Polymorph", "Spell": "Polymorph Treant", "SpellID": 266245838, "Target": "Enemy"},
+        {"Do": "Polymorph", "Spell": "Polymorph Elemental", "SpellID": 292362260, "Target": "Enemy"}
+      ],
+      "Notes": "Astraeus falls: a random wizard is polymorphed into a Colossus, Fire or Storm Elemental, or Treant." },
+
+    { "When": "BossDefeated",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003323"},
+        {"Do": "Cast", "Spell": "Hatch", "SpellID": 400037182, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Defeated: Hatch (Wizard404: needs confirming)." }
+  ]
+}

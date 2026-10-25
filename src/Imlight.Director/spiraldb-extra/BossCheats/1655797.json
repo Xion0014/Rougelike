@@ -1,0 +1,54 @@
+{
+  // The Hierophant (Rank 24, Ice, 20,220 health), Darkmoor. The Hierophant: her minions match her moves, Chain Lightning after a wizard's turn, and Velma's helpful spells.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  // Checked against its Wizard101 Central page (saved 2026-10-24): her globals also bring the minions' blade.
+  "TemplateID": 1655797,
+  "Name": "The Hierophant (Rank 24)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "ICast", "Category": "Blade,Global",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003956"},
+        {"Do": "CastBy", "By": "Ally", "Spell": "Balanceblade", "SpellID": 514206205, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Her helpful charm or global (Central): a minion casts Balanceblade on her." },
+
+    { "When": "ICast", "Category": "Trap",
+      "Actions": [
+        {"Do": "PickOne", "Count": 2},
+        {"Do": "CastBy", "By": "Ally", "Spell": "Hex", "SpellID": 92296, "Target": "Receiver", "DispelImmune": false},
+        {"Do": "CastBy", "By": "Ally", "Spell": "Ice Trap", "SpellID": 415162663, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "Her jinx: a minion casts Hex or Ice Trap on her target." },
+
+    { "When": "ICast", "Category": "Aura",
+      "Actions": [
+        {"Do": "PickOne", "Count": 3},
+        {"Do": "CastBy", "By": "Ally", "Spell": "Magnify", "SpellID": 927591397, "Target": "Self", "DispelImmune": false},
+        {"Do": "CastBy", "By": "Ally", "Spell": "Brace", "SpellID": 74485346, "Target": "Self", "DispelImmune": false},
+        {"Do": "CastBy", "By": "Ally", "Spell": "Sleet Storm", "SpellID": 1000501217, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Her aura: a minion casts an aura." },
+
+    { "When": "PlayerCasts", "Chance": 20, "Fizzle": "Any",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003959"},
+        {"Do": "Cast", "Spell": "Chain Lightning", "SpellID": 1298343624, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "Now and then after a wizard's turn (20%, a guess): Chain Lightning." },
+
+    { "When": "RoundStart", "Round": 2, "Every": 2,
+      "Actions": [
+        {"Do": "InTurn", "Count": 3, "Group": 2},
+        {"Do": "Say", "Line": "CombatMessages_00003979"},
+        {"Do": "Cast", "Spell": "ASTH - Chain Lightning", "SpellID": 903367652, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00003980"},
+        {"Do": "Cast", "Spell": "ASTH - Velma Buff", "SpellID": 1353047185, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00003981"},
+        {"Do": "Cast", "Spell": "ASTH - Velma Debuff", "SpellID": 1081538716, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Velma (helpful): every 2 rounds (a guess) one of her gifts to a random wizard." }
+  ]
+}

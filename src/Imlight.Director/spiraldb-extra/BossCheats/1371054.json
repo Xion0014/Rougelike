@@ -1,0 +1,44 @@
+{
+  // Ygor (Rank 15, Death, 19,760 health), Polaris. Ygor: Late Plague, Breeze Shields, and his pet's Power Link when he or his minion is hit.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1371054,
+  "Name": "Ygor (Rank 15)",
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000676"},
+        {"Do": "Cast", "Spell": "Late Plague", "SpellID": 1154479273, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Late Plague on them." },
+
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "Spells_00001456"},
+        {"Do": "Cast", "Spell": "Breeze Shield", "SpellID": 599264106, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Breeze Shield." },
+
+    { "When": "RoundStart", "Round": 6, "Every": 6,
+      "Actions": [
+        {"Do": "Say", "Line": "Spells_00001458"},
+        {"Do": "Cast", "Spell": "Breeze Shield", "SpellID": 599264106, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Every sixth round: Breeze Shield." },
+
+    { "When": "BossHit", "Category": "Damage",
+      "Actions": [
+        {"Do": "Say", "Line": "Spells_00001459"},
+        {"Do": "Cast", "Spell": "Power Link", "SpellID": 1047271692, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Hit by a damage spell: his pet's Power Link (here: his own)." },
+
+    { "When": "AllyHit", "Category": "Damage",
+      "Actions": [
+        {"Do": "Say", "Line": "Spells_00001459"},
+        {"Do": "Cast", "Spell": "Power Link", "SpellID": 1047271692, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "His minion hit: Power Link." }
+  ]
+}

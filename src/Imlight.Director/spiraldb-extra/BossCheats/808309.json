@@ -1,0 +1,38 @@
+{
+  // Lamia (Rank 11, Death, 10,880 health), Aquila. Lamia: Lamia's Doom in round 1, and again when a wizard replaces it.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  // Checked against its Wizard101 Central page (saved 2026-10-24): Scarecrow every 4th round until a wizard tries to replace her global, and from round 30 on regardless.
+  "TemplateID": 808309,
+  "Name": "Lamia (Rank 11)",
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Lamia's Doom", "SpellID": 413673089, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Lamia's Doom (+35% death damage for all)." },
+
+    { "When": "PlayerGlobals",
+      "Actions": [
+        {"Do": "Mark", "Mark": "global tried", "Target": "Self"},
+        {"Do": "Say", "Line": "You are not the master down here!"},
+        {"Do": "Cast", "Spell": "Lamia's Doom", "SpellID": 413673089, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A wizard's global over it: she says so and casts it again (Strangle stopping this is not made). It also marks her: a wizard has tried to replace it." },
+
+    { "When": "RoundStart", "Round": 4, "Every": 4, "ToRound": 29, "Mark": "global tried", "MarkWho": "Self", "NotMarked": true,
+      "Actions": [
+        {"Do": "Say", "Line": "You are slow to take in the world around us!"},
+        {"Do": "Cast", "Spell": "Scarecrow", "SpellID": 166788920, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Every 4th round while no wizard has tried to replace her global: Scarecrow (620 steal on all, half back to her; Central)." },
+
+    { "When": "RoundStart", "Round": 4, "Every": 4, "FromRound": 30,
+      "Actions": [
+        {"Do": "Say", "Line": "You are slow to take in the world around us!"},
+        {"Do": "Cast", "Spell": "Scarecrow", "SpellID": 166788920, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "From round 30 on: Scarecrow every 4th round whatever the wizards did (Central)." }
+  ]
+}

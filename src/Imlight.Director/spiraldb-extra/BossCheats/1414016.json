@@ -1,0 +1,36 @@
+{
+  // Mimic (Rank 18, Moon, 32,000 health), Mirage. Mimic (Rank 18): Steal Pips for a late wizard, and a new boss form every three rounds.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1414016,
+  "Name": "Mimic (Rank 18)",
+  "ShadowPips": 3,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000966"},
+        {"Do": "Cast", "Spell": "Steal Pips", "SpellID": 724062293, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Steal Pips on them." },
+
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000967"},
+        {"Do": "Polymorph", "Spell": "Polymorph Mimic", "SpellID": 1523876478, "Target": "Self"}
+      ],
+      "Notes": "Round 1: Polymorph Mimic into a random form." },
+
+    { "When": "RoundEnd", "Round": 3, "Every": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000247"},
+        {"Do": "PickOne", "Count": 5},
+        {"Do": "Polymorph", "Spell": "Polymorph Luska Charmbeak", "SpellID": 1401128579, "Target": "Self"},
+        {"Do": "Polymorph", "Spell": "Polymorph Cyrus Drake", "SpellID": 1863185021, "Target": "Self"},
+        {"Do": "Polymorph", "Spell": "Polymorph Ghost Dog", "SpellID": 1912524181, "Target": "Self"},
+        {"Do": "Polymorph", "Spell": "Polymorph Mithraya", "SpellID": 1421176397, "Target": "Self"},
+        {"Do": "Polymorph", "Spell": "Polymorph Prince Gobblestone", "SpellID": 1512375004, "Target": "Self"}
+      ],
+      "Notes": "End of every three rounds: a new form." }
+  ]
+}

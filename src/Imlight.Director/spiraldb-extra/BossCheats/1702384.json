@@ -1,0 +1,59 @@
+{
+  // The Gray Man (Rank 24, Death, 15,265 health), Unknown. The Gray Man: Guardian Spirit, power pips for wizards' charms, and Bladestorms as he is hurt.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1702384,
+  "Name": "The Gray Man (Rank 24)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003928"},
+        {"Do": "Cast", "Spell": "Guardian Spirit", "SpellID": 630100933, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Guardian Spirit." },
+
+    { "When": "RoundEnd", "HasWho": "AnyEnemy", "HasKind": "Charm",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003929"},
+        {"Do": "Cast", "Spell": "Pips for Enemy Blades", "SpellID": 20959416, "Target": "Matched", "DispelImmune": false}
+      ],
+      "Notes": "End of each round a wizard has a charm: Pips for Enemy Blades on them." },
+
+    { "When": "HealthBelow", "Percent": 90,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003927"},
+        {"Do": "Cast", "Spell": "Bladestorm", "SpellID": 1568997937, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Under 90%: Bladestorm." },
+
+    { "When": "HealthBelow", "Percent": 70,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003927"},
+        {"Do": "Cast", "Spell": "Bladestorm", "SpellID": 1527056215, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Under 70%: Bladestorm." },
+
+    { "When": "HealthBelow", "Percent": 50,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003927"},
+        {"Do": "Cast", "Spell": "Bladestorm", "SpellID": 1527056217, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Under 50%: Bladestorm." },
+
+    { "When": "HealthBelow", "Percent": 30,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003927"},
+        {"Do": "Cast", "Spell": "Bladestorm", "SpellID": 1527056219, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Under 30%: Bladestorm." },
+
+    { "When": "HealthBelow", "Percent": 10,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003927"},
+        {"Do": "Cast", "Spell": "Bladestorm", "SpellID": 1387645309, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Under 10%: Bladestorm." }
+  ]
+}

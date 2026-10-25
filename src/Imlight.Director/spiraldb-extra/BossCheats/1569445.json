@@ -1,0 +1,66 @@
+{
+  // Quake Charmer (Rank 22, Myth, 12,539 health), Novus. Quake Charmer (Novus): Earthquake every third round, and a second spell after each of his.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1569445,
+  "Name": "Quake Charmer (Rank 22)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "RoundEnd", "Round": 3, "Every": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002417"},
+        {"Do": "Cast", "Spell": "Earthquake", "SpellID": 425481960, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "End of every third round: Earthquake." },
+
+    { "When": "ICast", "Spells": ["Troll"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002415"},
+        {"Do": "Cast", "Spell": "Fire Elf", "SpellID": 1415711490, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "After his Troll: Fire Elf." },
+
+    { "When": "ICast", "Spells": ["Humongofrog"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002415"},
+        {"Do": "Cast", "Spell": "Meteor Strike", "SpellID": 729953007, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "After his Humongofrog: Meteor Strike." },
+
+    { "When": "ICast", "Spells": ["Stone Colossus"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002415"},
+        {"Do": "Cast", "Spell": "Helephant", "SpellID": 488303115, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "After his Stone Colossus: Helephant." },
+
+    { "When": "ICast", "Spells": ["Orthrus"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002415"},
+        {"Do": "Cast", "Spell": "Fire Dragon", "SpellID": 921541606, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "After his Orthrus: Fire Dragon." },
+
+    { "When": "ICast", "Spells": ["Medusa"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002415"},
+        {"Do": "Cast", "Spell": "Efreet", "SpellID": 1401700123, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "After his Medusa: Efreet." },
+
+    { "When": "ICast", "Spells": ["Cursed Colossus"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002415"},
+        {"Do": "Cast", "Spell": "Night Raid", "SpellID": 2112039114, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "After his Cursed Colossus: Night Raid." },
+
+    { "When": "ICast", "Spells": ["Bale Barbarian"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002415"},
+        {"Do": "Cast", "Spell": "Into Darkness", "SpellID": 442662703, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "After his Bale Barbarian: Into Darkness." }
+  ]
+}

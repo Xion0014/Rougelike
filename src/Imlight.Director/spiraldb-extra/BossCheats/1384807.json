@@ -1,0 +1,54 @@
+{
+  // Krampus (Rank 15, Fire, 24,115 health), Wizard City. Krampus: Scald and Smoke Screen for a late wizard, Steal Charm, Cleanse Ward for a Feint, Helpers, and Dimension Shift onto them.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1384807,
+  "Name": "Krampus (Rank 15)",
+  "ShadowPips": 3,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001011"},
+        {"Do": "Cast", "Spell": "Scald", "SpellID": 1676243775, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Smoke Screen", "SpellID": 568607004, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Scald, Smoke Screen on them." },
+
+    { "When": "PlayerCharms",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001010"},
+        {"Do": "Cast", "Spell": "Steal Charm", "SpellID": 600047072, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "A charm: Steal Charm (all unprotected charms)." },
+
+    { "When": "PlayerCasts", "Spells": ["Feint"], "AnyVersion": true, "OnBoss": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001009"},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 55434460, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 55434460, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A Feint on him (not Mass Feint): Cleanse Ward twice." },
+
+    { "When": "RoundStart", "Round": 5,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001013"},
+        {"Do": "Cast", "Spell": "Krampus Helpers", "SpellID": 1455608624, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 5: Krampus Helpers." },
+
+    { "When": "MinionDefeated",
+      "Actions": [
+        {"Do": "Wait", "Rounds": 1},
+        {"Do": "Cast", "Spell": "Krampus Helpers", "SpellID": 1455608624, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A Helper falls: another the round after." },
+
+    { "When": "PlayerCasts", "Category": "Trap", "OnBoss": true, "HasAllies": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001012"},
+        {"Do": "Cast", "Spell": "Dimension Shift", "SpellID": 1413580065, "Target": "Ally", "DispelImmune": false}
+      ],
+      "Notes": "A jinx on him while he has minions: Dimension Shift onto one." }
+  ]
+}

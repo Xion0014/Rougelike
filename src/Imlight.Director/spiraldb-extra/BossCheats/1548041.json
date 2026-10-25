@@ -1,0 +1,53 @@
+{
+  // Grounds-Creeper Willie (Rank 20, Myth, 12,425 health), Unforgiven Dead Gauntlet. Grounds-Creeper Willie: a card to banish him with, and answers to shields and heals.
+  // From Wizard404's data on the gauntlets (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove).
+  // Built first from blocks that were there, then from the new universal blocks each Notes names (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1548041,
+  "Name": "Grounds-Creeper Willie (Rank 20)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002033"},
+        {"Do": "Cast", "Spell": "ASTH Banish!", "SpellID": 985874271, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "A wizard who joins after round 1: every wizard gets a late Banish! card (it hurts their own side for 25%). Existing blocks." },
+
+    { "When": "RoundEnd", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002034"},
+        {"Do": "Cast", "Spell": "ASTH Banish!", "SpellID": 88014113, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "\"Ach! I cannae be beaten, only banished!\" The end of round 1: every wizard gets the Banish! card that expels him." },
+
+    { "When": "BossHit",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002039"},
+        {"Do": "Cast", "Spell": "Orthrus", "SpellID": 1862621819, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "\"Ach! Get 'em, Bitey!\" He takes damage: Orthrus. Existing blocks." },
+
+    { "When": "PlayerCasts", "Category": "Shield",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002038"},
+        {"Do": "Cast", "Spell": "Guidance", "SpellID": 31392436, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "\"Hide behind yer shields then!\" A wizard's shield: Guidance on the wizards, as Wizard404 says. Existing blocks." },
+
+    { "When": "PlayerCasts", "Category": "Heal",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002036"},
+        {"Do": "Cast", "Spell": "ASTH Donate Shadow", "SpellID": 1960213880, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "\"Oh, Wizard need a heal?\" A wizard's heal: that wizard gets a Donate Shadow card. A pet's heal should not count (Wizard404); here it does, the server cannot tell them apart." },
+
+    { "When": "RoundStart", "Every": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002037"},
+        {"Do": "Cast", "Spell": "Mana Burn", "SpellID": 2070569989, "Target": "", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00002035"}
+      ],
+      "Notes": "Every third round: Mana Burn, then \"Think ye can banish me? Try!\"." }
+  ]
+}

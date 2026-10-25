@@ -1,0 +1,47 @@
+{
+  // Broken Branch Queen (Rank 24, Storm, 11,510 health), Darkmoor. Broken Branch Queen: Stabilize on her King every 6 rounds, put back and healed when it comes off; she falls with him.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  // Checked against its Wizard101 Central page (saved 2026-10-24): a Supernova on the King's aura also heals him and puts it back.
+  "TemplateID": 1702065,
+  "Name": "Broken Branch Queen (Rank 24)",
+  "Cheats": [
+    { "When": "RoundStart", "Round": 1, "Every": 6,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003912"},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Stabilize", "SpellID": 863744688, "Target": "Self", "DispelImmune": false, "Creature": 1702064}
+      ],
+      "Notes": "Round 1 and every 6: Stabilize (+100% resist aura) on the King." },
+
+    { "When": "PlayerCasts", "Category": "Aura", "Creature": 1702064, "CreatureWho": "Receiver",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003911"},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Stabilize", "SpellID": 863744688, "Target": "Self", "DispelImmune": false, "Creature": 1702064}
+      ],
+      "Notes": "A wizard's aura on the King: she puts the Stabilize back." },
+
+    { "When": "EnemyCasts", "Category": "Dispel,Steal",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003911"},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Blessing", "SpellID": 1641304242, "Target": "Self", "DispelImmune": false, "Creature": 1702064},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Stabilize", "SpellID": 863744688, "Target": "Self", "DispelImmune": false, "Creature": 1702064}
+      ],
+      "Notes": "A wizard takes the King's aura off: Blessing heals him to full and Stabilize goes back on." },
+
+    { "When": "PlayerCasts", "Spells": ["Supernova", "Mass Supernova"], "AnyVersion": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003911"},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Blessing", "SpellID": 1641304242, "Target": "Self", "DispelImmune": false, "Creature": 1702064},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Stabilize", "SpellID": 863744688, "Target": "Self", "DispelImmune": false, "Creature": 1702064}
+      ],
+      "Notes": "A Supernova takes the King's aura off: he is healed to full and the aura goes back on (Central)." },
+
+    { "When": "MinionDefeated", "Creature": 1702064,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003913"},
+        {"Do": "Defeat"}
+      ],
+      "Notes": "The King falls: so does she." }
+  ]
+}

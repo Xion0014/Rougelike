@@ -1,0 +1,59 @@
+{
+  // Goofang (Rank 15, Fire, 7,000 health), Mirage. Goofang: Steal Pips for a late wizard, and the opposite spell after his own.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1384895,
+  "Name": "Goofang (Rank 15)",
+  "ShadowPips": 1,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000926"},
+        {"Do": "Cast", "Spell": "Steal Pips", "SpellID": 1145417760, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 2: Steal Pips on them." },
+
+    { "When": "ICast", "Spells": ["Fireblade"], "Chance": 50,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000930"},
+        {"Do": "Cast", "Spell": "Iceblade", "SpellID": 1045295820, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Sometimes (50%) after his Fireblade: Iceblade." },
+
+    { "When": "ICast", "Spells": ["Iceblade"], "Chance": 50,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000930"},
+        {"Do": "Cast", "Spell": "Fireblade", "SpellID": 910290622, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Sometimes (50%) after his Iceblade: Fireblade." },
+
+    { "When": "ICast", "Spells": ["Fire Cat"], "Chance": 50,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000928"},
+        {"Do": "Cast", "Spell": "Ice Cat", "SpellID": 164126591, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Sometimes (50%) after his Fire Cat: Ice Cat." },
+
+    { "When": "ICast", "Spells": ["Ice Cat"], "Chance": 50,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000928"},
+        {"Do": "Cast", "Spell": "Fire Cat", "SpellID": 957065192, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Sometimes (50%) after his Ice Cat: Fire Cat." },
+
+    { "When": "ICast", "Spells": ["Meteor Strike"], "Chance": 50,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000929"},
+        {"Do": "Cast", "Spell": "Blizzard", "SpellID": 950291400, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Sometimes (50%) after his Meteor Strike: Blizzard." },
+
+    { "When": "ICast", "Spells": ["Blizzard"], "Chance": 50,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000929"},
+        {"Do": "Cast", "Spell": "Meteor Strike", "SpellID": 1979948506, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Sometimes (50%) after his Blizzard: Meteor Strike." }
+  ]
+}

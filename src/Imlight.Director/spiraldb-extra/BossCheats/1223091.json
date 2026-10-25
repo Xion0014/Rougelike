@@ -1,0 +1,35 @@
+{
+  // Hisser (Rank 13, Fire, 18,720 health), Khrysalis. Hisser: Tempest after a round he was not hurt, Shift when hurt with a DoT on him.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1223091,
+  "Name": "Hisser (Rank 13)",
+  "Cheats": [
+    { "When": "BossHit", "Category": "Damage",
+      "Actions": [
+        {"Do": "Mark", "Mark": "hurt this round", "Target": "Self"}
+      ],
+      "Notes": "Hurt: marked for this round." },
+
+    { "When": "RoundEnd", "Mark": "hurt this round", "MarkWho": "Self", "NotMarked": true,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000113"},
+        {"Do": "Cast", "Spell": "Tempest", "SpellID": 1250470070, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A round he was not hurt: Tempest at its end." },
+
+    { "When": "BossHit", "HasWho": "Self", "HasKind": "DoT", "Cooldown": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001876"},
+        {"Do": "Cast", "Spell": "Shift", "SpellID": 90320179, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Hurt with a DoT on him: Shift on a random wizard." },
+
+    { "When": "RoundEnd",
+      "Actions": [
+        {"Do": "Unmark", "Mark": "hurt this round", "Target": "Self"}
+      ],
+      "Notes": "End of each round: the mark comes off (after the cheats that look at it)." }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  // Gussied-Up Gator (Rank 21, Myth, 4,295 health), Night Mire Gauntlet. Gussied-Up Gator: comes into a battle with its minions.
+  // From Wizard404's data on the gauntlets (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove).
+  // Built first from blocks that were there, then from the new universal blocks each Notes names (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1593332,
+  "Name": "Gussied-Up Gator (Rank 21)",
+  "Cheats": [
+    { "When": "Passive", "Passive": "Minions", "Brings": ["1593330", "1593324", "1593322"],
+      "Notes": "It fights with Gussied-Up Gator and 2 Glowbug Zappers (Wizard404: its minions). New block: comes with." },
+
+    { "When": "Passive", "Passive": "Minions", "Brings": ["1593325", "1593323"], "PlayersMin": 3,
+      "Notes": "With 3 or more wizards, 2 Glowbug Zappers too (Wizard404: its minions for 3 players). New block: comes with, and the existing how many players." }
+  ]
+}

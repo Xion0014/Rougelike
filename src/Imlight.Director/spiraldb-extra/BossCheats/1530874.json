@@ -1,0 +1,51 @@
+{
+  // Power Draconian (Rank 20, Fire, 12,275 health), Lemuria. Power Draconian: Impede for a late wizard, Equalize, Blessing for an AoE, Power Stunner.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1530874,
+  "Name": "Power Draconian (Rank 20)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001895"},
+        {"Do": "Cast", "Spell": "Impede", "SpellID": 1906062967, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Impede on them." },
+
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001898"},
+        {"Do": "Cast", "Spell": "Equalize", "SpellID": 526415898, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Equalize." },
+
+    { "When": "PlayerGlobals",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001899"},
+        {"Do": "Cast", "Spell": "Equalize", "SpellID": 526415898, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A global: Equalize again." },
+
+    { "When": "PlayerCasts", "MultiTarget": true, "Category": "Damage",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001897"},
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 1131057749, "Target": "AllAllies", "DispelImmune": false}
+      ],
+      "Notes": "Hit with an AoE: Blessing restores all his allies." },
+
+    { "When": "RoundStart", "Round": 3, "Every": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001960"},
+        {"Do": "Cast", "Spell": "Power Stunner", "SpellID": 356800941, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Every third round: Power Stunner." },
+
+    { "When": "ICast", "Spells": ["Lord of the Wilds"],
+      "Actions": [
+        {"Do": "CastBy", "By": "Creature", "Spell": "Empower", "SpellID": 664615927, "Target": "Self", "DispelImmune": false, "Creature": 1530875}
+      ],
+      "Notes": "His Lord of the Wilds: the White Tiger Empowers itself." }
+  ]
+}

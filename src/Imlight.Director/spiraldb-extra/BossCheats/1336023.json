@@ -1,0 +1,140 @@
+{
+  // Sir Blackwater (Rank 14, Star, 18,000 health), Dungeons. Sir Blackwater: Disarm and Dark Tribute answers, and a 15-round death, life and storm cycle.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1336023,
+  "Name": "Sir Blackwater (Rank 14)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "PlayerCasts", "Category": "Blade,Global",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000518"},
+        {"Do": "Interrupt"},
+        {"Do": "Cast", "Spell": "Disarm", "SpellID": 1627273980, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A blade or global: Disarm on the wizard, first." },
+
+    { "When": "PlayerCasts", "Category": "Weakness", "OnBoss": true, "SingleTarget": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000520"},
+        {"Do": "Interrupt"},
+        {"Do": "Cast", "Spell": "Dark Tribute", "SpellID": 973103412, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A single-target weakness on him: Dark Tribute, first." },
+
+    { "When": "RoundEnd", "Round": 1, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000521"},
+        {"Do": "Cast", "Spell": "Sacrifice", "SpellID": 761482201, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Death cycle (rounds 1-4 of each 15): Sacrifice." },
+
+    { "When": "RoundEnd", "Round": 2, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000521"},
+        {"Do": "Cast", "Spell": "Sacrifice", "SpellID": 761482201, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Death cycle (rounds 1-4 of each 15): Sacrifice." },
+
+    { "When": "RoundEnd", "Round": 3, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000521"},
+        {"Do": "Cast", "Spell": "Sacrifice", "SpellID": 761482201, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Death cycle (rounds 1-4 of each 15): Sacrifice." },
+
+    { "When": "RoundEnd", "Round": 4, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000521"},
+        {"Do": "Cast", "Spell": "Sacrifice", "SpellID": 761482201, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Death cycle (rounds 1-4 of each 15): Sacrifice." },
+
+    { "When": "RoundStart", "Round": 5, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000524"},
+        {"Do": "Cast", "Spell": "Age of Reckoning", "SpellID": 1314329415, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Virulence", "SpellID": 250316317, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Deathblade", "SpellID": 556969572, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "From Beyond", "SpellID": 1072685801, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 5 of each 15." },
+
+    { "When": "RoundEnd", "Round": 6, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000522"},
+        {"Do": "Cast", "Spell": "Spirit Armor", "SpellID": 1046597698, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Life cycle (rounds 6-9): Spirit Armor." },
+
+    { "When": "RoundEnd", "Round": 7, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000522"},
+        {"Do": "Cast", "Spell": "Spirit Armor", "SpellID": 1046597698, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Life cycle (rounds 6-9): Spirit Armor." },
+
+    { "When": "RoundEnd", "Round": 8, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000522"},
+        {"Do": "Cast", "Spell": "Spirit Armor", "SpellID": 1046597698, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Life cycle (rounds 6-9): Spirit Armor." },
+
+    { "When": "RoundEnd", "Round": 9, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000522"},
+        {"Do": "Cast", "Spell": "Spirit Armor", "SpellID": 1046597698, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Life cycle (rounds 6-9): Spirit Armor." },
+
+    { "When": "RoundStart", "Round": 10, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000525"},
+        {"Do": "Cast", "Spell": "Sanctuary", "SpellID": 278860909, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Cycle of Life", "SpellID": 1235843804, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Guiding Light", "SpellID": 1613204900, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Rebirth", "SpellID": 620544931, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 10 of each 15." },
+
+    { "When": "RoundEnd", "Round": 11, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000523"},
+        {"Do": "Cast", "Spell": "Healing Current", "SpellID": 2033316751, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Storm cycle (rounds 11-14): Healing Current." },
+
+    { "When": "RoundEnd", "Round": 12, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000523"},
+        {"Do": "Cast", "Spell": "Healing Current", "SpellID": 2033316751, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Storm cycle (rounds 11-14): Healing Current." },
+
+    { "When": "RoundEnd", "Round": 13, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000523"},
+        {"Do": "Cast", "Spell": "Healing Current", "SpellID": 2033316751, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Storm cycle (rounds 11-14): Healing Current." },
+
+    { "When": "RoundEnd", "Round": 14, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000523"},
+        {"Do": "Cast", "Spell": "Healing Current", "SpellID": 2033316751, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Storm cycle (rounds 11-14): Healing Current." },
+
+    { "When": "RoundStart", "Round": 15, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000526"},
+        {"Do": "Cast", "Spell": "Astraphobia", "SpellID": 1523238357, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Galvanic Field", "SpellID": 1000012417, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Stormblade", "SpellID": 560043093, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Gloambugs!", "SpellID": 1461643487, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 15 of each 15." }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  // Morg the Merciless (Rank 20, Fire, 11,905 health), Lemuria. Morg the Merciless: his minions back for a late wizard, Detonate, Guardian Spirit, a Tower Shield and Power Nova, then Regenerate.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1530813,
+  "Name": "Morg the Merciless (Rank 20)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1, "AlliesMax": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001971"},
+        {"Do": "Cast", "Spell": "Morg's Minions", "SpellID": 1395741809, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A late wizard while a minion is missing." },
+
+    { "When": "RoundStart", "HasWho": "AnyEnemy", "HasKind": "DoT", "HasAllies": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001974"},
+        {"Do": "CastBy", "By": "Ally", "Spell": "Detonate", "SpellID": 30480473, "Target": "Matched", "DispelImmune": false}
+      ],
+      "Notes": "A wizard with a DoT: a minion casts Detonate." },
+
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001915"},
+        {"Do": "Cast", "Spell": "Guardian Spirit", "SpellID": 1529598853, "Target": "Ally", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Guardian Spirit on a minion." },
+
+    { "When": "RoundStart", "Round": 2, "HasAllies": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001973"},
+        {"Do": "Cast", "Spell": "Tower Shield", "SpellID": 432324968, "Target": "WeakestAlly", "DispelImmune": false}
+      ],
+      "Notes": "Round 2: Tower Shield on a minion." },
+
+    { "When": "RoundStart", "Round": 3, "HasAllies": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001972"},
+        {"Do": "CastBy", "By": "Ally", "Spell": "Power Nova", "SpellID": 360829802, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 3: a minion casts Power Nova." },
+
+    { "When": "MinionDefeated", "NoAllies": true, "Once": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001916"},
+        {"Do": "Cast", "Spell": "Regenerate", "SpellID": 1797342617, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "His minions all down: Regenerate (99% of his health to himself)." }
+  ]
+}

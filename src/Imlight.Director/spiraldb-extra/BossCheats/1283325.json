@@ -1,0 +1,37 @@
+{
+  // Balor the Broken Fang (Rank 14, Storm, 19,770 health), Khrysalis. Balor the Broken Fang (Shadow): two thralls who blade him, and Tower Shields.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1283325,
+  "Name": "Balor the Broken Fang (Rank 14)",
+  "ShadowPips": 1,
+  "Cheats": [
+    { "When": "RoundEnd", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000229"},
+        {"Do": "Minion", "Creature": 1223090},
+        {"Do": "Minion", "Creature": 1283348}
+      ],
+      "Notes": "End of round 1: a Blackback Thrall and an Ashen Man Eater." },
+
+    { "When": "RoundEnd", "Round": 2, "Every": 2,
+      "Actions": [
+        {"Do": "CastBy", "By": "Creature", "Spell": "Stormblade", "SpellID": 2131701592, "Target": "Owner", "DispelImmune": false, "Creature": 1283348}
+      ],
+      "Notes": "End of every second round: the Man Eater's Stormblade on him." },
+
+    { "When": "RoundEnd", "Round": 3, "Every": 3,
+      "Actions": [
+        {"Do": "CastBy", "By": "Creature", "Spell": "Dragonblade", "SpellID": 912758508, "Target": "Owner", "DispelImmune": false, "Creature": 1223090}
+      ],
+      "Notes": "End of every third round: the Thrall's Dragonblade on him." },
+
+    { "When": "RoundStart", "Round": 2, "Every": 2, "Chance": 70,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000214"},
+        {"Do": "Cast", "Spell": "Tower Shield", "SpellID": 909851316, "Target": "Ally", "DispelImmune": false}
+      ],
+      "Notes": "Now and then: Tower Shield on himself or an ally." }
+  ]
+}

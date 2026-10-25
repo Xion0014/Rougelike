@@ -1,0 +1,17 @@
+{
+  // Orange Iguana Champion (Rank 24, Balance, 16,000 health), Hidden Temple Gauntlet. Orange Iguana Champion.
+  // From Wizard404's data on the gauntlets (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove).
+  // Built first from blocks that were there, then from the new universal blocks each Notes names (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1714992,
+  "Name": "Orange Iguana Champion (Rank 24)",
+  "Cheats": [
+    { "When": "PlayerCasts", "Category": "Blade",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00004304"},
+        {"Do": "Cast", "Spell": "Balanceblade", "SpellID": 403616231, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Tower Shield", "SpellID": 432324968, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "\"Are these Orange Iguanas, or chameleons?\" A wizard's blade: a 45% Balanceblade and a Tower Shield on itself (Wizard404: spells to be verified). Existing blocks." }
+  ]
+}

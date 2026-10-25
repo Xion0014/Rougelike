@@ -1,0 +1,50 @@
+{
+  // Mulleted Dr. Neaux (Rank 22, Life, 17,035 health), Night Mire Gauntlet. Mulleted Dr. Neaux: the Trim cycle. Take half his health to set it off, and keep him from healing back to full.
+  // From Wizard404's data on the gauntlets (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove).
+  // Built first from blocks that were there, then from the new universal blocks each Notes names (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1593334,
+  "Name": "Mulleted Dr. Neaux (Rank 22)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "Passive", "Passive": "Minions", "Brings": ["1593336", "1593335"],
+      "Notes": "He fights with two Hairballs (Wizard404: his minions). New block: comes with." },
+
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002661"},
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 1641304242, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A wizard who joins after round 1: Blessing on himself. Existing blocks." },
+
+    { "When": "BossDefeated", "Phase": 1,
+      "Actions": [
+        {"Do": "SetHealth", "Amount": 17035},
+        {"Do": "Say", "Line": "CombatMessages_00002662"},
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 1641304242, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Defeated before his Trim: back at full health with Blessing. Existing blocks." },
+
+    { "When": "HealthBelow", "Percent": 50, "Phase": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002664"},
+        {"Do": "Cast", "Spell": "Choke", "SpellID": 74757411, "Target": "", "DispelImmune": false},
+        {"Do": "SetPhase", "Phase": 2}
+      ],
+      "Notes": "He loses half his health: Choke at once, and the Trim cycle starts (phase 2). Existing blocks." },
+
+    { "When": "RoundStart", "Phase": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002663"},
+        {"Do": "Cast", "Spell": "Heartbeat", "SpellID": 615731793, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "In the Trim cycle, each round: Heartbeat on himself (1,500 healing)." },
+
+    { "When": "RoundStart", "Phase": 2, "HealthAbove": 99,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002665"},
+        {"Do": "SetPhase", "Phase": 1}
+      ],
+      "Notes": "Healed back to full: the cycle starts over, and the Trim has to be set off again (a phase's health cheats can go off again when it comes back)." }
+  ]
+}

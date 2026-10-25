@@ -1,0 +1,46 @@
+{
+  // Shadow of the Land (Rank 12, Balance, 13,070 health), Khrysalis. Shadow of the Land: a Power Nova every 5th round, stronger for each Laughing Calaca standing, and more Calacas.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1223069,
+  "Name": "Shadow of the Land (Rank 12)",
+  "ShadowPips": 1,
+  "Cheats": [
+    { "When": "RoundStart", "Round": 5, "Every": 5, "NoAllies": true,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000196"},
+        {"Do": "Cast", "Spell": "Power Nova", "SpellID": 905510049, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Every 5th round, no minion: Power Nova." },
+
+    { "When": "RoundStart", "Round": 5, "Every": 5, "AlliesMin": 1, "AlliesMax": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000197"},
+        {"Do": "Cast", "Spell": "Power Nova", "SpellID": 880344225, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "1 minion." },
+
+    { "When": "RoundStart", "Round": 5, "Every": 5, "AlliesMin": 2, "AlliesMax": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000198"},
+        {"Do": "Cast", "Spell": "Power Nova", "SpellID": 888732833, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "2 minions." },
+
+    { "When": "RoundStart", "Round": 5, "Every": 5, "AlliesMin": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000199"},
+        {"Do": "Cast", "Spell": "Power Nova", "SpellID": 930675873, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "3 minions." },
+
+    { "When": "MinionDefeated", "Creature": 1223255,
+      "Actions": [
+        {"Do": "Wait", "Rounds": 2},
+        {"Do": "Say", "Line": "WizardBossFights_00000210"},
+        {"Do": "Minion", "Creature": 1223255}
+      ],
+      "Notes": "A Calaca falls: another comes (2 rounds later, a guess)." }
+  ]
+}

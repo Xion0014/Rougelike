@@ -1,0 +1,89 @@
+{
+  // Skeletaur (Rank 20, Shadow, 13,200 health), Lemuria. Skeletaur: Natural Attacks with Stun or Confusion, a Blessing if he falls first, totems for lemurs, Convert Trap for a Feint, Beguile.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1530897,
+  "Name": "Skeletaur (Rank 20)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001931"},
+        {"Do": "Cast", "Spell": "Natural Attack", "SpellID": 277749774, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00002020"},
+        {"Do": "Cast", "Spell": "Stun", "SpellID": 1863780109, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A late wizard: Natural Attack and Stun." },
+
+    { "When": "ICast", "Spells": ["Natural Attack"], "Chance": 50,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002020"},
+        {"Do": "Cast", "Spell": "Stun", "SpellID": 1863780109, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "After Natural Attack (277749774): Stun for 2 rounds." },
+
+    { "When": "ICast", "Spells": ["Natural Attack"], "Chance": 50,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002021"},
+        {"Do": "Cast", "Spell": "Confusion", "SpellID": 1916550793, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "After the other Natural Attack: Confusion." },
+
+    { "When": "BossDefeated", "HasAllies": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002024"},
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 1641304242, "Target": "Self", "DispelImmune": false},
+        {"Do": "SetHealth", "Amount": 13200}
+      ],
+      "Notes": "Defeated before his minions: Blessing." },
+
+    { "When": "MinionDefeated", "Creature": 1530898,
+      "Actions": [
+        {"Do": "PickOne", "Count": 3},
+        {"Do": "Cast", "Spell": "Summon Armor Totem", "SpellID": 2047286043, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Summon Taunting Totem", "SpellID": 1221955125, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Summon Hex Totem", "SpellID": 1193582007, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A Death Lemur falls: a totem comes." },
+
+    { "When": "MinionDefeated", "Creature": 1535296,
+      "Actions": [
+        {"Do": "PickOne", "Count": 3},
+        {"Do": "Cast", "Spell": "Summon Armor Totem", "SpellID": 2047286043, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Summon Taunting Totem", "SpellID": 1221955125, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Summon Hex Totem", "SpellID": 1193582007, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "" },
+
+    { "When": "MinionDefeated", "Creature": 1535295,
+      "Actions": [
+        {"Do": "PickOne", "Count": 3},
+        {"Do": "Cast", "Spell": "Summon Armor Totem", "SpellID": 2047286043, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Summon Taunting Totem", "SpellID": 1221955125, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Summon Hex Totem", "SpellID": 1193582007, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "" },
+
+    { "When": "PlayerCasts", "Spells": ["Feint"], "OnBoss": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002023"},
+        {"Do": "Cast", "Spell": "Convert Trap", "SpellID": 690901232, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A Feint on him: Convert Trap halves it." },
+
+    { "When": "RoundStart", "Round": 4, "Every": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002022"},
+        {"Do": "Cast", "Spell": "Beguile", "SpellID": 591686509, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Every 4th round: Beguile." },
+
+    { "When": "RoundStart", "Round": 5, "Every": 5,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002022"},
+        {"Do": "Cast", "Spell": "Beguile", "SpellID": 591686509, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Every 5th round: Beguile." }
+  ]
+}

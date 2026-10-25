@@ -1,0 +1,30 @@
+{
+  // Dark Sentinel (Rank 17, Shadow, 80,000 health), Polaris. Dark Sentinel: Shadow Sentinel, Enfeeble for charms, Steal Ward for wards.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1376371,
+  "Name": "Dark Sentinel (Rank 17)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Shadow Sentinel MOB", "SpellID": 272842088, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Shadow Sentinel." },
+
+    { "When": "PlayerCharms",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000867"},
+        {"Do": "Cast", "Spell": "Enfeeble", "SpellID": 476835093, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Enfeeble", "SpellID": 476835093, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "A charm: Enfeeble on the caster and the one it went on." },
+
+    { "When": "PlayerWards", "Chance": 50,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Steal Ward", "SpellID": 991342922, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A ward: maybe (50%, a guess) Steal Ward on the caster." }
+  ]
+}

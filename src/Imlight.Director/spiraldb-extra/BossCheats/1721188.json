@@ -1,0 +1,21 @@
+{
+  // Scorching Elemental (Rank 1, Fire, 35 health), Unknown. Scorching Elemental: Sparky three times, then it leaves.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1721188,
+  "Name": "Scorching Elemental (Rank 1)",
+  "Cheats": [
+    { "When": "RoundStart", "ToRound": 3,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Sparky", "SpellID": 405526750, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Rounds 1-3: Sparky." },
+
+    { "When": "RoundStart", "Round": 4,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Exit Combat", "SpellID": 2022486178, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 4: Exit Combat." }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  // Icepatch Colossus (Rank 6, Ice, 220 health), Unknown. Icepatch Colossus: five casts, then it leaves.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1721187,
+  "Name": "Icepatch Colossus (Rank 6)",
+  "Cheats": [
+    { "When": "RoundStart", "MaxTimes": 6,
+      "Actions": [
+        {"Do": "InTurn", "Count": 6},
+        {"Do": "Cast", "Spell": "Ice Trap", "SpellID": 415162663, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Ice Fuel", "SpellID": 894908387, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Ice Trap", "SpellID": 415162663, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Ice Fuel", "SpellID": 894908387, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Arctic Trap", "SpellID": 1480922641, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Exit Combat", "SpellID": 2022486178, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Each round: Ice Trap, Ice Fuel, Ice Trap, Ice Fuel, Arctic Trap, then Exit Combat." }
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  // Alpha Wolf (Rank 25, Death, 16,205 health), Darkmoor. Alpha Wolf: an aura that lets 1 damage through until three phases of four DoTs, jinxes, then curses.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  // Checked against its Wizard101 Central page (saved 2026-10-24): phase 2 is four harmful wards and phase 3 four harmful charms (they were the other way round); each phase's line is said once.
+  "TemplateID": 1705033,
+  "Name": "Alpha Wolf (Rank 25)",
+  "Cheats": [
+    { "When": "BattleStart", "Phase": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00004007"},
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 1835827618, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Fortify", "SpellID": 945884935, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Blessing (three HoTs) and Fortify (1 damage at most)." },
+
+    { "When": "PlayerCasts", "Category": "DoT", "OnBoss": true, "Phase": 1, "Once": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00004008"}
+      ],
+      "Notes": "A DoT on him (said once)." },
+
+    { "When": "PlayerCasts", "Category": "DoT", "OnBoss": true, "Phase": 1, "HasWho": "Self", "HasKind": "DoT", "HasCount": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00004009"},
+        {"Do": "Cast", "Spell": "Sacrifice", "SpellID": 59355030, "Target": "Self", "DispelImmune": false},
+        {"Do": "SetPhase", "Phase": 2}
+      ],
+      "Notes": "Four DoTs on him at once: Sacrifice (all off, 25% of his health) and phase 2. New If: HasCount." },
+
+    { "When": "RoundStart", "Round": 1, "Phase": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00004010"},
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 2131480900, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Phase 2: Blessing gives three -50% shields." },
+
+    { "When": "PlayerCasts", "Category": "Trap", "OnBoss": true, "Phase": 2, "Once": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00004011"}
+      ],
+      "Notes": "Phase 2: a harmful ward on him (said once)." },
+
+    { "When": "PlayerCasts", "Category": "Trap", "OnBoss": true, "Phase": 2, "HasWho": "Self", "HasKind": "Trap", "HasCount": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00004012"},
+        {"Do": "Cast", "Spell": "Sacrifice", "SpellID": 59355030, "Target": "Self", "DispelImmune": false},
+        {"Do": "SetPhase", "Phase": 3}
+      ],
+      "Notes": "Four harmful wards on him at once: Sacrifice and phase 3." },
+
+    { "When": "RoundStart", "Round": 1, "Phase": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00004013"},
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 501434947, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Phase 3: Blessing gives three +50% blades." },
+
+    { "When": "PlayerCasts", "Category": "Weakness", "OnBoss": true, "Phase": 3, "Once": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00004014"}
+      ],
+      "Notes": "Phase 3: a harmful charm on him (said once)." },
+
+    { "When": "PlayerCasts", "Category": "Weakness", "OnBoss": true, "Phase": 3, "HasWho": "Self", "HasKind": "Weakness", "HasCount": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00004015"},
+        {"Do": "Cast", "Spell": "Sacrifice", "SpellID": 59355030, "Target": "Self", "DispelImmune": false},
+        {"Do": "RemoveAuras", "Target": "Self"},
+        {"Do": "SetPhase", "Phase": 4}
+      ],
+      "Notes": "Four harmful charms at once: Sacrifice, the aura comes off, and he can be hurt freely." },
+
+    { "When": "PlayerCasts", "Category": "Dispel", "OnBoss": true, "Phase": 1,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Exit Combat", "SpellID": 2022486178, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard takes his aura off before the phases are done: Exit Combat on them." }
+  ]
+}

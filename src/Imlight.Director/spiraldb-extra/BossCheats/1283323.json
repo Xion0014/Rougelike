@@ -1,0 +1,19 @@
+{
+  // Tree Root (Rank 14, Death, 12,845 health), Khrysalis. Tree Root: when any root falls, an elite root of one of their schools comes.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1283323,
+  "Name": "Tree Root (Rank 14)",
+  "Cheats": [
+    { "When": "MinionDefeated",
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000216"},
+        {"Do": "PickOne", "Count": 3},
+        {"Do": "Minion", "Creature": 1299020},
+        {"Do": "Minion", "Creature": 1299021},
+        {"Do": "Minion", "Creature": 1299022}
+      ],
+      "Notes": "A root falls: another root comes (which elite version is not known; one of the three here)." }
+  ]
+}

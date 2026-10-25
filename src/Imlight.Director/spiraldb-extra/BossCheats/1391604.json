@@ -1,0 +1,84 @@
+{
+  // Yowck (Rank 16, Ice, 23,370 health), Empyrea. Yowck: shields after his Natural Attack, a late wizard's Mana Burn, Black Mantle for a fizzle, Adrok's traps moved, ward limits.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1391604,
+  "Name": "Yowck (Rank 16)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "ICast", "Spells": ["Natural Attack"],
+      "Actions": [
+        {"Do": "PickOne", "Count": 2},
+        {"Do": "Cast", "Spell": "Elemental Shield", "SpellID": 1923654835, "Target": "Ally", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Spirit Shield", "SpellID": 1775966056, "Target": "Ally", "DispelImmune": false}
+      ],
+      "Notes": "After his Natural Attack: a shield on an ally." },
+
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001144"},
+        {"Do": "Cast", "Spell": "Mana Burn", "SpellID": 309838857, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Donate Power", "SpellID": 567400314, "Target": "AllAllies", "DispelImmune": false}
+      ],
+      "Notes": "A late wizard." },
+
+    { "When": "PlayerCasts", "Fizzle": "Fizzled",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001145"},
+        {"Do": "Cast", "Spell": "Black Mantle", "SpellID": 574206760, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard fizzles: Black Mantle." },
+
+    { "When": "PlayerCasts", "Category": "Trap", "Creature": 1391606, "CreatureWho": "Receiver",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001100"},
+        {"Do": "Cast", "Spell": "Shift", "SpellID": 733752155, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "A trap on Adrok: Shift on him moves it to the wizard." },
+
+    { "When": "PlayerCasts", "Category": "Ward", "SingleTarget": true, "Mark": "warded", "MarkWho": "Self", "NotMarked": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001147"},
+        {"Do": "Mark", "Mark": "warded", "Target": "Self"}
+      ],
+      "Notes": "The first single-target ward on themself in a round is let through." },
+
+    { "When": "PlayerCasts", "Category": "Ward", "SingleTarget": true, "Mark": "warded", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001102"},
+        {"Do": "Cast", "Spell": "Pierce", "SpellID": 1882292867, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Freeze", "SpellID": 1887199642, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A second one the same round: Pierce and Freeze." },
+
+    { "When": "PlayerCasts", "Category": "Ward", "MultiTarget": true, "Mark": "mass warded", "MarkWho": "Self", "NotMarked": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001148"},
+        {"Do": "Mark", "Mark": "mass warded", "Target": "Self"}
+      ],
+      "Notes": "The first multi-target ward in a round is let through." },
+
+    { "When": "PlayerCasts", "Category": "Ward", "MultiTarget": true, "Mark": "mass warded", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001104"},
+        {"Do": "Cast", "Spell": "Pierce", "SpellID": 1670373346, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Blinding Freeze", "SpellID": 1705705081, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A second the same round: Pierce and Blinding Freeze." },
+
+    { "When": "RoundEnd",
+      "Actions": [
+        {"Do": "Unmark", "Mark": "warded", "Target": "Self"},
+        {"Do": "Unmark", "Mark": "mass warded", "Target": "Self"}
+      ],
+      "Notes": "End of the round: the ward counts start again." },
+
+    { "When": "PlayerCasts", "Category": "Weakness", "OnBoss": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001146"},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Cleanse Charm", "SpellID": 343915998, "Target": "Owner", "DispelImmune": false, "Creature": 1391606}
+      ],
+      "Notes": "A curse on Yowck: Adrok casts Cleanse Charm on him." }
+  ]
+}

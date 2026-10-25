@@ -1,0 +1,107 @@
+{
+  // Judge Veg (Rank 19, Life, 13,510 health), Karamelle. Judge Veg: Grim Grrnadier for a late wizard, a cleanse for Feints, and wizards turned into vegetables.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1505799,
+  "Name": "Judge Veg (Rank 19)",
+  "ShadowPips": 1,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001586"},
+        {"Do": "Cast", "Spell": "Grim Grrnadier", "SpellID": 1417110840, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Grim Grrnadier on them." },
+
+    { "When": "PlayerCasts", "Spells": ["Feint", "Mass Feint"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001587"},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 1213761009, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A Feint or Mass Feint: Cleanse Ward on himself." },
+
+    { "When": "RoundEnd", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001588"},
+        {"Do": "PickOne", "Count": 4, "Group": 2},
+        {"Do": "Polymorph", "Spell": "Polymorph Carrot", "SpellID": 985575500, "Target": "Enemy"},
+        {"Do": "Cast", "Spell": "Baby Carrot Tag", "SpellID": 459220065, "Target": "Last", "DispelImmune": false},
+        {"Do": "Polymorph", "Spell": "Polymorph Beet", "SpellID": 896809233, "Target": "Enemy"},
+        {"Do": "Cast", "Spell": "Dead Beet Tag", "SpellID": 1902126904, "Target": "Last", "DispelImmune": false},
+        {"Do": "Polymorph", "Spell": "Polymorph Disparagus", "SpellID": 724908954, "Target": "Enemy"},
+        {"Do": "Cast", "Spell": "Disparagus Tag", "SpellID": 1509016360, "Target": "Last", "DispelImmune": false},
+        {"Do": "Polymorph", "Spell": "Polymorph Peas", "SpellID": 1194631926, "Target": "Enemy"},
+        {"Do": "Cast", "Spell": "Snow Peas Tag", "SpellID": 818478273, "Target": "Last", "DispelImmune": false}
+      ],
+      "Notes": "End of round 1: a wizard turned into a vegetable, with its tag." },
+
+    { "When": "RoundEnd", "Round": 10, "Every": 9, "PlayersMax": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001588"},
+        {"Do": "PickOne", "Count": 4},
+        {"Do": "Polymorph", "Spell": "Polymorph Carrot", "SpellID": 985575500, "Target": "Enemy"},
+        {"Do": "Polymorph", "Spell": "Polymorph Beet", "SpellID": 896809233, "Target": "Enemy"},
+        {"Do": "Polymorph", "Spell": "Polymorph Disparagus", "SpellID": 724908954, "Target": "Enemy"},
+        {"Do": "Polymorph", "Spell": "Polymorph Peas", "SpellID": 1194631926, "Target": "Enemy"}
+      ],
+      "Notes": "1 wizard: again every 9 rounds." },
+
+    { "When": "RoundEnd", "Round": 8, "Every": 7, "PlayersMin": 2, "PlayersMax": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001589"},
+        {"Do": "PickOne", "Count": 4},
+        {"Do": "Polymorph", "Spell": "Polymorph Carrot", "SpellID": 985575500, "Target": "Enemy"},
+        {"Do": "Polymorph", "Spell": "Polymorph Beet", "SpellID": 896809233, "Target": "Enemy"},
+        {"Do": "Polymorph", "Spell": "Polymorph Disparagus", "SpellID": 724908954, "Target": "Enemy"},
+        {"Do": "Polymorph", "Spell": "Polymorph Peas", "SpellID": 1194631926, "Target": "Enemy"}
+      ],
+      "Notes": "2 wizards: every 7 rounds." },
+
+    { "When": "RoundEnd", "Round": 6, "Every": 5, "PlayersMin": 3, "PlayersMax": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001590"},
+        {"Do": "PickOne", "Count": 4},
+        {"Do": "Polymorph", "Spell": "Polymorph Carrot", "SpellID": 985575500, "Target": "Enemy"},
+        {"Do": "Polymorph", "Spell": "Polymorph Beet", "SpellID": 896809233, "Target": "Enemy"},
+        {"Do": "Polymorph", "Spell": "Polymorph Disparagus", "SpellID": 724908954, "Target": "Enemy"},
+        {"Do": "Polymorph", "Spell": "Polymorph Peas", "SpellID": 1194631926, "Target": "Enemy"}
+      ],
+      "Notes": "3 wizards: every 5 rounds." },
+
+    { "When": "RoundEnd", "Round": 4, "Every": 3, "PlayersMin": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001591"},
+        {"Do": "PickOne", "Count": 4},
+        {"Do": "Polymorph", "Spell": "Polymorph Carrot", "SpellID": 985575500, "Target": "Enemy"},
+        {"Do": "Polymorph", "Spell": "Polymorph Beet", "SpellID": 896809233, "Target": "Enemy"},
+        {"Do": "Polymorph", "Spell": "Polymorph Disparagus", "SpellID": 724908954, "Target": "Enemy"},
+        {"Do": "Polymorph", "Spell": "Polymorph Peas", "SpellID": 1194631926, "Target": "Enemy"}
+      ],
+      "Notes": "4 wizards: every 3 rounds." },
+
+    { "When": "ICast", "Spells": ["Delphic Lamassu"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001592"}
+      ],
+      "Notes": "His Delphic Lamassu." },
+
+    { "When": "ICast", "Spells": ["Wings of Night"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001594"}
+      ],
+      "Notes": "His Wings of Night." },
+
+    { "When": "ICast", "Spells": ["Hungry Caterpillar"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001593"}
+      ],
+      "Notes": "His Hungry Caterpillar." },
+
+    { "When": "ICast", "Spells": ["Grim Grrnadier"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001595"}
+      ],
+      "Notes": "His Grim Grrnadier." }
+  ]
+}

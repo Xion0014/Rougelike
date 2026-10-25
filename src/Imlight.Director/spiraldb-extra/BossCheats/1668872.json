@@ -1,0 +1,42 @@
+{
+  // Grandfather Spider (Rank 19, Shadow, 50,000 health), Grandfather Spider Rematch. Grandfather Spider: his three minions keep him whole; he swaps the turn order every 3 rounds.
+  // From Wizard404's data on the gauntlets (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove).
+  // Built first from blocks that were there, then from the new universal blocks each Notes names (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1668872,
+  "Name": "Grandfather Spider (Rank 19)",
+  "ShadowPips": 7,
+  "Cheats": [
+    { "When": "Passive", "Passive": "Minions", "Brings": ["1668871", "1668870", "1668873"],
+      "Notes": "He fights with Shadowbones, Bort Shadowmane and Shadowwock (Wizard404: his minions). New block: comes with." },
+
+    { "When": "RoundEnd",
+      "Actions": [
+        {"Do": "Pips", "Amount": 1, "Kind": "Shadow", "Target": "Self"}
+      ],
+      "Notes": "The end of every round: a shadow pip. Existing blocks (Wizard404: spell to be confirmed)." },
+
+    { "When": "PlayerCasts", "OnBoss": true, "HasAllies": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003592"},
+        {"Do": "HealthTo", "Amount": 100, "Target": "Self"}
+      ],
+      "Notes": "\"Be patient, you have other playmates.\" A spell on him while a minion stands: back to full health. Existing blocks." },
+
+    { "When": "RoundStart", "Every": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001007"},
+        {"Do": "Cast", "Spell": "Dimension Shift", "SpellID": 1983639969, "Target": "Self", "DispelImmune": false},
+        {"Do": "FirstTurn", "Side": "Swap"}
+      ],
+      "Notes": "\"Spin the Wheel!\" Every 3 rounds: Dimension Shift, and the other side goes first. New: turn order swap." },
+
+    { "When": "MinionDefeated", "NoAllies": true, "Once": true,
+      "Actions": [
+        {"Do": "Wait", "Rounds": 1},
+        {"Do": "Say", "Line": "CombatMessages_00004330"},
+        {"Do": "HealthTo", "Amount": 100, "Target": "Self"}
+      ],
+      "Notes": "\"Oh this has looked like fun! My turn!\" The round after his last minion falls: back to full health. He also takes two of his minions' cheats at random (Wizard404: needs clarifying); not made." }
+  ]
+}

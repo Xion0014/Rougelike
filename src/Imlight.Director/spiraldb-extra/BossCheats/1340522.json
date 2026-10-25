@@ -1,0 +1,57 @@
+{
+  // Warden Vissarovich (Rank 15, Ice, 12,080 health), Polaris. Warden Vissarovich: Frostbite for a late wizard, Frozen Armor, and a cycle of nine moves.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1340522,
+  "Name": "Warden Vissarovich (Rank 15)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000676"},
+        {"Do": "Cast", "Spell": "Frostbite", "SpellID": 1625015765, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Frostbite on them." },
+
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000825"},
+        {"Do": "Cast", "Spell": "Frozen Armor", "SpellID": 1337342610, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Frozen Armor on himself." },
+
+    { "When": "RoundStart", "FromRound": 2,
+      "Actions": [
+        {"Do": "InTurn", "Count": 9, "Group": 3},
+        {"Do": "Say", "Line": "CombatMessages_00000826"},
+        {"Do": "Cast", "Spell": "Iceblade", "SpellID": 1045295820, "Target": "Self", "DispelImmune": false},
+        {"Do": "Say"},
+        {"Do": "Say", "Line": "CombatMessages_00000828"},
+        {"Do": "Cast", "Spell": "Hailstorm", "SpellID": 1830249355, "Target": "", "DispelImmune": false},
+        {"Do": "Say"},
+        {"Do": "Say", "Line": "CombatMessages_00000829"},
+        {"Do": "Cast", "Spell": "Blizzard", "SpellID": 126627734, "Target": "", "DispelImmune": false},
+        {"Do": "Say"},
+        {"Do": "Say", "Line": "CombatMessages_00000830"},
+        {"Do": "Cast", "Spell": "Amplify", "SpellID": 927512169, "Target": "Self", "DispelImmune": false},
+        {"Do": "Say"},
+        {"Do": "Say", "Line": "CombatMessages_00000831"},
+        {"Do": "Cast", "Spell": "Woolly Mammoth", "SpellID": 1713326560, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Say"},
+        {"Do": "Say", "Line": "CombatMessages_00000832"},
+        {"Do": "Cast", "Spell": "Availing Hands", "SpellID": 484998026, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Balanceblade", "SpellID": 1538644858, "Target": "Self", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00000833"},
+        {"Do": "Say"},
+        {"Do": "Say"},
+        {"Do": "Say", "Line": "CombatMessages_00000834"},
+        {"Do": "Cast", "Spell": "Judgement", "SpellID": 998131405, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Say"},
+        {"Do": "Say", "Line": "CombatMessages_00000827"},
+        {"Do": "Cast", "Spell": "Tower Shield", "SpellID": 432324968, "Target": "Self", "DispelImmune": false},
+        {"Do": "Say"}
+      ],
+      "Notes": "From round 2, one move of his cycle a round: Iceblade, Hailstorm, Blizzard, Amplify, Woolly Mammoth, Availing Hands and Balanceblade, a pass, Judgement, Tower Shield." }
+  ]
+}

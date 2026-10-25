@@ -1,0 +1,30 @@
+{
+  // Happy Bear (Rank 25, Balance, 20,330 health), Darkmoor. Happy Bear: answers to wards, jinxes, charms and heals.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1705035,
+  "Name": "Happy Bear (Rank 25)",
+  "Cheats": [
+    { "When": "PlayerCasts", "Category": "Ward,Trap",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003997"},
+        {"Do": "Cast", "Spell": "Legion Shield", "SpellID": 3605232, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A ward or jinx: Legion Shield." },
+
+    { "When": "PlayerCasts", "Category": "Blade",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003997"},
+        {"Do": "Cast", "Spell": "Bladestorm", "SpellID": 1527056215, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A charm: Bladestorm." },
+
+    { "When": "PlayerCasts", "Category": "Heal",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003997"},
+        {"Do": "Cast", "Spell": "Pigsie", "SpellID": 2021718686, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A heal: Pigsie." }
+  ]
+}

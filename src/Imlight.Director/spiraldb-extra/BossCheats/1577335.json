@@ -1,0 +1,36 @@
+{
+  // Gourmand Ramsey (Rank 22, Fire, 13,135 health), Novus. Gourmand Ramsey: a forced pass, Apollo Bright One, Monster Mash for single buffs.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1577335,
+  "Name": "Gourmand Ramsey (Rank 22)",
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Force Pass", "SpellID": 423978274, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: the wizards must pass." },
+
+    { "When": "RoundStart", "Round": 2,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Force Pass End", "SpellID": 1376816564, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00002430"},
+        {"Do": "Cast", "Spell": "Cyclops Minion", "SpellID": 1341001631, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 2: the pass ends, and Apollo comes." },
+
+    { "When": "RoundStart", "FromRound": 3, "AlliesUp": ["1551356"],
+      "Actions": [
+        {"Do": "CastBy", "By": "Creature", "Spell": "Intercept 100", "SpellID": 751334567, "Target": "Owner", "DispelImmune": false, "Creature": 1551356}
+      ],
+      "Notes": "Apollo's turn: Intercept 100 on him." },
+
+    { "When": "PlayerCasts", "Category": "Blade,Trap,Global", "SingleTarget": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002432"},
+        {"Do": "Cast", "Spell": "Monster Mash", "SpellID": 831628468, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A single-target blade, trap or damage global: Monster Mash (25% of their health)." }
+  ]
+}

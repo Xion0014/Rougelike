@@ -1,0 +1,28 @@
+{
+  // Zolomon (Rank 23, Ice, 17,325 health), Wallaru. Zolomon: Weakness for a charm, a spider every third round.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1619087,
+  "Name": "Zolomon (Rank 23)",
+  "Cheats": [
+    { "When": "PlayerCharms",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002990"},
+        {"Do": "Cast", "Spell": "Weakness", "SpellID": 1321504283, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A charm: Weakness on the wizard." },
+
+    { "When": "RoundStart", "Round": 3, "Every": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002991"},
+        {"Do": "PickOne", "Count": 5},
+        {"Do": "Cast", "Spell": "Black Widow", "SpellID": 1906675443, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Clockwork Spider", "SpellID": 185282768, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Crystal Spider", "SpellID": 194740784, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Infestation", "SpellID": 1122914161, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Luminous Weaver", "SpellID": 1767442726, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Every third round: one of five spider spells." }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  // The Scorpion (Rank 16, Shadow, 16,800 health), Mirage. The Scorpion: Bad Juju for a late wizard, Cleanse Ward for a Feint, Natural Attack for a heal, Poison and Detonate.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1384772,
+  "Name": "The Scorpion (Rank 16)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000910"},
+        {"Do": "Interrupt"},
+        {"Do": "Cast", "Spell": "Bad Juju", "SpellID": 1317678274, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A late wizard: Bad Juju." },
+
+    { "When": "PlayerCasts", "Spells": ["Feint"], "OnBoss": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000913"},
+        {"Do": "Interrupt"},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 55434460, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A Feint on him: Cleanse Ward first." },
+
+    { "When": "PlayerCasts", "Category": "Heal",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000914"},
+        {"Do": "Interrupt"},
+        {"Do": "Cast", "Spell": "Natural Attack", "SpellID": 704035237, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A heal: Natural Attack on the caster." },
+
+    { "When": "RoundEnd", "Round": 3, "Every": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000912"},
+        {"Do": "Cast", "Spell": "Poison", "SpellID": 1757403362, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "End of every third round: Poison." },
+
+    { "When": "RoundEnd", "HasWho": "AnyEnemy", "HasKind": "DoT", "Chance": 75,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000915"},
+        {"Do": "Cast", "Spell": "Detonate", "SpellID": 30480473, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "End of a round a wizard has a DoT: likely (75%) Detonate." }
+  ]
+}

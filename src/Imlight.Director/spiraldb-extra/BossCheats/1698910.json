@@ -1,0 +1,17 @@
+{
+  // Death Card (Rank 25, Death, 16,115 health), Darkmoor. Death Card: Death Draught, then a Healing Current card for each wizard.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1698910,
+  "Name": "Death Card (Rank 25)",
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003984"},
+        {"Do": "Cast", "Spell": "Death Draught", "SpellID": 2033606250, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "ASTH Heal 50%", "SpellID": 1212192856, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Death Draught, then ASTH Heal 50% gives each wizard a Healing Current." }
+  ]
+}

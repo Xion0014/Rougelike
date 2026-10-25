@@ -1,0 +1,47 @@
+{
+  // Winged Sorrow (Rank 24, Death, 55,037 health), Darkmoor. Winged Sorrow: Exit Combat for each wizard in round 1, and its brazier globals.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  // Checked against its Wizard101 Central page (saved 2026-10-24): the random weakness comes only while its Sun Global is up.
+  "TemplateID": 1655808,
+  "Name": "Winged Sorrow (Rank 24)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003970"},
+        {"Do": "Cast", "Spell": "Exit Combat", "SpellID": 2022486178, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: each wizard is given Exit Combat." },
+
+    { "When": "RoundEnd", "Chance": 25, "HasWho": "Self", "HasSpell": "Sun Global",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003975"},
+        {"Do": "Cast", "Spell": "Mass Chromatic Weakness", "SpellID": 1766001104, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Now and then at the end of a round while its Sun Global is up (Central; 25% is a guess): Mass Chromatic Weakness." },
+
+    { "When": "RoundEnd", "HasWho": "Self", "HasSpell": "Storm Global",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Full Pips", "SpellID": 1314611987, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "While its Storm Global is up: struck by lightning, full pips." },
+
+    { "When": "PlayerCasts", "Category": "Heal", "HasWho": "Self", "HasSpell": "Storm Global",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003974"},
+        {"Do": "HealthTo", "Amount": 100}
+      ],
+      "Notes": "A wizard heals under the Storm Global: back to full." },
+
+    { "When": "PlayerCasts", "Category": "Charm,Ward,Aura", "HasWho": "Self", "HasSpell": "Sun Global",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003972"},
+        {"Do": "RemoveCharms", "Kind": "All", "Target": "Caster"},
+        {"Do": "RemoveWards", "Kind": "All", "Target": "Caster"},
+        {"Do": "RemoveAuras", "Target": "Caster"}
+      ],
+      "Notes": "A hanging effect or aura under the Sun Global: cleared at once." }
+  ]
+}

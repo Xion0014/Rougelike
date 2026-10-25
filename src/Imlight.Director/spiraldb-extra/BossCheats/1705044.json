@@ -1,0 +1,40 @@
+{
+  // Balaur (Rank 25, Life, 12,000 health), Darkmoor. Balaur (Life/Myth head): a Tower Shield each round, getting stronger, and Circle of Thorns.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1705044,
+  "Name": "Balaur (Rank 25)",
+  "Cheats": [
+    { "When": "MinionDefeated", "Creature": 1705043,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00004095"},
+        {"Do": "Cast", "Spell": "Circle of Thorns", "SpellID": 509107032, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "The Balance head falls: it becomes active." },
+
+    { "When": "RoundEnd", "MaxTimes": 5, "AlliesDown": ["1705043"],
+      "Actions": [
+        {"Do": "InTurn", "Count": 5},
+        {"Do": "Cast", "Spell": "Tower Shield", "SpellID": 970480467, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Tower Shield", "SpellID": 968907603, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Tower Shield", "SpellID": 969431891, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Tower Shield", "SpellID": 972053331, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Tower Shield", "SpellID": 972577619, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Each round while active: a Tower Shield, 20% more each time, five at most." },
+
+    { "When": "PlayerGlobals", "AlliesDown": ["1705043"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00004099"},
+        {"Do": "Cast", "Spell": "Circle of Thorns", "SpellID": 524627156, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A wizard's global while active: Circle of Thorns." },
+
+    { "When": "RoundStart", "HasWho": "Self", "HasSpell": "Feint",
+      "Actions": [
+        {"Do": "RemoveWards", "Kind": "Good", "Spell": "Feint", "Target": "Self"}
+      ],
+      "Notes": "A Feint on it at the start of a round comes off." }
+  ]
+}

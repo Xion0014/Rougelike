@@ -1,0 +1,37 @@
+{
+  // Vigilant Sargun (Rank 18, Sun, 15,999 health), Empyrea. Vigilant Sargun: Queen Calypso for a late wizard, Equalize, Cleanse Charm for a dispel.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1462159,
+  "Name": "Vigilant Sargun (Rank 18)",
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001229"},
+        {"Do": "Cast", "Spell": "Queen Calypso", "SpellID": 289102086, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 2: Queen Calypso on them." },
+
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001230"},
+        {"Do": "Cast", "Spell": "Equalize", "SpellID": 1923057080, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Equalize." },
+
+    { "When": "PlayerGlobals",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001231"},
+        {"Do": "Cast", "Spell": "Equalize", "SpellID": 1923057080, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A wizard's global: Equalize again." },
+
+    { "When": "PlayerCasts", "Category": "Dispel", "OnBoss": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001232"},
+        {"Do": "Cast", "Spell": "Cleanse Charm", "SpellID": 677363191, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A dispel on him: Cleanse Charm." }
+  ]
+}

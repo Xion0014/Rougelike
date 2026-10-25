@@ -1,0 +1,86 @@
+{
+  // Aberrant Paradox (Rank 19, Shadow, 13,655 health), Karamelle. Aberrant Paradox: three waves of Aberrations, a revive while they stand, and the Emulate globals.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1505840,
+  "Name": "Aberrant Paradox (Rank 19)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Power Nova", "SpellID": 1350355735, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A late wizard: Power Nova defeats them." },
+
+    { "When": "BossDefeated", "HasAllies": true,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 838600055, "Target": "Self", "DispelImmune": false},
+        {"Do": "SetHealth", "Amount": 6827}
+      ],
+      "Notes": "Defeated while minions remain: Blessing, back with half its health." },
+
+    { "When": "BossDefeated", "AlliesDown": ["1515958", "1515957"], "MaxTimes": 2,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 838600055, "Target": "Self", "DispelImmune": false},
+        {"Do": "SetHealth", "Amount": 6827}
+      ],
+      "Notes": "Defeated before the last wave is down (the last falls this round)." },
+
+    { "When": "MinionDefeated", "Creature": 1515951,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Minions - Dream Belloq", "SpellID": 2109528196, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Aberration 1515951 falls: the next one (1515954) comes in its place." },
+
+    { "When": "MinionDefeated", "Creature": 1515952,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Minions - Dream Belloq", "SpellID": 189245741, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Aberration 1515952 falls: the next one (1515956) comes in its place." },
+
+    { "When": "MinionDefeated", "Creature": 1515953,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Minions - Dream Belloq", "SpellID": 2092752462, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Aberration 1515953 falls: the next one (1515955) comes in its place." },
+
+    { "When": "MinionDefeated", "Creature": 1515954,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Minions - Dream Belloq", "SpellID": 1125527250, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Aberration 1515954 falls: the next one (1515958) comes in its place." },
+
+    { "When": "MinionDefeated", "Creature": 1515956,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Minions - Dream Belloq", "SpellID": 1669217383, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Aberration 1515956 falls: the next one (1515957) comes in its place." },
+
+    { "When": "MinionDefeated", "Creature": 1515955,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Minions - Dream Belloq", "SpellID": 1669217383, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Aberration 1515955 falls: the next one (1515957) comes in its place." },
+
+    { "When": "RoundStart", "Round": 1, "Every": 3,
+      "Actions": [
+        {"Do": "PickOne", "Count": 7, "Group": 2},
+        {"Do": "Cast", "Spell": "Emulate Fire", "SpellID": 1564263899, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "ASTH Fire", "SpellID": 202674627, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Emulate Ice", "SpellID": 2086234393, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "ASTH Ice", "SpellID": 1844128647, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Emulate Storm", "SpellID": 237565793, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "ASTH Storm", "SpellID": 1713186348, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Emulate Myth", "SpellID": 1537658587, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "ASTH Myth", "SpellID": 437558519, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Emulate Life", "SpellID": 1567412187, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "ASTH Life", "SpellID": 404001123, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Emulate Death", "SpellID": 1561509985, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "ASTH Death", "SpellID": 136151128, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Emulate Balance", "SpellID": 1513595275, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "ASTH Balance", "SpellID": 663835953, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Round 1 and every 3: the Divine Paradox's random Emulate global, and its spell for each wizard." }
+  ]
+}

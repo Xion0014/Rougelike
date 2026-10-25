@@ -1,0 +1,61 @@
+{
+  // Squire Greggor (Rank 18, Life, 21,200 health), Wizard City. Squire Greggor: Quicken (again if lost), Chromatic Blast every 4 rounds, Rebirth for Sir Greggor, Berserk once he falls.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1489266,
+  "Name": "Squire Greggor (Rank 18)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001424"},
+        {"Do": "Cast", "Spell": "Quicken", "SpellID": 244362882, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Quicken." },
+
+    { "When": "RoundStart", "HasWho": "Self", "HasKind": "Aura", "HasNot": true, "Mark": "sir fallen", "MarkWho": "Self", "NotMarked": true, "FromRound": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001425"},
+        {"Do": "Cast", "Spell": "Quicken", "SpellID": 244362882, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "His aura gone, while Sir Greggor stands: Quicken again." },
+
+    { "When": "RoundStart", "Round": 4, "Every": 4, "AlliesUp": ["1489267"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001428"},
+        {"Do": "Cast", "Spell": "Chromatic Blast", "SpellID": 1333881380, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Chromatic Blast", "SpellID": 1333881380, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Every 4 rounds: Chromatic Blast twice." },
+
+    { "When": "RoundStart", "Round": 4, "Every": 4, "AlliesDown": ["1489267"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001428"},
+        {"Do": "Cast", "Spell": "Chromatic Blast", "SpellID": 1333881380, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Every 4 rounds once Sir Greggor has fallen: once." },
+
+    { "When": "AllyHit", "Category": "Damage", "Creature": 1489267, "Chance": 25,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001434"},
+        {"Do": "Cast", "Spell": "Rebirth", "SpellID": 1879159782, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Sir Greggor hurt: sometimes (25%, a guess) Rebirth." },
+
+    { "When": "MinionDefeated", "Creature": 1489267,
+      "Actions": [
+        {"Do": "Mark", "Mark": "sir fallen", "Target": "Self"},
+        {"Do": "Wait", "Rounds": 1},
+        {"Do": "Say", "Line": "CombatMessages_00001430"},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1182965264, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Sir Greggor falls: Berserk the round after." },
+
+    { "When": "RoundStart", "HasWho": "Self", "HasKind": "Aura", "HasNot": true, "Mark": "sir fallen", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1182965264, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "His Berserk gone: cast again." }
+  ]
+}

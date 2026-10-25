@@ -1,0 +1,154 @@
+{
+  // Spirit of Darkmoor (Rank 14, Sun, 14,700 health), Dungeons. Spirit of Darkmoor: Scald, Assail and a revive for her minions; a 15-round myth, life and fire cycle.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1336029,
+  "Name": "Spirit of Darkmoor (Rank 14)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "PlayerCasts", "Category": "Blade",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000535"},
+        {"Do": "Cast", "Spell": "Scald", "SpellID": 2042562696, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A blade: Scald." },
+
+    { "When": "PlayerCasts", "Category": "Global",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000535"},
+        {"Do": "Cast", "Spell": "Scald", "SpellID": 2042562696, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A damage global: Scald." },
+
+    { "When": "PlayerCasts", "Category": "Trap", "OnBoss": true, "SingleTarget": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000533"},
+        {"Do": "Cast", "Spell": "Assail", "SpellID": 607260623, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Myth Trap", "SpellID": 220824375, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Myth Trap", "SpellID": 220824375, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A single-target trap on her: Assail and two Myth Traps on the wizard." },
+
+    { "When": "MinionDefeated", "Cooldown": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000534"},
+        {"Do": "Cast", "Spell": "Eternal Leviathan", "SpellID": 652366, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A minion falls before her: Eternal Leviathan brings them back." },
+
+    { "When": "RoundEnd", "Round": 1, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000536"},
+        {"Do": "Cast", "Spell": "Pierce", "SpellID": 1705519350, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Myth cycle (rounds 1-4 of each 15): Pierce on a wizard." },
+
+    { "When": "RoundEnd", "Round": 2, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000536"},
+        {"Do": "Cast", "Spell": "Pierce", "SpellID": 1705519350, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Myth cycle (rounds 1-4 of each 15): Pierce on a wizard." },
+
+    { "When": "RoundEnd", "Round": 3, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000536"},
+        {"Do": "Cast", "Spell": "Pierce", "SpellID": 1705519350, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Myth cycle (rounds 1-4 of each 15): Pierce on a wizard." },
+
+    { "When": "RoundEnd", "Round": 4, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000536"},
+        {"Do": "Cast", "Spell": "Pierce", "SpellID": 1705519350, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Myth cycle (rounds 1-4 of each 15): Pierce on a wizard." },
+
+    { "When": "RoundStart", "Round": 5, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000539"},
+        {"Do": "Cast", "Spell": "Mythspear", "SpellID": 1671476, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Mythblade", "SpellID": 956929563, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Saga of Heroes", "SpellID": 1759583392, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Cursed Colossus", "SpellID": 1201165292, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 5 of each 15." },
+
+    { "When": "RoundEnd", "Round": 6, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000537"},
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 359997797, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Life cycle: Blessing on herself." },
+
+    { "When": "RoundEnd", "Round": 7, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000537"},
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 359997797, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Life cycle: Blessing on herself." },
+
+    { "When": "RoundEnd", "Round": 8, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000537"},
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 359997797, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Life cycle: Blessing on herself." },
+
+    { "When": "RoundEnd", "Round": 9, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000537"},
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 359997797, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Life cycle: Blessing on herself." },
+
+    { "When": "RoundStart", "Round": 10, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000540"},
+        {"Do": "Cast", "Spell": "Lifespear", "SpellID": 2050867, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Lifeblade", "SpellID": 957307932, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Namaste", "SpellID": 317604833, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Moody Caterpillar", "SpellID": 2110162909, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Round 10 of each 15." },
+
+    { "When": "RoundEnd", "Round": 11, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000538"},
+        {"Do": "Cast", "Spell": "Backdraft", "SpellID": 90724358, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Fire cycle: Backdraft on a wizard." },
+
+    { "When": "RoundEnd", "Round": 12, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000538"},
+        {"Do": "Cast", "Spell": "Backdraft", "SpellID": 90724358, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Fire cycle: Backdraft on a wizard." },
+
+    { "When": "RoundEnd", "Round": 13, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000538"},
+        {"Do": "Cast", "Spell": "Backdraft", "SpellID": 90724358, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Fire cycle: Backdraft on a wizard." },
+
+    { "When": "RoundEnd", "Round": 14, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000538"},
+        {"Do": "Cast", "Spell": "Backdraft", "SpellID": 90724358, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Fire cycle: Backdraft on a wizard." },
+
+    { "When": "RoundStart", "Round": 15, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000541"},
+        {"Do": "Cast", "Spell": "Firespear", "SpellID": 2038585, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Fireblade", "SpellID": 957287442, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Combustion", "SpellID": 1552306018, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Night Raid", "SpellID": 2112039114, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 15 of each 15." }
+  ]
+}

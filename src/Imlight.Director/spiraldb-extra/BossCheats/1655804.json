@@ -1,0 +1,126 @@
+{
+  // Bartleby Quietus (Rank 24, Balance, 15,000 health), Darkmoor. Bartleby Quietus: the Scion gambits, and an answer to every kind of hanging effect.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1655804,
+  "Name": "Bartleby Quietus (Rank 24)",
+  "Cheats": [
+    { "When": "RoundStart", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003943"}
+      ],
+      "Notes": "Round 1: the line." },
+
+    { "When": "PlayerCasts", "Category": "Aura",
+      "Actions": [
+        {"Do": "RemoveAuras", "Target": "Caster"}
+      ],
+      "Notes": "A wizard's aura: taken off at once." },
+
+    { "When": "PlayerCasts", "Category": "DoT", "HasWho": "Receiver", "HasKind": "DoT", "HasCount": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003944"},
+        {"Do": "Cast", "Spell": "Scion of Fire", "SpellID": 354751004, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "Three DoTs on someone: Scion of Fire." },
+
+    { "When": "PlayerCasts", "Category": "Ward", "HasWho": "Receiver", "HasKind": "Ward", "HasCount": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003944"},
+        {"Do": "Cast", "Spell": "Scion of Ice", "SpellID": 1711172204, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "Four wards on someone: Scion of Ice." },
+
+    { "When": "PlayerCasts", "Category": "Charm", "HasWho": "Receiver", "HasKind": "Charm", "HasCount": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003944"},
+        {"Do": "Cast", "Spell": "Scion of Storm", "SpellID": 92323045, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "Four charms: Scion of Storm." },
+
+    { "When": "PlayerCasts", "Category": "HoT", "HasWho": "Receiver", "HasKind": "HoT", "HasCount": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003944"},
+        {"Do": "Cast", "Spell": "Scion of Life", "SpellID": 522474012, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "Three HoTs: Scion of Life." },
+
+    { "When": "PlayerCasts", "Category": "Weakness", "HasWho": "Receiver", "HasKind": "Weakness", "HasCount": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003944"},
+        {"Do": "Cast", "Spell": "Scion of Death", "SpellID": 1657167087, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "Four curses: Scion of Death." },
+
+    { "When": "PlayerCasts", "Category": "Trap", "HasWho": "Receiver", "HasKind": "Trap", "HasCount": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003944"},
+        {"Do": "Cast", "Spell": "Scion of Myth", "SpellID": 966495716, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "Four jinxes: Scion of Myth." },
+
+    { "When": "PlayerCasts", "Category": "Blade",
+      "Actions": [
+        {"Do": "PickOne", "Count": 2, "Group": 2},
+        {"Do": "Say", "Line": "CombatMessages_00002774"},
+        {"Do": "Cast", "Spell": "Mob Putrefaction", "SpellID": 1767763196, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00002773"},
+        {"Do": "Cast", "Spell": "Mob Wall of Blades", "SpellID": 293311286, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A charm: one of his answers." },
+
+    { "When": "PlayerCasts", "Category": "Trap",
+      "Actions": [
+        {"Do": "PickOne", "Count": 2, "Group": 2},
+        {"Do": "Say", "Line": "CombatMessages_00002769"},
+        {"Do": "Cast", "Spell": "Mob Backfire", "SpellID": 1062429372, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00002776"},
+        {"Do": "Cast", "Spell": "Mob Oni's Naturalism", "SpellID": 1328372945, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A jinx: one of his answers." },
+
+    { "When": "PlayerCasts", "Category": "Shield",
+      "Actions": [
+        {"Do": "PickOne", "Count": 2, "Group": 2},
+        {"Do": "Say", "Line": "CombatMessages_00002768"},
+        {"Do": "Cast", "Spell": "Mob Meltdown", "SpellID": 1062232764, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00002770"},
+        {"Do": "Cast", "Spell": "Mob Betrayal", "SpellID": 334363972, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A ward: one of his answers." },
+
+    { "When": "PlayerCasts", "Category": "DoT",
+      "Actions": [
+        {"Do": "PickOne", "Count": 2, "Group": 2},
+        {"Do": "Say", "Line": "CombatMessages_00002778"},
+        {"Do": "Cast", "Spell": "Mob Oni's Attrition", "SpellID": 1100267935, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00002777"},
+        {"Do": "Cast", "Spell": "Mob Jinn's Affliction", "SpellID": 1328370897, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A DoT: one of his answers." },
+
+    { "When": "PlayerCasts", "Category": "Weakness",
+      "Actions": [
+        {"Do": "PickOne", "Count": 2, "Group": 2},
+        {"Do": "Say", "Line": "CombatMessages_00002771"},
+        {"Do": "Cast", "Spell": "Mob Delusion", "SpellID": 334429508, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00002772"},
+        {"Do": "Cast", "Spell": "Mob Glacial Fortress", "SpellID": 293309238, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A curse: one of his answers." },
+
+    { "When": "RoundEnd", "Round": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003945"}
+      ],
+      "Notes": "End of round 3: Miranda warns." },
+
+    { "When": "RoundEnd", "Round": 7,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003946"},
+        {"Do": "Cast", "Spell": "Miranda's Dream", "SpellID": 242964114, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "End of round 7: a hidden spell gives Miranda's Dream." }
+  ]
+}

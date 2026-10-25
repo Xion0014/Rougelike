@@ -1,0 +1,77 @@
+{
+  // Gorn Hits-With-Sticks (Rank 23, Life, 22,005 health), Krokotopia. Gorn Hits-With-Sticks: Brace, and ten scripted rounds of spells.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1668244,
+  "Name": "Gorn Hits-With-Sticks (Rank 23)",
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003487"},
+        {"Do": "Cast", "Spell": "Brace", "SpellID": 1345113406, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Brace (-300% resist for 99 rounds)." },
+
+    { "When": "RoundStart", "Round": 1,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Nature's Wrath", "SpellID": 784677378, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Nature's Wrath, without pips." },
+
+    { "When": "RoundStart", "Round": 2,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Nature's Wrath", "SpellID": 380811256, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Round 2: Nature's Wrath, without pips." },
+
+    { "When": "RoundStart", "Round": 3,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Drop Bear Fury", "SpellID": 1236866240, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Round 3: Drop Bear Fury, without pips." },
+
+    { "When": "RoundStart", "Round": 4,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Drop Bear Fury", "SpellID": 1236866240, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Round 4: Drop Bear Fury, without pips." },
+
+    { "When": "RoundStart", "Round": 5,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Centaur", "SpellID": 1992965846, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Round 5: Centaur, without pips." },
+
+    { "When": "RoundStart", "Round": 6,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Centaur", "SpellID": 1992965846, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Round 6: Centaur, without pips." },
+
+    { "When": "RoundStart", "Round": 7,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Forest Lord", "SpellID": 1209811126, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Round 7: Forest Lord, without pips." },
+
+    { "When": "RoundStart", "Round": 8,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003496"},
+        {"Do": "Cast", "Spell": "Natural Attack", "SpellID": 391806089, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Round 8: Natural Attack, without pips." },
+
+    { "When": "RoundStart", "Round": 9,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Bonetree Lord", "SpellID": 331120786, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Round 9: Bonetree Lord, without pips." },
+
+    { "When": "RoundStart", "Round": 10,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Bonetree Lord", "SpellID": 331120786, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Round 10: Bonetree Lord, without pips." }
+  ]
+}

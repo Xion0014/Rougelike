@@ -1,0 +1,70 @@
+{
+  // Lucia (Rank 20, Star, 11,405 health), HousingGauntlet. Lucia: Mana Burn for a late wizard, Clockworkers, steals every fifth round, and her cuckoo cycle.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1655108,
+  "Name": "Lucia (Rank 20)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000676"},
+        {"Do": "Cast", "Spell": "Mana Burn", "SpellID": 309838857, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A late wizard: Mana Burn." },
+
+    { "When": "RoundStart", "PlayersMin": 2, "AlliesMax": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000875"},
+        {"Do": "Cast", "Spell": "Clockworker", "SpellID": 1823806993, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Each round with 2+ wizards and a circle free: Clockworker." },
+
+    { "When": "RoundStart", "Round": 5, "Every": 5,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000877"},
+        {"Do": "Cast", "Spell": "Steal Charms", "SpellID": 1406532128, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Steal Wards", "SpellID": 531030646, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Every fifth round: steals on all wizards." },
+
+    { "When": "RoundEnd", "Round": 1, "Every": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003282"},
+        {"Do": "Cast", "Spell": "Sprite", "SpellID": 1691744213, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "End of round 1 of each 4: Sprite." },
+
+    { "When": "RoundEnd", "Round": 2, "Every": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003282"},
+        {"Do": "Say", "Line": "CombatMessages_00003282"},
+        {"Do": "Cast", "Spell": "Magnify", "SpellID": 927591397, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 2: Magnify." },
+
+    { "When": "RoundEnd", "Round": 3, "Every": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003282"},
+        {"Do": "Say", "Line": "CombatMessages_00003282"},
+        {"Do": "Say", "Line": "CombatMessages_00003282"},
+        {"Do": "Cast", "Spell": "Star Buff", "SpellID": 1426379451, "Target": "AllAllies", "DispelImmune": false}
+      ],
+      "Notes": "Round 3: Star Buff." },
+
+    { "When": "RoundEnd", "Round": 4, "Every": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000876"},
+        {"Do": "Cast", "Spell": "Mockenspiel", "SpellID": 105526132, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 4: Mockenspiel." },
+
+    { "When": "HealthBelow", "Percent": 50,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000878"},
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 1022053292, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Under half health (a guess): Blessing." }
+  ]
+}

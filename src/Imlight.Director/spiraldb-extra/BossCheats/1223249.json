@@ -1,0 +1,46 @@
+{
+  // Ghost Dog (Rank 13, Death, 21,760 health), Khrysalis. Ghost Dog: Shadow Shrike, Shatter for a shield, minions, Death Blister and Detonate.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1223249,
+  "Name": "Ghost Dog (Rank 13)",
+  "ShadowPips": 1,
+  "Cheats": [
+    { "When": "Pips", "Pips": 1, "PipsKind": "Shadow", "Chance": 75,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Shadow Shrike MOB", "SpellID": 540032754, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A shadow pip: Shadow Shrike MOB (it is likely)." },
+
+    { "When": "PlayerCasts", "Category": "Shield",
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000203"},
+        {"Do": "Cast", "Spell": "Shatter", "SpellID": 258673959, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "A shield: Shatter." },
+
+    { "When": "RoundEnd", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000206"},
+        {"Do": "Minion", "Creature": 1223265},
+        {"Do": "Minion", "Creature": 1206097},
+        {"Do": "Minion", "Creature": 1206097}
+      ],
+      "Notes": "End of round 1: a Seijun Killer and two Hagakure Blades." },
+
+    { "When": "RoundEnd", "Round": 2, "Every": 5,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000204"},
+        {"Do": "Cast", "Spell": "Death Blister", "SpellID": 185419734, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "End of round 2 and every 5: Death Blister." },
+
+    { "When": "RoundEnd", "Round": 5,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000205"},
+        {"Do": "Cast", "Spell": "Detonate", "SpellID": 1290342082, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "End of round 5: Detonate." }
+  ]
+}

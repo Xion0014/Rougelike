@@ -1,0 +1,45 @@
+{
+  // Rotten Rob (Rank 9, Fire, 3,085 health), Unknown. Rotten Rob: Efreet at the end of each round until the Stormzilla he gives is cast.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1669879,
+  "Name": "Rotten Rob (Rank 9)",
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Scald", "SpellID": 73862227, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Scald (in the game his turn)." },
+
+    { "When": "RoundEnd", "Mark": "cheat off", "MarkWho": "Self", "NotMarked": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003461"},
+        {"Do": "Cast", "Spell": "Efreet", "SpellID": 1808589297, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "End of each round while the cheat is on: Efreet." },
+
+    { "When": "RoundStart", "Round": 4, "Mark": "cheat off", "MarkWho": "Self", "NotMarked": true, "Every": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003462"},
+        {"Do": "Cast", "Spell": "give", "SpellID": 214227033, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Start of round 4: the card is given." },
+
+    { "When": "BossDefeated", "Mark": "cheat off", "MarkWho": "Self", "NotMarked": true,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 1641304242, "Target": "Self", "DispelImmune": false},
+        {"Do": "SetHealth", "Amount": 3085},
+        {"Do": "Cast", "Spell": "give", "SpellID": 214227033, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Defeated while the cheat is on: Blessing back to full, and the card given again." },
+
+    { "When": "PlayerCasts", "Spells": ["Stormzilla"], "AnyVersion": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003463"},
+        {"Do": "Cast", "Spell": "Triage", "SpellID": 866678457, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Mark", "Mark": "cheat off", "Target": "Self"}
+      ],
+      "Notes": "The given Stormzilla cast: Triage on all wizards, and the cheat is off." }
+  ]
+}

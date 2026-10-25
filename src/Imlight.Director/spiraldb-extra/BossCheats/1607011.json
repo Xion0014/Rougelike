@@ -1,0 +1,39 @@
+{
+  // Voice of Death (Rank 22, Balance, 56,500 health), Unknown. Voice of Death: Quicken when it lacks an aura, Mana Burn for pips, and pips for X-pip charms and wards.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  // Checked against its Wizard101 Central page (saved 2026-10-24): Mana Burn at the end of a round when a wizard has pips left (RoundEnd now takes Pips).
+  "TemplateID": 1607011,
+  "Name": "Voice of Death (Rank 22)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "RoundStart", "HasWho": "Self", "HasKind": "Aura", "HasNot": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002823"},
+        {"Do": "Cast", "Spell": "Quicken", "SpellID": 440354206, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "No aura on it: Quicken (7 power pips a round for all)." },
+
+    { "When": "RoundEnd", "Pips": 1, "PipsOf": "Enemy",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002825"},
+        {"Do": "Cast", "Spell": "Mana Burn", "SpellID": 792757708, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "End of each round, a wizard still has pips (Central): Mana Burn on all wizards." },
+
+    { "When": "PlayerCasts", "Spells": ["Supercharge"], "AnyVersion": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002824"},
+        {"Do": "Cast", "Spell": "Eye of Vigilance", "SpellID": 1085437151, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A Supercharge: Eye of Vigilance (charms off, 7 power pips)." },
+
+    { "When": "PlayerCasts", "Spells": ["Backdraft", "Ice Armor", "Frozen Armor"], "AnyVersion": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002824"},
+        {"Do": "Cast", "Spell": "Righting the Scales", "SpellID": 1062046498, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "Backdraft, Ice Armor or Frozen Armor: Righting the Scales." }
+  ]
+}

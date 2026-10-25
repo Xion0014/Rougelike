@@ -1,0 +1,46 @@
+{
+  // Le Pingouin (Rank 16, Ice, 12,935 health), Empyrea. Le Pingouin: Winter Moon for a late wizard, a Clockwork Spanner for each wizard, and their sacrifice in round 3.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1391636,
+  "Name": "Le Pingouin (Rank 16)",
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001131"},
+        {"Do": "Cast", "Spell": "Winter Moon", "SpellID": 1588945025, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Winter Moon on them." },
+
+    { "When": "RoundEnd", "AlliesMax": 0, "PlayersMin": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001132"},
+        {"Do": "Cast", "Spell": "Summon Minion", "SpellID": 1473225800, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Fewer minions than wizards: Summon Minion." },
+
+    { "When": "RoundEnd", "AlliesMin": 1, "AlliesMax": 1, "PlayersMin": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001132"},
+        {"Do": "Cast", "Spell": "Summon Minion", "SpellID": 1473225800, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "" },
+
+    { "When": "RoundEnd", "AlliesMin": 2, "AlliesMax": 2, "PlayersMin": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001132"},
+        {"Do": "Cast", "Spell": "Summon Minion", "SpellID": 1473225800, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "" },
+
+    { "When": "RoundEnd", "Round": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001133"},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Immolate", "SpellID": 109639322, "Target": "", "DispelImmune": false, "Creature": 1430404},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Insane Bolt", "SpellID": 1501955764, "Target": "", "DispelImmune": false, "Creature": 1430400},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Poison", "SpellID": 1589761793, "Target": "", "DispelImmune": false, "Creature": 1430409}
+      ],
+      "Notes": "End of round 3: each Spanner sacrifices itself for 700 to all wizards." }
+  ]
+}

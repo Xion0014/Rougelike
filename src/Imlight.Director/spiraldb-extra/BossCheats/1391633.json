@@ -1,0 +1,32 @@
+{
+  // Killer Krok (Rank 16, Death, 11,705 health), Empyrea. Killer Krok: Bad Juju for a late wizard, Sacrifice for a trap and after Dark Fiend.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1391633,
+  "Name": "Killer Krok (Rank 16)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001121"},
+        {"Do": "Cast", "Spell": "Bad Juju", "SpellID": 1902313520, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Bad Juju on them." },
+
+    { "When": "PlayerCasts", "Category": "Trap,Weakness", "OnBoss": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001123"},
+        {"Do": "Cast", "Spell": "Sacrifice", "SpellID": 761482201, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A curse or trap on him: Sacrifice." },
+
+    { "When": "ICast", "Spells": ["Dark Fiend"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001124"},
+        {"Do": "Say", "Line": "CombatMessages_00001122"},
+        {"Do": "Cast", "Spell": "Sacrifice", "SpellID": 761482201, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "After his Dark Fiend: Sacrifice." }
+  ]
+}

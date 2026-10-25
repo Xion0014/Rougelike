@@ -1,0 +1,12 @@
+{
+  // Cake Mimic (Rank 3, Moon, 2,500 health), Liches & Legends Gauntlet. Cake Mimic: comes into a battle with its minions.
+  // From Wizard404's data on the gauntlets (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove).
+  // Built first from blocks that were there, then from the new universal blocks each Notes names (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1681286,
+  "Name": "Cake Mimic (Rank 3)",
+  "Cheats": [
+    { "When": "Passive", "Passive": "Minions", "Brings": ["1681920", "1681287", "1681919"],
+      "Notes": "It fights with 3 Mimics (Wizard404: its minions). New block: comes with." }
+  ]
+}

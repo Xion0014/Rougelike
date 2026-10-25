@@ -1,0 +1,22 @@
+{
+  // Jabberwock (Rank 11, Fire, 16,970 health), Avalon. Jabberwock: Meteor Strike and a curse on himself every third round, cleansed two rounds later.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 589403,
+  "Name": "Jabberwock (Rank 11)",
+  "Cheats": [
+    { "When": "RoundEnd", "Round": 3, "Every": 3,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Meteor Strike-Jabberwock", "SpellID": 902458157, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Curse-Jabberwock", "SpellID": 966358310, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "End of every third round: Meteor Strike, and a trap on himself." },
+
+    { "When": "RoundEnd", "Round": 5, "Every": 3,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 2007995204, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Two rounds after: Cleanse Ward on himself." }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  // The Devourer (Rank 18, Shadow, 80,000 health), Wizard City. The Devourer: three Biles, Cleanse Ward for a Feint, Devour every three rounds, and two cleanses.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1489250,
+  "Name": "The Devourer (Rank 18)",
+  "ShadowPips": 5,
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Summon Minions", "SpellID": 281164226, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Summon Minions", "SpellID": 281164226, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Summon Minions", "SpellID": 281164226, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: three Biles." },
+
+    { "When": "PlayerCasts", "Spells": ["Feint"], "AnyVersion": true, "OnBoss": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001438"},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 1018758999, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A Feint on it: Cleanse Ward." },
+
+    { "When": "RoundEnd", "Round": 4, "Every": 3,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Devour - End DMG", "SpellID": 2108996636, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Summon Minions", "SpellID": 281164226, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "End of round 4 and every 3rd after: Devour ends (1,500 shadow to all), and a Bile." },
+
+    { "When": "RoundEnd", "Round": 1, "Every": 3,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Devour", "SpellID": 1325982926, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "End of round 1 and every 3rd after: Devour on a wizard." },
+
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Devour", "SpellID": 1325982926, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A late wizard: devoured." },
+
+    { "When": "RoundStart", "Round": 4,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Steal Charm AOE", "SpellID": 615472753, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Round 4: Steal Charm AOE." },
+
+    { "When": "RoundStart", "Round": 5,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 201527093, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Balanceblade", "SpellID": 578086463, "Target": "Ally", "DispelImmune": false}
+      ],
+      "Notes": "Round 5: Cleanse Ward on itself and a Balanceblade on an ally." }
+  ]
+}

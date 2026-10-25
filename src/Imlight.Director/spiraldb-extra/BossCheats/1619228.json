@@ -1,0 +1,55 @@
+{
+  // Desperation (Rank 23, Ice, 18,885 health), Unknown. Desperation: Katabatic Wind, Frozen Armor for a Feint, and spells at 80%, 50% and 25%.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1619228,
+  "Name": "Desperation (Rank 23)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002904"},
+        {"Do": "Cast", "Spell": "Katabatic Wind", "SpellID": 1113430490, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Katabatic Wind." },
+
+    { "When": "PlayerGlobals",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Katabatic Wind", "SpellID": 1113430490, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Its global replaced: cast again." },
+
+    { "When": "PlayerCasts", "Spells": ["Feint", "Mass Feint"], "AnyVersion": true, "OnBoss": true,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Frozen Armor", "SpellID": 782566888, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A Feint or Mass Feint on it: Frozen Armor." },
+
+    { "When": "HealthBelow", "Percent": 80,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Healing Current", "SpellID": 885016852, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Under 80%: Healing Current." },
+
+    { "When": "HealthBelow", "Percent": 50,
+      "Actions": [
+        {"Do": "PickOne", "Count": 7},
+        {"Do": "Cast", "Spell": "Fire Shield", "SpellID": 1731855964, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Snow Shield", "SpellID": 1731424937, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Storm Shield", "SpellID": 406790657, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Myth Shield", "SpellID": 1732025431, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Life Shield", "SpellID": 1731876438, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Death Shield", "SpellID": 409737272, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Tower Shield", "SpellID": 432324968, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Under 50%: one of seven shields." },
+
+    { "When": "HealthBelow", "Percent": 25,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Ice Feint", "SpellID": 1789762744, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Resuscitate", "SpellID": 1039857888, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Under 25%: Ice Feint on a wizard, Resuscitate on itself." }
+  ]
+}

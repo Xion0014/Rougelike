@@ -1,0 +1,35 @@
+{
+  // Kravenly the Hunter (Rank 12, Life, 15,040 health), Khrysalis. Kravenly the Hunter: a Natural Attack each round, and Spirit Blasts as he is hurt.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1223097,
+  "Name": "Kravenly the Hunter (Rank 12)",
+  "Cheats": [
+    { "When": "RoundStart",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Natural Attack", "SpellID": 0, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Each round: his Natural Attack on a random wizard." },
+
+    { "When": "HealthBelow", "Health": 11280,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Spirit Blast", "SpellID": 1964687106, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Under 11,280: Spirit Blast." },
+
+    { "When": "HealthBelow", "Health": 7520,
+      "Actions": [
+        {"Do": "PickOne", "Count": 2},
+        {"Do": "Cast", "Spell": "Spirit Blast", "SpellID": 1964687106, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Spectral Blast", "SpellID": 1033950735, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Under 7,520: Spirit or Spectral Blast." },
+
+    { "When": "HealthBelow", "Health": 3760,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Spirit Blast", "SpellID": 1964687106, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Under 3,760: Spirit Blast." }
+  ]
+}

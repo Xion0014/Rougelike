@@ -1,0 +1,53 @@
+{
+  // Adrok (Rank 16, Storm, 17,710 health), Empyrea. Adrok: Rocklops for a late wizard, Lightning Strike when he fizzles, and Beets when he has no trap.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  // Checked against its Wizard101 Central page (saved 2026-10-24): Beets' Beat Drop when a wizard falls; Lightning Strike on whoever on his side fizzles.
+  "TemplateID": 1391606,
+  "Name": "Adrok (Rank 16)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "ICast", "Spells": ["Natural Attack"],
+      "Actions": [
+        {"Do": "Cast", "Spell": "Healing Current", "SpellID": 2033316751, "Target": "Ally", "DispelImmune": false}
+      ],
+      "Notes": "After his Natural Attack: Healing Current on an ally." },
+
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001142"},
+        {"Do": "Cast", "Spell": "Rocklops", "SpellID": 899196036, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A late wizard: Rocklops." },
+
+    { "When": "SideFizzles",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001143"},
+        {"Do": "Cast", "Spell": "Lightning Strike", "SpellID": 743740871, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "He or an ally fizzles: Lightning Strike on the one who fizzled (Central; Wizard404 has only his own fizzle)." },
+
+    { "When": "RoundEnd", "HasWho": "Self", "HasKind": "Trap", "HasNot": true, "AlliesDown": ["1430691"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001098"},
+        {"Do": "Cast", "Spell": "Summon Minions", "SpellID": 1188277081, "Target": "", "DispelImmune": false},
+        {"Do": "Wait", "Rounds": 2},
+        {"Do": "Say", "Line": "CombatMessages_00001099"},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Beat Drop", "SpellID": 867339128, "Target": "Enemy", "DispelImmune": false, "Creature": 1430691}
+      ],
+      "Notes": "End of a round with no trap on him and no Beets: Summon Minions brings Beets; two rounds later Beets drops (it and a wizard fall)." },
+
+    { "When": "PlayerCasts", "Category": "Trap", "OnBoss": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001097"}
+      ],
+      "Notes": "A trap on him: Beets is put off." },
+
+    { "When": "PlayerDefeated",
+      "Actions": [
+        {"Do": "CastBy", "By": "Creature", "Spell": "Beat Drop", "SpellID": 867339128, "Target": "Enemy", "DispelImmune": false, "Creature": 1430691}
+      ],
+      "Notes": "A wizard falls: Beets casts Beat Drop, defeating itself and a random wizard (Central)." }
+  ]
+}

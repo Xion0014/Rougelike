@@ -1,0 +1,100 @@
+{
+  // Khan (Rank 16, Fire, 7,700 health), Empyrea. Khan: a Fury for each wizard, Steal Trap from his minions, and a Wraith every 5th round.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1391581,
+  "Name": "Khan (Rank 16)",
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001118"},
+        {"Do": "Cast", "Spell": "Mana Burn", "SpellID": 1431822665, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Summon Minion", "SpellID": 2066837458, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 2: Mana Burn and a minion." },
+
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Summon Minion", "SpellID": 2066837458, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 1214224462, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Summon Minion (a random Fury), then Cleanse Ward." },
+
+    { "When": "RoundEnd", "AlliesMax": 0, "PlayersMin": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001120"},
+        {"Do": "Cast", "Spell": "Summon Minion", "SpellID": 2066837458, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Fewer minions than wizards: another." },
+
+    { "When": "RoundEnd", "AlliesMin": 1, "AlliesMax": 1, "PlayersMin": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001120"},
+        {"Do": "Cast", "Spell": "Summon Minion", "SpellID": 2066837458, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "" },
+
+    { "When": "RoundEnd", "AlliesMin": 2, "AlliesMax": 2, "PlayersMin": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001120"},
+        {"Do": "Cast", "Spell": "Summon Minion", "SpellID": 2066837458, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "" },
+
+    { "When": "PlayerCasts", "Category": "Trap", "OnBoss": true, "HasAllies": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001119"},
+        {"Do": "CastBy", "By": "Ally", "Spell": "Steal Trap", "SpellID": 1066058499, "Target": "Owner", "DispelImmune": false}
+      ],
+      "Notes": "A trap on him with minions: a minion steals it." },
+
+    { "When": "RoundEnd", "Round": 5, "Every": 5, "AlliesUp": ["1430675"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001093"},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Steal Health", "SpellID": 1546788804, "Target": "Self", "DispelImmune": false, "Creature": 1430675},
+        {"Do": "Cast", "Spell": "Wraith", "SpellID": 2130073873, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "End of every 5th round, with a Fire Fury: it sacrifices itself to heal him, then his Fire Wraith." },
+
+    { "When": "RoundEnd", "Round": 5, "Every": 5, "AlliesUp": ["1430674"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001093"},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Steal Health", "SpellID": 1546788804, "Target": "Self", "DispelImmune": false, "Creature": 1430674},
+        {"Do": "Cast", "Spell": "Wraith", "SpellID": 686400180, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "End of every 5th round, with a Ice Fury: it sacrifices itself to heal him, then his Ice Wraith." },
+
+    { "When": "RoundEnd", "Round": 5, "Every": 5, "AlliesUp": ["1430678"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001093"},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Steal Health", "SpellID": 1546788804, "Target": "Self", "DispelImmune": false, "Creature": 1430678},
+        {"Do": "Cast", "Spell": "Wraith", "SpellID": 2007580049, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "End of every 5th round, with a Storm Fury: it sacrifices itself to heal him, then his Storm Wraith." },
+
+    { "When": "RoundEnd", "Round": 5, "Every": 5, "AlliesUp": ["1430676"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001093"},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Steal Health", "SpellID": 1546788804, "Target": "Self", "DispelImmune": false, "Creature": 1430676},
+        {"Do": "Cast", "Spell": "Wraith", "SpellID": 1066817988, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "End of every 5th round, with a Myth Fury: it sacrifices itself to heal him, then his Myth Wraith." },
+
+    { "When": "RoundEnd", "Round": 5, "Every": 5, "AlliesUp": ["1430679"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001093"},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Steal Health", "SpellID": 1546788804, "Target": "Self", "DispelImmune": false, "Creature": 1430679},
+        {"Do": "Cast", "Spell": "Wraith", "SpellID": 2142656795, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "End of every 5th round, with a Life Fury: it sacrifices itself to heal him, then his Life Wraith." },
+
+    { "When": "RoundEnd", "Round": 5, "Every": 5, "AlliesUp": ["1430677"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001093"},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Steal Health", "SpellID": 1546788804, "Target": "Self", "DispelImmune": false, "Creature": 1430677},
+        {"Do": "Cast", "Spell": "Wraith", "SpellID": 826882038, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "End of every 5th round, with a Death Fury: it sacrifices itself to heal him, then his Death Wraith." }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  // Puzzle Piece Monster (Rank 22, Moon, 14,590 health), Novus. Puzzle Piece Monster: a defuse in round 1, Moon Blade and Moon Trap in turn.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1569379,
+  "Name": "Puzzle Piece Monster (Rank 22)",
+  "Cheats": [
+    { "When": "RoundEnd", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002421"},
+        {"Do": "PickOne", "Count": 3},
+        {"Do": "Cast", "Spell": "Elemental Defuse", "SpellID": 630853674, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Spirit Defuse", "SpellID": 731600361, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Unbalance", "SpellID": 115459838, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "End of round 1: Elemental Defuse, Spirit Defuse or Unbalance." },
+
+    { "When": "RoundEnd", "Round": 1, "Every": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002419"},
+        {"Do": "Cast", "Spell": "Moon Blade", "SpellID": 1143919574, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Odd rounds: Moon Blade." },
+
+    { "When": "RoundEnd", "Round": 2, "Every": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002420"},
+        {"Do": "Cast", "Spell": "Moon Trap", "SpellID": 400136239, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Even rounds: Moon Trap." }
+  ]
+}

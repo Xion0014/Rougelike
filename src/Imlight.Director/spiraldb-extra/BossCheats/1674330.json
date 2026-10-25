@@ -1,0 +1,15 @@
+{
+  // Furry Friend (Rank 24, Myth, 10,000 health), Krokotopia. Furry Friend: a stronger Fur Baby when it has a charm, ward, HoT and aura.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1674330,
+  "Name": "Furry Friend (Rank 24)",
+  "Cheats": [
+    { "When": "ICast", "Spells": ["Fur Baby"], "HasWho": "Self", "HasKind": "Charm",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Fur Baby", "SpellID": 176764576, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Its Fur Baby with a charm on it (here: any charm): the stronger one." }
+  ]
+}

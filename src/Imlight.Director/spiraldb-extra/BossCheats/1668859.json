@@ -1,0 +1,62 @@
+{
+  // Shadowbones (Rank 17, Shadow, 8,000 health), Grandfather Spider Rematch. Shadowbones: tag. A marked wizard has to hit him with a one-target spell that round; anyone else's spells heal him.
+  // From Wizard404's data on the gauntlets (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove).
+  // Built first from blocks that were there, then from the new universal blocks each Notes names (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1668859,
+  "Name": "Shadowbones (Rank 17)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "RoundStart", "Mark": "Tag", "MarkWho": "AnyEnemy", "NotMarked": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003618"},
+        {"Do": "Mark", "Mark": "Tag", "Target": "Enemy"}
+      ],
+      "Notes": "\"Tag... you're it.\" Round 1, and each round no one is marked: a random wizard is marked. The stun-block look of \"Tag. I'm it!\" is not made (the spell is unconfirmed). New blocks: marked, mark." },
+
+    { "When": "PlayerCasts", "OnBoss": true, "Mark": "Tag", "MarkWho": "Caster", "NotMarked": true,
+      "Actions": [
+        {"Do": "HealthTo", "Amount": 100, "Target": "Self"}
+      ],
+      "Notes": "\"You're not it!\" A wizard who is not marked aims a spell at him: back to full health. New block: marked." },
+
+    { "When": "BossHit", "SingleTarget": true, "Mark": "Tag", "MarkWho": "Caster",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003623"},
+        {"Do": "Unmark", "Mark": "Tag", "Target": "Caster"},
+        {"Do": "Mark", "Mark": "Safe", "Target": "Caster"}
+      ],
+      "Notes": "\"You're too fast!\" The marked wizard hits him with a one-target spell: the mark comes off (and that wizard is safe for the rest of the round). New blocks: marked, take a mark off, mark." },
+
+    { "When": "PlayerCasts", "MultiTarget": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003621"},
+        {"Do": "HealthTo", "Amount": 100, "Target": "Self"},
+        {"Do": "Pips", "Amount": 1, "Kind": "Shadow", "Target": "Summoner"}
+      ],
+      "Notes": "\"They're not playing.\" A spell on a whole side: back to full health, and a shadow pip for Grandfather Spider. New block: many targets." },
+
+    { "When": "RoundEnd", "Mark": "Tag", "MarkWho": "AnyEnemy",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003597"},
+        {"Do": "Cast", "Spell": "Lord of Winter", "SpellID": 1566956425, "Target": "Marked", "DispelImmune": false},
+        {"Do": "Unmark", "Mark": "Tag", "Target": "Marked"}
+      ],
+      "Notes": "\"Too slow.\" The round ends with a wizard still marked: Lord of Winter on them, and the mark comes off. New blocks: marked, take a mark off." },
+
+    { "When": "RoundEnd", "Mark": "Safe", "MarkWho": "AnyEnemy",
+      "Actions": [
+        {"Do": "Unmark", "Mark": "Safe", "Target": "Marked"}
+      ],
+      "Notes": "The round is over: whoever hit him in time is no longer safe." },
+
+    { "When": "BossDefeated", "Mark": "Safe", "MarkWho": "Caster", "NotMarked": true,
+      "Actions": [
+        {"Do": "SetHealth", "Amount": 8000},
+        {"Do": "Say", "Line": "CombatMessages_00003649"},
+        {"Do": "Cast", "Spell": "Scarecrow", "SpellID": 968795108, "Target": "", "DispelImmune": false},
+        {"Do": "Pips", "Amount": 1, "Kind": "Shadow", "Target": "Summoner"}
+      ],
+      "Notes": "\"If you're not going to play...\" Defeated by a wizard who was not the one tagging him back: back at full health, Scarecrow, and a shadow pip for Grandfather Spider." }
+  ]
+}

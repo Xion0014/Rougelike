@@ -1,0 +1,16 @@
+{
+  // Blue Batacuda Champion (Rank 24, Ice, 15,000 health), Hidden Temple Gauntlet. Blue Batacuda Champion.
+  // From Wizard404's data on the gauntlets (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove).
+  // Built first from blocks that were there, then from the new universal blocks each Notes names (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1714988,
+  "Name": "Blue Batacuda Champion (Rank 24)",
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00004318"},
+        {"Do": "Cast", "Spell": "Tower Shields", "SpellID": 1170188241, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Three -200% Tower Shields on itself. Wizard404 gives no moment: round 1 here (a guess). Existing blocks." }
+  ]
+}

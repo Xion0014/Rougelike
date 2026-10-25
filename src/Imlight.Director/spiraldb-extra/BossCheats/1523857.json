@@ -1,0 +1,31 @@
+{
+  // Rogue Engineer (Rank 19, Storm, 8,740 health), Lemuria. Rogue Engineer: Card Limit for the wizards, Legion Shield when she has no shield.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1523857,
+  "Name": "Rogue Engineer (Rank 19)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001842"},
+        {"Do": "Cast", "Spell": "give", "SpellID": 232487593, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Card Limit for all wizards." },
+
+    { "When": "RoundStart", "Round": 4, "Every": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001843"},
+        {"Do": "Cast", "Spell": "give", "SpellID": 232487593, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Round 4 and every 3: another." },
+
+    { "When": "RoundEnd", "HasWho": "Self", "HasKind": "Shield", "HasNot": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001844"},
+        {"Do": "Cast", "Spell": "Legion Shield", "SpellID": 3605232, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "End of each round with no shield on her: Legion Shield." }
+  ]
+}

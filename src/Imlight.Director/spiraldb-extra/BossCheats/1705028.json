@@ -1,0 +1,31 @@
+{
+  // Werewolf Tracker (Rank 25, Fire, 13,830 health), Darkmoor. Werewolf Tracker: Bladestorm and Curse in a cycle.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1705028,
+  "Name": "Werewolf Tracker (Rank 25)",
+  "Cheats": [
+    { "When": "RoundStart", "Round": 1, "Every": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003881"},
+        {"Do": "Cast", "Spell": "Bladestorm", "SpellID": 89076168, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 1 of each 4 (a guess): Bladestorm." },
+
+    { "When": "RoundStart", "Round": 2, "Every": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003882"},
+        {"Do": "Cast", "Spell": "Curse", "SpellID": 1218520866, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Round 2 of each 4: Curse (three +35% traps on all wizards)." },
+
+    { "When": "BossDefeated",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003885"},
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 1641304242, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Exit Combat", "SpellID": 2127696416, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Its Mysterious Werewolf (this one) defeated: Blessing, then Exit Combat." }
+  ]
+}

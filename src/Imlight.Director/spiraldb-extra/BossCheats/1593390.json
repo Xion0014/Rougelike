@@ -1,0 +1,44 @@
+{
+  // Stallion Quartermane (Rank 21, Balance, 13,860 health), Lemuria. Stallion Quartermane: Mana Burn for a late wizard, Blessing for a low ally, pip steals.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1593390,
+  "Name": "Stallion Quartermane (Rank 21)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001857"},
+        {"Do": "Cast", "Spell": "Mana Burn", "SpellID": 69336200, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Mana Burn on them." },
+
+    { "When": "PlayerCasts", "Spells": ["Feint"], "OnBoss": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001860"},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 1213761009, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A Feint on him: Cleanse Ward." },
+
+    { "When": "AllyHealthBelow", "Percent": 20,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001862"},
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 530133976, "Target": "Hit", "DispelImmune": false}
+      ],
+      "Notes": "An ally under 20% (a guess): Blessing (10%)." },
+
+    { "When": "RoundStart", "Pips": 5, "PipsOf": "Enemy", "Chance": 50,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001861"},
+        {"Do": "Cast", "Spell": "Steal Pips", "SpellID": 2086659390, "Target": "MostPips", "DispelImmune": false}
+      ],
+      "Notes": "A wizard with 5+ pips (a guess): Steal Pips." },
+
+    { "When": "ICast", "Spells": ["Natural Attack"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001858"}
+      ],
+      "Notes": "His Natural Attack." }
+  ]
+}

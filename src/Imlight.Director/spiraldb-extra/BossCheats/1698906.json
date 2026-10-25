@@ -1,0 +1,20 @@
+{
+  // The Emperor Card (Rank 25, Myth, 14,290 health), Darkmoor. The Emperor Card: wards on itself, then a Shatter for each wizard.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1698906,
+  "Name": "The Emperor Card (Rank 25)",
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003984"},
+        {"Do": "AddCharm", "Kind": "Shield", "Amount": 100, "Target": "Self"},
+        {"Do": "AddCharm", "Kind": "Shield", "Amount": 100, "Target": "Self"},
+        {"Do": "AddCharm", "Kind": "Shield", "Amount": 100, "Target": "Self"},
+        {"Do": "AddCharm", "Kind": "Absorb", "Amount": 5000, "Target": "Self"},
+        {"Do": "Cast", "Spell": "ASTH Shatter", "SpellID": 1309176601, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: three -100% shields and a 5,000 absorb on itself (the exact spell is unknown), then ASTH Shatter." }
+  ]
+}

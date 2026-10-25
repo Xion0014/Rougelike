@@ -1,0 +1,51 @@
+{
+  // General Stormclaw (Rank 9, Myth, 2,400 health), Marleybone. General Stormclaw: Tower Shield, Cleanse Ward for traps, three helpers who answer for him, Frost Giant when they fall.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 184342,
+  "Name": "General Stormclaw (Rank 9)",
+  "Cheats": [
+    { "When": "RoundStart", "Round": 1, "Every": 3,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Tower Shield", "SpellID": 1005934076, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 1 and every 3: Tower Shield." },
+
+    { "When": "PlayerCasts", "Category": "Trap",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 2007994870, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "A trap: Cleanse Ward on its target." },
+
+    { "When": "RoundEnd", "Round": 1,
+      "Actions": [
+        {"Do": "Minion", "Creature": 184192},
+        {"Do": "Minion", "Creature": 184191},
+        {"Do": "Minion", "Creature": 184193}
+      ],
+      "Notes": "End of round 1: his three helpers." },
+
+    { "When": "MinionDefeated", "NoAllies": true, "Once": true,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Frost Giant", "SpellID": 1216186440, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "All helpers down: Frost Giant." },
+
+    { "When": "BossHit", "Category": "Damage", "Cooldown": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000020"},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Rebirth", "SpellID": 1244672367, "Target": "", "DispelImmune": false, "Creature": 184192},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Storm Lord", "SpellID": 82896576, "Target": "", "DispelImmune": false, "Creature": 184193}
+      ],
+      "Notes": "Hurt: the Lazy Henchman's Rebirth and the Tired Fighter's Storm Lord." },
+
+    { "When": "AllyHit", "Creature": 184193, "Cooldown": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000021"},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Rebirth", "SpellID": 1244672367, "Target": "", "DispelImmune": false, "Creature": 184192},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Colossus", "SpellID": 72464277, "Target": "", "DispelImmune": false, "Creature": 184191}
+      ],
+      "Notes": "A single hit on the Tired Fighter: Rebirth and Colossus." }
+  ]
+}

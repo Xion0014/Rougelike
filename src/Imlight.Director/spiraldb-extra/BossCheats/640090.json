@@ -1,0 +1,27 @@
+{
+  // Flevur Flave (Rank 12, Death, 10,600 health), Avalon. Flevur Flave: Gnomes! in round 1, and steals charms and wards.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 640090,
+  "Name": "Flevur Flave (Rank 12)",
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Gnomes!", "SpellID": 1569220793, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Gnomes!." },
+
+    { "When": "PlayerCasts", "Category": "Charm",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Steal Charm", "SpellID": 2048942658, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard's charm: Steal Charm on them." },
+
+    { "When": "PlayerCasts", "Category": "Ward",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Steal Ward", "SpellID": 286699852, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard's ward: Steal Ward on them (Volcanic Golem not set apart)." }
+  ]
+}

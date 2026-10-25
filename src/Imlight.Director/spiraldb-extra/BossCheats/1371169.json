@@ -1,0 +1,61 @@
+{
+  // Colonel Ivanenko (Rank 15, Storm, 8,000 health), Polaris. Colonel Ivanenko: Wild Bolt for a late wizard, Tower Shield for a Feint, Healing Current for a heal, globals in rounds 4, 8 and 12.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1371169,
+  "Name": "Colonel Ivanenko (Rank 15)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000676"},
+        {"Do": "Cast", "Spell": "Wild Bolt", "SpellID": 2078052508, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Wild Bolt on them." },
+
+    { "When": "PlayerCasts", "Spells": ["Feint"], "AnyVersion": true, "OnBoss": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000793"},
+        {"Do": "Cast", "Spell": "Tower Shield", "SpellID": 432324968, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A Feint on him: Tower Shield." },
+
+    { "When": "PlayerCasts", "Category": "Heal",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000794"},
+        {"Do": "Cast", "Spell": "Healing Current", "SpellID": 1008861450, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A heal: Healing Current." },
+
+    { "When": "RoundStart", "Round": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000795"},
+        {"Do": "Cast", "Spell": "Darkwind", "SpellID": 391430711, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 4: Darkwind." },
+
+    { "When": "RoundStart", "Round": 8,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000796"},
+        {"Do": "Cast", "Spell": "Balefrost", "SpellID": 1615064713, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 8: Balefrost." },
+
+    { "When": "RoundStart", "Round": 12,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000797"},
+        {"Do": "Cast", "Spell": "Darkwind", "SpellID": 391430711, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 12: Darkwind." },
+
+    { "When": "RoundStart", "Chance": 20,
+      "Actions": [
+        {"Do": "PickOne", "Count": 3},
+        {"Do": "Cast", "Spell": "Storm Cat", "SpellID": 16098089, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Winter Ice Cat", "SpellID": 1041324655, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Snow Serpent", "SpellID": 219826034, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "His pet, at random (20%)." }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  // Krokodile Hunter (Rank 23, Myth, 14,185 health), Unknown. Krokodile Hunter: a show at the end of round 1, and Spinysaur each round.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1619090,
+  "Name": "Krokodile Hunter (Rank 23)",
+  "Cheats": [
+    { "When": "RoundEnd", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002929"},
+        {"Do": "Cast", "Spell": "Balanceblade", "SpellID": 578086463, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Feint", "SpellID": 617354786, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1018507804, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Tempest", "SpellID": 1713223288, "Target": "", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00002927"},
+        {"Do": "Cast", "Spell": "Supernova", "SpellID": 1039118069, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "End of round 1: Balanceblade, Feint, Berserk, Tempest, then Supernova." },
+
+    { "When": "RoundStart", "Chance": 70,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002926"},
+        {"Do": "Cast", "Spell": "Spinysaur", "SpellID": 304115876, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Most rounds (70%, a guess): Spinysaur (100 life) on a wizard." }
+  ]
+}

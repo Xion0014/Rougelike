@@ -1,0 +1,54 @@
+{
+  // Omen Stribog (Rank 17, Shadow, 32,000 health), Polaris. Omen Stribog: Mana Burn for a late wizard, a Mass Feint taken off, backlash for a shadow creature, Berserk when last.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1376359,
+  "Name": "Omen Stribog (Rank 17)",
+  "ShadowPips": 7,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000676"},
+        {"Do": "Cast", "Spell": "Mana Burn", "SpellID": 1527838769, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Mana Burn on them." },
+
+    { "When": "PlayerCasts", "Spells": ["Mass Feint"], "AnyVersion": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000865"},
+        {"Do": "RemoveWards", "Kind": "Bad", "Spell": "Mass Feint", "Target": "Self"},
+        {"Do": "RemoveWards", "Kind": "Bad", "Spell": "Mass Feint", "Target": "AllAllies"}
+      ],
+      "Notes": "A Mass Feint (a single Feint is allowed): taken off him and his allies." },
+
+    { "When": "PlayerShadows",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000866"},
+        {"Do": "Cast", "Spell": "Shadow Increase Backlash - Omen Stribog", "SpellID": 162631586, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A shadow creature: the backlash spell on the caster." },
+
+    { "When": "RoundStart", "NoAllies": true,
+      "Actions": [
+        {"Do": "InTurn", "Count": 10},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1149410832, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1149404688, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1149406736, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1149416976, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1149419024, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1149412880, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1149414928, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1149425168, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1149427216, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1182965264, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Last standing: Berserk each round, +10% more each time (to +100%)." },
+
+    { "When": "PlayerCasts", "Category": "Aura", "OnBoss": true, "NoAllies": true,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1149410832, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "His Berserk taken off while last: cast again." }
+  ]
+}

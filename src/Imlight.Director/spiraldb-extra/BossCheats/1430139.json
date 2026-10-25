@@ -1,0 +1,47 @@
+{
+  // Baane (Rank 16, Ice, 13,600 health), Empyrea. Baane: Freeze and a growing Berserk for a late wizard, and the turn order swaps every third round.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1430139,
+  "Name": "Baane (Rank 16)",
+  "ShadowPips": 1,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001107"},
+        {"Do": "Cast", "Spell": "Freeze", "SpellID": 1887199642, "Target": "Caster", "DispelImmune": false},
+        {"Do": "InTurn", "Count": 10},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1149410832, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1149404688, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1149406736, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1149416976, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1149419024, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1149412880, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1149414928, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1149425168, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1149427216, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1182965264, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A late wizard: Freeze on them, and the next of ten Berserks." },
+
+    { "When": "RoundEnd", "Round": 3, "Every": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001109"},
+        {"Do": "FirstTurn", "Side": "Swap"}
+      ],
+      "Notes": "End of every third round: the turn order swaps." },
+
+    { "When": "BossHit", "Category": "Damage", "Cooldown": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001110"}
+      ],
+      "Notes": "Hurt: the line." },
+
+    { "When": "ICast", "Spells": ["Dark Nova"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001112"}
+      ],
+      "Notes": "His Dark Nova: the line." }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  // Shadow Weaver (Rank 9, Balance, 900 health), Celestia. Shadow Weaver: Sandstorm every two rounds, Balanceblade from its minion for a blade or AoE.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1669452,
+  "Name": "Shadow Weaver (Rank 9)",
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003515"},
+        {"Do": "Cast", "Spell": "Sandstorm", "SpellID": 1829994384, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Sandstorm." },
+
+    { "When": "RoundEnd", "Round": 2, "Every": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003515"},
+        {"Do": "Cast", "Spell": "Sandstorm", "SpellID": 1829994384, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "End of every second round: Sandstorm." },
+
+    { "When": "PlayerCasts", "Category": "Blade",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003516"},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Balanceblade", "SpellID": 719477982, "Target": "Self", "DispelImmune": false, "Creature": 1669491}
+      ],
+      "Notes": "A blade: its Shadow Weaver minion casts Balanceblade." },
+
+    { "When": "PlayerCasts", "Category": "Damage", "MultiTarget": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003516"},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Balanceblade", "SpellID": 719477982, "Target": "Self", "DispelImmune": false, "Creature": 1669491}
+      ],
+      "Notes": "A damage AoE: the same." }
+  ]
+}

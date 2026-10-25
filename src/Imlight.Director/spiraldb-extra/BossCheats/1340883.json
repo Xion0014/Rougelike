@@ -1,0 +1,80 @@
+{
+  // The Rat (Rank 16, Shadow, 28,000 health), Polaris. The Rat: Titan Experiments for traps, blades and heals, Dimension Shift for a second Feint, and the Titan's punches.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1340883,
+  "Name": "The Rat (Rank 16)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000676"},
+        {"Do": "Cast", "Spell": "Fuel", "SpellID": 1171853464, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Dimension Shift", "SpellID": 1783168513, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A late wizard: Fuel (+60% fire, ice, global and trap) and Dimension Shift of his jinxes, curses and DoTs onto them." },
+
+    { "When": "EnemyCasts", "Spells": ["Feint"], "AnyVersion": true, "OnBoss": true, "HasWho": "Self", "HasSpell": "Feint",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000850"},
+        {"Do": "Cast", "Spell": "Dimension Shift", "SpellID": 1783168513, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A Feint on him while one is already there: Dimension Shift onto the caster." },
+
+    { "When": "EnemyCasts", "Spells": ["Feint"], "AnyVersion": true, "OnBoss": true, "HasWho": "Self", "HasSpell": "Feint", "HasNot": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000849"}
+      ],
+      "Notes": "A first Feint on him: a warning." },
+
+    { "When": "PlayerCasts", "Category": "Trap",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000810"},
+        {"Do": "Cast", "Spell": "Fire Elemental", "SpellID": 486527304, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A trap: Titan Experiment 07." },
+
+    { "When": "PlayerCasts", "Category": "Blade",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000845"},
+        {"Do": "Cast", "Spell": "Fire Elemental", "SpellID": 1057055312, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A blade: Titan Experiment 291." },
+
+    { "When": "PlayerCasts", "Category": "Heal",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000762"},
+        {"Do": "Cast", "Spell": "Fire Elemental", "SpellID": 1022227250, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A heal: Titan Experiment 34." },
+
+    { "When": "RoundStart", "Round": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000812"},
+        {"Do": "Cast", "Spell": "Titan First Punch", "SpellID": 1715832178, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Round 2: the Titan's first punch on all wizards." },
+
+    { "When": "RoundStart", "Round": 10, "Every": 10, "ToRound": 20,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000812"},
+        {"Do": "Cast", "Spell": "Titan Punch", "SpellID": 1950848629, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Rounds 10 and 20: Titan Punch." },
+
+    { "When": "RoundStart", "Round": 5, "Every": 10, "ToRound": 25,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000811"},
+        {"Do": "Cast", "Spell": "Titan Laser", "SpellID": 1949256660, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Rounds 5, 15 and 25: Titan Laser." },
+
+    { "When": "RoundStart", "Round": 30,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000813"},
+        {"Do": "Cast", "Spell": "Titan Super Punch", "SpellID": 90187567, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Round 30: Titan Super Punch (the battle is lost)." }
+  ]
+}

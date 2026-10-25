@@ -1,0 +1,20 @@
+{
+  // Renegade Druid (Rank 18, Star, 1 health), Unknown. Renegade Druid (Star, the Druid's minion): one of three spells at the end of round 4.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1489905,
+  "Name": "Renegade Druid (Rank 18)",
+  "ShadowPips": 1,
+  "Cheats": [
+    { "When": "RoundEnd", "Round": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001404"},
+        {"Do": "PickOne", "Count": 3},
+        {"Do": "Cast", "Spell": "Vengeance", "SpellID": 1162096324, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Brace", "SpellID": 1776642642, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Quicken", "SpellID": 1493197621, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "End of round 4: Vengeance, Brace or Quicken." }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  // Fire Elemental (Rank 17, Fire, 2,670 health), Karamelle. Fire Elemental (Heidi's): a spell each round, and it defeats itself in round 4.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1515500,
+  "Name": "Fire Elemental (Rank 17)",
+  "Cheats": [
+    { "When": "RoundStart", "Round": 1,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Scald", "SpellID": 73862227, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Its round 1: Scald." },
+
+    { "When": "RoundStart", "Round": 2,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Mass Fuel", "SpellID": 1710457537, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 2: Mass Fuel." },
+
+    { "When": "RoundStart", "Round": 3,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Choke", "SpellID": 74757411, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 3: Choke." },
+
+    { "When": "RoundStart", "Round": 4,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Wicked Bull", "SpellID": 1676291521, "Target": "", "DispelImmune": false},
+        {"Do": "Defeat"}
+      ],
+      "Notes": "Round 4: Wicked Bull, then it defeats itself." }
+  ]
+}

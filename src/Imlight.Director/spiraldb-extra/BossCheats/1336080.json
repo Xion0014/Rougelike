@@ -1,0 +1,47 @@
+{
+  // Bunferatu (Rank 15, Death, 23,600 health), Dungeons. Bunferatu: Doom and Gloom, Infection for an attack, and his interrupt cycle.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1336080,
+  "Name": "Bunferatu (Rank 15)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000562"},
+        {"Do": "Cast", "Spell": "Doom and Gloom", "SpellID": 1833900557, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Doom and Gloom." },
+
+    { "When": "PlayerGlobals",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000562"},
+        {"Do": "Cast", "Spell": "Doom and Gloom", "SpellID": 1833900557, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Replaced: cast again at once." },
+
+    { "When": "PlayerCasts", "Category": "Damage", "OnBoss": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000565"},
+        {"Do": "Cast", "Spell": "Infection", "SpellID": 334242429, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "An attack on him: Infection." },
+
+    { "When": "RoundEnd", "Round": 2, "Every": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000563"},
+        {"Do": "Cast", "Spell": "Dark Tribute", "SpellID": 973103412, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Deathblade", "SpellID": 2136741217, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Balanceblade", "SpellID": 1538644858, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "End of every second round: Dark Tribute, Deathblade and Balanceblade." },
+
+    { "When": "RoundStart", "Round": 3, "Every": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000564"},
+        {"Do": "Cast", "Spell": "Call of Khrulhu", "SpellID": 1348958414, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Every third round: Call of Khrulhu." }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  // Copy Qhat (Rank 22, Ice, 16,715 health), Novus. Copy Qhat (Novus): a copy every fourth round, and a second spell after each of hers.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1569444,
+  "Name": "Copy Qhat (Rank 22)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "RoundEnd", "Round": 1, "Every": 4, "AlliesMax": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002416"},
+        {"Do": "Cast", "Spell": "Summon Minions", "SpellID": 1079040980, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "End of round 1 and every fourth: a copy." },
+
+    { "When": "ICast", "Spells": ["Snow Serpent"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002414"},
+        {"Do": "Cast", "Spell": "Troll", "SpellID": 1800861129, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "After her Snow Serpent: Troll." },
+
+    { "When": "ICast", "Spells": ["Blizzard"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002414"},
+        {"Do": "Cast", "Spell": "Humongofrog", "SpellID": 1272123051, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "After her Blizzard: Humongofrog." },
+
+    { "When": "ICast", "Spells": ["Colossus"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002414"},
+        {"Do": "Cast", "Spell": "Stone Colossus", "SpellID": 1811690256, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "After her Colossus: Stone Colossus." },
+
+    { "When": "ICast", "Spells": ["Frost Giant"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002414"},
+        {"Do": "Cast", "Spell": "Orthrus", "SpellID": 1862621819, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "After her Frost Giant: Orthrus." },
+
+    { "When": "ICast", "Spells": ["Snow Angel"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002414"},
+        {"Do": "Cast", "Spell": "Medusa", "SpellID": 2028234611, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "After her Snow Angel: Medusa." },
+
+    { "When": "ICast", "Spells": ["Dark Weaver"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002414"},
+        {"Do": "Cast", "Spell": "Cursed Colossus", "SpellID": 1201165292, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "After her Dark Weaver: Cursed Colossus." },
+
+    { "When": "ICast", "Spells": ["Evil Freeze Ray"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002414"},
+        {"Do": "Cast", "Spell": "Bale Barbarian", "SpellID": 586403255, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "After her Evil Freeze Ray: Bale Barbarian." }
+  ]
+}

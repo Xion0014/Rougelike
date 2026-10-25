@@ -1,0 +1,101 @@
+{
+  // The Shedder (Rank 18, Shadow, 15 health), Unknown. The Shedder: a late wizard stunned, Hired Hooves, Shadowstrike when hurt, and Super Shedder at 1 health.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1489251,
+  "Name": "The Shedder (Rank 18)",
+  "ShadowPips": 3,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001349"},
+        {"Do": "Cast", "Spell": "Natural Attack", "SpellID": 295354660, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Stun", "SpellID": 1863780109, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Natural Attack, Stun on them." },
+
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Summon", "SpellID": 743015829, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Summon", "SpellID": 743015829, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Summon", "SpellID": 743015829, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: three Hired Hooves." },
+
+    { "When": "MinionDefeated",
+      "Actions": [
+        {"Do": "Mark", "Mark": "lost a minion", "Target": "Self"}
+      ],
+      "Notes": "A minion falls: marked." },
+
+    { "When": "RoundStart", "Round": 6, "Every": 6, "Mark": "lost a minion", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Summon", "SpellID": 743015829, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Summon", "SpellID": 743015829, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Summon", "SpellID": 743015829, "Target": "", "DispelImmune": false},
+        {"Do": "Unmark", "Mark": "lost a minion", "Target": "Self"}
+      ],
+      "Notes": "Every 6 rounds after a minion fell: three more." },
+
+    { "When": "BossHit", "Category": "Damage",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Shadowstrike", "SpellID": 1360765746, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Hurt: Shadowstrike on himself." },
+
+    { "When": "ICast", "Spells": ["Natural Attack"],
+      "Actions": [
+        {"Do": "Cast", "Spell": "Stun", "SpellID": 1863780109, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "After his Natural Attack: Stun on the wizard." },
+
+    { "When": "HealthBelow", "Health": 2,
+      "Actions": [
+        {"Do": "Polymorph", "Spell": "Polymorph", "SpellID": 1231010919, "Target": "Self"}
+      ],
+      "Notes": "At 1 health: Super Shedder." },
+
+    { "When": "PlayerCharms",
+      "Actions": [
+        {"Do": "CastBy", "By": "Creature", "Spell": "Steal Charm", "SpellID": 134806928, "Target": "Caster", "DispelImmune": false, "Creature": 1494119}
+      ],
+      "Notes": "A charm: the Hired Hoof 1494119 casts Steal Charm on the caster." },
+
+    { "When": "PlayerWards",
+      "Actions": [
+        {"Do": "CastBy", "By": "Creature", "Spell": "Steal Ward", "SpellID": 1702365771, "Target": "Caster", "DispelImmune": false, "Creature": 1494120}
+      ],
+      "Notes": "A ward: the Hired Hoof 1494120 casts Steal Ward on the caster." },
+
+    { "When": "PlayerCasts", "Category": "Weakness",
+      "Actions": [
+        {"Do": "CastBy", "By": "Creature", "Spell": "Cleanse Charm", "SpellID": 1196233089, "Target": "Caster", "DispelImmune": false, "Creature": 1494121}
+      ],
+      "Notes": "A weakness: the Hired Hoof 1494121 casts Cleanse Charm on the caster." },
+
+    { "When": "PlayerCasts", "Category": "Trap",
+      "Actions": [
+        {"Do": "CastBy", "By": "Creature", "Spell": "Cleanse Ward", "SpellID": 2070775755, "Target": "Caster", "DispelImmune": false, "Creature": 1494122}
+      ],
+      "Notes": "A trap: the Hired Hoof 1494122 casts Cleanse Ward on the caster." },
+
+    { "When": "PlayerHeals",
+      "Actions": [
+        {"Do": "CastBy", "By": "Creature", "Spell": "Infection", "SpellID": 153048997, "Target": "Caster", "DispelImmune": false, "Creature": 1494124}
+      ],
+      "Notes": "A heal: the Hired Hoof 1494124 casts Infection on the caster." },
+
+    { "When": "PlayerCasts", "Category": "DoT",
+      "Actions": [
+        {"Do": "CastBy", "By": "Creature", "Spell": "Mass Triage", "SpellID": 618858298, "Target": "Caster", "DispelImmune": false, "Creature": 1494123}
+      ],
+      "Notes": "A dot: the Hired Hoof 1494123 casts Mass Triage on the caster." },
+
+    { "When": "PlayerAuras",
+      "Actions": [
+        {"Do": "CastBy", "By": "Creature", "Spell": "Supernova", "SpellID": 1139866856, "Target": "Caster", "DispelImmune": false, "Creature": 1494125}
+      ],
+      "Notes": "A aura: the Hired Hoof 1494125 casts Supernova on the caster." }
+  ]
+}

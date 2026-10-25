@@ -1,0 +1,22 @@
+{
+  // Sister Sanderson (Rank 24, Death, 22,950 health), Darkmoor. Sister Sanderson: Gravestorm on the marked wizard each even round.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1702099,
+  "Name": "Sister Sanderson (Rank 24)",
+  "Cheats": [
+    { "When": "RoundEnd", "Round": 2, "Every": 2, "Mark": "weakest", "MarkWho": "AnyEnemy",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003942"},
+        {"Do": "Cast", "Spell": "Gravestorm", "SpellID": 534471169, "Target": "Marked", "DispelImmune": false}
+      ],
+      "Notes": "End of each even round: Gravestorm on the wizard MorbidMary marked." },
+
+    { "When": "RoundEnd", "Round": 2, "Every": 2, "HealthAbove": 99,
+      "Actions": [
+        {"Do": "AddCharm", "Kind": "Shield", "Amount": 100, "Target": "Self"}
+      ],
+      "Notes": "At full health then: a -100% ward on herself (the exact aura is unknown)." }
+  ]
+}

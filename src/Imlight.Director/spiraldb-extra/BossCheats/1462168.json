@@ -1,0 +1,19 @@
+{
+  // The Rat (Rank 17, Shadow, 28,000 health), Empyrea. The Rat: the Rat and the Scorpion's pip swap, and their quarrels.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1462168,
+  "Name": "The Rat (Rank 17)",
+  "ShadowPips": 3,
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "CastBy", "By": "Creature", "Spell": "Donate Shadow", "SpellID": 1721665180, "Target": "Self", "DispelImmune": false, "Creature": 1462169},
+        {"Do": "Say", "Line": "CombatMessages_00001290"},
+        {"Do": "Cast", "Spell": "Steal Shadow Pip", "SpellID": 1999903973, "Target": "Ally", "DispelImmune": false},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Steal Pips", "SpellID": 1473099408, "Target": "Owner", "DispelImmune": false, "Creature": 1462169}
+      ],
+      "Notes": "Round 1: the Scorpion's Donate Shadow, the Rat steals the pip, the Scorpion steals pips back." }
+  ]
+}

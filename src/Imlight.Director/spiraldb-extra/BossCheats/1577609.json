@@ -1,0 +1,52 @@
+{
+  // Atavus Monquistan (Rank 23, Fire, 15,950 health), Novus. Atavus Monquistan: the Aeon of Atavus devours the wizards and spits them up as creatures, and lasers them.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1577609,
+  "Name": "Atavus Monquistan (Rank 23)",
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002468"},
+        {"Do": "Cast", "Spell": "Devour", "SpellID": 1597654954, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: the Aeon devours all wizards." },
+
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002468"},
+        {"Do": "Cast", "Spell": "Devour", "SpellID": 1597654954, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Wait", "Rounds": 1},
+        {"Do": "Cast", "Spell": "Spit Up", "SpellID": 287948375, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A late wizard: devoured, then spat up." },
+
+    { "When": "RoundStart", "Round": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002467"},
+        {"Do": "Cast", "Spell": "Spit Up", "SpellID": 1597654954, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Round 2: Spit Up polymorphs them for 20 rounds." },
+
+    { "When": "RoundStart", "Round": 4, "Every": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001989"},
+        {"Do": "Cast", "Spell": "Natural Attack", "SpellID": 807059208, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Every 4 rounds (a guess): the Aeon's laser (750 to all)." },
+
+    { "When": "MinionDefeated", "Once": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002469"},
+        {"Do": "Cast", "Spell": "Hatch", "SpellID": 1604032170, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "A boss falls: the wizards turn back." },
+
+    { "When": "BossDefeated",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Atavus Trigger", "SpellID": 269026595, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Defeated: Atavus Trigger hands the Aeon to the next boss." }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  // Boa Fett (Rank 16, Fire, 8,400 health), Mirage. Boa Fett: Mander Armor, Cleanse Ward for a trap, Smoke Screen or Freeze after his attacks, Power Link, Push Over Time.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1384905,
+  "Name": "Boa Fett (Rank 16)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "Spells_00001531"},
+        {"Do": "Cast", "Spell": "Mander Armor", "SpellID": 1067504415, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Mander Armor." },
+
+    { "When": "PlayerCasts", "Category": "Trap", "OnBoss": true,
+      "Actions": [
+        {"Do": "Say", "Line": "Spells_00001534"},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 306080282, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A trap on him: Cleanse Ward." },
+
+    { "When": "ICast", "Spells": ["Natural Attack"], "Chance": 50,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000989"},
+        {"Do": "Cast", "Spell": "Smoke Screen", "SpellID": 1485064446, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "After a Natural Attack (half the time): Smoke Screen." },
+
+    { "When": "ICast", "Spells": ["Natural Attack"], "Chance": 50,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000990"},
+        {"Do": "Cast", "Spell": "Freeze", "SpellID": 1681107840, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "After the other: Freeze on that wizard." },
+
+    { "When": "RoundEnd", "Round": 5, "Every": 5,
+      "Actions": [
+        {"Do": "Say", "Line": "Spells_00001559"},
+        {"Do": "Cast", "Spell": "Power Link", "SpellID": 1533297296, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "End of every fifth round: Power Link." },
+
+    { "When": "PlayerCasts", "Category": "DoT", "OnBoss": true,
+      "Actions": [
+        {"Do": "Say", "Line": "Spells_00001532"},
+        {"Do": "Cast", "Spell": "Push Over Time", "SpellID": 2010822853, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A DoT on him: Push Over Time onto the wizard." }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  // Mr. Stone (Rank 24, Ice, 17,635 health), Darkmoor. Mr. Stone: turns to a statue at the end of rounds 1, 4 and every 5th; if not hit then, Medusa Stare on a wizard.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1702068,
+  "Name": "Mr. Stone (Rank 24)",
+  "Cheats": [
+    { "When": "RoundEnd", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003902"},
+        {"Do": "Cast", "Spell": "Power Nova", "SpellID": 895832698, "Target": "Self", "DispelImmune": false},
+        {"Do": "Mark", "Mark": "statue", "Target": "Self"}
+      ],
+      "Notes": "End of round 1: Power Nova turns him into the statue (300% resist) for a round." },
+
+    { "When": "RoundEnd", "Round": 4, "Every": 5,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003902"},
+        {"Do": "Cast", "Spell": "Power Nova", "SpellID": 895832698, "Target": "Self", "DispelImmune": false},
+        {"Do": "Mark", "Mark": "statue", "Target": "Self"}
+      ],
+      "Notes": "End of round 4 and every 5th after." },
+
+    { "When": "BossHit", "Mark": "statue", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003903"},
+        {"Do": "Cast", "Spell": "Hatch", "SpellID": 775973598, "Target": "Self", "DispelImmune": false},
+        {"Do": "Unmark", "Mark": "statue", "Target": "Self"}
+      ],
+      "Notes": "Hurt as the statue: Hatch on himself." },
+
+    { "When": "RoundEnd", "Round": 2, "Every": 5, "Mark": "statue", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003904"},
+        {"Do": "Cast", "Spell": "Medusa Stare", "SpellID": 1570481562, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Unmark", "Mark": "statue", "Target": "Self"}
+      ],
+      "Notes": "Not attacked as the statue: Medusa Stare turns a wizard into a statue." },
+
+    { "When": "RoundEnd", "Round": 5, "Every": 5, "Mark": "statue", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003904"},
+        {"Do": "Cast", "Spell": "Medusa Stare", "SpellID": 1570481562, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Unmark", "Mark": "statue", "Target": "Self"}
+      ],
+      "Notes": "" }
+  ]
+}

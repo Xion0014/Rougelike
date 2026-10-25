@@ -1,0 +1,51 @@
+{
+  // Ra (Rank 23, Balance, 17,875 health), Krokotopia. Ra (Rank 23): cloaked blades or traps that must be matched before he is hit.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1655242,
+  "Name": "Ra (Rank 23)",
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003332"}
+      ],
+      "Notes": "Round 1: a hint." },
+
+    { "When": "RoundEnd", "HasWho": "Self", "HasKind": "Charm,Ward", "HasNot": true, "Mark": "done", "MarkWho": "Self", "NotMarked": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003333"},
+        {"Do": "PickOne", "Count": 2},
+        {"Do": "Cast", "Spell": "Sun Blade", "SpellID": 668106155, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Sun Trap", "SpellID": 567442859, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Mark", "Mark": "unmatched", "Target": "Self"}
+      ],
+      "Notes": "End of a round with no cloaked effects: three Sun Blades on himself or Sun Traps on the wizards." },
+
+    { "When": "BossHit", "Mark": "unmatched", "MarkWho": "Self", "HasWho": "Caster", "HasKind": "Blade", "HasCount": 3, "HasNot": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003334"},
+        {"Do": "Cast", "Spell": "Ra", "SpellID": 189675055, "Target": "Caster", "DispelImmune": false},
+        {"Do": "RemoveCharms", "Kind": "All", "Target": "all"},
+        {"Do": "RemoveWards", "Kind": "All", "Target": "all"},
+        {"Do": "Unmark", "Mark": "unmatched", "Target": "Self"}
+      ],
+      "Notes": "Hit before the wizard matches them (three blades on them or traps on him, counted): Ra on them." },
+
+    { "When": "BossHit", "Mark": "unmatched", "MarkWho": "Self", "HasWho": "Caster", "HasKind": "Blade", "HasCount": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003335"},
+        {"Do": "Cast", "Spell": "Frenzy", "SpellID": 86877415, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Mark", "Mark": "done", "Target": "Self"}
+      ],
+      "Notes": "Hit after matching: Frenzy, and his cheats stop." },
+
+    { "When": "BossDefeated", "Mark": "unmatched", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003352"},
+        {"Do": "Cast", "Spell": "Availing Hands", "SpellID": 1894026344, "Target": "Self", "DispelImmune": false},
+        {"Do": "SetHealth", "Amount": 17875}
+      ],
+      "Notes": "Defeated before matching." }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  // Ravik Dreamscape (Rank 13, Ice, 20,600 health), Khrysalis. Ravik Dreamscape: Doom and Gloom every 5th round, Cursed Mouse Knights.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1223103,
+  "Name": "Ravik Dreamscape (Rank 13)",
+  "ShadowPips": 1,
+  "Cheats": [
+    { "When": "RoundStart", "Round": 1, "Every": 5,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000195"},
+        {"Do": "Cast", "Spell": "Doom and Gloom", "SpellID": 314648545, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1 and every 5th: Doom and Gloom." },
+
+    { "When": "RoundStart", "Round": 3, "Every": 2, "AlliesMax": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000208"},
+        {"Do": "Minion", "Creature": 1223073}
+      ],
+      "Notes": "Round 3 and every 2nd: a Cursed Mouse Knight." },
+
+    { "When": "RoundEnd", "FromRound": 10, "AlliesMax": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000208"},
+        {"Do": "Minion", "Creature": 1223073}
+      ],
+      "Notes": "From round 10, or once his first knight fell or a curse was put on him: one every round." },
+
+    { "When": "RoundEnd", "Mark": "hurried", "MarkWho": "Self", "AlliesMax": 2, "ToRound": 9,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000208"},
+        {"Do": "Minion", "Creature": 1223073}
+      ],
+      "Notes": "" },
+
+    { "When": "MinionDefeated", "Creature": 1223073,
+      "Actions": [
+        {"Do": "Mark", "Mark": "hurried", "Target": "Self"}
+      ],
+      "Notes": "" },
+
+    { "When": "PlayerCasts", "Category": "Weakness", "OnBoss": true,
+      "Actions": [
+        {"Do": "Mark", "Mark": "hurried", "Target": "Self"}
+      ],
+      "Notes": "" }
+  ]
+}

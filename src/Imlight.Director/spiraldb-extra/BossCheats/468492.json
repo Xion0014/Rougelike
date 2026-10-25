@@ -1,0 +1,22 @@
+{
+  // Randolf Spellshine (Rank 5, Myth, 775 health), Wysteria. Randolf Spellshine: Cleanse Ward every 2 rounds, Vampire for a hit with no shield.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 468492,
+  "Name": "Randolf Spellshine (Rank 5)",
+  "Cheats": [
+    { "When": "RoundStart", "Round": 2, "Every": 2,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 2007994870, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Every 2 rounds: Cleanse Ward on a wizard (all their shields)." },
+
+    { "When": "PlayerDamages", "HasWho": "Caster", "HasKind": "Shield", "HasNot": true,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000117"},
+        {"Do": "Cast", "Spell": "Vampire", "SpellID": 931332206, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A damage spell from a wizard with no shield: Vampire on them." }
+  ]
+}

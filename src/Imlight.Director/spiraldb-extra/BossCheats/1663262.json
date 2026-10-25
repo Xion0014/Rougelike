@@ -1,0 +1,58 @@
+{
+  // White Dragon (Rank 14, Ice, 27,565 health), Pendragon Rematch. White Dragon: it punishes spells on a whole side.
+  // From Wizard404's data on the gauntlets (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove).
+  // Built first from blocks that were there, then from the new universal blocks each Notes names (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1663262,
+  "Name": "White Dragon (Rank 14)",
+  "Cheats": [
+    { "When": "PlayerCasts", "Category": "Damage", "MultiTarget": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002939"},
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 1641304242, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "\"You are weak and unfocused\" Damage on a whole side: Blessing on itself. New block: many targets." },
+
+    { "When": "PlayerCasts", "Category": "Heal", "MultiTarget": true,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Frost Giant", "SpellID": 166090060, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A heal on a whole side: Frost Giant." },
+
+    { "When": "PlayerCasts", "Category": "Blade", "MultiTarget": true,
+      "Actions": [
+        {"Do": "Cast", "Spell": "AOE Disarm", "SpellID": 1063191407, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A blade on a whole side: AOE Disarm." },
+
+    { "When": "PlayerCasts", "Category": "Shield", "MultiTarget": true,
+      "Actions": [
+        {"Do": "Cast", "Spell": "AOE Pierce", "SpellID": 1105325324, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A shield on a whole side: AOE Pierce." },
+
+    { "When": "PlayerCasts", "Category": "HoT", "MultiTarget": true,
+      "Actions": [
+        {"Do": "Cast", "Spell": "AOE Remove HOT", "SpellID": 102667431, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A heal over time on a whole side: AOE Remove HOT." },
+
+    { "When": "PlayerCasts", "Category": "DoT", "MultiTarget": true,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Triage", "SpellID": 394618746, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Damage over time on a whole side: Triage on itself." },
+
+    { "When": "PlayerCasts", "Category": "Trap", "MultiTarget": true,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 1744091377, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Traps on a whole side: Cleanse Ward on itself." },
+
+    { "When": "PlayerCasts", "Category": "Weakness", "MultiTarget": true,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Cleanse Charm", "SpellID": 731187518, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Weaknesses on a whole side: Cleanse Charm on itself." }
+  ]
+}

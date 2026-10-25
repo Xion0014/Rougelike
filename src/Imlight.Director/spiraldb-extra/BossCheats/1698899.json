@@ -1,0 +1,318 @@
+{
+  // Beast With A Million Eyes (Rank 25, Moon, 13,115 health), Darkmoor. Beast With A Million Eyes: a Shift gives an aura, and only its two schools may defeat him; an idle round brings a big spell.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  // Checked against its Wizard101 Central page (saved 2026-10-24): an idle round's big spell is one of seven at random (Sandstorm too), not one for each aura.
+  "TemplateID": 1698899,
+  "Name": "Beast With A Million Eyes (Rank 25)",
+  "Cheats": [
+    { "When": "BossHit",
+      "Actions": [
+        {"Do": "Mark", "Mark": "hurt this round", "Target": "Self"}
+      ],
+      "Notes": "Hurt: marked for this round." },
+
+    { "When": "ICast", "Spells": ["Shift Dread Paladin"], "AnyVersion": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00004204"},
+        {"Do": "Cast", "Spell": "Sleet Storm", "SpellID": 1000501217, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "His Shift Dread Paladin: Sleet Storm on himself (Ice)." },
+
+    { "When": "BossDefeated", "School": "Ice", "HasWho": "Self", "HasSpell": "Sleet Storm",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001239"},
+        {"Do": "SetHealth", "Amount": 13115},
+        {"Do": "Cast", "Spell": "Lord of Winter", "SpellID": 1695700605, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Defeated by Ice under Sleet Storm: back to full and Lord of Winter (only Fire or Myth may defeat him)." },
+
+    { "When": "BossDefeated", "School": "Storm", "HasWho": "Self", "HasSpell": "Sleet Storm",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001239"},
+        {"Do": "SetHealth", "Amount": 13115},
+        {"Do": "Cast", "Spell": "Lord of Winter", "SpellID": 1695700605, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Defeated by Storm under Sleet Storm: back to full and Lord of Winter (only Fire or Myth may defeat him)." },
+
+    { "When": "BossDefeated", "School": "Life", "HasWho": "Self", "HasSpell": "Sleet Storm",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001239"},
+        {"Do": "SetHealth", "Amount": 13115},
+        {"Do": "Cast", "Spell": "Lord of Winter", "SpellID": 1695700605, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Defeated by Life under Sleet Storm: back to full and Lord of Winter (only Fire or Myth may defeat him)." },
+
+    { "When": "BossDefeated", "School": "Death", "HasWho": "Self", "HasSpell": "Sleet Storm",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001239"},
+        {"Do": "SetHealth", "Amount": 13115},
+        {"Do": "Cast", "Spell": "Lord of Winter", "SpellID": 1695700605, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Defeated by Death under Sleet Storm: back to full and Lord of Winter (only Fire or Myth may defeat him)." },
+
+    { "When": "BossDefeated", "School": "Balance", "HasWho": "Self", "HasSpell": "Sleet Storm",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001239"},
+        {"Do": "SetHealth", "Amount": 13115},
+        {"Do": "Cast", "Spell": "Lord of Winter", "SpellID": 1695700605, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Defeated by Balance under Sleet Storm: back to full and Lord of Winter (only Fire or Myth may defeat him)." },
+
+    { "When": "ICast", "Spells": ["Shift Grendel"], "AnyVersion": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00004199"},
+        {"Do": "Cast", "Spell": "Furnace", "SpellID": 1036631401, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "His Shift Grendel: Furnace on himself (Fire)." },
+
+    { "When": "BossDefeated", "School": "Fire", "HasWho": "Self", "HasSpell": "Furnace",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001239"},
+        {"Do": "SetHealth", "Amount": 13115},
+        {"Do": "Cast", "Spell": "Sun Serpent", "SpellID": 141079815, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Defeated by Fire under Furnace: back to full and Sun Serpent (only Life or Storm may defeat him)." },
+
+    { "When": "BossDefeated", "School": "Ice", "HasWho": "Self", "HasSpell": "Furnace",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001239"},
+        {"Do": "SetHealth", "Amount": 13115},
+        {"Do": "Cast", "Spell": "Sun Serpent", "SpellID": 141079815, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Defeated by Ice under Furnace: back to full and Sun Serpent (only Life or Storm may defeat him)." },
+
+    { "When": "BossDefeated", "School": "Myth", "HasWho": "Self", "HasSpell": "Furnace",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001239"},
+        {"Do": "SetHealth", "Amount": 13115},
+        {"Do": "Cast", "Spell": "Sun Serpent", "SpellID": 141079815, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Defeated by Myth under Furnace: back to full and Sun Serpent (only Life or Storm may defeat him)." },
+
+    { "When": "BossDefeated", "School": "Death", "HasWho": "Self", "HasSpell": "Furnace",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001239"},
+        {"Do": "SetHealth", "Amount": 13115},
+        {"Do": "Cast", "Spell": "Sun Serpent", "SpellID": 141079815, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Defeated by Death under Furnace: back to full and Sun Serpent (only Life or Storm may defeat him)." },
+
+    { "When": "BossDefeated", "School": "Balance", "HasWho": "Self", "HasSpell": "Furnace",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001239"},
+        {"Do": "SetHealth", "Amount": 13115},
+        {"Do": "Cast", "Spell": "Sun Serpent", "SpellID": 141079815, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Defeated by Balance under Furnace: back to full and Sun Serpent (only Life or Storm may defeat him)." },
+
+    { "When": "ICast", "Spells": ["Shift Piscean"], "AnyVersion": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00004201"},
+        {"Do": "Cast", "Spell": "Galvanic Field", "SpellID": 1000012417, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "His Shift Piscean: Galvanic Field on himself (Storm)." },
+
+    { "When": "BossDefeated", "School": "Fire", "HasWho": "Self", "HasSpell": "Galvanic Field",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001239"},
+        {"Do": "SetHealth", "Amount": 13115},
+        {"Do": "Cast", "Spell": "Storm Owl", "SpellID": 990349312, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Defeated by Fire under Galvanic Field: back to full and Storm Owl (only Death or Ice may defeat him)." },
+
+    { "When": "BossDefeated", "School": "Storm", "HasWho": "Self", "HasSpell": "Galvanic Field",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001239"},
+        {"Do": "SetHealth", "Amount": 13115},
+        {"Do": "Cast", "Spell": "Storm Owl", "SpellID": 990349312, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Defeated by Storm under Galvanic Field: back to full and Storm Owl (only Death or Ice may defeat him)." },
+
+    { "When": "BossDefeated", "School": "Myth", "HasWho": "Self", "HasSpell": "Galvanic Field",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001239"},
+        {"Do": "SetHealth", "Amount": 13115},
+        {"Do": "Cast", "Spell": "Storm Owl", "SpellID": 990349312, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Defeated by Myth under Galvanic Field: back to full and Storm Owl (only Death or Ice may defeat him)." },
+
+    { "When": "BossDefeated", "School": "Life", "HasWho": "Self", "HasSpell": "Galvanic Field",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001239"},
+        {"Do": "SetHealth", "Amount": 13115},
+        {"Do": "Cast", "Spell": "Storm Owl", "SpellID": 990349312, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Defeated by Life under Galvanic Field: back to full and Storm Owl (only Death or Ice may defeat him)." },
+
+    { "When": "BossDefeated", "School": "Balance", "HasWho": "Self", "HasSpell": "Galvanic Field",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001239"},
+        {"Do": "SetHealth", "Amount": 13115},
+        {"Do": "Cast", "Spell": "Storm Owl", "SpellID": 990349312, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Defeated by Balance under Galvanic Field: back to full and Storm Owl (only Death or Ice may defeat him)." },
+
+    { "When": "ICast", "Spells": ["Shift GreenOak"], "AnyVersion": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00004200"},
+        {"Do": "Cast", "Spell": "Devotion", "SpellID": 1466356455, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "His Shift GreenOak: Devotion on himself (Life)." },
+
+    { "When": "BossDefeated", "School": "Fire", "HasWho": "Self", "HasSpell": "Devotion",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001239"},
+        {"Do": "SetHealth", "Amount": 13115},
+        {"Do": "Cast", "Spell": "Spinysaur", "SpellID": 474579317, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Defeated by Fire under Devotion: back to full and Spinysaur (only Death or Storm may defeat him)." },
+
+    { "When": "BossDefeated", "School": "Ice", "HasWho": "Self", "HasSpell": "Devotion",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001239"},
+        {"Do": "SetHealth", "Amount": 13115},
+        {"Do": "Cast", "Spell": "Spinysaur", "SpellID": 474579317, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Defeated by Ice under Devotion: back to full and Spinysaur (only Death or Storm may defeat him)." },
+
+    { "When": "BossDefeated", "School": "Myth", "HasWho": "Self", "HasSpell": "Devotion",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001239"},
+        {"Do": "SetHealth", "Amount": 13115},
+        {"Do": "Cast", "Spell": "Spinysaur", "SpellID": 474579317, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Defeated by Myth under Devotion: back to full and Spinysaur (only Death or Storm may defeat him)." },
+
+    { "When": "BossDefeated", "School": "Life", "HasWho": "Self", "HasSpell": "Devotion",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001239"},
+        {"Do": "SetHealth", "Amount": 13115},
+        {"Do": "Cast", "Spell": "Spinysaur", "SpellID": 474579317, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Defeated by Life under Devotion: back to full and Spinysaur (only Death or Storm may defeat him)." },
+
+    { "When": "BossDefeated", "School": "Balance", "HasWho": "Self", "HasSpell": "Devotion",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001239"},
+        {"Do": "SetHealth", "Amount": 13115},
+        {"Do": "Cast", "Spell": "Spinysaur", "SpellID": 474579317, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Defeated by Balance under Devotion: back to full and Spinysaur (only Death or Storm may defeat him)." },
+
+    { "When": "ICast", "Spells": ["Shift Ogre"], "AnyVersion": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00004203"},
+        {"Do": "Cast", "Spell": "Reliquary", "SpellID": 281681134, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "His Shift Ogre: Reliquary on himself (Myth)." },
+
+    { "When": "BossDefeated", "School": "Ice", "HasWho": "Self", "HasSpell": "Reliquary",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001239"},
+        {"Do": "SetHealth", "Amount": 13115},
+        {"Do": "Cast", "Spell": "Celestial Calendar", "SpellID": 119326103, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Defeated by Ice under Reliquary: back to full and Celestial Calendar (only Fire or Life may defeat him)." },
+
+    { "When": "BossDefeated", "School": "Storm", "HasWho": "Self", "HasSpell": "Reliquary",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001239"},
+        {"Do": "SetHealth", "Amount": 13115},
+        {"Do": "Cast", "Spell": "Celestial Calendar", "SpellID": 119326103, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Defeated by Storm under Reliquary: back to full and Celestial Calendar (only Fire or Life may defeat him)." },
+
+    { "When": "BossDefeated", "School": "Myth", "HasWho": "Self", "HasSpell": "Reliquary",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001239"},
+        {"Do": "SetHealth", "Amount": 13115},
+        {"Do": "Cast", "Spell": "Celestial Calendar", "SpellID": 119326103, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Defeated by Myth under Reliquary: back to full and Celestial Calendar (only Fire or Life may defeat him)." },
+
+    { "When": "BossDefeated", "School": "Death", "HasWho": "Self", "HasSpell": "Reliquary",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001239"},
+        {"Do": "SetHealth", "Amount": 13115},
+        {"Do": "Cast", "Spell": "Celestial Calendar", "SpellID": 119326103, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Defeated by Death under Reliquary: back to full and Celestial Calendar (only Fire or Life may defeat him)." },
+
+    { "When": "BossDefeated", "School": "Balance", "HasWho": "Self", "HasSpell": "Reliquary",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001239"},
+        {"Do": "SetHealth", "Amount": 13115},
+        {"Do": "Cast", "Spell": "Celestial Calendar", "SpellID": 119326103, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Defeated by Balance under Reliquary: back to full and Celestial Calendar (only Fire or Life may defeat him)." },
+
+    { "When": "ICast", "Spells": ["Shift Sugar Glider"], "AnyVersion": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00004202"},
+        {"Do": "Cast", "Spell": "Virulence", "SpellID": 250316317, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "His Shift Sugar Glider: Virulence on himself (Death)." },
+
+    { "When": "BossDefeated", "School": "Fire", "HasWho": "Self", "HasSpell": "Virulence",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001239"},
+        {"Do": "SetHealth", "Amount": 13115},
+        {"Do": "Cast", "Spell": "Avenging Fossil", "SpellID": 250531677, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Defeated by Fire under Virulence: back to full and Avenging Fossil (only Ice or Myth may defeat him)." },
+
+    { "When": "BossDefeated", "School": "Storm", "HasWho": "Self", "HasSpell": "Virulence",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001239"},
+        {"Do": "SetHealth", "Amount": 13115},
+        {"Do": "Cast", "Spell": "Avenging Fossil", "SpellID": 250531677, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Defeated by Storm under Virulence: back to full and Avenging Fossil (only Ice or Myth may defeat him)." },
+
+    { "When": "BossDefeated", "School": "Life", "HasWho": "Self", "HasSpell": "Virulence",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001239"},
+        {"Do": "SetHealth", "Amount": 13115},
+        {"Do": "Cast", "Spell": "Avenging Fossil", "SpellID": 250531677, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Defeated by Life under Virulence: back to full and Avenging Fossil (only Ice or Myth may defeat him)." },
+
+    { "When": "BossDefeated", "School": "Death", "HasWho": "Self", "HasSpell": "Virulence",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001239"},
+        {"Do": "SetHealth", "Amount": 13115},
+        {"Do": "Cast", "Spell": "Avenging Fossil", "SpellID": 250531677, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Defeated by Death under Virulence: back to full and Avenging Fossil (only Ice or Myth may defeat him)." },
+
+    { "When": "BossDefeated", "School": "Balance", "HasWho": "Self", "HasSpell": "Virulence",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001239"},
+        {"Do": "SetHealth", "Amount": 13115},
+        {"Do": "Cast", "Spell": "Avenging Fossil", "SpellID": 250531677, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Defeated by Balance under Virulence: back to full and Avenging Fossil (only Ice or Myth may defeat him)." },
+
+    { "When": "RoundEnd", "FromRound": 2, "Mark": "hurt this round", "MarkWho": "Self", "NotMarked": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001894"},
+        {"Do": "PickOne", "Count": 7},
+        {"Do": "Cast", "Spell": "Blizzard", "SpellID": 126627734, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Ratatoskr's Spin", "SpellID": 1781467837, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Meteor Strike", "SpellID": 729953007, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Humongofrog", "SpellID": 1272123051, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Tempest", "SpellID": 1569112959, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Sandstorm", "SpellID": 1829994384, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Ship of Fools", "SpellID": 1104648001, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A round after round 1 he was not hurt: one of seven spells at random (Central; not by his aura)." },
+
+    { "When": "RoundEnd",
+      "Actions": [
+        {"Do": "Unmark", "Mark": "hurt this round", "Target": "Self"}
+      ],
+      "Notes": "End of a round: the mark comes off." }
+  ]
+}

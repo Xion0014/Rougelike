@@ -1,0 +1,40 @@
+{
+  // Moth-Amon (Rank 20, Moon, 14,585 health), Lemuria. Moth-Amon: a late wizard becomes an egg, Projections in round 1, Enfeeble for a blade, targetable two rounds after his minions fall.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1530797,
+  "Name": "Moth-Amon (Rank 20)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001903"},
+        {"Do": "Polymorph", "Spell": "Polymorph - Egg", "SpellID": 1254744584, "Target": "Caster"}
+      ],
+      "Notes": "A late wizard: Polymorph - Egg." },
+
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001904"},
+        {"Do": "Cast", "Spell": "Minions - Moth-Amon", "SpellID": 239974349, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Minions - Moth-Amon", "SpellID": 945633453, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: three Projections (he becomes untargetable), and Mandar for the wizards." },
+
+    { "When": "PlayerCasts", "Category": "Blade",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001992"},
+        {"Do": "Cast", "Spell": "Enfeeble", "SpellID": 539569992, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "A blade: Enfeeble on all wizards." },
+
+    { "When": "MinionDefeated", "NoAllies": true, "Once": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001905"},
+        {"Do": "Wait", "Rounds": 2},
+        {"Do": "Cast", "Spell": "Make Targetable", "SpellID": 327537132, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "All his minions down: two rounds later Make Targetable." }
+  ]
+}

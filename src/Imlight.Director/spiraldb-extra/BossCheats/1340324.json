@@ -1,0 +1,13 @@
+{
+  // Meowiarty (Rank 14, Myth, 13,850 health), Meowiarty Exalted Duel. Meowiarty: comes into a battle with its minions.
+  // From Wizard404's data on the gauntlets (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove).
+  // Built first from blocks that were there, then from the new universal blocks each Notes names (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1340324,
+  "Name": "Meowiarty (Rank 14)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "Passive", "Passive": "Minions", "Brings": ["1336739", "1336737"], "BringsRandom": ["1336745", "1336741", "1336743"], "BringsCount": 1,
+      "Notes": "It fights with Midnighter and O'Leary Thug and 1 of Dr. Von Katzenstein, Gibson O'Leary and Jacques the Scratcher at random (Wizard404: its minions and pool). New block: comes with." }
+  ]
+}

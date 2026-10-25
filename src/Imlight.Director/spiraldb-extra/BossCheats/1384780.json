@@ -1,0 +1,30 @@
+{
+  // Mother Ghulture (Rank 15, Life, 4,560 health), Mirage. Mother Ghulture: Luminous Weaver for a late wizard, Ghultures, and Guardian Spirit for all.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1384780,
+  "Name": "Mother Ghulture (Rank 15)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000956"},
+        {"Do": "Cast", "Spell": "Luminous Weaver", "SpellID": 1688778738, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Luminous Weaver on them." },
+
+    { "When": "RoundStart", "ToRound": 3, "AlliesMax": 2,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Ghulture Minion", "SpellID": 2022372276, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Rounds 1-3 with a circle free: a Ghulture." },
+
+    { "When": "RoundStart", "AlliesMin": 3, "Once": true,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Guardian Spirit", "SpellID": 454346747, "Target": "AllAllies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Guardian Spirit", "SpellID": 454346747, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Three minions: Guardian Spirit on all." }
+  ]
+}

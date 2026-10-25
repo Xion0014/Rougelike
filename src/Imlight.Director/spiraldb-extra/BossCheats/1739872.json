@@ -1,0 +1,37 @@
+{
+  // The Monster (Rank 5, Death, 9,000 health), Unknown. The Monster: Beguile, a minion, Heartbeat while it stands, and Self Sacrifice when it falls.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1739872,
+  "Name": "The Monster (Rank 5)",
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00004470"},
+        {"Do": "Cast", "Spell": "Beguile", "SpellID": 1898986085, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Summon Minions", "SpellID": 801794221, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Beguile on itself, and its default (balance) minion." },
+
+    { "When": "RoundEnd", "Round": 2,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Make Targetable", "SpellID": 327537132, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "End of round 2: Make Targetable." },
+
+    { "When": "BossDefeated", "HasAllies": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00004466"},
+        {"Do": "Cast", "Spell": "Heartbeat", "SpellID": 1991156741, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Defeated while a minion stands: Heartbeat on itself." },
+
+    { "When": "MinionDefeated",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00004462"},
+        {"Do": "Cast", "Spell": "Self Sacrifice", "SpellID": 1308788739, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "A minion falls: Self Sacrifice on every wizard." }
+  ]
+}

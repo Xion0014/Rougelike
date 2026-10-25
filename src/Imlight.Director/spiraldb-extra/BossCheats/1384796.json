@@ -1,0 +1,28 @@
+{
+  // Dumoozid (Rank 15, Storm, 5,200 health), Mirage. Dumoozid: Lord of Winter for a late wizard, and random Empower, Tempest or Mana Burn.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1384796,
+  "Name": "Dumoozid (Rank 15)",
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000957"},
+        {"Do": "Cast", "Spell": "Lord of Winter", "SpellID": 718819178, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Lord of Winter on them." },
+
+    { "When": "RoundStart", "Chance": 30,
+      "Actions": [
+        {"Do": "PickOne", "Count": 3, "Group": 2},
+        {"Do": "Say", "Line": "CombatMessages_00000889"},
+        {"Do": "Cast", "Spell": "Empower", "SpellID": 1886605378, "Target": "Self", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00000958"},
+        {"Do": "Cast", "Spell": "Tempest", "SpellID": 581130926, "Target": "", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00000888"},
+        {"Do": "Cast", "Spell": "Mana Burn", "SpellID": 1840857739, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Now and then (30%): Empower, Tempest (all charms and wards off the wizards) or Mana Burn." }
+  ]
+}

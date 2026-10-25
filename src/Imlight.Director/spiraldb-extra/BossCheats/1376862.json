@@ -1,0 +1,46 @@
+{
+  // Lucia (Rank 15, Star, 5,045 health), Great Clock Gauntlet. Lucia.
+  // From Wizard404's data on the gauntlets (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove).
+  // Built first from blocks that were there, then from the new universal blocks each Notes names (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1376862,
+  "Name": "Lucia (Rank 15)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000676"},
+        {"Do": "Cast", "Spell": "Mana Burn", "SpellID": 309838857, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "\"Tardiness will not be tolerated!\" A late wizard: Mana Burn." },
+
+    { "When": "PlayerCasts", "Category": "Trap", "OnBoss": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000878"},
+        {"Do": "Cast", "Spell": "Star Buff", "SpellID": 1426379451, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "\"The star is only as good as her supporting cast!\" A jinx (a trap) on her: Star Buff." },
+
+    { "When": "PlayerCasts", "Spells": ["Feint"], "AnyVersion": true, "OnBoss": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000874"},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 1213761009, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "\"I've no time for such frivolity!\" A Feint on her: Cleanse Ward on herself." },
+
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000875"},
+        {"Do": "Cast", "Spell": "Clockworker", "SpellID": 1010953041, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "\"Let's even the odds!\" Round 1: Clockworker summons a Clockworker." },
+
+    { "When": "RoundStart", "Every": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000877"},
+        {"Do": "Cast", "Spell": "Steal Charm", "SpellID": 1406532128, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Steal Ward", "SpellID": 531030646, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "\"This is my show! MINE!\" Every fourth round: Steal Charm and Steal Ward on every wizard." }
+  ]
+}

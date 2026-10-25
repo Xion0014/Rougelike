@@ -1,0 +1,63 @@
+{
+  // Ervin the Barbarian (Rank 12, Death, 12,905 health), Dungeons. Ervin the Barbarian: Tower Shield, trap and charm answers, Taurus's Smoke Screen, and Leviathan once his minions fall.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 469537,
+  "Name": "Ervin the Barbarian (Rank 12)",
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Tower Shield", "SpellID": 2013941342, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Tower Shield." },
+
+    { "When": "BossHit", "HasAllies": true,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Tower Shield", "SpellID": 2013941342, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Hurt while his minions stand: Tower Shield again." },
+
+    { "When": "PlayerCasts", "Category": "Trap", "OnBoss": true, "HasAllies": true,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 1048474958, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A trap on him while his minions stand: Cleanse Ward takes one off." },
+
+    { "When": "PlayerCasts", "Category": "Charm,Weakness",
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000111"},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Cleanse Charm", "SpellID": 449645256, "Target": "Caster", "DispelImmune": false, "Creature": 469538},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Deathblade", "SpellID": 2136741217, "Target": "Owner", "DispelImmune": false, "Creature": 469538}
+      ],
+      "Notes": "A charm or curse: Taurus takes a charm off the caster and blades Ervin." },
+
+    { "When": "RoundStart", "Round": 3, "Every": 3,
+      "Actions": [
+        {"Do": "CastBy", "By": "Creature", "Spell": "Smoke Screen", "SpellID": 305778176, "Target": "", "DispelImmune": false, "Creature": 469538}
+      ],
+      "Notes": "Every third round: Taurus casts Smoke Screen." },
+
+    { "When": "PlayerCasts", "Fizzle": "Fizzled",
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000115"},
+        {"Do": "Cast", "Spell": "Skeletal Dragon", "SpellID": 1814329639, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard fizzles: Skeletal Dragon on them." },
+
+    { "When": "MinionDefeated", "NoAllies": true, "Once": true,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000116"},
+        {"Do": "Cast", "Spell": "Leviathan", "SpellID": 1307543796, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Mark", "Mark": "alone", "Target": "Self"}
+      ],
+      "Notes": "All his minions down: Leviathan on a wizard at once." },
+
+    { "When": "RoundStart", "Every": 2, "Mark": "alone", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000116"},
+        {"Do": "Cast", "Spell": "Leviathan", "SpellID": 1307543796, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Then every two rounds: Leviathan." }
+  ]
+}

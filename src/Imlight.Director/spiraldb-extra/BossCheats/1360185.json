@@ -1,0 +1,13 @@
+{
+  // Fairy (Fire) (Rank 14), a minion of the Fairy Queen in the Rattlebones Exalted Challenge (Epic_WC_Fairy_Minion_Fire).
+  // From Wizard101 Central's page "Fairy (Fire) (Rank 14)" (Niduus saved it, 2026-10-23). Health (4,160) and stats are
+  // the game's own. Built from blocks that were there, with the new target "the last one who hurt it" (LastAttacker).
+  "TemplateID": 1360185,
+  "Name": "Fairy (Fire) (Rank 14)",
+  "Cheats": [
+    { "When": "HealthBelow", "Percent": 25,
+      "Casts": [ { "Spell": "Immolate - FairyMinion", "DispelImmune": false } ], "Target": "LastAttacker",
+      "Line": "CombatMessages_00000744",
+      "Notes": "\"Ashes to ashes, we all burn down!\" Under 25% health: 2,100 Fire damage to herself and 600 to the wizard who last hurt her. Not cast when that wizard is defeated." }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  // Chilly (Rank 16, Ice, 6,800 health), Mirage. One of the cold ghosts: Steal Pips for a late wizard, Medicine Mode every 5th round.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1402187,
+  "Name": "Chilly (Rank 16)",
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000960"},
+        {"Do": "Cast", "Spell": "Steal Pips", "SpellID": 724062293, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 3: Steal Pips on them." },
+
+    { "When": "RoundEnd", "Round": 5, "Every": 5,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000961"},
+        {"Do": "Polymorph", "Spell": "Polymorph Medicine Mode", "SpellID": 1016803567, "Target": "Self"}
+      ],
+      "Notes": "End of every 5th round: Medicine Mode." },
+
+    { "When": "RoundEnd", "Round": 6, "Every": 6,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000962"},
+        {"Do": "Cast", "Spell": "Enfeeble", "SpellID": 539569992, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 1646515495, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Hatch", "SpellID": 775973598, "Target": "AllAllies", "DispelImmune": false}
+      ],
+      "Notes": "End of every 6th round: Enfeeble, Cleanse Ward, and Hatch on all the ghosts." }
+  ]
+}

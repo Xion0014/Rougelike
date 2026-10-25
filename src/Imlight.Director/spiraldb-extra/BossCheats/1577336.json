@@ -1,0 +1,35 @@
+{
+  // Rententen (Rank 22, Death, 14,595 health), Novus. Rententen: a full Blessing when hit, except in the round of his Snowball Barrage; Legendary Spy once his minions fall.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1577336,
+  "Name": "Rententen (Rank 22)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "BossHit", "HasWho": "Self", "HasSpell": "Allow Hit Aura", "HasNot": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002464"},
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 1641304242, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Hurt outside his open round: Blessing to full." },
+
+    { "When": "MinionDefeated", "NoAllies": true, "Once": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002466"},
+        {"Do": "Cast", "Spell": "ASTH Legendary Spy", "SpellID": 1718875293, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "His minions all down: each wizard gets Legendary Spy." },
+
+    { "When": "RoundStart", "Chance": 25, "Cooldown": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002463"},
+        {"Do": "Cast", "Spell": "Allow Hit Aura", "SpellID": 50607636, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Snowball Barrage", "SpellID": 787592334, "Target": "", "DispelImmune": false},
+        {"Do": "Wait", "Rounds": 1},
+        {"Do": "Say", "Line": "CombatMessages_00002465"},
+        {"Do": "Cast", "Spell": "Supernova", "SpellID": 1039118069, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "At random (25%): Allow Hit Aura and Snowball Barrage; the round after, Supernova." }
+  ]
+}

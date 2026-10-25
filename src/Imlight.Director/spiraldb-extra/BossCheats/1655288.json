@@ -1,0 +1,36 @@
+{
+  // Zephon (Rank 999, Storm, 100,000 health), Krokotopia. Zephon: Stormblade for each blade, trap or AoE, Insane Bolt at three Stormblades, Freeze for Ratatoskr's Spin.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1655288,
+  "Name": "Zephon (Rank 999)",
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003358"}
+      ],
+      "Notes": "The start: a line." },
+
+    { "When": "PlayerCasts", "Category": "Blade,Trap,Global",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003364"},
+        {"Do": "Cast", "Spell": "Stormblade", "SpellID": 2131701592, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A blade, trap or damage global: Stormblade on itself." },
+
+    { "When": "RoundStart", "HasWho": "Self", "HasSpell": "Stormblade", "HasCount": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003363"},
+        {"Do": "Cast", "Spell": "Insane Bolt", "SpellID": 547717988, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Three Stormblades on it: Insane Bolt." },
+
+    { "When": "BossHit", "Spells": ["Ratatoskr's Spin"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003528"},
+        {"Do": "Cast", "Spell": "Freeze", "SpellID": 1903011074, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Hit by the Bard's Ratatoskr's Spin: Freeze on itself." }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  // King Avernus (Rank 3, Death, 2,135 health), Liches & Legends Gauntlet. King Avernus: a roll every second round. The relic cheats depend on relics in the room and are not made.
+  // From Wizard404's data on the gauntlets (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove).
+  // Built first from blocks that were there, then from the new universal blocks each Notes names (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1681275,
+  "Name": "King Avernus (Rank 3)",
+  "Cheats": [
+    { "When": "RoundEnd", "Every": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003554"},
+        {"Do": "PickOne", "Count": 4, "Group": 2},
+        {"Do": "Say", "Line": "CombatMessages_00003558"},
+        {"Do": "Cast", "Spell": "Freeze the Heart", "SpellID": 462313666, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00003557"},
+        {"Do": "Cast", "Spell": "Freeze the Heart", "SpellID": 1685169981, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00003556"},
+        {"Do": "Cast", "Spell": "Deathly Toll", "SpellID": 462313667, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00003555"},
+        {"Do": "Cast", "Spell": "Deathly Toll", "SpellID": 1685169980, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "\"Gut Punch of Paralysis. Does it succeed?\" The end of every second round, one of four with its line: a stunning 200 Ice hit, a 200 Ice hit, a fizzle, or a stun on himself. Pick one takes a group size now (2: a line and its spell)." }
+  ]
+}

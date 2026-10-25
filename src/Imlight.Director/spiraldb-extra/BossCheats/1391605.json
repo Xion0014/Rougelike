@@ -1,0 +1,63 @@
+{
+  // Mykedee (Rank 16, Death, 19,825 health), Empyrea. Mykedee: Metalops for a late wizard, Feint after his Natural Attack, Guardian Spirit on Beets, and blade and heal cycles.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  // Checked against its Wizard101 Central page (saved 2026-10-24): Bad Juju goes on the blade's target; only single-target blades on someone else count.
+  "TemplateID": 1391605,
+  "Name": "Mykedee (Rank 16)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001141"},
+        {"Do": "Cast", "Spell": "Metalops", "SpellID": 344072655, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Metalops on them." },
+
+    { "When": "RoundStart", "NoAllies": true, "Once": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001141"},
+        {"Do": "Cast", "Spell": "Metalops", "SpellID": 344072655, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "The last one standing on his side: Metalops on all wizards, once." },
+
+    { "When": "ICast", "Spells": ["Natural Attack"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001186"},
+        {"Do": "Cast", "Spell": "Feint", "SpellID": 842771753, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "After his Natural Attack: Feint on the target." },
+
+    { "When": "RoundStart", "Chance": 25, "AlliesUp": ["1430691"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001187"},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Guardian Spirit", "SpellID": 350341776, "Target": "Self", "DispelImmune": false, "Creature": 1430691}
+      ],
+      "Notes": "Now and then (25%) with Beets: Guardian Spirit on Beets." },
+
+    { "When": "PlayerCasts", "Category": "Blade", "SingleTarget": true, "NotOnCaster": true,
+      "Actions": [
+        {"Do": "InTurn", "Count": 3, "Group": 2},
+        {"Do": "Say", "Line": "CombatMessages_00001138"},
+        {"Do": "Cast", "Spell": "Bad Juju", "SpellID": 1902313520, "Target": "Receiver", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00001139"},
+        {"Do": "Cast", "Spell": "Virulent Plague", "SpellID": 1507921725, "Target": "", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00001140"},
+        {"Do": "Cast", "Spell": "Metalops", "SpellID": 344072655, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A single-target blade on someone else (not a whole-team blade): Bad Juju on that target, then Virulent Plague, then Metalops, in turn (Central)." },
+
+    { "When": "PlayerCasts", "Category": "Heal",
+      "Actions": [
+        {"Do": "InTurn", "Count": 3, "Group": 2},
+        {"Do": "Say", "Line": "CombatMessages_00001135"},
+        {"Do": "Cast", "Spell": "Infection", "SpellID": 153048997, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00001136"},
+        {"Do": "Cast", "Spell": "Infection", "SpellID": 153048997, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00001137"},
+        {"Do": "Cast", "Spell": "Mass Infection", "SpellID": 1211824803, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A heal: Infection, Infection, Mass Infection in turn." }
+  ]
+}

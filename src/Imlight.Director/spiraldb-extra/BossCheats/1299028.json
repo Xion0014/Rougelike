@@ -1,0 +1,42 @@
+{
+  // Evandyr HalfEar (Rank 14, Myth, 18,060 health), Khrysalis. Evandyr HalfEar: three boxers in turn, and again when they fall.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1299028,
+  "Name": "Evandyr HalfEar (Rank 14)",
+  "Cheats": [
+    { "When": "RoundEnd", "Round": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000223"},
+        {"Do": "Minion", "Creature": 1206393}
+      ],
+      "Notes": "End of round 2: Ali LeftJab." },
+
+    { "When": "RoundEnd", "Round": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000224"},
+        {"Do": "Minion", "Creature": 1206394}
+      ],
+      "Notes": "End of round 4: Rocky RightHook." },
+
+    { "When": "RoundEnd", "Round": 6,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000225"},
+        {"Do": "Minion", "Creature": 1206395}
+      ],
+      "Notes": "End of round 6: Tyson UpperCut." },
+
+    { "When": "MinionDefeated", "FromRound": 3,
+      "Actions": [
+        {"Do": "InTurn", "Count": 3, "Group": 2},
+        {"Do": "Say", "Line": "WizardBossFights_00000223"},
+        {"Do": "Minion", "Creature": 1206393},
+        {"Do": "Say", "Line": "WizardBossFights_00000224"},
+        {"Do": "Minion", "Creature": 1206394},
+        {"Do": "Say", "Line": "WizardBossFights_00000225"},
+        {"Do": "Minion", "Creature": 1206395}
+      ],
+      "Notes": "One falls: they come again in the same order." }
+  ]
+}

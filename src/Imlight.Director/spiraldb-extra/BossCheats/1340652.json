@@ -1,0 +1,59 @@
+{
+  // Ludus the Beastmaster (Rank 15, Balance, 10,880 health), Polaris. Ludus the Beastmaster: Mana Burn for a late wizard, Sea Lions, Swap Ward, and he guards his beasts.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1340652,
+  "Name": "Ludus the Beastmaster (Rank 15)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000676"},
+        {"Do": "Cast", "Spell": "Mana Burn", "SpellID": 69336200, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Mana Burn on them." },
+
+    { "When": "RoundStart", "Round": 4, "Every": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000820"},
+        {"Do": "Cast", "Spell": "Attack Sea Lion", "SpellID": 2063106963, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Every 4th round: an Attack Sea Lion." },
+
+    { "When": "PlayerCasts", "Spells": ["Feint"], "OnBoss": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000674"},
+        {"Do": "Cast", "Spell": "Swap Ward", "SpellID": 584566847, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A Feint on him (not Mass Feint): Swap Ward." },
+
+    { "When": "PlayerCasts", "Category": "Trap", "Creature": 1369834, "CreatureWho": "Receiver",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000823"},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 968601166, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "A jinx on a Sea Lion: Cleanse Ward." },
+
+    { "When": "PlayerCasts", "Category": "Weakness", "SingleTarget": true, "Creature": 1369834, "CreatureWho": "Receiver",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000824"},
+        {"Do": "Cast", "Spell": "Cleanse Charm", "SpellID": 449625782, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "A single curse on a Sea Lion: Cleanse Charm." },
+
+    { "When": "AllyHit", "Creature": 1369834,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000821"},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1618526352, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A Sea Lion attacked: Berserk." },
+
+    { "When": "MinionDefeated", "Creature": 1369834,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000822"},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 377388109, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A Sea Lion falls: Berserk." }
+  ]
+}

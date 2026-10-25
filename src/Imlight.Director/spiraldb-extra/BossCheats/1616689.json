@@ -1,0 +1,30 @@
+{
+  // Imogen Nightgrove (Rank 23, Life, 9,100 health), Forbidden Library Gauntlet. Imogen Nightgrove: she reads a wizard and braces against their school.
+  // From Wizard404's data on the gauntlets (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove).
+  // Built first from blocks that were there, then from the new universal blocks each Notes names (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1616689,
+  "Name": "Imogen Nightgrove (Rank 23)",
+  "Cheats": [
+    { "When": "RoundStart", "Round": 1, "Every": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003077"},
+        {"Do": "Cast", "Spell": "Arcane Deduction", "SpellID": 299949802, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "OnlySchool", "School": "Fire", "Count": 1, "Target": "Last"},
+        {"Do": "Cast", "Spell": "Brace", "SpellID": 79889168, "Target": "Self", "DispelImmune": false},
+        {"Do": "OnlySchool", "School": "Ice", "Count": 1, "Target": "Last"},
+        {"Do": "Cast", "Spell": "Brace", "SpellID": 663416167, "Target": "Self", "DispelImmune": false},
+        {"Do": "OnlySchool", "School": "Storm", "Count": 1, "Target": "Last"},
+        {"Do": "Cast", "Spell": "Brace", "SpellID": 769579586, "Target": "Self", "DispelImmune": false},
+        {"Do": "OnlySchool", "School": "Myth", "Count": 1, "Target": "Last"},
+        {"Do": "Cast", "Spell": "Brace", "SpellID": 993876590, "Target": "Self", "DispelImmune": false},
+        {"Do": "OnlySchool", "School": "Life", "Count": 1, "Target": "Last"},
+        {"Do": "Cast", "Spell": "Brace", "SpellID": 2067589358, "Target": "Self", "DispelImmune": false},
+        {"Do": "OnlySchool", "School": "Death", "Count": 1, "Target": "Last"},
+        {"Do": "Cast", "Spell": "Brace", "SpellID": 305523507, "Target": "Self", "DispelImmune": false},
+        {"Do": "OnlySchool", "School": "Balance", "Count": 1, "Target": "Last"},
+        {"Do": "Cast", "Spell": "Brace", "SpellID": 1247354939, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 1 and every 3 rounds: Arcane Deduction on a random wizard, then the Brace of that wizard's school (on herself: a guess, Wizard404 does not say on whom). New block: only for a school." }
+  ]
+}

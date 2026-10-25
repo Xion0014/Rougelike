@@ -1,0 +1,31 @@
+{
+  // Were-Bear Brute (Rank 25, Storm, 14,475 health), Darkmoor. Were-Bear Brute: Pigsie and Bladestorm in a four-round cycle.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1705029,
+  "Name": "Were-Bear Brute (Rank 25)",
+  "Cheats": [
+    { "When": "RoundStart", "Round": 1, "Every": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003883"},
+        {"Do": "Cast", "Spell": "Pigsie", "SpellID": 680193765, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1 of each 4: Pigsie." },
+
+    { "When": "RoundStart", "Round": 4, "Every": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003881"},
+        {"Do": "Cast", "Spell": "Bladestorm", "SpellID": 89076168, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 4 of each 4: Bladestorm." },
+
+    { "When": "BossDefeated",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003885"},
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 1641304242, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Exit Combat", "SpellID": 2127696416, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Its Mysterious Werewolf (this one) defeated: Blessing, then Exit Combat." }
+  ]
+}

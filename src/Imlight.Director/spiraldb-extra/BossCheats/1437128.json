@@ -1,0 +1,53 @@
+{
+  // Admiral Dynt (Rank 17, Shadow, 10,560 health), Empyrea. Admiral Dynt: Grand Phoenix on a late wizard, a random spell each round, Wild Bolt in round 5, blades after his Natural Attacks.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  // Checked against its Wizard101 Central page (saved 2026-10-24): the blade after his Natural Attack goes by that attack's school (fire +40%, shadow +30%).
+  "TemplateID": 1437128,
+  "Name": "Admiral Dynt (Rank 17)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001134"},
+        {"Do": "Cast", "Spell": "Grand Phoenix", "SpellID": 61387751, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Grand Phoenix." },
+
+    { "When": "RoundEnd",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001095"},
+        {"Do": "PickOne", "Count": 8},
+        {"Do": "Cast", "Spell": "Bladestorm", "SpellID": 1532191801, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Legion Shield", "SpellID": 858980741, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Guidance", "SpellID": 634218202, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Rebirth", "SpellID": 1628802348, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Spirit Armor", "SpellID": 585761504, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Sprite Swarm", "SpellID": 247622480, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Stun Block", "SpellID": 1123621328, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Unicorn", "SpellID": 322920374, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "End of each round: one of eight spells on all wizards." },
+
+    { "When": "RoundEnd", "Round": 5,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001227"},
+        {"Do": "Cast", "Spell": "Wild Bolt", "SpellID": 2078052508, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 55434460, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "End of round 5: Wild Bolt, then Cleanse Ward." },
+
+    { "When": "ICast", "Spells": ["Natural Attack"], "School": "Shadow",
+      "Actions": [
+        {"Do": "AddCharm", "Kind": "Blade", "Amount": 30, "School": "Shadow", "Target": "Self"}
+      ],
+      "Notes": "After his shadow Natural Attack: +30% shadow blade (Central)." },
+
+    { "When": "ICast", "Spells": ["Natural Attack"], "School": "Fire",
+      "Actions": [
+        {"Do": "AddCharm", "Kind": "Blade", "Amount": 40, "School": "Fire", "Target": "Self"}
+      ],
+      "Notes": "After his fire Natural Attack: +40% fire blade (Central)." }
+  ]
+}

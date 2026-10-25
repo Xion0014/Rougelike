@@ -1,0 +1,66 @@
+{
+  // Mr. Montgomery (Rank 23, Storm, 14,165 health), Unknown. Mr. Montgomery: storm blades and spells rounds 1-5, Tempest each round, and Sacrifice at the end of round 5.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1619174,
+  "Name": "Mr. Montgomery (Rank 23)",
+  "Cheats": [
+    { "When": "RoundEnd",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003022"},
+        {"Do": "Cast", "Spell": "Tempest", "SpellID": 1569112959, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "End of each round: Tempest (6 pips)." },
+
+    { "When": "RoundStart", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003021"},
+        {"Do": "Cast", "Spell": "Stormblade", "SpellID": 2131701592, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Stormblade." },
+
+    { "When": "RoundStart", "Round": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003021"},
+        {"Do": "Cast", "Spell": "Stormblade", "SpellID": 2131701592, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Stormblade", "SpellID": 2131701592, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 2: Stormblade, Stormblade." },
+
+    { "When": "RoundStart", "Round": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003021"},
+        {"Do": "Cast", "Spell": "Stormblade", "SpellID": 2131701592, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Stormblade", "SpellID": 2131701592, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Darkwind", "SpellID": 391430711, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 3: Stormblade, Stormblade, Darkwind." },
+
+    { "When": "RoundStart", "Round": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003021"},
+        {"Do": "Cast", "Spell": "Stormblade", "SpellID": 2131701592, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Stormblade", "SpellID": 2131701592, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Darkwind", "SpellID": 391430711, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 4: Stormblade, Stormblade, Darkwind." },
+
+    { "When": "RoundStart", "Round": 5,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003021"},
+        {"Do": "Cast", "Spell": "Stormblade", "SpellID": 2131701592, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Stormblade", "SpellID": 2131701592, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Darkwind", "SpellID": 391430711, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Tempest", "SpellID": 1569112959, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 5: Stormblade, Stormblade, Darkwind, Tempest." },
+
+    { "When": "RoundEnd", "Round": 5,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003023"},
+        {"Do": "Cast", "Spell": "Sacrifice", "SpellID": 927448295, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "End of round 5: Sacrifice of all his health." }
+  ]
+}

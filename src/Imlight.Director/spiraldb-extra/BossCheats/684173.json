@@ -1,0 +1,58 @@
+{
+  // Cipactli (Rank 13, Death, 17,200 health), Azteca. Cipactli: tags a wizard who must ward (or charm) in its cycle, or gets Dr. Von's Monster.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 684173,
+  "Name": "Cipactli (Rank 13)",
+  "Cheats": [
+    { "When": "RoundStart", "Round": 3, "Every": 6,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000175"},
+        {"Do": "Cast", "Spell": "Hex", "SpellID": 92296, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Ward Tag", "SpellID": 1740698461, "Target": "Last", "DispelImmune": false},
+        {"Do": "Mark", "Mark": "ward tag", "Target": "Last"}
+      ],
+      "Notes": "Ward cycle, round 3 and every 6: Hex and Ward Tag on a wizard." },
+
+    { "When": "PlayerCasts", "Category": "Ward", "Mark": "ward tag", "MarkWho": "Caster",
+      "Actions": [
+        {"Do": "Unmark", "Mark": "ward tag", "Target": "Caster"},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 944540787, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "The tagged wizard wards: the tag comes off." },
+
+    { "When": "RoundStart", "Round": 5, "Every": 6, "Mark": "ward tag", "MarkWho": "AnyEnemy",
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000176"},
+        {"Do": "Cast", "Spell": "Dr. Von's Monster", "SpellID": 1933130556, "Target": "Marked", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 944540787, "Target": "Marked", "DispelImmune": false},
+        {"Do": "Unmark", "Mark": "ward tag", "Target": "Marked"}
+      ],
+      "Notes": "Two rounds on, a tagged wizard who did not ward: Dr. Von's Monster." },
+
+    { "When": "RoundStart", "Round": 6, "Every": 6,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Balanceblade", "SpellID": 514206205, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Charm Tag", "SpellID": 163410085, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Mark", "Mark": "charm tag", "Target": "Last"}
+      ],
+      "Notes": "Charm cycle, round 6 and every 6: Balanceblade on himself, Charm Tag on a wizard." },
+
+    { "When": "PlayerCasts", "Category": "Charm", "Mark": "charm tag", "MarkWho": "Caster",
+      "Actions": [
+        {"Do": "Unmark", "Mark": "charm tag", "Target": "Caster"},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 944540787, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "The tagged wizard casts a charm: the tag comes off." },
+
+    { "When": "RoundStart", "Round": 8, "Every": 6, "Mark": "charm tag", "MarkWho": "AnyEnemy",
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000176"},
+        {"Do": "Cast", "Spell": "Dr. Von's Monster", "SpellID": 1933130556, "Target": "Marked", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 944540787, "Target": "Marked", "DispelImmune": false},
+        {"Do": "Unmark", "Mark": "charm tag", "Target": "Marked"}
+      ],
+      "Notes": "Two rounds on, a tagged wizard who did not charm: Dr. Von's Monster." }
+  ]
+}

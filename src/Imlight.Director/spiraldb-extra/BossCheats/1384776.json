@@ -1,0 +1,25 @@
+{
+  // Tiki (Rank 15, Life, 6,720 health), Mirage. Tiki: Guiding Light and Spirit Armor for a late wizard, and he takes off DoTs.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1384776,
+  "Name": "Tiki (Rank 15)",
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000976"},
+        {"Do": "Cast", "Spell": "Guiding Light", "SpellID": 1034298003, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Guiding Light", "SpellID": 1034298003, "Target": "AllAllies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Spirit Armor", "SpellID": 495800100, "Target": "StrongestAlly", "DispelImmune": false}
+      ],
+      "Notes": "A late wizard: Guiding Light on himself and Ricky, Spirit Armor on Taffy." },
+
+    { "When": "PlayerCasts", "Category": "DoT",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000977"},
+        {"Do": "RemoveEffects", "Kind": "DoT", "Count": 1, "Target": "Receiver"}
+      ],
+      "Notes": "A DoT on anyone: he takes it off (the exact spell is unknown). New block: RemoveEffects." }
+  ]
+}

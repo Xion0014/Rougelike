@@ -1,0 +1,27 @@
+{
+  // Belloq (Rank 24, Balance, 34,000 health), Hidden Temple Gauntlet. Belloq. Wizard404's cheats for him are a work in progress: only his lines, at guessed moments.
+  // From Wizard404's data on the gauntlets (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove).
+  // Built first from blocks that were there, then from the new universal blocks each Notes names (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1714997,
+  "Name": "Belloq (Rank 24)",
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00004375"}
+      ],
+      "Notes": "\"This is Belloq's game now.\" Round 1 (a guess)." },
+
+    { "When": "PlayerCasts", "Category": "Trap",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00004377"}
+      ],
+      "Notes": "\"Traps? My specialty.\" A wizard's trap (a guess)." },
+
+    { "When": "PlayerCasts", "Category": "Blade",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00004341"}
+      ],
+      "Notes": "\"Building up your attack? I did already!\" A wizard's blade (a guess)." }
+  ]
+}

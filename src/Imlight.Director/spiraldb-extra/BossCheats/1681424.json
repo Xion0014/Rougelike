@@ -1,0 +1,36 @@
+{
+  // Luther Hexdragon (Rank 12, Storm, 4,570 health), Unknown. Luther Hexdragon: a blade spell each round until a Blade Gambit, and a second life if it is still on.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1681424,
+  "Name": "Luther Hexdragon (Rank 12)",
+  "Cheats": [
+    { "When": "RoundStart", "Mark": "cheat off", "MarkWho": "Self", "NotMarked": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003604"},
+        {"Do": "PickOne", "Count": 4},
+        {"Do": "Cast", "Spell": "Catch of the Day", "SpellID": 935660106, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Dragonlance", "SpellID": 1760812531, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Storm Beetle", "SpellID": 1046929538, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Stormblade", "SpellID": 2044671616, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Each round while the cheat is on: one of four spells." },
+
+    { "When": "PlayerCasts", "Spells": ["Blade Gambit", "Gambit"], "AnyVersion": true, "OnBoss": true,
+      "Actions": [
+        {"Do": "Mark", "Mark": "cheat off", "Target": "Self"}
+      ],
+      "Notes": "A Gambit that takes off charms, on him: the cheat is off." },
+
+    { "When": "BossDefeated", "MaxTimes": 1, "Mark": "cheat off", "MarkWho": "Self", "NotMarked": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003603"},
+        {"Do": "SetHealth", "Amount": 4570},
+        {"Do": "PickOne", "Count": 2},
+        {"Do": "Cast", "Spell": "ASTH Scarecrow", "SpellID": 208426859, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "ASTH Skeletal Dragon", "SpellID": 130165213, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Defeated with the cheat on: back to full, and a Scarecrow or Skeletal Dragon card for all." }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  // Rattlebones (Rank 14), Rattlebones Exalted Challenge (housing gauntlet HOUSE_ULTRADUNGEON_Rattlebones_100;
+  // Heroic_WC_Rattlebones_100). From Wizard101 Central's page "Rattlebones (Rank 14)" (Niduus saved it, 2026-10-23).
+  // His health (24,400), shadow pips (3), boost, resist and pierce are the game's own: his template and his amulet
+  // (Rattlebones-Epic-Amulet) give what the page says, so nothing is changed here.
+  // Built first from blocks that were there (Niduus, 2026-10-23: "FIRST to be made up from EXISTING blocks, THEN create
+  // new UNIVERSAL blocks"); the new block used here is "a player joins" (EnemyJoins).
+  // Each cheat's spell can be dispelled as the page says (its school's dispel stops it): DispelImmune false.
+  "TemplateID": 1340311,
+  "Name": "Rattlebones (Rank 14)",
+  // Central: "Shadow Pips 3 max".
+  "ShadowPips": 3,
+  "Cheats": [
+    { "When": "Passive", "Passive": "Minions", "Brings": ["1340312"],
+      "Notes": "He fights with the Fairy Queen (Wizard404: his minion, 2026-10-24). A battle started against him brings her in: the room's own Queen first, else she is summoned. New block: comes with." },
+
+    { "When": "EnemyJoins", "Round": 2,
+      "Casts": [ { "Spell": "Mana Burn - Rattlebones", "DispelImmune": false } ], "Target": "Caster",
+      "Line": "CombatMessages_00000676",
+      "Notes": "\"Tardiness will not be tolerated!\" A wizard who joins after the second round gets Mana Burn (Balance: Unbalance stops it). New block: a player joins." },
+
+    { "When": "PlayerHeals",
+      "Casts": [ { "Spell": "Doom and Gloom - Nosferabbit", "DispelImmune": false } ],
+      "Line": "CombatMessages_00000675",
+      "Notes": "\"Let's dampen the Heals!\" A wizard's heal (a pet's too) gets a -75% Doom and Gloom (Death: Strangle stops it). Existing blocks." },
+
+    { "When": "PlayerCasts", "Spells": ["Feint"], "AnyVersion": true, "School": "Death", "OnBoss": true,
+      "Casts": [ { "Spell": "Swap Negative Wards-Rattlebones", "DispelImmune": false } ], "Target": "Caster",
+      "Line": "CombatMessages_00000674",
+      "Notes": "\"Why don't we trade!\" A Feint put on him: the Ice swap of traps puts the bigger one on that wizard (Melt stops it). Mass Feint and Balance's Feint do not count. Existing blocks." }
+  ]
+}

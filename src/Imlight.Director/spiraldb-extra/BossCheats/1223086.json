@@ -1,0 +1,17 @@
+{
+  // Atlach-Leng (Rank 13, Ice, 18,920 health), Khrysalis. Atlach-Leng: a Crypt Spider every 2nd round.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1223086,
+  "Name": "Atlach-Leng (Rank 13)",
+  "ShadowPips": 1,
+  "Cheats": [
+    { "When": "RoundStart", "Round": 2, "Every": 2, "AlliesMax": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000207"},
+        {"Do": "Minion", "Creature": 1223072}
+      ],
+      "Notes": "Every 2nd round: a Crypt Spider." }
+  ]
+}

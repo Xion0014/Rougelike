@@ -1,0 +1,30 @@
+{
+  // Procyon (Rank 10, Myth, 7,690 health), Celestia. Procyon: Meteor Strike for a heal, by the number of wizards.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 267136,
+  "Name": "Procyon (Rank 10)",
+  "Cheats": [
+    { "When": "PlayerCasts", "Category": "Heal", "PlayersMax": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000050"},
+        {"Do": "Cast", "Spell": "Meteor Strike", "SpellID": 497227428, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A heal, 1 wizard." },
+
+    { "When": "PlayerCasts", "Category": "Heal", "PlayersMin": 2, "PlayersMax": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000050"},
+        {"Do": "Cast", "Spell": "Meteor Strike", "SpellID": 497211044, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A heal, 2 wizards." },
+
+    { "When": "PlayerCasts", "Category": "Heal", "PlayersMin": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000050"},
+        {"Do": "Cast", "Spell": "Meteor Strike", "SpellID": 1632058557, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A heal, 3 or 4 wizards." }
+  ]
+}

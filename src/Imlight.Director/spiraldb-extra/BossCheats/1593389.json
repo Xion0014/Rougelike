@@ -1,0 +1,76 @@
+{
+  // Solomon Crane (Rank 21, Death, 13,860 health), Lemuria. Solomon Crane: Bad Juju for a late wizard, growing Impede and Fortify, Convert Shield and Trap, Detonate.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1593389,
+  "Name": "Solomon Crane (Rank 21)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001845"},
+        {"Do": "Cast", "Spell": "Bad Juju", "SpellID": 1697434154, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Bad Juju on them." },
+
+    { "When": "RoundStart", "Round": 1, "Every": 2, "MaxTimes": 5,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001846"},
+        {"Do": "InTurn", "Count": 5},
+        {"Do": "Cast", "Spell": "Impede", "SpellID": 939262098, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Impede", "SpellID": 939263634, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Impede", "SpellID": 939263122, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Impede", "SpellID": 939264658, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Impede", "SpellID": 939264146, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Every 2 rounds (a guess): the next, stronger Impede." },
+
+    { "When": "RoundStart", "Round": 2, "Every": 2, "MaxTimes": 5,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001847"},
+        {"Do": "InTurn", "Count": 5},
+        {"Do": "Cast", "Spell": "Fortify", "SpellID": 2057435761, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Fortify", "SpellID": 2057429617, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Fortify", "SpellID": 2057431665, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Fortify", "SpellID": 2057425521, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Fortify", "SpellID": 2057427569, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Every 2 rounds: the next, stronger Fortify." },
+
+    { "When": "PlayerCasts", "Category": "Shield", "SingleTarget": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001849"},
+        {"Do": "Cast", "Spell": "Convert Shield", "SpellID": 1856150099, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "A single shield: Convert Shield." },
+
+    { "When": "PlayerCasts", "Category": "Shield", "MultiTarget": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001849"},
+        {"Do": "Cast", "Spell": "Mass Convert Shield", "SpellID": 116485419, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A mass shield." },
+
+    { "When": "PlayerCasts", "Category": "Trap", "SingleTarget": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001848"},
+        {"Do": "Cast", "Spell": "Convert Trap", "SpellID": 690901232, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "A single trap: Convert Trap." },
+
+    { "When": "PlayerCasts", "Category": "Trap", "MultiTarget": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001848"},
+        {"Do": "Cast", "Spell": "Mass Convert Trap", "SpellID": 1082029246, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A mass trap." },
+
+    { "When": "RoundStart", "HasWho": "AnyEnemy", "HasKind": "DoT", "Chance": 50,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001850"},
+        {"Do": "Cast", "Spell": "Detonate", "SpellID": 2033788231, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A wizard with a DoT: Detonate." }
+  ]
+}

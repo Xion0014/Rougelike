@@ -1,0 +1,36 @@
+{
+  // Balaur (Rank 25, Balance, 12,000 health), Darkmoor. Balaur (Balance head): Balance of Power, seven power pips every four rounds.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1705043,
+  "Name": "Balaur (Rank 25)",
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00004092"},
+        {"Do": "Say", "Line": "CombatMessages_00004094"},
+        {"Do": "Cast", "Spell": "Balance of Power", "SpellID": 1660449258, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Balance of Power." },
+
+    { "When": "RoundEnd", "Round": 1, "Every": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00004101"},
+        {"Do": "Pips", "Amount": 7, "Kind": "Power"}
+      ],
+      "Notes": "End of round 1 and every 4: seven power pips." },
+
+    { "When": "PlayerGlobals",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00004099"}
+      ],
+      "Notes": "A wizard's global: noticed." },
+
+    { "When": "RoundStart", "HasWho": "Self", "HasSpell": "Feint",
+      "Actions": [
+        {"Do": "RemoveWards", "Kind": "Good", "Spell": "Feint", "Target": "Self"}
+      ],
+      "Notes": "A Feint on it at the start of a round comes off." }
+  ]
+}

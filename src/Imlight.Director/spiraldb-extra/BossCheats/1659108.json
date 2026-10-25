@@ -1,0 +1,61 @@
+{
+  // Divine Cabalist (Rank 23, Cantrips, 96,000 health), Unknown. Divine Cabalist: tags, and an answer to each kind of hanging effect a wizard puts on.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1659108,
+  "Name": "Divine Cabalist (Rank 23)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003272"},
+        {"Do": "Say", "Line": "CombatMessages_00003279"},
+        {"Do": "Cast", "Spell": "Tags Self", "SpellID": 1845898896, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Tags Ememy", "SpellID": 123449323, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Tags Self on him, Tags Ememy on all wizards." },
+
+    { "When": "PlayerCasts", "Category": "Blade",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003273"},
+        {"Do": "Cast", "Spell": "Enfeeble", "SpellID": 129713464, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "A blade: Enfeeble." },
+
+    { "When": "PlayerCasts", "Category": "Shield",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003273"},
+        {"Do": "Cast", "Spell": "Shatter", "SpellID": 876766972, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "A shield: Shatter." },
+
+    { "When": "PlayerCasts", "Category": "Weakness",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003273"},
+        {"Do": "Cast", "Spell": "Cleanse Charm", "SpellID": 1921661338, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "A weakness: Cleanse Charm." },
+
+    { "When": "PlayerCasts", "Category": "Trap",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003273"},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 1216393490, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "A trap: Cleanse Ward." },
+
+    { "When": "PlayerCasts", "Category": "DoT",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003273"},
+        {"Do": "Cast", "Spell": "Triage", "SpellID": 395934661, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "A DoT: Triage." },
+
+    { "When": "PlayerCasts", "Category": "HoT",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003273"},
+        {"Do": "Cast", "Spell": "Remove HOT", "SpellID": 485815590, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "A HoT: Remove HOT." }
+  ]
+}

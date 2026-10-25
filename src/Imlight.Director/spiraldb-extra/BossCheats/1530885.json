@@ -1,0 +1,62 @@
+{
+  // The Writer (Rank 20, Myth, 62,125 health), Lemuria. The Writer: Blank Pages, Absurdism each round, Confuse and Sacrifice on his minions, Beguile.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1530885,
+  "Name": "The Writer (Rank 20)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001919"},
+        {"Do": "Cast", "Spell": "Confuse", "SpellID": 479055406, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Confuse on them." },
+
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001980"},
+        {"Do": "Cast", "Spell": "Summon Minions", "SpellID": 852369909, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Summon Minions brings the pages." },
+
+    { "When": "RoundEnd",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001927"},
+        {"Do": "Cast", "Spell": "Absurdism", "SpellID": 102696336, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "End of each round: Absurdism." },
+
+    { "When": "RoundStart", "Chance": 20, "HasAllies": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001981"},
+        {"Do": "Cast", "Spell": "Confuse", "SpellID": 314249157, "Target": "Ally", "DispelImmune": false}
+      ],
+      "Notes": "Now and then (20%): Confuse on a minion." },
+
+    { "When": "RoundStart", "Chance": 20, "HasAllies": true, "Cooldown": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001983"},
+        {"Do": "Cast", "Spell": "Sacrifice", "SpellID": 1299451394, "Target": "Ally", "DispelImmune": false},
+        {"Do": "Wait", "Rounds": 2},
+        {"Do": "Cast", "Spell": "Random Minion", "SpellID": 1123572805, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Now and then (20%): Sacrifice a minion; two rounds later a new one." },
+
+    { "When": "RoundStart", "Chance": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001982"},
+        {"Do": "Cast", "Spell": "Beguile", "SpellID": 591686509, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Randomly (15%): Beguile on a wizard." },
+
+    { "When": "BossDefeated",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001985"},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Furnace", "SpellID": 1434578903, "Target": "Self", "DispelImmune": false, "Creature": 1530886},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Furnace", "SpellID": 1434578903, "Target": "Self", "DispelImmune": false, "Creature": 1528134}
+      ],
+      "Notes": "Defeated: his pages cast Furnace on themselves." }
+  ]
+}

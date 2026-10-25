@@ -1,0 +1,50 @@
+{
+  // Fairy Queen (Rank 7), Rattlebones Master Challenge (Heroic_WC_DarkFairy). From Wizard101 Central's pages
+  // "Rattlebones (Rank 7)", which holds her cheats, and "Fairy Queen (Rank 7)" (Niduus saved them, 2026-10-23). Made
+  // from her Rank 14 file (1340312.json). Her health (4,800) and stats are the game's own; the pages give her no shadow
+  // pips. Her Satyr is a spell of her deck at this rank, not a cheat, and the page names no extra fairy once
+  // Rattlebones is defeated. Her fairies come from the game's own Rank 7 summon, Fairy Queen-Lesser Epic Summon, which
+  // picks one of the 7 Rank 7 fairies at random (1214675-1214681).
+  "TemplateID": 1340306,
+  "Name": "Fairy Queen (Rank 7)",
+  "Cheats": [
+    { "When": "Passive", "Passive": "Circle", "Circle": 4,
+      "Notes": "She always stands on the 4th circle of the enemy side (Niduus, 2026-10-24: \"make Fairy Queens assign for 4th spot a passive block\")." },
+    { "When": "BattleStart",
+      "Casts": [ { "Spell": "Fairy Queen-Lesser Epic Summon", "DispelImmune": false }, { "Spell": "Fairy Queen-Lesser Epic Summon", "DispelImmune": false } ],
+      "Line": "Spells_00001415", "Once": true,
+      "Notes": "\"Fairies! Protect your Queen!\" First round: 2 fairies of random schools, fighting from the next round." },
+
+    { "When": "MinionDefeated", "Creature": 1340305, "Once": true, "SetPhase": 2,
+      "Notes": "Rattlebones is defeated: phase 2, in which she takes over his tardiness cheat." },
+
+    { "When": "EnemyJoins", "Round": 1, "Phase": 2,
+      "Casts": [ { "Spell": "Mana Burn", "DispelImmune": false } ], "Target": "Caster",
+      "Line": "CombatMessages_00000683",
+      "Notes": "\"Rattlebones will be avenged!\" Once he is defeated she casts his tardiness cheat: Mana Burn on a wizard who joins late (Unbalance stops it)." },
+
+    { "When": "MinionDefeated", "Creature": 1340305, "NotCreature": true, "Cooldown": 3,
+      "Actions": [
+        { "Do": "Wait", "Rounds": 4 },
+        { "Do": "Say", "Line": "CombatMessages_00000449" },
+        { "Do": "Cast", "Spell": "Fairy Queen-Lesser Epic Summon", "DispelImmune": false },
+        { "Do": "Cast", "Spell": "Fairy Queen-Lesser Epic Summon", "DispelImmune": false }
+      ],
+      "Notes": "A fairy falls: 4 rounds later, 2 more fairies of random schools." },
+
+    { "When": "PlayerCasts", "Category": "Blade", "Chance": 50,
+      "Casts": [ { "Spell": "MOB_Enfeeble - Protected", "DispelImmune": false } ], "Target": "Receiver",
+      "Line": "CombatMessages_00000677",
+      "Notes": "\"You'll never be as charming as Rattlebones!\" A blade (at this rank only blades, not every charm): Enfeeble on whoever got it; a blade on many (Bladestorm) is taken from the one who cast it. The chance is a guess (Central: \"a random chance\")." },
+
+    { "When": "PlayerGlobals", "Chance": 50,
+      "Casts": [ { "Spell": "MOB_Enfeeble - Protected", "DispelImmune": false } ], "Target": "Caster",
+      "Line": "CombatMessages_00000677",
+      "Notes": "The same for a global: Enfeeble on the wizard who cast it." },
+
+    { "When": "PlayerCasts", "Spells": ["Feint"], "AnyVersion": true, "School": "Death", "OnBoss": true,
+      "Casts": [ { "Spell": "Swap Negative Wards-Rattlebones", "DispelImmune": false } ], "Target": "Caster",
+      "Line": "CombatMessages_00000674",
+      "Notes": "\"Why don't we trade?\" A Feint put on her: the traps swap so the bigger one is on that wizard (Melt stops it)." }
+  ]
+}

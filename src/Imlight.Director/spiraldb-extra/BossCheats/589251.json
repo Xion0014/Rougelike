@@ -1,0 +1,22 @@
+{
+  // Kurokage (Rank 12, Myth, 7,960 health), Midnight Sun Pagoda. Kurokage: ward stripping and a Vampire for a wizard who attacks with no shield up.
+  // From Wizard404's data on the gauntlets (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove).
+  // Built first from blocks that were there, then from the new universal blocks each Notes names (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 589251,
+  "Name": "Kurokage (Rank 12)",
+  "Cheats": [
+    { "When": "RoundStart", "Every": 2,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 2007994870, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Every 2 rounds: Cleanse Ward on every wizard. Existing blocks." },
+
+    { "When": "PlayerCasts", "Category": "Damage", "HasWho": "Caster", "HasKind": "Shield", "HasNot": true,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000117"},
+        {"Do": "Cast", "Spell": "Vampire", "SpellID": 1791508106, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "\"You won't last long without shields!\" A wizard's damage spell, with no shield on them: Vampire on that wizard. New block: has a charm or ward (has none)." }
+  ]
+}

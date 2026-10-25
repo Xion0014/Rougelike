@@ -1,0 +1,34 @@
+{
+  // Stone of Echoes (Rank 13, Balance, 7,585 health), Unknown. Stone of Echoes: Weakness DOT until the Chimera he gives is cast on him.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1713462,
+  "Name": "Stone of Echoes (Rank 13)",
+  "Cheats": [
+    { "When": "RoundStart", "Mark": "cheat off", "MarkWho": "Self", "NotMarked": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00004294"},
+        {"Do": "Cast", "Spell": "Weakness DOT", "SpellID": 947400164, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Each round while the cheat is on: Weakness DOT on all wizards." },
+
+    { "When": "BossDefeated", "Mark": "cheat off", "MarkWho": "Self", "NotMarked": true,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 1641304242, "Target": "Self", "DispelImmune": false},
+        {"Do": "SetHealth", "Amount": 7585},
+        {"Do": "Say", "Line": "CombatMessages_00004292"},
+        {"Do": "Cast", "Spell": "give", "SpellID": 396735699, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Defeated while it is on: Blessing back to full, and a Chimera card for all." },
+
+    { "When": "PlayerCasts", "Spells": ["Chimera"], "AnyVersion": true, "OnBoss": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00004293"},
+        {"Do": "Cast", "Spell": "Cleanse Charm", "SpellID": 1392661104, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Triage", "SpellID": 866678457, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Mark", "Mark": "cheat off", "Target": "Self"}
+      ],
+      "Notes": "The Chimera on him: Cleanse Charm and Triage on all wizards, and the cheat is off." }
+  ]
+}

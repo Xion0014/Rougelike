@@ -1,0 +1,26 @@
+{
+  // Admiral Bontau (Rank 16, Death, 9,800 health), Mirage. Admiral Bontau: Midnight's Choking Fog and Vitality Drain, Virulent Plague for a single attack.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1402289,
+  "Name": "Admiral Bontau (Rank 16)",
+  "Cheats": [
+    { "When": "RoundStart", "Round": 1, "Every": 3,
+      "Actions": [
+        {"Do": "InTurn", "Count": 2, "Group": 2},
+        {"Do": "Say", "Line": "CombatMessages_00000898"},
+        {"Do": "Cast", "Spell": "Choking Fog", "SpellID": 2122291479, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00000900"},
+        {"Do": "Cast", "Spell": "Vitality Drain", "SpellID": 1511307640, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Round 1 and every 3rd: Midnight casts Choking Fog, then Vitality Drain the next time." },
+
+    { "When": "PlayerCasts", "Category": "Damage", "OnBoss": true, "SingleTarget": true, "Chance": 40,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000899"},
+        {"Do": "Cast", "Spell": "Virulent Plague", "SpellID": 1507921725, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Sometimes (40%) a single attack on him: Virulent Plague." }
+  ]
+}

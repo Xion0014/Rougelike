@@ -1,0 +1,77 @@
+{
+  // MacDeath (Rank 17, Shadow, 9,600 health), The Accursed Play Gauntlet. MacDeath: an aura that wears down as he is hit, understudies, and answers to feints, DoTs, globals and heals.
+  // From Wizard404's data on the gauntlets (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove).
+  // Built first from blocks that were there, then from the new universal blocks each Notes names (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1446046,
+  "Name": "MacDeath (Rank 17)",
+  "ShadowPips": 3,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001196"},
+        {"Do": "Cast", "Spell": "Feint", "SpellID": 842771753, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Curse", "SpellID": 858080044, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Hex", "SpellID": 1808580584, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "\"Late arrivals will not be seated!\" A late wizard: Feint, Curse and Hex on them." },
+
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001198"},
+        {"Do": "Cast", "Spell": "Fortify", "SpellID": 1057010479, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "\"To be or not to be?\" Round 1: Fortify." },
+
+    { "When": "FromRound", "Round": 2, "NoAllies": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001197"},
+        {"Do": "Cast", "Spell": "Summon Minions", "SpellID": 1044937683, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "From round 2, while no understudy stands: Summon Minions brings one in (that it comes again after one falls is a guess)." },
+
+    { "When": "PlayerCasts", "Category": "DoT", "OnBoss": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001200"},
+        {"Do": "Cast", "Spell": "Shift", "SpellID": 843033756, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A damage over time on him: Shift on that wizard." },
+
+    { "When": "PlayerCasts", "Category": "Global,Heal",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001202"},
+        {"Do": "Cast", "Spell": "Doom and Gloom", "SpellID": 1688646018, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "\"Out, out, brief candle!\" A global or heal: Doom and Gloom." },
+
+    { "When": "PlayerCasts", "Spells": ["Feint"], "AnyVersion": true, "OnBoss": true, "HasAllies": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001203"},
+        {"Do": "CastBy", "By": "Ally", "Spell": "Steal Ward", "SpellID": 1066058499, "Target": "Summoner", "DispelImmune": false}
+      ],
+      "Notes": "A Feint on him while an understudy stands: the understudy steals it off him. New block: an ally casts." },
+
+    { "When": "RoundStart", "Round": 3, "Every": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001201"},
+        {"Do": "Cast", "Spell": "Beguile", "SpellID": 591686509, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Beguile on a random wizard every 3 rounds (Wizard404 does not know how often: a guess)." },
+
+    { "When": "BossHit", "MaxTimes": 9,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001199"},
+        {"Do": "InTurn", "Count": 9},
+        {"Do": "Cast", "Spell": "Fortify", "SpellID": 1059107632, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Fortify", "SpellID": 1059369776, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Fortify", "SpellID": 1058583344, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Fortify", "SpellID": 1058845488, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Fortify", "SpellID": 1058059056, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Fortify", "SpellID": 1058321200, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Fortify", "SpellID": 1057534768, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Fortify", "SpellID": 1057796912, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Fortify", "SpellID": 1057010480, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "\"Et tu, Wizard?\" Each hit: the next weaker Fortify (10% less resist each time), 9 in all. New block: in turn." }
+  ]
+}

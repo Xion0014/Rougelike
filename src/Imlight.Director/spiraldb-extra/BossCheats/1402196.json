@@ -1,0 +1,52 @@
+{
+  // Shadowbones (Rank 16, Shadow, 12,800 health), Mirage. Shadowbones: Mana Burn for a late wizard, Doom and Gloom for a heal, Swap Ward for a Feint, Magnify for fairies, Dark Convert once.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1402196,
+  "Name": "Shadowbones (Rank 16)",
+  "ShadowPips": 3,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000676"},
+        {"Do": "Cast", "Spell": "Mana Burn", "SpellID": 1527838769, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 2: Mana Burn on them." },
+
+    { "When": "PlayerCasts", "Category": "Heal",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000675"},
+        {"Do": "Cast", "Spell": "Doom and Gloom", "SpellID": 1688646018, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A heal: Doom and Gloom." },
+
+    { "When": "PlayerCasts", "Spells": ["Feint"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000674"},
+        {"Do": "Cast", "Spell": "Swap Ward", "SpellID": 1479315353, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A Feint (not Mass Feint): Swap Ward." },
+
+    { "When": "PlayerCasts", "Spells": ["Dark Sprite", "Fairy", "Pixie", "Sprite"], "AnyVersion": true,
+      "Actions": [
+        {"Do": "Say", "Line": "Spells_00001565"},
+        {"Do": "Cast", "Spell": "Magnify", "SpellID": 927591397, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A fairy spell: Magnify." },
+
+    { "When": "ICast", "Spells": ["Dark Sprite", "Fairy", "Pixie", "Sprite"], "AnyVersion": true,
+      "Actions": [
+        {"Do": "Say", "Line": "Spells_00001565"},
+        {"Do": "Cast", "Spell": "Magnify", "SpellID": 927591397, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "His own fairy spell." },
+
+    { "When": "RoundStart", "Chance": 20, "MaxTimes": 1, "FromRound": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "Spells_00001564"},
+        {"Do": "Cast", "Spell": "Dark Convert", "SpellID": 1099223878, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Once in the battle, at random (20% a round): Dark Convert." }
+  ]
+}

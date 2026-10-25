@@ -1,0 +1,45 @@
+{
+  // Chronomaster Devlin (Rank 15, Balance, 9,800 health), Mirage. Chronomaster Devlin: Mana Burn for a late wizard, two Power Plays, and Weakness and Black Mantle for a trap.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1384900,
+  "Name": "Chronomaster Devlin (Rank 15)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000991"},
+        {"Do": "Cast", "Spell": "Mana Burn", "SpellID": 517114192, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Mana Burn on them." },
+
+    { "When": "RoundStart", "Round": 1, "Every": 10,
+      "Actions": [
+        {"Do": "Say", "Line": "Spells_00001535"},
+        {"Do": "Cast", "Spell": "Power Play", "SpellID": 1533414847, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1 and every 10: Power Play." },
+
+    { "When": "RoundEnd", "Round": 5, "Every": 10,
+      "Actions": [
+        {"Do": "Say", "Line": "Spells_00001558"},
+        {"Do": "Cast", "Spell": "Power Play", "SpellID": 2062651432, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "End of round 5 and every 10: the other Power Play." },
+
+    { "When": "PlayerGlobals", "ToRound": 5,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Power Play", "SpellID": 1533414847, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Replaced in rounds 1-5 of each 10: back." },
+
+    { "When": "PlayerCasts", "Category": "Trap",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000992"},
+        {"Do": "Cast", "Spell": "Weakness", "SpellID": 1192072777, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Black Mantle", "SpellID": 574206760, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A trap on him or his minion." }
+  ]
+}

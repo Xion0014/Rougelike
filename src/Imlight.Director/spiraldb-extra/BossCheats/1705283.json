@@ -1,0 +1,32 @@
+{
+  // Were-Bear Brute (Rank 25, Storm, 13,745 health), Unknown. Were-Bear Brute: Pigsie and Bladestorm every four rounds, and it leaves when defeated.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1705283,
+  "Name": "Were-Bear Brute (Rank 25)",
+  "Cheats": [
+    { "When": "RoundStart", "Round": 1, "Every": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003883"},
+        {"Do": "Cast", "Spell": "Pigsie", "SpellID": 680193765, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 1 of each four: Pigsie." },
+
+    { "When": "RoundStart", "Round": 4, "Every": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003881"},
+        {"Do": "Cast", "Spell": "Bladestorm", "SpellID": 89076168, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 4 of each four: Bladestorm." },
+
+    { "When": "BossDefeated",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003885"},
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 1641304242, "Target": "Self", "DispelImmune": false},
+        {"Do": "SetHealth", "Amount": 13745},
+        {"Do": "Cast", "Spell": "Exit Combat", "SpellID": 2022486178, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Defeated: Blessing, then Exit Combat (it leaves)." }
+  ]
+}

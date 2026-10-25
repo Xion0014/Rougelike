@@ -1,0 +1,38 @@
+{
+  // Vizier Rafaj (Rank 15, Balance, 8,400 health), Mirage. Vizier Rafaj: Weakness each round, Mana Burn for a late wizard, Hex for a trap, Balanceblade for blades and globals.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1402258,
+  "Name": "Vizier Rafaj (Rank 15)",
+  "ShadowPips": 1,
+  "Cheats": [
+    { "When": "RoundEnd",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000964"},
+        {"Do": "Cast", "Spell": "Weakness", "SpellID": 1911351883, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "End of each round: Weakness on a wizard." },
+
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "you're late to the party"},
+        {"Do": "Cast", "Spell": "Mana Burn", "SpellID": 69336200, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Mana Burn on them." },
+
+    { "When": "PlayerCasts", "Category": "Trap",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000965"},
+        {"Do": "Cast", "Spell": "Hex", "SpellID": 1808580584, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A trap: Hex on the wizard." },
+
+    { "When": "PlayerCasts", "Category": "Blade,Global",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000965"},
+        {"Do": "Cast", "Spell": "Balanceblade", "SpellID": 1538644858, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A blade or global: Balanceblade." }
+  ]
+}

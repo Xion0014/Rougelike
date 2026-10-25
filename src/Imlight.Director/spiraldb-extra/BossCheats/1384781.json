@@ -1,0 +1,59 @@
+{
+  // Trengil Hoarder (Rank 15, Ice, 7,000 health), Mirage. Trengil Hoarder: Steal Pips for a late wizard, steals at the end of rounds with charms or wards.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1384781,
+  "Name": "Trengil Hoarder (Rank 15)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001018"},
+        {"Do": "Cast", "Spell": "Steal Pips", "SpellID": 724062293, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Steal Pips on them." },
+
+    { "When": "PlayerCasts", "Category": "Charm",
+      "Actions": [
+        {"Do": "Mark", "Mark": "charm cast", "Target": "Self"}
+      ],
+      "Notes": "A charm cast this round." },
+
+    { "When": "PlayerCasts", "Category": "Ward",
+      "Actions": [
+        {"Do": "Mark", "Mark": "ward cast", "Target": "Self"}
+      ],
+      "Notes": "A ward cast this round." },
+
+    { "When": "RoundEnd", "Mark": "charm cast", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001017"},
+        {"Do": "Cast", "Spell": "Steal Charm", "SpellID": 615472753, "Target": "", "DispelImmune": false},
+        {"Do": "Unmark", "Mark": "charm cast", "Target": "Self"}
+      ],
+      "Notes": "End of a round a charm was cast: Steal Charm." },
+
+    { "When": "RoundEnd", "Mark": "ward cast", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000959"},
+        {"Do": "Cast", "Spell": "Steal Ward", "SpellID": 1679636309, "Target": "", "DispelImmune": false},
+        {"Do": "Unmark", "Mark": "ward cast", "Target": "Self"}
+      ],
+      "Notes": "A ward: Steal Ward." },
+
+    { "When": "ICast", "Spells": ["Bladestorm"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001015"},
+        {"Do": "Cast", "Spell": "Steal Charm", "SpellID": 2094111987, "Target": "Ally", "DispelImmune": false}
+      ],
+      "Notes": "His Bladestorm: Steal Charm on his minion." },
+
+    { "When": "ICast", "Spells": ["Legion Shield"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001015"},
+        {"Do": "Cast", "Spell": "Steal Ward", "SpellID": 1994309953, "Target": "Ally", "DispelImmune": false}
+      ],
+      "Notes": "His Legion Shield: Steal Ward on his minion." }
+  ]
+}

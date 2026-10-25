@@ -1,0 +1,60 @@
+{
+  // Nordri (Rank 10, Death, 4,840 health), Unknown. Nordri: Tower Shields, a tag on the boss that may be hit, and Meteor Strike once alone.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 346699,
+  "Name": "Nordri (Rank 10)",
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Tower Shield", "SpellID": 1005934076, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Tower Shield (in the game his turn)." },
+
+    { "When": "RoundStart", "Round": 2,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Tower Shield", "SpellID": 2013941342, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 2: a second Tower Shield." },
+
+    { "When": "PlayerDamages", "OnBoss": true,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Tower Shield", "SpellID": 2013941342, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A damage spell on him: the Tower Shield again." },
+
+    { "When": "RoundStart", "Round": 1, "Every": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000082"},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 2007994870, "Target": "AllAllies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 2007994870, "Target": "Self", "DispelImmune": false},
+        {"Do": "PickOne", "Count": 2},
+        {"Do": "Cast", "Spell": "Tag! I'm It!", "SpellID": 343900124, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Tag! I'm It!", "SpellID": 343900124, "Target": "Ally", "DispelImmune": false}
+      ],
+      "Notes": "Round 1 and every 3rd: the old tag off, and a new one on a boss of his side." },
+
+    { "When": "AllyHit", "Category": "Damage", "SingleTarget": true, "HasWho": "Self", "HasSpell": "Tag! I'm It!",
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000079"},
+        {"Do": "Cast", "Spell": "Wraith", "SpellID": 1545838667, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Tagged, and a single-target hit lands on another of its side: Wraith." },
+
+    { "When": "MinionDefeated", "AlliesMax": 0, "Once": true,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000089"},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 2007994870, "Target": "Self", "DispelImmune": false},
+        {"Do": "Mark", "Mark": "alone", "Target": "Self"}
+      ],
+      "Notes": "No minions left: Cleanse Ward on his shields." },
+
+    { "When": "RoundStart", "Round": 3, "Every": 3, "Mark": "alone", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000090"},
+        {"Do": "Cast", "Spell": "Meteor Strike", "SpellID": 497227428, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Every 3 rounds once alone: Meteor Strike." }
+  ]
+}

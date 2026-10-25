@@ -1,0 +1,89 @@
+{
+  // Titan's Trident (Rank 18, Shadow, 1,000,000 health), Empyrea. Titan's Trident (Storm Titan): Equalize, refraction minions, Trident Slam, Laser Eyes, and Mellori's chain at each 20,000 damage.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1593393,
+  "Name": "Titan's Trident (Rank 18)",
+  "ShadowPips": 5,
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Storm Titan Intro", "SpellID": 471975241, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Equalize", "SpellID": 1517924936, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: the intro and Equalize." },
+
+    { "When": "PlayerGlobals",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Equalize", "SpellID": 1517924936, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Its global replaced: Equalize again." },
+
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Titan's Grab", "SpellID": 573843146, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Summon Minions", "SpellID": 899260576, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A late wizard: Titan's Grab and a refraction minion." },
+
+    { "When": "RoundStart", "AlliesUp": ["1605759"],
+      "Actions": [
+        {"Do": "CastBy", "By": "Creature", "Spell": "Sabotage", "SpellID": 348304457, "Target": "Enemy", "DispelImmune": false, "Creature": 1605759}
+      ],
+      "Notes": "Deadly Ice Refraction: Sabotage or Legion Shield (here Sabotage)." },
+
+    { "When": "RoundStart", "AlliesUp": ["1605760"],
+      "Actions": [
+        {"Do": "CastBy", "By": "Creature", "Spell": "Scald", "SpellID": 73862227, "Target": "", "DispelImmune": false, "Creature": 1605760}
+      ],
+      "Notes": "Mythic Fire Refraction: Scald." },
+
+    { "When": "RoundStart", "AlliesUp": ["1605758"],
+      "Actions": [
+        {"Do": "CastBy", "By": "Creature", "Spell": "Storm Lord", "SpellID": 82896576, "Target": "", "DispelImmune": false, "Creature": 1605758}
+      ],
+      "Notes": "Stormy Life Refraction: Storm Lord." },
+
+    { "When": "RoundStart", "Chance": 20,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Trident Slam", "SpellID": 734489678, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Now and then (20%): Trident Slam, all charms and wards off itself." },
+
+    { "When": "RoundStart", "Chance": 15, "Cooldown": 2,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Laugh", "SpellID": 41991177, "Target": "", "DispelImmune": false},
+        {"Do": "Wait", "Rounds": 1},
+        {"Do": "Cast", "Spell": "Laser Eyes", "SpellID": 1791409161, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Now and then (15%): the Titan laughs; the next round, Laser Eyes." },
+
+    { "When": "HealthBelow", "Health": 980000, "Phase": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001285"},
+        {"Do": "Say", "Line": "CombatMessages_00001288"},
+        {"Do": "Cast", "Spell": "HP Threshold 1", "SpellID": 1025728518, "Target": "Self", "DispelImmune": false},
+        {"Do": "HealthTo", "Amount": 100},
+        {"Do": "SetPhase", "Phase": 2}
+      ],
+      "Notes": "Phase 1: 20,000 damage taken, back to full health and the next phase." },
+
+    { "When": "HealthBelow", "Health": 980000, "Phase": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001286"},
+        {"Do": "Say", "Line": "CombatMessages_00001287"},
+        {"Do": "Cast", "Spell": "HP Threshold 2", "SpellID": 1025728902, "Target": "Self", "DispelImmune": false},
+        {"Do": "HealthTo", "Amount": 100},
+        {"Do": "SetPhase", "Phase": 3}
+      ],
+      "Notes": "Phase 2: 20,000 damage taken, back to full health and the next phase." },
+
+    { "When": "HealthBelow", "Health": 980000, "Phase": 3,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Storm Titan Kill", "SpellID": 249939620, "Target": "Self", "DispelImmune": false},
+        {"Do": "Defeat"}
+      ],
+      "Notes": "Phase 3: 20,000 damage taken again, it is defeated." }
+  ]
+}

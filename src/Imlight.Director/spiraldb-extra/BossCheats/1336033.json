@@ -1,0 +1,173 @@
+{
+  // Yevgeny NightCreeper (Rank 15, Moon, 22,400 health), Dungeons. Yevgeny NightCreeper: answers to blades, shields and curses, a 15-round ice, myth and death cycle, and shifts.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1336033,
+  "Name": "Yevgeny NightCreeper (Rank 15)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "PlayerCasts", "Category": "Blade",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000551"},
+        {"Do": "Cast", "Spell": "Freeze", "SpellID": 1887199642, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A blade: Freeze on the caster." },
+
+    { "When": "PlayerCasts", "Category": "Shield",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000550"},
+        {"Do": "Cast", "Spell": "Pierce", "SpellID": 1911022320, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "A shield: Pierce on the one with it." },
+
+    { "When": "PlayerCasts", "Category": "Weakness", "OnBoss": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000552"},
+        {"Do": "Cast", "Spell": "Bad Juju", "SpellID": 1902313520, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A curse on him: Bad Juju on the caster." },
+
+    { "When": "RoundStart", "Chance": 30, "HasWho": "AnyEnemy", "HasKind": "Shield",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000549"},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Steal Ward", "SpellID": 991342922, "Target": "Matched", "DispelImmune": false, "Creature": 1336032}
+      ],
+      "Notes": "Now and then (30%), a wizard with a shield: an Anguished Wraith steals it." },
+
+    { "When": "RoundStart", "Round": 1, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000555"},
+        {"Do": "Cast", "Spell": "Frozen Armor", "SpellID": 178636823, "Target": "Ally", "DispelImmune": false}
+      ],
+      "Notes": "Ice cycle (rounds 1-4 of each 15): Frozen Armor on an ally." },
+
+    { "When": "RoundStart", "Round": 2, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000555"},
+        {"Do": "Cast", "Spell": "Frozen Armor", "SpellID": 178636823, "Target": "Ally", "DispelImmune": false}
+      ],
+      "Notes": "Ice cycle (rounds 1-4 of each 15): Frozen Armor on an ally." },
+
+    { "When": "RoundStart", "Round": 3, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000555"},
+        {"Do": "Cast", "Spell": "Frozen Armor", "SpellID": 178636823, "Target": "Ally", "DispelImmune": false}
+      ],
+      "Notes": "Ice cycle (rounds 1-4 of each 15): Frozen Armor on an ally." },
+
+    { "When": "RoundStart", "Round": 4, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000555"},
+        {"Do": "Cast", "Spell": "Frozen Armor", "SpellID": 178636823, "Target": "Ally", "DispelImmune": false}
+      ],
+      "Notes": "Ice cycle (rounds 1-4 of each 15): Frozen Armor on an ally." },
+
+    { "When": "RoundStart", "Round": 5, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000557"},
+        {"Do": "Cast", "Spell": "Katabatic Wind", "SpellID": 1113430490, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Mass Ice Trap", "SpellID": 295180025, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Iceblade", "SpellID": 1178043870, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Dark Weaver", "SpellID": 936713678, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Round 5." },
+
+    { "When": "RoundStart", "Round": 6, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000553"},
+        {"Do": "Cast", "Spell": "Buff Minion", "SpellID": 691742325, "Target": "Ally", "DispelImmune": false}
+      ],
+      "Notes": "Myth cycle: Buff Minion on an ally." },
+
+    { "When": "RoundStart", "Round": 7, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000553"},
+        {"Do": "Cast", "Spell": "Buff Minion", "SpellID": 691742325, "Target": "Ally", "DispelImmune": false}
+      ],
+      "Notes": "Myth cycle: Buff Minion on an ally." },
+
+    { "When": "RoundStart", "Round": 8, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000553"},
+        {"Do": "Cast", "Spell": "Buff Minion", "SpellID": 691742325, "Target": "Ally", "DispelImmune": false}
+      ],
+      "Notes": "Myth cycle: Buff Minion on an ally." },
+
+    { "When": "RoundStart", "Round": 9, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000553"},
+        {"Do": "Cast", "Spell": "Buff Minion", "SpellID": 691742325, "Target": "Ally", "DispelImmune": false}
+      ],
+      "Notes": "Myth cycle: Buff Minion on an ally." },
+
+    { "When": "RoundStart", "Round": 10, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000556"},
+        {"Do": "Cast", "Spell": "Saga of Heroes", "SpellID": 1759583392, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Mass Myth Trap", "SpellID": 1815254796, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Mythblade", "SpellID": 956929563, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Cursed Colossus", "SpellID": 1201165292, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 10." },
+
+    { "When": "RoundStart", "Round": 11, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000554"},
+        {"Do": "Cast", "Spell": "Feint", "SpellID": 842771753, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Death cycle: Feint on a wizard." },
+
+    { "When": "RoundStart", "Round": 12, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000554"},
+        {"Do": "Cast", "Spell": "Feint", "SpellID": 842771753, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Death cycle: Feint on a wizard." },
+
+    { "When": "RoundStart", "Round": 13, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000554"},
+        {"Do": "Cast", "Spell": "Feint", "SpellID": 842771753, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Death cycle: Feint on a wizard." },
+
+    { "When": "RoundStart", "Round": 14, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000554"},
+        {"Do": "Cast", "Spell": "Feint", "SpellID": 842771753, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Death cycle: Feint on a wizard." },
+
+    { "When": "RoundStart", "Round": 15, "Every": 15,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000558"},
+        {"Do": "Cast", "Spell": "Doom and Gloom", "SpellID": 1833900557, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Mass Death Trap", "SpellID": 882727909, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Deathblade", "SpellID": 556969572, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "From Beyond", "SpellID": 1072685801, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 15." },
+
+    { "When": "RoundEnd", "Round": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000559"},
+        {"Do": "Cast", "Spell": "Shift Chaney", "SpellID": 1400165231, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "End of round 3: Shift Chaney." },
+
+    { "When": "RoundEnd", "Round": 6,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000560"},
+        {"Do": "Cast", "Spell": "Shift Akhtang", "SpellID": 524943665, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "End of round 6: Shift Akhtang." },
+
+    { "When": "RoundEnd", "Round": 9,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000561"},
+        {"Do": "Cast", "Spell": "Shift Blackwater", "SpellID": 336616421, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "End of round 9: Shift Blackwater." }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  // Crash the Bandit Coot (Rank 23, Fire, 15,000 health), Unknown. Crash the Bandit Coot (second): Empower each round, Crash Attacks with a second spell, and a second life.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1628618,
+  "Name": "Crash the Bandit Coot (Rank 23)",
+  "Cheats": [
+    { "When": "RoundEnd",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002982"},
+        {"Do": "Cast", "Spell": "Empower", "SpellID": 1944537118, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "End of each round: Empower." },
+
+    { "When": "RoundEnd", "Round": 2, "Every": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002981"},
+        {"Do": "PickOne", "Count": 7, "Group": 2},
+        {"Do": "Cast", "Spell": "Sun Serpent", "SpellID": 141079815, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Mob Backfire", "SpellID": 1062429372, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Lord of Winter", "SpellID": 1695700605, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Mob Glacial Fortress", "SpellID": 293309238, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Storm Owl", "SpellID": 990349312, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Disarm", "SpellID": 1498374989, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Celestial Calendar", "SpellID": 119326103, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 1888031094, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Spinysaur", "SpellID": 474579317, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Mob Oni's Naturalism", "SpellID": 1328372945, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Avenging Fossil", "SpellID": 250531677, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Mob Putrefaction", "SpellID": 1767763196, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Sabertooth", "SpellID": 1829426808, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Empower", "SpellID": 1944537118, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "End of every second round (two Empowers): a Crash Attack of one school and its second spell." },
+
+    { "When": "BossDefeated", "MaxTimes": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003033"},
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 1641304242, "Target": "Self", "DispelImmune": false},
+        {"Do": "SetHealth", "Amount": 15000},
+        {"Do": "Cast", "Spell": "Equalize", "SpellID": 484472858, "Target": "", "DispelImmune": false},
+        {"Do": "Mark", "Mark": "lives again", "Target": "Self"}
+      ],
+      "Notes": "Defeated the first time: back to full, then Equalize." },
+
+    { "When": "PlayerGlobals", "Mark": "lives again", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Equalize", "SpellID": 484472858, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "His Equalize replaced: cast again." }
+  ]
+}

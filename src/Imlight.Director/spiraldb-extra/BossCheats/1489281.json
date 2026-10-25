@@ -1,0 +1,106 @@
+{
+  // Satharilith (Rank 18, Shadow, 42,065 health), Unknown. Satharilith: Mana Burn for a late wizard, his Guards' Intercept in turn, Cleanse Ward for a Feint, and Aspects for fallen Guards.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1489281,
+  "Name": "Satharilith (Rank 18)",
+  "ShadowPips": 3,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001419"},
+        {"Do": "Cast", "Spell": "Mana Burn", "SpellID": 1052298331, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Mana Burn on them." },
+
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "CastBy", "By": "Creature", "Spell": "Intercept - 100", "SpellID": 751334567, "Target": "Owner", "DispelImmune": false, "Creature": 1489961}
+      ],
+      "Notes": "Round 1: the first Guard's Intercept on him." },
+
+    { "When": "MinionDefeated", "Creature": 1489961,
+      "Actions": [
+        {"Do": "CastBy", "By": "Creature", "Spell": "Intercept - 100", "SpellID": 751334567, "Target": "Owner", "DispelImmune": false, "Creature": 1489297}
+      ],
+      "Notes": "The first Guard falls: the second's Intercept." },
+
+    { "When": "MinionDefeated", "Creature": 1489297,
+      "Actions": [
+        {"Do": "CastBy", "By": "Creature", "Spell": "Intercept - 100", "SpellID": 751334567, "Target": "Owner", "DispelImmune": false, "Creature": 1489960}
+      ],
+      "Notes": "The second falls: the third's." },
+
+    { "When": "PlayerCasts", "Spells": ["Feint"], "AnyVersion": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001420"},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 1924801312, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 1924801312, "Target": "AllAllies", "DispelImmune": false}
+      ],
+      "Notes": "A Feint: Cleanse Ward on his side." },
+
+    { "When": "MinionDefeated",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001421"},
+        {"Do": "Cast", "Spell": "Natural Attack", "SpellID": 1532424070, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "OnlySchool", "School": "Fire", "Count": 1},
+        {"Do": "Cast", "Spell": "Summon - Fire Aspect", "SpellID": 758874438, "Target": "", "DispelImmune": false},
+        {"Do": "OnlySchool", "School": "Ice", "Count": 1},
+        {"Do": "Cast", "Spell": "Summon - Ice Aspect", "SpellID": 1753292614, "Target": "", "DispelImmune": false},
+        {"Do": "OnlySchool", "School": "Storm", "Count": 1},
+        {"Do": "Cast", "Spell": "Summon - Storm Aspect", "SpellID": 1697322161, "Target": "", "DispelImmune": false},
+        {"Do": "OnlySchool", "School": "Myth", "Count": 1},
+        {"Do": "Cast", "Spell": "Summon - Myth Aspect", "SpellID": 537892678, "Target": "", "DispelImmune": false},
+        {"Do": "OnlySchool", "School": "Life", "Count": 1},
+        {"Do": "Cast", "Spell": "Summon - Life Aspect", "SpellID": 765171014, "Target": "", "DispelImmune": false},
+        {"Do": "OnlySchool", "School": "Death", "Count": 1},
+        {"Do": "Cast", "Spell": "Summon - Death Aspect", "SpellID": 1017152847, "Target": "", "DispelImmune": false},
+        {"Do": "OnlySchool", "School": "Balance", "Count": 1},
+        {"Do": "Cast", "Spell": "Summon - Balance Aspect", "SpellID": 372659517, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A Guard falls: Natural Attack on a wizard, then an Aspect of that wizard's school." },
+
+    { "When": "BattleStart", "AlliesDown": ["1489961"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001422"},
+        {"Do": "PickOne", "Count": 7},
+        {"Do": "Cast", "Spell": "Summon - Fire Aspect", "SpellID": 758874438, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Summon - Ice Aspect", "SpellID": 1753292614, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Summon - Storm Aspect", "SpellID": 1697322161, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Summon - Myth Aspect", "SpellID": 537892678, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Summon - Life Aspect", "SpellID": 765171014, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Summon - Death Aspect", "SpellID": 1017152847, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Summon - Balance Aspect", "SpellID": 372659517, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Guard 1 missing: a random Aspect." },
+
+    { "When": "BattleStart", "AlliesDown": ["1489297"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001422"},
+        {"Do": "PickOne", "Count": 7},
+        {"Do": "Cast", "Spell": "Summon - Fire Aspect", "SpellID": 758874438, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Summon - Ice Aspect", "SpellID": 1753292614, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Summon - Storm Aspect", "SpellID": 1697322161, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Summon - Myth Aspect", "SpellID": 537892678, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Summon - Life Aspect", "SpellID": 765171014, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Summon - Death Aspect", "SpellID": 1017152847, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Summon - Balance Aspect", "SpellID": 372659517, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Guard 2 missing: a random Aspect." },
+
+    { "When": "BattleStart", "AlliesDown": ["1489960"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001422"},
+        {"Do": "PickOne", "Count": 7},
+        {"Do": "Cast", "Spell": "Summon - Fire Aspect", "SpellID": 758874438, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Summon - Ice Aspect", "SpellID": 1753292614, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Summon - Storm Aspect", "SpellID": 1697322161, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Summon - Myth Aspect", "SpellID": 537892678, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Summon - Life Aspect", "SpellID": 765171014, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Summon - Death Aspect", "SpellID": 1017152847, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Summon - Balance Aspect", "SpellID": 372659517, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Guard 3 missing: a random Aspect." }
+  ]
+}

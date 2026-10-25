@@ -1,0 +1,37 @@
+{
+  // Cyphurr (Rank 16, Ice, 11,760 health), Mirage. Cyphurr: his pet's Precision, Steal Charm, Stun and Icewind.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1402279,
+  "Name": "Cyphurr (Rank 16)",
+  "Cheats": [
+    { "When": "RoundStart", "Round": 1, "Every": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000918"},
+        {"Do": "Cast", "Spell": "Precision", "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 1 and every 4: Precision." },
+
+    { "When": "PlayerCasts", "Category": "Charm",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000476"},
+        {"Do": "Cast", "Spell": "Steal Charm", "SpellID": 975200773, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "A charm: Steal Charm." },
+
+    { "When": "RoundStart", "Round": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000916"},
+        {"Do": "Cast", "Spell": "Stun", "SpellID": 2514611, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Round 3: Stun on a wizard." },
+
+    { "When": "RoundStart", "Round": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000927"},
+        {"Do": "Cast", "Spell": "Icewind", "SpellID": 1131989934, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 2: Icewind." }
+  ]
+}

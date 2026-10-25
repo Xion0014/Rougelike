@@ -1,0 +1,52 @@
+{
+  // Coatl (Rank 22, Balance, 5,450 health), Unknown. Coatl: too many hanging effects of a kind and it takes them all off.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1607042,
+  "Name": "Coatl (Rank 22)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "PlayerCasts", "Category": "Blade", "HasWho": "Receiver", "HasKind": "Blade", "HasCount": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002845"},
+        {"Do": "Cast", "Spell": "Enfeeble", "SpellID": 129713464, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "A fourth blade on a wizard: Enfeeble." },
+
+    { "When": "PlayerCasts", "Category": "Shield", "HasWho": "Receiver", "HasKind": "Shield", "HasCount": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002845"},
+        {"Do": "Cast", "Spell": "Shatter", "SpellID": 876766972, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "A fourth shield: Shatter." },
+
+    { "When": "PlayerCasts", "Category": "Trap", "HasWho": "Receiver", "HasKind": "Trap", "HasCount": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002845"},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 26014286, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "A fourth trap: Cleanse Ward." },
+
+    { "When": "PlayerCasts", "Category": "Weakness", "HasWho": "Receiver", "HasKind": "Weakness", "HasCount": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002845"},
+        {"Do": "Cast", "Spell": "Cleanse Charm", "SpellID": 1392661104, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "A fourth weakness: Cleanse Charm." },
+
+    { "When": "PlayerCasts", "Category": "DoT", "HasWho": "Receiver", "HasKind": "DoT", "HasCount": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002845"},
+        {"Do": "Cast", "Spell": "Triage", "SpellID": 866678457, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "A second DoT: Triage." },
+
+    { "When": "PlayerCasts", "Category": "HoT", "HasWho": "Receiver", "HasKind": "HoT", "HasCount": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002845"},
+        {"Do": "Cast", "Spell": "Remove HOT", "SpellID": 485815590, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "A second HoT: Remove HOT." }
+  ]
+}

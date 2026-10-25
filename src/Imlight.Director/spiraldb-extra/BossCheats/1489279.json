@@ -1,0 +1,91 @@
+{
+  // Prince Viggor (Rank 18, Myth, 41,300 health), Wizard City. Prince Viggor: four spells for a late wizard, minions, Cleanse Ward for a Feint, buffs, and his minions' answers.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1489279,
+  "Name": "Prince Viggor (Rank 18)",
+  "ShadowPips": 5,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001388"},
+        {"Do": "Cast", "Spell": "Bladestorm", "SpellID": 65780020, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Mass Weakness", "SpellID": 1798627878, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Triple Mass Tower Shield", "SpellID": 698961015, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Mass Feint", "SpellID": 617354786, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Bladestorm, Mass Weakness, Triple Mass Tower Shield, Mass Feint on them." },
+
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001389"},
+        {"Do": "Cast", "Spell": "Summon Minions", "SpellID": 951009140, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: a minion." },
+
+    { "When": "RoundStart", "Round": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001395"},
+        {"Do": "Cast", "Spell": "Summon Minions", "SpellID": 951009140, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 3: another." },
+
+    { "When": "PlayerCasts", "Spells": ["Feint", "Mass Feint"], "AnyVersion": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001390"},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 55434460, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A Feint (any version): Cleanse Ward on him." },
+
+    { "When": "RoundStart", "Round": 2, "Every": 3,
+      "Actions": [
+        {"Do": "InTurn", "Count": 4, "Group": 2},
+        {"Do": "Say", "Line": "CombatMessages_00001391"},
+        {"Do": "Cast", "Spell": "Mass Tower Shield", "SpellID": 2090465101, "Target": "", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00001393"},
+        {"Do": "Cast", "Spell": "Mass Weakness", "SpellID": 1798627878, "Target": "", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00001392"},
+        {"Do": "Cast", "Spell": "Bladestorm", "SpellID": 65780020, "Target": "", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00001394"},
+        {"Do": "Cast", "Spell": "Mass Feint", "SpellID": 617354786, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Every third round (a guess): the next of his four buffs." },
+
+    { "When": "PlayerCharms",
+      "Actions": [
+        {"Do": "CastBy", "By": "Creature", "Spell": "Cleanse Charm", "SpellID": 343915998, "Target": "Self", "DispelImmune": false, "Creature": 1489853},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Balanceblade", "SpellID": 1538644858, "Target": "Self", "DispelImmune": false, "Creature": 1489853},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Cleanse Charm", "SpellID": 343915998, "Target": "Self", "DispelImmune": false, "Creature": 1489854},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Balanceblade", "SpellID": 1538644858, "Target": "Self", "DispelImmune": false, "Creature": 1489854}
+      ],
+      "Notes": "A charm: his fire and ice minions Cleanse Charm and Balanceblade themselves." },
+
+    { "When": "PlayerCasts", "Category": "Trap",
+      "Actions": [
+        {"Do": "CastBy", "By": "Creature", "Spell": "Cleanse Ward", "SpellID": 201527093, "Target": "Caster", "DispelImmune": false, "Creature": 1489855},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Feint", "SpellID": 842771753, "Target": "Caster", "DispelImmune": false, "Creature": 1489855},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Cleanse Ward", "SpellID": 201527093, "Target": "Caster", "DispelImmune": false, "Creature": 1489856},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Feint", "SpellID": 842771753, "Target": "Caster", "DispelImmune": false, "Creature": 1489856}
+      ],
+      "Notes": "A jinx: his storm and myth minions Cleanse Ward and Feint the wizard." },
+
+    { "When": "PlayerWards",
+      "Actions": [
+        {"Do": "CastBy", "By": "Creature", "Spell": "Pierce", "SpellID": 1882292867, "Target": "Self", "DispelImmune": false, "Creature": 1489857},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Tower Shield", "SpellID": 1557607393, "Target": "Self", "DispelImmune": false, "Creature": 1489857},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Pierce", "SpellID": 1882292867, "Target": "Self", "DispelImmune": false, "Creature": 1489858},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Tower Shield", "SpellID": 1557607393, "Target": "Self", "DispelImmune": false, "Creature": 1489858}
+      ],
+      "Notes": "A ward: his life and death minions Pierce and Tower Shield themselves." },
+
+    { "When": "PlayerCasts", "Category": "Weakness",
+      "Actions": [
+        {"Do": "CastBy", "By": "Creature", "Spell": "Cleanse Charm", "SpellID": 343915998, "Target": "Caster", "DispelImmune": false, "Creature": 1489859},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Weakness", "SpellID": 1911351883, "Target": "Caster", "DispelImmune": false, "Creature": 1489859},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Cleanse Charm", "SpellID": 343915998, "Target": "Caster", "DispelImmune": false, "Creature": 1489860},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Weakness", "SpellID": 1911351883, "Target": "Caster", "DispelImmune": false, "Creature": 1489860}
+      ],
+      "Notes": "A curse: his balance and shadow minions Cleanse Charm and Weakness the wizard." }
+  ]
+}

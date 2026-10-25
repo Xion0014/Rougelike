@@ -1,0 +1,45 @@
+{
+  // Nyx Night Bringer (Rank 23, Moon, 58,300 health), Forbidden Library Gauntlet. Nyx Night Bringer: night falls. Wizard404's list is a work in progress; what it gives clearly is made.
+  // From Wizard404's data on the gauntlets (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove).
+  // Built first from blocks that were there, then from the new universal blocks each Notes names (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1616693,
+  "Name": "Nyx Night Bringer (Rank 23)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003106"},
+        {"Do": "Cast", "Spell": "Doom and Gloom", "SpellID": 1073823816, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "\"Nightfall is inevitable!\" Round 1: Doom and Gloom." },
+
+    { "When": "RoundEnd", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003108"},
+        {"Do": "Cast", "Spell": "Acrimony", "SpellID": 1572884948, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "\"The cloak of Night obscures all sight!\" The end of round 1: Acrimony (-50% accuracy, 99 rounds) on every wizard." },
+
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003108"},
+        {"Do": "Cast", "Spell": "Acrimony", "SpellID": 1572884948, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A late wizard gets Acrimony too." },
+
+    { "When": "PlayerCasts", "Spells": ["Feint", "Mass Feint"], "AnyVersion": true, "OnBoss": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003116"},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 55434460, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "\"The dark of Night shields me!\" A Feint on her (Mass Feint and a pet's too): Cleanse Ward takes the traps off her. Indemnity stopping it is not made." },
+
+    { "When": "PlayerCasts", "Category": "Blade", "HasWho": "Caster", "HasSpell": "Acrimony",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003109"},
+        {"Do": "Cast", "Spell": "recieve", "SpellID": 1365294626, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "\"No! The light!\" A wizard with Acrimony on them who blades an ally gets a Torch card (Wizard404: the blade is a guess). New block: has a charm or ward (from this spell)." }
+  ]
+}

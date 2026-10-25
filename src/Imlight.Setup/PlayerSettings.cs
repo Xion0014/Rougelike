@@ -98,6 +98,8 @@ internal static class PlayerSettings {
         ("Creatures", [
             new("Roguelike", "SwapStreetCreatures", "Random creatures", "On: streets and their dungeons show random creatures of a similar level. Off: they keep their own creatures.", SettingKind.Switch),
             new("Roguelike", "RandomCreatureDecks", "Random creature decks", "On: street creatures (bosses aside) fight with a random deck of normal spells for their level and school.", SettingKind.Switch),
+            new("Roguelike", "BossCheats", "Boss cheats", "On: bosses with a cheat file cast free spells and show lines mid-battle, as in the real game.", SettingKind.Switch),
+            new("Roguelike", "BossCheatsFromTier", "Boss cheats from tier", "The first tier whose bosses cheat (6: arc 2).", SettingKind.Whole, 1, 100),
         ]),
         ("The run", [
             new("Roguelike", "StreetMinutes", "Minutes per street", "How long each street lasts before the boss (tiers with their own time keep it).", SettingKind.Whole, 1, 240),

@@ -1,0 +1,60 @@
+{
+  // The Quake Charmer (Rank 19, Myth, 9,520 health), Karamelle. The Quake Charmer: a Natural Attack for a late wizard, Earthquakes and TNT.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1505746,
+  "Name": "The Quake Charmer (Rank 19)",
+  "ShadowPips": 1,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001569"},
+        {"Do": "Interrupt"},
+        {"Do": "Cast", "Spell": "Natural Attack", "SpellID": 620628977, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Mark", "Mark": "quaked", "Target": "Caster"}
+      ],
+      "Notes": "A late wizard: Natural Attack." },
+
+    { "When": "ICast", "Spells": ["Natural Attack"], "Mark": "quaked", "MarkWho": "Receiver",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001573"},
+        {"Do": "Cast", "Spell": "Immolate", "SpellID": 117900031, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "His Natural Attack on a wizard hit before: Immolate (the circles beside them are not picked)." },
+
+    { "When": "ICast", "Spells": ["Natural Attack"],
+      "Actions": [
+        {"Do": "Mark", "Mark": "quaked", "Target": "Receiver"}
+      ],
+      "Notes": "" },
+
+    { "When": "RoundEnd", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001570"},
+        {"Do": "Cast", "Spell": "Earthquake", "SpellID": 425481960, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "End of round 1: Earthquake." },
+
+    { "When": "RoundEnd", "Round": 5, "Every": 5,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001570"},
+        {"Do": "Cast", "Spell": "Earthquake", "SpellID": 425481960, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "End of every fifth round." },
+
+    { "When": "RoundEnd", "Round": 6, "Every": 5,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001572"},
+        {"Do": "Cast", "Spell": "Earthquake", "SpellID": 1847470661, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "The round after: the Earthquake that takes a charm and ward." },
+
+    { "When": "RoundEnd", "Round": 3, "Every": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001571"},
+        {"Do": "Cast", "Spell": "TNT", "SpellID": 878836305, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "End of every third round: TNT." }
+  ]
+}

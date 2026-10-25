@@ -1,0 +1,38 @@
+{
+  // Duncan Grimwater (Rank 16, Death, 5,360 health), Mirage. Duncan Grimwater: Doom and Gloom, Infection for a heal, Dark Fiend at 2 shadow pips.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1384921,
+  "Name": "Duncan Grimwater (Rank 16)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000903"},
+        {"Do": "Cast", "Spell": "Doom and Gloom", "SpellID": 561549695, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Doom and Gloom." },
+
+    { "When": "PlayerGlobals",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Doom and Gloom", "SpellID": 561549695, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Replaced: again." },
+
+    { "When": "PlayerCasts", "Category": "Heal",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000904"},
+        {"Do": "Cast", "Spell": "Infection", "SpellID": 153048997, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A heal: Infection." },
+
+    { "When": "Pips", "Pips": 2, "PipsKind": "Shadow",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000905"},
+        {"Do": "Cast", "Spell": "Dark Fiend", "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Pips", "Amount": -2, "Kind": "Shadow"}
+      ],
+      "Notes": "2 shadow pips: Dark Fiend." }
+  ]
+}

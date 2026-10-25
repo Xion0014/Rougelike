@@ -1,0 +1,72 @@
+{
+  // Fairy Queen (Rank 14), Rattlebones Exalted Challenge (Heroic_WC_DarkFairy_100). From Wizard101 Central's page
+  // "Rattlebones (Rank 14)", which holds her cheats (Niduus saved it, 2026-10-23). Her health (18,000) and stats are
+  // the game's own (template and FairyQueen-Epic-Amulet).
+  // Built first from blocks that were there; the new blocks used here are "this creature" (Creature, NotCreature),
+  // "wait … rounds" (Wait) and "an ally's health drops" (AllyHealthBelow). Her fairies come from the game's own summon
+  // spell, which picks one of the 7 Rank 14 fairies at random (1360184-1360190), so each cast is a random school.
+  // Her own page, "Fairy Queen (Rank 14)" (Niduus saved it, 2026-10-23), lists no cheats of its own and agrees with the
+  // stats above. The server takes a creature's most shadow pips from its cheat file, not from the template, so her 2
+  // are set here.
+  "TemplateID": 1340312,
+  "Name": "Fairy Queen (Rank 14)",
+  // Central: "Shadow Pips 2 max".
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "Passive", "Passive": "Circle", "Circle": 4,
+      "Notes": "She always stands on the 4th circle of the enemy side (Niduus, 2026-10-24: \"make Fairy Queens assign for 4th spot a passive block\")." },
+    { "When": "BattleStart",
+      "Casts": [ { "Spell": "Fairy Queen-Epic Summon", "DispelImmune": false }, { "Spell": "Fairy Queen-Epic Summon", "DispelImmune": false } ],
+      "Line": "Spells_00001415", "Once": true,
+      "Notes": "\"Fairies! Protect your Queen!\" First round: 2 fairies of random schools, fighting from the next round. Existing blocks." },
+
+    { "When": "MinionDefeated", "Creature": 1340311, "Once": true,
+      "SetPhase": 2,
+      "Casts": [ { "Spell": "Fairy Queen-Epic Summon", "DispelImmune": false } ],
+      "Notes": "Rattlebones is defeated: one more fairy at once, and from now on 3 fairies each time (phase 2). New block: this creature." },
+
+    { "When": "EnemyJoins", "Round": 2, "Phase": 2,
+      "Casts": [ { "Spell": "Mana Burn - Rattlebones", "DispelImmune": false } ], "Target": "Caster",
+      "Line": "CombatMessages_00000683",
+      "Notes": "\"Rattlebones will be avenged!\" Once Rattlebones is defeated (phase 2) she casts his tardiness cheat: a wizard who joins after the second round gets Mana Burn (Unbalance stops it). Central lists this line under his tardiness cheat; it was first read as a cheat of its own." },
+
+    { "When": "MinionDefeated", "Creature": 1340311, "NotCreature": true, "Phase": 1, "Cooldown": 3,
+      "Actions": [
+        { "Do": "Wait", "Rounds": 4 },
+        { "Do": "Say", "Line": "CombatMessages_00000449" },
+        { "Do": "Cast", "Spell": "Fairy Queen-Epic Summon", "DispelImmune": false },
+        { "Do": "Cast", "Spell": "Fairy Queen-Epic Summon", "DispelImmune": false }
+      ],
+      "Notes": "A fairy falls: 4 rounds later, 2 more fairies of random schools. New blocks: this creature (anyone but Rattlebones), wait 4 rounds." },
+
+    { "When": "MinionDefeated", "Creature": 1340311, "NotCreature": true, "Phase": 2, "Cooldown": 3,
+      "Actions": [
+        { "Do": "Wait", "Rounds": 4 },
+        { "Do": "Say", "Line": "CombatMessages_00000449" },
+        { "Do": "Cast", "Spell": "Fairy Queen-Epic Summon", "DispelImmune": false },
+        { "Do": "Cast", "Spell": "Fairy Queen-Epic Summon", "DispelImmune": false },
+        { "Do": "Cast", "Spell": "Fairy Queen-Epic Summon", "DispelImmune": false }
+      ],
+      "Notes": "As above once Rattlebones is defeated: \"An additional Fairy will appear\", so 3." },
+
+    { "When": "PlayerCharms", "Chance": 50,
+      "Casts": [ { "Spell": "MOB_Enfeeble - Protected", "DispelImmune": false } ], "Target": "Receiver",
+      "Line": "CombatMessages_00000677",
+      "Notes": "\"You'll never be as charming as Rattlebones!\" A charm (Plague too): Enfeeble on whoever got it; a blade on many (Bladestorm) is taken from the one who cast it. The chance is a guess (Central: \"a random chance\"). Existing blocks." },
+
+    { "When": "PlayerGlobals", "Chance": 50,
+      "Casts": [ { "Spell": "MOB_Enfeeble - Protected", "DispelImmune": false } ], "Target": "Caster",
+      "Line": "CombatMessages_00000677",
+      "Notes": "The same for a global: Enfeeble on the wizard who cast it. Existing blocks." },
+
+    { "When": "PlayerCasts", "Spells": ["Feint"], "AnyVersion": true, "School": "Death", "OnBoss": true,
+      "Casts": [ { "Spell": "Swap Negative Wards-Rattlebones", "DispelImmune": false } ], "Target": "Caster",
+      "Line": "CombatMessages_00000674",
+      "Notes": "\"Why don't we trade!\" A Feint put on her: the traps swap so the bigger one is on that wizard (Melt stops it). Existing blocks." },
+
+    { "When": "AllyHealthBelow", "Percent": 50, "Creature": 1340311,
+      "Casts": [ { "Spell": "Satyr", "DispelImmune": false } ], "Target": "Caster",
+      "Line": "CombatMessages_00000684",
+      "Notes": "\"We fight as a team this time. Our victory is assured.\" Satyr on Rattlebones. Central gives no moment for it: here, once, as his health first drops under half (a guess). New blocks: an ally's health drops, this creature." }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  // The Shadoe (Rank 21, Shadow, 13,860 health), Lemuria. The Shadoe: Card Limits, Shadow Sentinel, Equalize, and more.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1593391,
+  "Name": "The Shadoe (Rank 21)",
+  "ShadowPips": 3,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001886"},
+        {"Do": "Cast", "Spell": "Card Limit", "SpellID": 511308575, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Card Limit on them." },
+
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001996"},
+        {"Do": "Cast", "Spell": "Card Limit", "SpellID": 527693986, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00001888"},
+        {"Do": "Cast", "Spell": "Equalize", "SpellID": 1973388728, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Card Limit for all wizards and Equalize." },
+
+    { "When": "PlayerGlobals",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001889"},
+        {"Do": "Cast", "Spell": "Equalize", "SpellID": 1973388728, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Replaced: Equalize again." },
+
+    { "When": "AllyHealthBelow", "Percent": 50,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001887"},
+        {"Do": "Cast", "Spell": "Shadow Sentinel MOB", "SpellID": 482898093, "Target": "Hit", "DispelImmune": false}
+      ],
+      "Notes": "An ally under half: Shadow Sentinel (intercepts 25%)." },
+
+    { "When": "PlayerCasts", "Category": "Shield", "Chance": 50,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001891"},
+        {"Do": "Cast", "Spell": "Steal Ward", "SpellID": 54122057, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A shield (50%): Steal Ward." },
+
+    { "When": "PlayerCasts", "Category": "Trap", "Chance": 50,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001890"},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 201527093, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "A trap on an ally (50%): Cleanse Ward." }
+  ]
+}

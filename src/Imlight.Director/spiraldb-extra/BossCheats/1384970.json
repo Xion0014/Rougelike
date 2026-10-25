@@ -1,0 +1,54 @@
+{
+  // Melanj (Rank 16, Balance, 10,360 health), Mirage. Melanj: Mana Burn for a late wizard, Doom and Gloom, Abyssal Wurm, three spells for a blade, Virulent Plague for a Feint.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1384970,
+  "Name": "Melanj (Rank 16)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000969"},
+        {"Do": "Cast", "Spell": "Mana Burn", "SpellID": 517114192, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Mana Burn on them." },
+
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000970"},
+        {"Do": "Cast", "Spell": "Doom and Gloom", "SpellID": 1688646018, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Doom and Gloom." },
+
+    { "When": "PlayerGlobals",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000970"},
+        {"Do": "Cast", "Spell": "Doom and Gloom", "SpellID": 1688646018, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Replaced: again (Strangle stopping it is not made)." },
+
+    { "When": "RoundEnd", "Round": 5, "Every": 5,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000973"},
+        {"Do": "Cast", "Spell": "Abyssal Wurm", "SpellID": 1077923686, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "End of every 5th round: Abyssal Wurm." },
+
+    { "When": "PlayerCasts", "Category": "Blade,Global",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000972"},
+        {"Do": "Cast", "Spell": "Natural Attack", "SpellID": 885569816, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Steal Charm", "SpellID": 1591946991, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Weakness", "SpellID": 1321504283, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A blade or damage global: Natural Attack, Steal Charm and Weakness on the caster." },
+
+    { "When": "PlayerCasts", "Spells": ["Feint"], "Chance": 50,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000971"},
+        {"Do": "Cast", "Spell": "Virulent Plague", "SpellID": 1599984203, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A Feint (50%): Virulent Plague." }
+  ]
+}

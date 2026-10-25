@@ -1,0 +1,64 @@
+{
+  // Banrigh Sluagh (Rank 20, Death, 13,200 health), Unforgiven Dead Gauntlet. Banrigh Sluagh and the three Unforgiven Dead, who help the wizards on a schedule.
+  // From Wizard404's data on the gauntlets (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove).
+  // Built first from blocks that were there, then from the new universal blocks each Notes names (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1548044,
+  "Name": "Banrigh Sluagh (Rank 20)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "Passive", "Passive": "Minions", "Brings": ["1548050", "1548047", "1548053"],
+      "Notes": "She fights with three Unforgiven Dead (Wizard404: her minions). New block: comes with." },
+
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002025"},
+        {"Do": "Cast", "Spell": "Curse", "SpellID": 10858922, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "\"Late to Doomsday, yer still doomed!\" A late wizard: Curse." },
+
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002031"},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Donate Shadow", "SpellID": 1280891407, "Target": "AllEnemies", "DispelImmune": false, "Creature": 1548053}
+      ],
+      "Notes": "Round 1: the Shadow Unforgiven Dead gives every wizard a Donate Shadow card. New block: an ally casts." },
+
+    { "When": "RoundStart", "Round": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002029"},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Hex", "SpellID": 166302043, "Target": "AllAllies", "DispelImmune": false, "Creature": 1548047}
+      ],
+      "Notes": "Round 2: the Balance Unforgiven Dead puts Hex on all its allies (her side). New block: an ally casts." },
+
+    { "When": "RoundEnd", "Round": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002028"},
+        {"Do": "PickOne", "Count": 2},
+        {"Do": "Cast", "Spell": "Mass Infection", "SpellID": 133227446, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Plague", "SpellID": 1888318032, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "The end of round 2: Mass Infection or Plague. Existing blocks." },
+
+    { "When": "RoundStart", "Round": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002030"},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Magnify", "SpellID": 1455045207, "Target": "AllEnemies", "DispelImmune": false, "Creature": 1548050}
+      ],
+      "Notes": "Round 3: the Star Unforgiven Dead casts Magnify on every wizard. New block: an ally casts." },
+
+    { "When": "RoundEnd", "Round": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002027"},
+        {"Do": "Cast", "Spell": "Putrefaction", "SpellID": 321677896, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "The end of round 3: Putrefaction." },
+
+    { "When": "RoundStart", "Round": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002026"},
+        {"Do": "Cast", "Spell": "Mass Supernova", "SpellID": 793827852, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 4: Mass Supernova." }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  // Titan's Trident (Rank 18, Shadow, 25,000 health), Empyrea. Titan's Trident: Equalize, and Mellori's chain at each 7,750 damage.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1437162,
+  "Name": "Titan's Trident (Rank 18)",
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Equalize", "SpellID": 1923057080, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Equalize." },
+
+    { "When": "HealthBelow", "Health": 17250, "Phase": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001285"},
+        {"Do": "Say", "Line": "CombatMessages_00001288"},
+        {"Do": "Cast", "Spell": "restored", "SpellID": 1025728518, "Target": "Self", "DispelImmune": false},
+        {"Do": "HealthTo", "Amount": 100},
+        {"Do": "SetPhase", "Phase": 2}
+      ],
+      "Notes": "Phase 1: 7,750 damage taken, back to full health and the next phase." },
+
+    { "When": "HealthBelow", "Health": 17250, "Phase": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001286"},
+        {"Do": "Say", "Line": "CombatMessages_00001287"},
+        {"Do": "Cast", "Spell": "restored", "SpellID": 1025728902, "Target": "Self", "DispelImmune": false},
+        {"Do": "HealthTo", "Amount": 100},
+        {"Do": "SetPhase", "Phase": 3}
+      ],
+      "Notes": "Phase 2: 7,750 damage taken, back to full health and the next phase." },
+
+    { "When": "HealthBelow", "Health": 17250, "Phase": 3,
+      "Actions": [
+        {"Do": "Cast", "Spell": "defeat", "SpellID": 249939620, "Target": "Self", "DispelImmune": false},
+        {"Do": "Defeat"}
+      ],
+      "Notes": "Phase 3: 7,750 damage taken again, it is defeated." }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  // Mother Sunn (Rank 23, Sun, 21,000 health), Krokotopia. Mother Sunn: Scald every 2 rounds, Power Nova every 5.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1668476,
+  "Name": "Mother Sunn (Rank 23)",
+  "Cheats": [
+    { "When": "RoundStart", "Round": 2, "Every": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003436"},
+        {"Do": "Cast", "Spell": "Scald", "SpellID": 11164145, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Every 2 rounds: Scald." },
+
+    { "When": "RoundStart", "Round": 5, "Every": 5,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003437"},
+        {"Do": "Cast", "Spell": "Power Nova", "SpellID": 1384882735, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Every 5 rounds: Power Nova." }
+  ]
+}

@@ -1,0 +1,114 @@
+{
+  // Dewey (Rank 15, Death, 5,270 health), Fantastic Voyage Expedition. Dewey.
+  // From Wizard404's data on the gauntlets (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove).
+  // Built first from blocks that were there, then from the new universal blocks each Notes names (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1391291,
+  "Name": "Dewey (Rank 15)",
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001028"},
+        {"Do": "Cast", "Spell": "Mana Burn", "SpellID": 522593260, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A late wizard: Mana Burn takes 3 pips." },
+
+    { "When": "PlayerCasts", "Category": "DoT",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001034"},
+        {"Do": "Cast", "Spell": "Mass Triage", "SpellID": 382441647, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A wizard's damage over time: Mass Triage. New card kind: damage over time." },
+
+    { "When": "AllyHit", "School": "Fire",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001029"},
+        {"Do": "Cast", "Spell": "Fire Shield", "SpellID": 1731855964, "Target": "Hit", "DispelImmune": false}
+      ],
+      "Notes": "An ally hit by Fire: Fire Shield on that ally. New block: an ally is hit." },
+
+    { "When": "AllyHit", "School": "Ice",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001029"},
+        {"Do": "Cast", "Spell": "Snow Shield", "SpellID": 1731424937, "Target": "Hit", "DispelImmune": false}
+      ],
+      "Notes": "An ally hit by Ice: Snow Shield on that ally. New block: an ally is hit." },
+
+    { "When": "AllyHit", "School": "Storm",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001029"},
+        {"Do": "Cast", "Spell": "Storm Shield", "SpellID": 406790657, "Target": "Hit", "DispelImmune": false}
+      ],
+      "Notes": "An ally hit by Storm: Storm Shield on that ally. New block: an ally is hit." },
+
+    { "When": "AllyHit", "School": "Myth",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001029"},
+        {"Do": "Cast", "Spell": "Myth Shield", "SpellID": 1732025431, "Target": "Hit", "DispelImmune": false}
+      ],
+      "Notes": "An ally hit by Myth: Myth Shield on that ally. New block: an ally is hit." },
+
+    { "When": "AllyHit", "School": "Life",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001029"},
+        {"Do": "Cast", "Spell": "Life Shield", "SpellID": 1731876438, "Target": "Hit", "DispelImmune": false}
+      ],
+      "Notes": "An ally hit by Life: Life Shield on that ally. New block: an ally is hit." },
+
+    { "When": "AllyHit", "School": "Death",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001029"},
+        {"Do": "Cast", "Spell": "Death Shield", "SpellID": 409737272, "Target": "Hit", "DispelImmune": false}
+      ],
+      "Notes": "An ally hit by Death: Death Shield on that ally. New block: an ally is hit." },
+
+    { "When": "AllyHit", "School": "Balance",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001029"},
+        {"Do": "Cast", "Spell": "Tower Shield", "SpellID": 432324968, "Target": "Hit", "DispelImmune": false}
+      ],
+      "Notes": "An ally hit by Balance: Tower Shield on that ally." },
+
+    { "When": "AllyHit", "School": "Star",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001029"},
+        {"Do": "Cast", "Spell": "Tower Shield", "SpellID": 432324968, "Target": "Hit", "DispelImmune": false}
+      ],
+      "Notes": "An ally hit by Star: Tower Shield on that ally." },
+
+    { "When": "AllyHit", "School": "Sun",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001029"},
+        {"Do": "Cast", "Spell": "Tower Shield", "SpellID": 432324968, "Target": "Hit", "DispelImmune": false}
+      ],
+      "Notes": "An ally hit by Sun: Tower Shield on that ally." },
+
+    { "When": "AllyHit", "School": "Moon",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001029"},
+        {"Do": "Cast", "Spell": "Tower Shield", "SpellID": 432324968, "Target": "Hit", "DispelImmune": false}
+      ],
+      "Notes": "An ally hit by Moon: Tower Shield on that ally." },
+
+    { "When": "AllyHit", "School": "Shadow",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001029"},
+        {"Do": "Cast", "Spell": "Tower Shield", "SpellID": 432324968, "Target": "Hit", "DispelImmune": false}
+      ],
+      "Notes": "An ally hit by Shadow: Tower Shield on that ally." },
+
+    { "When": "PlayerCasts", "Category": "Blade,Global",
+      "Actions": [
+        {"Do": "InTurn", "Count": 4, "Group": 2},
+        {"Do": "Say", "Line": "CombatMessages_00001030"},
+        {"Do": "Cast", "Spell": "Tower Shield", "SpellID": 432324968, "Target": "Self", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00001031"},
+        {"Do": "Cast", "Spell": "Plague", "SpellID": 1888318032, "Target": "", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00001032"},
+        {"Do": "Cast", "Spell": "Legion Shield", "SpellID": 3605232, "Target": "", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00001033"},
+        {"Do": "Cast", "Spell": "Virulent Plague", "SpellID": 1599984203, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "The blade cycle: a wizard's blade or global. The 1st time Tower Shield on himself, the 2nd Plague, the 3rd Legion Shield, the 4th Virulent Plague, and round again. New block: in turn." }
+  ]
+}

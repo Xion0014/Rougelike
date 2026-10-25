@@ -1,0 +1,73 @@
+{
+  // Count Strigoi (Rank 25, Death, 20,000 health), Darkmoor. Count Strigoi: three Ascended Guards, vampire answers, Confusion and a heal in round 3.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1698890,
+  "Name": "Count Strigoi (Rank 25)",
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00004184"},
+        {"Do": "Cast", "Spell": "Summon Minions", "SpellID": 310873131, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Summon Minions brings three Ascended Guards." },
+
+    { "When": "BossHit", "Category": "Steal",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003986"},
+        {"Do": "Cast", "Spell": "Balanceblade", "SpellID": 578086463, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Hit by a steal: Balanceblade (protected) on itself." },
+
+    { "When": "BossDefeated", "Category": "Steal",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003986"},
+        {"Do": "SetHealth", "Amount": 20000}
+      ],
+      "Notes": "Defeated by a steal: back to full health (Minor Blessing's version is unknown)." },
+
+    { "When": "BossHit", "Spells": ["Power Nova", "Ra", "Sun Serpent", "Celestial Calendar", "Climaclysm", "Phoebus' Will"], "AnyVersion": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00004277"},
+        {"Do": "Cast", "Spell": "Solar Urticaria", "SpellID": 415951031, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Hit by a sun spell: Solar Urticaria on itself." },
+
+    { "When": "AllyHit", "Creature": 1712497,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00004263"},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Heartbeat", "SpellID": 1991156741, "Target": "Owner", "DispelImmune": false, "Creature": 1712497}
+      ],
+      "Notes": "An Ascended Guard is hurt: it casts Heartbeat on him." },
+
+    { "When": "AllyHit", "Creature": 1712497, "Category": "Steal",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003986"},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Balanceblade", "SpellID": 578086463, "Target": "Self", "DispelImmune": false, "Creature": 1712497}
+      ],
+      "Notes": "An Ascended Guard hit by a steal: Balanceblade on itself." },
+
+    { "When": "MinionDefeated", "Creature": 1712497,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00004182"},
+        {"Do": "Cast", "Spell": "Sacrifice", "SpellID": 718725325, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "An Ascended Guard falls: Sacrifice brings it back." },
+
+    { "When": "RoundStart", "Round": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00004185"},
+        {"Do": "Cast", "Spell": "Confusion", "SpellID": 351474253, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Healing Current", "SpellID": 261845412, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 3: Confusion on a wizard, Healing Current on himself." },
+
+    { "When": "RoundStart", "HealthUnder": 100, "Cooldown": 1, "Chance": 50,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00004275"},
+        {"Do": "Cast", "Spell": "Scarecrow", "SpellID": 1811481480, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Not at full health: Scarecrow (once a round; the version is unknown)." }
+  ]
+}

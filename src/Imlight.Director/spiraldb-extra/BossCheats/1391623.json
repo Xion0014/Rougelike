@@ -1,0 +1,44 @@
+{
+  // Poison Oak (Rank 17, Life, 9,240 health), Empyrea. Poison Oak: Life Trap after its Natural Attack, Lamassu for a late wizard, Wings of Fate, Swap Ward for a Feint, Incindiate in round 30.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1391623,
+  "Name": "Poison Oak (Rank 17)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "ICast", "Spells": ["Natural Attack"],
+      "Actions": [
+        {"Do": "Cast", "Spell": "Life Trap", "SpellID": 221202744, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "After its Natural Attack: Life Trap on the wizard." },
+
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001152"},
+        {"Do": "Cast", "Spell": "Lamassu", "SpellID": 728374273, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Lamassu on them." },
+
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001154"},
+        {"Do": "Cast", "Spell": "Wings of Fate", "SpellID": 867887265, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Wings of Fate." },
+
+    { "When": "PlayerCasts", "Spells": ["Feint"], "OnBoss": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001153"},
+        {"Do": "Cast", "Spell": "Swap Ward", "SpellID": 584566847, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A Feint on it: Swap Ward." },
+
+    { "When": "RoundEnd", "Round": 30,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001155"},
+        {"Do": "Cast", "Spell": "Incindiate", "SpellID": 1986646109, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "End of round 30: Incindiate." }
+  ]
+}

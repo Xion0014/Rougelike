@@ -1,0 +1,48 @@
+{
+  // The Bantam (Rank 20, Life, 12,580 health), Lemuria. The Bantam: Infection and Entangle for a late wizard, Natural Attack, Convert Blade, Mass Sacred Charge.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1530544,
+  "Name": "The Bantam (Rank 20)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001851"},
+        {"Do": "Cast", "Spell": "Infection", "SpellID": 334242429, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Entangle", "SpellID": 1570689433, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A late wizard." },
+
+    { "When": "RoundStart", "Round": 1, "Every": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001852"},
+        {"Do": "Cast", "Spell": "Natural Attack", "SpellID": 1495896680, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Round 1 and every 4 (a guess): Natural Attack." },
+
+    { "When": "PlayerCasts", "Category": "Blade",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001853"},
+        {"Do": "Cast", "Spell": "Convert Blade", "SpellID": 1605904094, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "A blade on another: Convert Blade." },
+
+    { "When": "RoundStart", "Chance": 20,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001854"},
+        {"Do": "Cast", "Spell": "Empower", "SpellID": 381362612, "Target": "AllAllies", "DispelImmune": false}
+      ],
+      "Notes": "Sometimes (20%): Angel's Empower." },
+
+    { "When": "Pips", "Pips": 12, "Cooldown": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001855"},
+        {"Do": "Wait", "Rounds": 1},
+        {"Do": "Say", "Line": "CombatMessages_00001856"},
+        {"Do": "Cast", "Spell": "Mass Sacred Charge", "SpellID": 80499105, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "12 pips: then Mass Sacred Charge." }
+  ]
+}

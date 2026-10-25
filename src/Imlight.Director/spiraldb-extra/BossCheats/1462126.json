@@ -1,0 +1,45 @@
+{
+  // The Bat (Rank 16, Shadow, 9,200 health), Empyrea. The Bat: Equalize, a shadow pip for each shadow spell on him, and he gives up at five.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1462126,
+  "Name": "The Bat (Rank 16)",
+  "ShadowPips": 5,
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001222"},
+        {"Do": "Cast", "Spell": "Equalize", "SpellID": 1583379875, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Equalize." },
+
+    { "When": "PlayerGlobals",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Equalize", "SpellID": 1583379875, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Its global replaced: Equalize again." },
+
+    { "When": "BossHit", "Category": "Shadow", "MaxTimes": 5,
+      "Actions": [
+        {"Do": "InTurn", "Count": 5, "Group": 2},
+        {"Do": "Cast", "Spell": "Donate Shadow", "SpellID": 2114200808, "Target": "Self", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00001223"},
+        {"Do": "Cast", "Spell": "Donate Shadow", "SpellID": 2114200808, "Target": "Self", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00001224"},
+        {"Do": "Cast", "Spell": "Donate Shadow", "SpellID": 2114200808, "Target": "Self", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00001223"},
+        {"Do": "Cast", "Spell": "Donate Shadow", "SpellID": 2114200808, "Target": "Self", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00001225"},
+        {"Do": "Cast", "Spell": "Donate Shadow", "SpellID": 2114200808, "Target": "Self", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00001226"}
+      ],
+      "Notes": "A spell of 1+ shadow pips on him: Donate Shadow, and a line for each pip." },
+
+    { "When": "Pips", "Pips": 5, "PipsKind": "Shadow", "FromRound": 2,
+      "Actions": [
+        {"Do": "Defeat"}
+      ],
+      "Notes": "Five shadow pips: he surrenders." }
+  ]
+}

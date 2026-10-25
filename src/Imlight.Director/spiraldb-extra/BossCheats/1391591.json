@@ -1,0 +1,67 @@
+{
+  // Caleban (Rank 17, Balance, 10,780 health), Empyrea. Caleban: Savage Paw for a late wizard, a minion for each wizard, Swap Ward for a Feint, Frenzy, and his minions' pips or health.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1391591,
+  "Name": "Caleban (Rank 17)",
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001116"},
+        {"Do": "Cast", "Spell": "Savage Paw", "SpellID": 1906610029, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Savage Paw on them." },
+
+    { "When": "RoundEnd", "AlliesMax": 0, "PlayersMin": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001113"},
+        {"Do": "Cast", "Spell": "Summon Minion", "SpellID": 870843948, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "End of a round with fewer minions than wizards: Summon Minion (1 of 2 Beastman Guards)." },
+
+    { "When": "RoundEnd", "AlliesMin": 1, "AlliesMax": 1, "PlayersMin": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001113"},
+        {"Do": "Cast", "Spell": "Summon Minion", "SpellID": 870843948, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "" },
+
+    { "When": "RoundEnd", "AlliesMin": 2, "AlliesMax": 2, "PlayersMin": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001113"},
+        {"Do": "Cast", "Spell": "Summon Minion", "SpellID": 870843948, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "" },
+
+    { "When": "PlayerCasts", "Spells": ["Feint"], "OnBoss": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001114"},
+        {"Do": "Cast", "Spell": "Swap Ward", "SpellID": 584566847, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A Feint on him (not Mass Feint): Swap Ward." },
+
+    { "When": "MinionDefeated",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001115"},
+        {"Do": "Cast", "Spell": "Frenzy", "SpellID": 1215947162, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A minion falls: Frenzy." },
+
+    { "When": "PlayerDefeated",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001115"},
+        {"Do": "Cast", "Spell": "Frenzy", "SpellID": 1215947162, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A wizard falls: Frenzy." },
+
+    { "When": "RoundStart", "Round": 2, "Every": 2, "HasAllies": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001117"},
+        {"Do": "InTurn", "Count": 2},
+        {"Do": "Cast", "Spell": "Steal Pips", "SpellID": 79034230, "Target": "AllAllies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Steal Health", "SpellID": 1012714860, "Target": "AllAllies", "DispelImmune": false}
+      ],
+      "Notes": "Every 2 rounds with a minion: Steal Pips, then Steal Health, on his minions." }
+  ]
+}

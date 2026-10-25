@@ -1,0 +1,32 @@
+{
+  // Hercules Poirot (Rank 18, Myth, 15,180 health), Empyrea. Hercules Poirot: three spells on a late wizard, Balanceblade at full health, Blessing when not.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1437078,
+  "Name": "Hercules Poirot (Rank 18)",
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001267"},
+        {"Do": "Cast", "Spell": "Athena Battle Sight", "SpellID": 1461965196, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Witch's House Call", "SpellID": 241122188, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Orthrus", "SpellID": 1862621819, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 2: Athena Battle Sight, Witch's House Call, Orthrus on them." },
+
+    { "When": "RoundEnd", "HealthAbove": 99,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001268"},
+        {"Do": "Cast", "Spell": "Balanceblade", "SpellID": 578086463, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "End of a round at full health: Balanceblade." },
+
+    { "When": "RoundEnd", "HealthUnder": 100,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001269"},
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 530133976, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "End of a round not at full: Blessing on himself." }
+  ]
+}

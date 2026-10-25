@@ -1,0 +1,14 @@
+{
+  // Fairy (Myth) (Rank 14), a minion of the Fairy Queen in the Rattlebones Exalted Challenge (Epic_WC_Fairy_Minion_Myth).
+  // From Wizard101 Central's pages "Fairy (Myth) (Rank 14)" and "Rattlebones (Rank 14)" (Niduus saved them, 2026-10-23).
+  // Health (4,160) and stats are the game's own. Built from blocks that were there, with the new target "whoever
+  // summoned it" (Summoner): the Queen, whose summon brought her in.
+  "TemplateID": 1360188,
+  "Name": "Fairy (Myth) (Rank 14)",
+  "Cheats": [
+    { "When": "HealthBelow", "Percent": 25,
+      "Casts": [ { "Spell": "Sacrifice - FairyMinion", "DispelImmune": false } ], "Target": "Summoner",
+      "Line": "CombatMessages_00000743",
+      "Notes": "\"I shall protect you at all costs, my queen!\" Under 25% health: 2,100 Death damage to herself, 700 healing to the Fairy Queen. Nothing is cast when the Queen is gone." }
+  ]
+}

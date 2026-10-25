@@ -1,0 +1,48 @@
+{
+  // Overlord Xerxes (Rank 16, Death, 4,000 health), Mirage. Overlord Xerxes: Steal Health on a late wizard and on his minions in round 1, Sacrifice for Feints, Steal Charm for blades.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1384758,
+  "Name": "Overlord Xerxes (Rank 16)",
+  "ShadowPips": 1,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000906"},
+        {"Do": "Interrupt"},
+        {"Do": "Cast", "Spell": "Steal Health", "SpellID": 876832616, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A late wizard: Steal Health." },
+
+    { "When": "BattleStart", "HasAllies": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000909"},
+        {"Do": "Cast", "Spell": "Steal Health", "SpellID": 1512771579, "Target": "AllAllies", "DispelImmune": false},
+        {"Do": "HealthTo", "Amount": 100}
+      ],
+      "Notes": "Round 1: Steal Health on his minions heals him to full." },
+
+    { "When": "BattleStart", "NoAllies": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000909"},
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 530168744, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 1 with no minions: Blessing to full." },
+
+    { "When": "PlayerCasts", "Spells": ["Feint", "Mass Feint"], "OnBoss": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000907"},
+        {"Do": "Interrupt"},
+        {"Do": "Cast", "Spell": "Sacrifice", "SpellID": 761482201, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A Feint or Mass Feint on him: Sacrifice." },
+
+    { "When": "PlayerCasts", "Category": "Blade,Global",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000908"},
+        {"Do": "Cast", "Spell": "Steal Charm", "SpellID": 1406532128, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "A blade or damage global: Steal Charm on the wizards' team." }
+  ]
+}

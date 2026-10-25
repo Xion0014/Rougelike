@@ -1,0 +1,56 @@
+{
+  // Sylster Glowstorm (Rank 12, Star, 19,985 health), Unknown. Sylster Glowstorm: a Trap Cycle and a Blade Cycle in turn, and Ra for a hit that breaks the cycle's rule.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 439075,
+  "Name": "Sylster Glowstorm (Rank 12)",
+  "Cheats": [
+    { "When": "RoundStart", "Round": 1, "Every": 8,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000063"},
+        {"Do": "Cast", "Spell": "Doom and Gloom Light", "SpellID": 63228094, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Cleanse Charm", "SpellID": 1564006704, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Unmark", "Mark": "blade cycle", "Target": "Self"},
+        {"Do": "Mark", "Mark": "trap cycle", "Target": "Self"}
+      ],
+      "Notes": "Round 1 and every 8th after: the Trap Cycle." },
+
+    { "When": "RoundStart", "Round": 4, "Every": 8,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000062"},
+        {"Do": "Cast", "Spell": "Doom and Gloom Dark", "SpellID": 225216664, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 197011855, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 197011855, "Target": "AllAllies", "DispelImmune": false},
+        {"Do": "Unmark", "Mark": "trap cycle", "Target": "Self"},
+        {"Do": "Mark", "Mark": "blade cycle", "Target": "Self"}
+      ],
+      "Notes": "Round 4 and every 8th after: the Blade Cycle." },
+
+    { "When": "PlayerCasts", "Category": "Charm", "SingleTarget": true, "Mark": "trap cycle", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Cleanse Charm", "SpellID": 1564006704, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "Trap Cycle: a single-target charm or curse: Cleanse Charm (3) on the caster." },
+
+    { "When": "PlayerCasts", "Category": "Trap", "SingleTarget": true, "Mark": "blade cycle", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 1048474958, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "Blade Cycle: a single-target trap: Cleanse Ward (1) on that boss." },
+
+    { "When": "EnemyCasts", "Category": "Damage", "OnBoss": true, "HasWho": "Self", "HasKind": "Trap", "HasNot": true, "Mark": "trap cycle", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000093"},
+        {"Do": "Cast", "Spell": "Ra", "SpellID": 389025122, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Trap Cycle: a hit on him while he has no trap: Ra." },
+
+    { "When": "EnemyCasts", "Category": "Damage", "OnBoss": true, "HasWho": "Caster", "HasKind": "Blade", "HasNot": true, "Mark": "blade cycle", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000094"},
+        {"Do": "Cast", "Spell": "Ra", "SpellID": 389025122, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Blade Cycle: a hit on him from a wizard with no blade: Ra." }
+  ]
+}

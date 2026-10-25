@@ -1,0 +1,51 @@
+{
+  // Entrance Exam (Rank 25, Death, 35,000 health), Darkmoor. Entrance Exam: shields or HoTs on itself, a revive while it has them, and 20% for each blade or trap.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1705038,
+  "Name": "Entrance Exam (Rank 25)",
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "PickOne", "Count": 2},
+        {"Do": "Cast", "Spell": "Seven School Shields", "SpellID": 1581722348, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Tranquility", "SpellID": 1826232001, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Seven School Shields or Tranquility on itself, at random." },
+
+    { "When": "BossDefeated", "HasWho": "Self", "HasKind": "Ward",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003962"},
+        {"Do": "Cast", "Spell": "revive", "SpellID": 911601537, "Target": "Self", "DispelImmune": false},
+        {"Do": "SetHealth", "Amount": 17500},
+        {"Do": "Cast", "Spell": "Seven School Shields", "SpellID": 1581722348, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Entrance Exam - ASTH Incapacitate", "SpellID": 1938122172, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Defeated with a ward on it: back with half its health, the shields again, and Incapacitate for each wizard." },
+
+    { "When": "BossDefeated", "HasWho": "Self", "HasKind": "HoT",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003962"},
+        {"Do": "Cast", "Spell": "revive", "SpellID": 911601537, "Target": "Self", "DispelImmune": false},
+        {"Do": "SetHealth", "Amount": 17500},
+        {"Do": "Cast", "Spell": "Tranquility", "SpellID": 1826232001, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Entrance Exam - ASTH Shatter", "SpellID": 1450723693, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Defeated with a HoT on it: back with half its health, Tranquility again, and Shatter for each wizard." },
+
+    { "When": "PlayerCasts", "Category": "Blade,Trap", "MaxTimes": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003960"},
+        {"Do": "Cast", "Spell": "will be dealt", "SpellID": 1342722351, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "A blade or trap: 20% of each wizard's health." },
+
+    { "When": "PlayerCasts", "Category": "Blade,Trap",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003961"},
+        {"Do": "Cast", "Spell": "will be dealt", "SpellID": 1342722351, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "From the third time: the same with the laugh." }
+  ]
+}

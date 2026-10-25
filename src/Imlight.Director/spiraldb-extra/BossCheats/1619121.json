@@ -1,0 +1,58 @@
+{
+  // Despair (Rank 23, Death, 16,810 health), Unknown. Despair: Doom and Gloom, Virulent Plague when hit, Deathblade after its spells, and answers to blades, auras, shields and Feints.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1619121,
+  "Name": "Despair (Rank 23)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Doom and Gloom", "SpellID": 561549695, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Doom and Gloom." },
+
+    { "When": "PlayerGlobals",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Doom and Gloom", "SpellID": 561549695, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Its global replaced: cast again." },
+
+    { "When": "ICast", "Category": "Damage",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Deathblade", "SpellID": 556969572, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Its spell on a wizard: Deathblade after it." },
+
+    { "When": "BossHit", "Category": "Damage",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Virulent Plague", "SpellID": 1599984203, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Hurt by a spell (each hit; DoTs do not count): Virulent Plague on itself." },
+
+    { "When": "PlayerCharms", "Category": "Blade",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Balanceblade", "SpellID": 578086463, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A blade: Balanceblade (protected) on Despair." },
+
+    { "When": "PlayerAuras",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Supernova", "SpellID": 1768326543, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "An aura: Supernova on the caster (a negative aura on Despair: on itself)." },
+
+    { "When": "PlayerWards", "Category": "Shield",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Shatter", "SpellID": 370212829, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "A shield: Shatter on all wizards." },
+
+    { "When": "PlayerCasts", "Spells": ["Feint", "Mass Feint"], "AnyVersion": true,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Swap Ward", "SpellID": 1221439341, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A Feint or Mass Feint: Swap Ward on the caster." }
+  ]
+}

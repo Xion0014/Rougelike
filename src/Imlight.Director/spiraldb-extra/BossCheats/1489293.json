@@ -1,0 +1,74 @@
+{
+  // King Detritus (Rank 18, Sun, 39,680 health), Unknown. King Detritus: Trash minions, Steal Health on them, and ten growing polymorphs.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1489293,
+  "Name": "King Detritus (Rank 18)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001349"},
+        {"Do": "Cast", "Spell": "Summon Minions", "SpellID": 1326280152, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Steal Health", "SpellID": 479718674, "Target": "Ally", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 2: a Trash minion and Steal Health on one." },
+
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001408"},
+        {"Do": "Cast", "Spell": "Summon Minions", "SpellID": 1326280152, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: a Trash minion." },
+
+    { "When": "PlayerCasts", "Spells": ["Feint", "Mass Feint"], "AnyVersion": true, "OnBoss": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001413"},
+        {"Do": "CastBy", "By": "Ally", "Spell": "Double Steal Trap", "SpellID": 1758531707, "Target": "Owner", "DispelImmune": false}
+      ],
+      "Notes": "A Feint on him: a Trash steals 2 traps off him." },
+
+    { "When": "MinionDefeated",
+      "Actions": [
+        {"Do": "Mark", "Mark": "lost a minion", "Target": "Self"}
+      ],
+      "Notes": "A minion falls: marked." },
+
+    { "When": "RoundStart", "Round": 3, "Every": 3, "Mark": "lost a minion", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001409"},
+        {"Do": "Cast", "Spell": "Summon Minions", "SpellID": 1326280152, "Target": "", "DispelImmune": false},
+        {"Do": "Unmark", "Mark": "lost a minion", "Target": "Self"}
+      ],
+      "Notes": "Every third round, if a minion has fallen: another Trash." },
+
+    { "When": "RoundEnd", "Round": 5, "Every": 5, "AlliesMin": 1, "MaxTimes": 10,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001410"},
+        {"Do": "Cast", "Spell": "Steal Health", "SpellID": 479718674, "Target": "Ally", "DispelImmune": false},
+        {"Do": "InTurn", "Count": 10, "Group": 2},
+        {"Do": "Say", "Line": "CombatMessages_00001411"},
+        {"Do": "Polymorph", "Spell": "Polymorph Detritus", "SpellID": 2079975708, "Target": "Self"},
+        {"Do": "Say", "Line": "CombatMessages_00001412"},
+        {"Do": "Polymorph", "Spell": "Polymorph Detritus", "SpellID": 2079926556, "Target": "Self"},
+        {"Do": "Say", "Line": "CombatMessages_00001414"},
+        {"Do": "Polymorph", "Spell": "Polymorph Detritus", "SpellID": 2079942940, "Target": "Self"},
+        {"Do": "Say", "Line": "CombatMessages_00001415"},
+        {"Do": "Polymorph", "Spell": "Polymorph Detritus", "SpellID": 2079893788, "Target": "Self"},
+        {"Do": "Say", "Line": "CombatMessages_00001416"},
+        {"Do": "Polymorph", "Spell": "Polymorph Detritus", "SpellID": 2079910172, "Target": "Self"},
+        {"Do": "Say", "Line": "CombatMessages_00001411"},
+        {"Do": "Polymorph", "Spell": "Polymorph Detritus", "SpellID": 2079861020, "Target": "Self"},
+        {"Do": "Say", "Line": "CombatMessages_00001412"},
+        {"Do": "Polymorph", "Spell": "Polymorph Detritus", "SpellID": 2079877404, "Target": "Self"},
+        {"Do": "Say", "Line": "CombatMessages_00001414"},
+        {"Do": "Polymorph", "Spell": "Polymorph Detritus", "SpellID": 2080090396, "Target": "Self"},
+        {"Do": "Say", "Line": "CombatMessages_00001415"},
+        {"Do": "Polymorph", "Spell": "Polymorph Detritus", "SpellID": 2080106780, "Target": "Self"},
+        {"Do": "Say", "Line": "CombatMessages_00001416"},
+        {"Do": "Polymorph", "Spell": "Polymorph Detritus", "SpellID": 2079959836, "Target": "Self"}
+      ],
+      "Notes": "Every fifth round with a minion: Steal Health (1,400) on it, and the next of ten polymorphs (+5% damage and pierce, -5% resist each)." }
+  ]
+}

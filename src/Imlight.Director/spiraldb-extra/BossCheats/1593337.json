@@ -1,0 +1,75 @@
+{
+  // Bearded Dragon (Rank 22, Sun, 17,065 health), Night Mire Gauntlet. Bearded Dragon (Sun) and its Star and Moon dragons: they keep each other alive, and a three-part cycle from round 2.
+  // From Wizard404's data on the gauntlets (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove).
+  // Built first from blocks that were there, then from the new universal blocks each Notes names (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1593337,
+  "Name": "Bearded Dragon (Rank 22)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "Passive", "Passive": "Minions", "Brings": ["1593338", "1593339"],
+      "Notes": "It fights with the Star and Moon Bearded Dragons (Wizard404: its minions). New block: comes with." },
+
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002728"},
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 1022053292, "Target": "AllAllies", "DispelImmune": false}
+      ],
+      "Notes": "\"Just what we needed- time to bask under the sun!\" A late wizard: Blessing on all its allies." },
+
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002738"}
+      ],
+      "Notes": "\"Moon and Stars keep Sun eternal!\" The clue, in round 1." },
+
+    { "When": "BossDefeated", "AlliesMin": 2,
+      "Actions": [
+        {"Do": "SetHealth", "Amount": 17065},
+        {"Do": "Say", "Line": "CombatMessages_00002735"},
+        {"Do": "Cast", "Spell": "Ra", "SpellID": 1195668091, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 1022053292, "Target": "AllAllies", "DispelImmune": false}
+      ],
+      "Notes": "\"You cannot defeat us at full strength!\" Defeated while both its allies stand: back up, Ra on the wizards and Blessing on its side. New block: how many allies." },
+
+    { "When": "BossDefeated", "AlliesMin": 1, "AlliesMax": 1,
+      "Actions": [
+        {"Do": "SetHealth", "Amount": 17065},
+        {"Do": "Say", "Line": "CombatMessages_00002736"},
+        {"Do": "Cast", "Spell": "Power Nova", "SpellID": 1488069996, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 1022053292, "Target": "AllAllies", "DispelImmune": false}
+      ],
+      "Notes": "\"As long as two remain we shall survive!\" Defeated with one ally standing: back up, Power Nova and Blessing. New block: how many allies." },
+
+    { "When": "RoundStart", "Round": 2, "Every": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002729"},
+        {"Do": "Cast", "Spell": "Sun Trap", "SpellID": 415158269, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00002731"},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Star Blade", "SpellID": 1143007400, "Target": "Ally", "DispelImmune": false, "Creature": 1593338},
+        {"Do": "Say", "Line": "CombatMessages_00002733"},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Moon Shield", "SpellID": 1732244119, "Target": "Ally", "DispelImmune": false, "Creature": 1593339}
+      ],
+      "Notes": "Round 2 (then every 3 rounds, a guess): Sun Trap on a random wizard, the Star dragon's Star Blade and the Moon dragon's Moon Shield on a random ally. New block: an ally casts." },
+
+    { "When": "RoundEnd", "Round": 2, "Every": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002730"},
+        {"Do": "PickOne", "Count": 3},
+        {"Do": "Cast", "Spell": "Blinding Light", "SpellID": 1261981915, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Guardian Spirit", "SpellID": 1529598853, "Target": "Ally", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Smoke Screen", "SpellID": 496482937, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00002732"},
+        {"Do": "PickOne", "Count": 3},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Unicorn", "SpellID": 550546918, "Target": "", "DispelImmune": false, "Creature": 1593338},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Restoring Rain", "SpellID": 1864306325, "Target": "", "DispelImmune": false, "Creature": 1593338},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Virulent Plague", "SpellID": 1599984203, "Target": "", "DispelImmune": false, "Creature": 1593338},
+        {"Do": "Say", "Line": "CombatMessages_00002734"},
+        {"Do": "PickOne", "Count": 3},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Legion Shield", "SpellID": 3605232, "Target": "", "DispelImmune": false, "Creature": 1593339},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Grendel's Amends", "SpellID": 197363180, "Target": "Ally", "DispelImmune": false, "Creature": 1593339},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Mass Infection", "SpellID": 133227446, "Target": "", "DispelImmune": false, "Creature": 1593339}
+      ],
+      "Notes": "The end of round 2 (then every 3 rounds, a guess): one spell at random each from the Sun, Star and Moon dragons. Existing blocks and an ally casts." }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  // Bort Shadowmane (Rank 16, Shadow, 12,600 health), Mirage. Bort Shadowmane: Steal Pip for a late wizard, Bronze Armor when attacked, Shatter after his Natural Attack.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1402195,
+  "Name": "Bort Shadowmane (Rank 16)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000996"},
+        {"Do": "Cast", "Spell": "Steal Pip", "SpellID": 724062293, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Steal Pip on them." },
+
+    { "When": "PlayerCasts", "Category": "Damage", "OnBoss": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000997"},
+        {"Do": "Cast", "Spell": "Bronze Armor", "SpellID": 1067862294, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Attacked: Bronze Armor." },
+
+    { "When": "ICast", "Spells": ["Natural Attack"],
+      "Actions": [
+        {"Do": "Cast", "Spell": "Shatter", "SpellID": 1000713067, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "After his Natural Attack: Shatter." }
+  ]
+}

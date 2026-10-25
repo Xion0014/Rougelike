@@ -1,0 +1,230 @@
+{
+  // Personal Daemon (Rank 23, Ice, 96,000 health), Unknown. Personal Daemon: three cloaked traps of one school and a big spell of it, and limits on hanging effects.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1659107,
+  "Name": "Personal Daemon (Rank 23)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "RoundStart", "Round": 2,
+      "Actions": [
+        {"Do": "PickOne", "Count": 7, "Group": 2},
+        {"Do": "Cast", "Spell": "Fire Shield 1", "SpellID": 1708075774, "Target": "Self", "DispelImmune": false},
+        {"Do": "Mark", "Mark": "Fire cloak", "Target": "Self"},
+        {"Do": "Cast", "Spell": "Snow Shield 1", "SpellID": 535119228, "Target": "Self", "DispelImmune": false},
+        {"Do": "Mark", "Mark": "Ice cloak", "Target": "Self"},
+        {"Do": "Cast", "Spell": "Storm Shield 1", "SpellID": 366818725, "Target": "Self", "DispelImmune": false},
+        {"Do": "Mark", "Mark": "Storm cloak", "Target": "Self"},
+        {"Do": "Cast", "Spell": "Myth Shield 1", "SpellID": 615459373, "Target": "Self", "DispelImmune": false},
+        {"Do": "Mark", "Mark": "Myth cloak", "Target": "Self"},
+        {"Do": "Cast", "Spell": "Life Shield 1", "SpellID": 1687104244, "Target": "Self", "DispelImmune": false},
+        {"Do": "Mark", "Mark": "Life cloak", "Target": "Self"},
+        {"Do": "Cast", "Spell": "Death Shield 1", "SpellID": 1396522946, "Target": "Self", "DispelImmune": false},
+        {"Do": "Mark", "Mark": "Death cloak", "Target": "Self"},
+        {"Do": "Cast", "Spell": "Balance Shield 1", "SpellID": 578428866, "Target": "Self", "DispelImmune": false},
+        {"Do": "Mark", "Mark": "Balance cloak", "Target": "Self"}
+      ],
+      "Notes": "Round 2: a cloaked trap of one school on himself." },
+
+    { "When": "RoundStart", "Round": 3, "Mark": "Fire cloak", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Fire Shield 2", "SpellID": 1707682558, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 3, Fire: the second cloaked trap." },
+
+    { "When": "RoundStart", "Round": 4, "Mark": "Fire cloak", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Fire Shield 3", "SpellID": 1707813630, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 4, Fire: the third." },
+
+    { "When": "RoundEnd", "Round": 5, "Mark": "Fire cloak", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003264"},
+        {"Do": "PickOne", "Count": 2},
+        {"Do": "Cast", "Spell": "Akori Nirini", "SpellID": 1640582985, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "King Artorius", "SpellID": 298005294, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "RemoveWards", "Kind": "All", "Spell": "Fire Shield 1", "Target": "Self"},
+        {"Do": "RemoveWards", "Kind": "All", "Spell": "Fire Shield 2", "Target": "Self"},
+        {"Do": "RemoveWards", "Kind": "All", "Spell": "Fire Shield 3", "Target": "Self"}
+      ],
+      "Notes": "End of round 5, Fire: Akori Nirini or King Artorius, and the cloaked traps cleansed." },
+
+    { "When": "RoundStart", "Round": 3, "Mark": "Ice cloak", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Snow Shield 2", "SpellID": 535131516, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 3, Ice: the second cloaked trap." },
+
+    { "When": "RoundStart", "Round": 4, "Mark": "Ice cloak", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Snow Shield 3", "SpellID": 535127420, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 4, Ice: the third." },
+
+    { "When": "RoundEnd", "Round": 5, "Mark": "Ice cloak", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003264"},
+        {"Do": "Cast", "Spell": "Hypothermi-HIYA!", "SpellID": 1950899557, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "RemoveWards", "Kind": "All", "Spell": "Snow Shield 1", "Target": "Self"},
+        {"Do": "RemoveWards", "Kind": "All", "Spell": "Snow Shield 2", "Target": "Self"},
+        {"Do": "RemoveWards", "Kind": "All", "Spell": "Snow Shield 3", "Target": "Self"}
+      ],
+      "Notes": "End of round 5, Ice: Hypothermi-HIYA!, and the cloaked traps cleansed." },
+
+    { "When": "RoundStart", "Round": 3, "Mark": "Storm cloak", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Storm Shield 2", "SpellID": 354235813, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 3, Storm: the second cloaked trap." },
+
+    { "When": "RoundStart", "Round": 4, "Mark": "Storm cloak", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Storm Shield 3", "SpellID": 358430117, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 4, Storm: the third." },
+
+    { "When": "RoundEnd", "Round": 5, "Mark": "Storm cloak", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003264"},
+        {"Do": "PickOne", "Count": 2},
+        {"Do": "Cast", "Spell": "Leviathan", "SpellID": 725961211, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "King Artorius", "SpellID": 428136364, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "RemoveWards", "Kind": "All", "Spell": "Storm Shield 1", "Target": "Self"},
+        {"Do": "RemoveWards", "Kind": "All", "Spell": "Storm Shield 2", "Target": "Self"},
+        {"Do": "RemoveWards", "Kind": "All", "Spell": "Storm Shield 3", "Target": "Self"}
+      ],
+      "Notes": "End of round 5, Storm: Leviathan or King Artorius, and the cloaked traps cleansed." },
+
+    { "When": "RoundStart", "Round": 3, "Mark": "Myth cloak", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Myth Shield 2", "SpellID": 615066157, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 3, Myth: the second cloaked trap." },
+
+    { "When": "RoundStart", "Round": 4, "Mark": "Myth cloak", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Myth Shield 3", "SpellID": 615197229, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 4, Myth: the third." },
+
+    { "When": "RoundEnd", "Round": 5, "Mark": "Myth cloak", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003264"},
+        {"Do": "Cast", "Spell": "Basilisk", "SpellID": 1474406736, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "RemoveWards", "Kind": "All", "Spell": "Myth Shield 1", "Target": "Self"},
+        {"Do": "RemoveWards", "Kind": "All", "Spell": "Myth Shield 2", "Target": "Self"},
+        {"Do": "RemoveWards", "Kind": "All", "Spell": "Myth Shield 3", "Target": "Self"}
+      ],
+      "Notes": "End of round 5, Myth: Basilisk, and the cloaked traps cleansed." },
+
+    { "When": "RoundStart", "Round": 3, "Mark": "Life cloak", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Life Shield 2", "SpellID": 1686711028, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 3, Life: the second cloaked trap." },
+
+    { "When": "RoundStart", "Round": 4, "Mark": "Life cloak", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Life Shield 3", "SpellID": 1686842100, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 4, Life: the third." },
+
+    { "When": "RoundEnd", "Round": 5, "Mark": "Life cloak", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003264"},
+        {"Do": "Cast", "Spell": "Centaur", "SpellID": 91915861, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "RemoveWards", "Kind": "All", "Spell": "Life Shield 1", "Target": "Self"},
+        {"Do": "RemoveWards", "Kind": "All", "Spell": "Life Shield 2", "Target": "Self"},
+        {"Do": "RemoveWards", "Kind": "All", "Spell": "Life Shield 3", "Target": "Self"}
+      ],
+      "Notes": "End of round 5, Life: Centaur, and the cloaked traps cleansed." },
+
+    { "When": "RoundStart", "Round": 3, "Mark": "Death cloak", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Death Shield 2", "SpellID": 1409105858, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 3, Death: the second cloaked trap." },
+
+    { "When": "RoundStart", "Round": 4, "Mark": "Death cloak", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Death Shield 3", "SpellID": 1404911554, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 4, Death: the third." },
+
+    { "When": "RoundEnd", "Round": 5, "Mark": "Death cloak", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003264"},
+        {"Do": "Cast", "Spell": "Skeletal Pirate", "SpellID": 2030986978, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "RemoveWards", "Kind": "All", "Spell": "Death Shield 1", "Target": "Self"},
+        {"Do": "RemoveWards", "Kind": "All", "Spell": "Death Shield 2", "Target": "Self"},
+        {"Do": "RemoveWards", "Kind": "All", "Spell": "Death Shield 3", "Target": "Self"}
+      ],
+      "Notes": "End of round 5, Death: Skeletal Pirate, and the cloaked traps cleansed." },
+
+    { "When": "RoundStart", "Round": 3, "Mark": "Balance cloak", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Balance Shield 2", "SpellID": 578428867, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 3, Balance: the second cloaked trap." },
+
+    { "When": "RoundStart", "Round": 4, "Mark": "Balance cloak", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Balance Shield 3", "SpellID": 578428868, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 4, Balance: the third." },
+
+    { "When": "RoundEnd", "Round": 5, "Mark": "Balance cloak", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003264"},
+        {"Do": "Cast", "Spell": "Hypothermi-HIYA!", "SpellID": 1466566319, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "RemoveWards", "Kind": "All", "Spell": "Balance Shield 1", "Target": "Self"},
+        {"Do": "RemoveWards", "Kind": "All", "Spell": "Balance Shield 2", "Target": "Self"},
+        {"Do": "RemoveWards", "Kind": "All", "Spell": "Balance Shield 3", "Target": "Self"}
+      ],
+      "Notes": "End of round 5, Balance: Hypothermi-HIYA!, and the cloaked traps cleansed." },
+
+    { "When": "PlayerWards", "HasWho": "Receiver", "HasKind": "Ward", "HasCount": 5,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003271"},
+        {"Do": "RemoveEffects", "Kind": "Ward", "Target": "Receiver"}
+      ],
+      "Notes": "A fifth ward on a wizard: all of them off." },
+
+    { "When": "PlayerCasts", "Category": "Trap", "HasWho": "Receiver", "HasKind": "Trap", "HasCount": 5,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003271"},
+        {"Do": "RemoveEffects", "Kind": "Trap", "Target": "Receiver"}
+      ],
+      "Notes": "A fifth jinx on his side: all of them off." },
+
+    { "When": "PlayerCasts", "Category": "HoT", "HasWho": "Receiver", "HasKind": "HoT", "HasCount": 5,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003271"},
+        {"Do": "RemoveEffects", "Kind": "HoT", "Target": "Receiver"}
+      ],
+      "Notes": "A fifth HoT on a wizard: all off." },
+
+    { "When": "PlayerCasts", "Category": "DoT", "HasWho": "Receiver", "HasKind": "DoT", "HasCount": 5,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003271"},
+        {"Do": "RemoveEffects", "Kind": "DoT", "Target": "Receiver"}
+      ],
+      "Notes": "A fifth DoT on his side: all off." },
+
+    { "When": "PlayerCasts", "Category": "Weakness",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002772"},
+        {"Do": "Cast", "Spell": "Mob Jinn's Vexation", "SpellID": 1252552837, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "A curse: Mob Jinn's Vexation takes it off." },
+
+    { "When": "PlayerCharms", "Category": "Blade",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002773"},
+        {"Do": "Cast", "Spell": "Mob Oni's Destruction", "SpellID": 1252552901, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "A charm: Mob Oni's Destruction takes it off." }
+  ]
+}

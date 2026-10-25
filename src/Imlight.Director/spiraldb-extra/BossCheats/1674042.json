@@ -1,0 +1,40 @@
+{
+  // Failed Ritual Oni (Rank 9, Balance, 3,800 health), Unknown. Failed Ritual Oni: Shield Trap each round until the Locust Swarm it gives is cast.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1674042,
+  "Name": "Failed Ritual Oni (Rank 9)",
+  "Cheats": [
+    { "When": "RoundStart", "Mark": "cheat off", "MarkWho": "Self", "NotMarked": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003477"},
+        {"Do": "Cast", "Spell": "Shield Trap", "SpellID": 474228149, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Each round while the cheat is on: Shield Trap." },
+
+    { "When": "RoundStart", "Round": 4, "Mark": "cheat off", "MarkWho": "Self", "NotMarked": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003478"},
+        {"Do": "Cast", "Spell": "Nature Call", "SpellID": 2057749254, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Start of round 4: the card is given." },
+
+    { "When": "BossDefeated", "Mark": "cheat off", "MarkWho": "Self", "NotMarked": true,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 1641304242, "Target": "Self", "DispelImmune": false},
+        {"Do": "SetHealth", "Amount": 3800},
+        {"Do": "Cast", "Spell": "Nature Call", "SpellID": 2057749254, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Defeated while the cheat is on: Blessing back to full, and the card given again." },
+
+    { "When": "PlayerCasts", "Spells": ["Locust Swarm"], "AnyVersion": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003480"},
+        {"Do": "Cast", "Spell": "Shatter", "SpellID": 876766972, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 26014286, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Mark", "Mark": "cheat off", "Target": "Self"}
+      ],
+      "Notes": "The given Locust Swarm cast: Shatter on itself, Cleanse Ward on the wizard, and the cheat is off." }
+  ]
+}

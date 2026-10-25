@@ -1,0 +1,17 @@
+{
+  // The Hermit Card (Rank 25, Balance, 16,820 health), Darkmoor. The Hermit Card: Shadow Weakness for each wizard, then a Purge for each.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1698908,
+  "Name": "The Hermit Card (Rank 25)",
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003984"},
+        {"Do": "Cast", "Spell": "Shadow Weakness", "SpellID": 533069803, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "ASTH Purge All", "SpellID": 258198696, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Shadow Weakness for each wizard, then ASTH Purge All." }
+  ]
+}

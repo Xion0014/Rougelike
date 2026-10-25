@@ -1,0 +1,40 @@
+{
+  // Morp (Rank 23, Life, 19,815 health), Unknown. Morp: Shadow Sentinel, stuns for the first two hits, and everyone out on the third.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1619148,
+  "Name": "Morp (Rank 23)",
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002970"},
+        {"Do": "Cast", "Spell": "Shadow Sentinel", "SpellID": 339705174, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Shadow Sentinel (3 rounds)." },
+
+    { "When": "BossHit", "Category": "Damage", "Mark": "hit twice", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002973"},
+        {"Do": "Cast", "Spell": "Exit Combat", "SpellID": 2127696416, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Hit a third time: Exit Combat on all wizards." },
+
+    { "When": "BossHit", "Category": "Damage", "Mark": "hit once", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002972"},
+        {"Do": "Stun", "Rounds": 1, "Target": "Caster"},
+        {"Do": "Unmark", "Mark": "hit once", "Target": "Self"},
+        {"Do": "Mark", "Mark": "hit twice", "Target": "Self"}
+      ],
+      "Notes": "Hit a second time: the caster stunned." },
+
+    { "When": "BossHit", "Category": "Damage", "Once": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002971"},
+        {"Do": "Stun", "Rounds": 1, "Target": "Caster"},
+        {"Do": "Mark", "Mark": "hit once", "Target": "Self"}
+      ],
+      "Notes": "Hit the first time: the caster stunned." }
+  ]
+}

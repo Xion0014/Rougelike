@@ -1,0 +1,17 @@
+{
+  // The Quizzler (Rank 16, Myth, 3,850 health), Empyrea. The Quizzler: Stun and Dimension Shift for a late wizard.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1391666,
+  "Name": "The Quizzler (Rank 16)",
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001130"},
+        {"Do": "Cast", "Spell": "Stun", "SpellID": 2514611, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Dimension Shift", "SpellID": 1443882214, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Stun, Dimension Shift on them." }
+  ]
+}

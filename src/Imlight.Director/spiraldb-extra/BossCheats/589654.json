@@ -1,0 +1,29 @@
+{
+  // Matkis Axethief (Rank 11, Fire, 9,040 health), Avalon. Matkis Axethief: Reshuffle in round 1 and at random, and Link on a wizard who fizzles.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 589654,
+  "Name": "Matkis Axethief (Rank 11)",
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Reshuffle", "SpellID": 1029625753, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Reshuffle, without pips." },
+
+    { "When": "PlayerCasts", "Fizzle": "Fizzled",
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000115"},
+        {"Do": "Cast", "Spell": "Link", "SpellID": 946535843, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard fizzles: Link on them." },
+
+    { "When": "RoundStart", "Chance": 25, "FromRound": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000158"},
+        {"Do": "Cast", "Spell": "Reshuffle", "SpellID": 1029625753, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Now and then (25% a round, a guess): Reshuffle on a wizard." }
+  ]
+}

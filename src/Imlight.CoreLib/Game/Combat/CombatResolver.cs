@@ -84,7 +84,7 @@ public class QueuedCombatAction {
 /// the effects of spells on targets. Manages the flow of a combat turn by processing queued 
 /// actions and calculating cinematic timing for visual feedback.
 /// </remarks>
-public class CombatResolver(Duel duel, CombatDuelSubCircle[] actorSubCircles) {
+public partial class CombatResolver(Duel duel, CombatDuelSubCircle[] actorSubCircles) {
     
     private const int SPELL_FIZZLE_TIME = 4;
 
@@ -262,14 +262,23 @@ public class CombatResolver(Duel duel, CombatDuelSubCircle[] actorSubCircles) {
 
         _petCastsThisRound.Clear();
         PetCastCards.Clear();
+
+        // Boss cheats (CombatResolver.BossCheats.cs): the round's own, then after each move, then the end of the round.
+        cinematicTime += CheatsAtRound(atEnd: false, combatActionList, cinematicTime);
         foreach (var action in _queuedCombatActions) {
             cinematicTime += WithPetMayCasts(() => CastDelayed(action.SpellCaster, atStart: true, combatActionList, cinematicTime),
                 combatActionList, cinematicTime);
+            var actionsBefore = combatActionList.m_actionList.Count;
+            var healthBefore = _subCircles.Where(c => c is { Occupied: true } && c.ParticipantGameStats is not null)
+                .ToDictionary(c => c, c => c.ParticipantGameStats.m_currentHitpoints);
             cinematicTime += WithPetMayCasts(() => ProcessQueuedAction(action, combatActionList, cinematicTime),
                 combatActionList, cinematicTime);
+            cinematicTime += CheatsAfterMove(action, actionsBefore, healthBefore, combatActionList, cinematicTime);
             cinematicTime += WithPetMayCasts(() => CastDelayed(action.SpellCaster, atStart: false, combatActionList, cinematicTime),
                 combatActionList, cinematicTime);
         }
+
+        cinematicTime += CheatsAtRound(atEnd: true, combatActionList, cinematicTime);
 
         return instantCinematics ? 0 : cinematicTime;
     }

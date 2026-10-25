@@ -1,0 +1,31 @@
+{
+  // Taffy (Rank 15, Ice, 8,400 health), Mirage. Taffy: Tower Shields and Frozen Armor for a late wizard, Cleanse Ward for a trap.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1384777,
+  "Name": "Taffy (Rank 15)",
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000978"},
+        {"Do": "Cast", "Spell": "Tower Shield", "SpellID": 2134617217, "Target": "AllAllies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Frozen Armor", "SpellID": 692672375, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A late wizard." },
+
+    { "When": "PlayerCasts", "Category": "Trap", "OnBoss": true, "SingleTarget": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000979"},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 916208984, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A single-target trap on him: Cleanse Ward." },
+
+    { "When": "PlayerCasts", "Spells": ["Mass Feint"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000979"},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 916208984, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "Mass Feint: Cleanse Ward on the caster." }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  // Renegade Druid (Rank 18, Storm, 140,000 health), Wizard City. Renegade Druid: Impede for a late wizard, Cleanse Ward for a Feint, three Druids with Intercepts, and their spells in rounds 8 and 12.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1489253,
+  "Name": "Renegade Druid (Rank 18)",
+  "ShadowPips": 4,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001400"},
+        {"Do": "Cast", "Spell": "Impede", "SpellID": 1906062967, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Impede on them." },
+
+    { "When": "PlayerCasts", "Spells": ["Feint", "Mass Feint"], "AnyVersion": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001401"},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 1924801312, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A Feint or Mass Feint: Cleanse Ward." },
+
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001402"},
+        {"Do": "Cast", "Spell": "Summon Minions", "SpellID": 295870445, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: three Renegade Druids." },
+
+    { "When": "RoundStart", "Round": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001403"},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Intercept 100", "SpellID": 751334567, "Target": "Owner", "DispelImmune": false, "Creature": 1489905},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Intercept 100", "SpellID": 751334567, "Target": "Owner", "DispelImmune": false, "Creature": 1489906},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Intercept 100", "SpellID": 751334567, "Target": "Owner", "DispelImmune": false, "Creature": 1489907}
+      ],
+      "Notes": "Round 2: each Druid's Intercept (Shadow Sentinel) on him." },
+
+    { "When": "RoundEnd", "Round": 8,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001405"},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Donate Shadow", "SpellID": 1277029173, "Target": "", "DispelImmune": false, "Creature": 1489906}
+      ],
+      "Notes": "End of round 8: the Shadow Druid's Donate Shadow." },
+
+    { "When": "RoundEnd", "Round": 12,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001406"},
+        {"Do": "PickOne", "Count": 7},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Shift Dread Paladin", "SpellID": 1539509074, "Target": "AllEnemies", "DispelImmune": false, "Creature": 1489907},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Shift GreenOak", "SpellID": 1248338602, "Target": "AllEnemies", "DispelImmune": false, "Creature": 1489907},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Shift Grendel", "SpellID": 1378865731, "Target": "AllEnemies", "DispelImmune": false, "Creature": 1489907},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Shift Ogre", "SpellID": 1795936072, "Target": "AllEnemies", "DispelImmune": false, "Creature": 1489907},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Shift Piscean", "SpellID": 310408071, "Target": "AllEnemies", "DispelImmune": false, "Creature": 1489907},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Shift Sugar Glider", "SpellID": 1947739674, "Target": "AllEnemies", "DispelImmune": false, "Creature": 1489907},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Shift Thornpaw", "SpellID": 1662070539, "Target": "AllEnemies", "DispelImmune": false, "Creature": 1489907}
+      ],
+      "Notes": "End of round 12: the Moon Druid's shift on the wizards (one of seven; the game picks one for each)." }
+  ]
+}

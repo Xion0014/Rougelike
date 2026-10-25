@@ -1,0 +1,24 @@
+{
+  // The Terror (Rank 16, Sun, 11,090 health), Empyrea. The Terror: Mana Burn for a late wizard, Terrorblade every fifth round.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1391658,
+  "Name": "The Terror (Rank 16)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001129"},
+        {"Do": "Cast", "Spell": "Mana Burn", "SpellID": 1770536658, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Mana Burn on them." },
+
+    { "When": "RoundEnd", "Round": 5, "Every": 5,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001129"},
+        {"Do": "Cast", "Spell": "Terrorblade", "SpellID": 6362532, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "End of every fifth round: Terrorblade." }
+  ]
+}

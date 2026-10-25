@@ -1,0 +1,35 @@
+{
+  // Copy Qhat (Rank 17, Moon, 1 health), Karamelle. Copy Qhat (copy): summons more copies on both sides.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1505771,
+  "Name": "Copy Qhat (Rank 17)",
+  "Cheats": [
+    { "When": "RoundStart", "AlliesMax": 2, "Cooldown": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001566"},
+        {"Do": "Cast", "Spell": "Summon Minions", "SpellID": 724475168, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A circle free on her side (every 2 rounds, a guess): another copy." },
+
+    { "When": "RoundStart", "PlayersMax": 3, "Cooldown": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001563"},
+        {"Do": "Cast", "Spell": "Summon Minions", "SpellID": 1345715302, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A circle free on the wizards' side: Copy Qhat - Player Minion." },
+
+    { "When": "ICast", "Spells": ["Major Snowburst"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001567"}
+      ],
+      "Notes": "Her Major Snowburst: the boss says \"Stop that!\" (here over her)." },
+
+    { "When": "ICast", "Spells": ["Balanceblade"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001565"}
+      ],
+      "Notes": "Her Balanceblade." }
+  ]
+}

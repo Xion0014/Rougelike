@@ -1,0 +1,35 @@
+{
+  // Belosto ToeBiter (Rank 13, Ice, 20,520 health), Khrysalis. Belosto ToeBiter: Natural Attack for a charm, global or manipulation; Scarecrow when anyone falls.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1223122,
+  "Name": "Belosto ToeBiter (Rank 13)",
+  "Cheats": [
+    { "When": "PlayerCasts", "Category": "Charm,Global",
+      "Actions": [
+        {"Do": "Interrupt"},
+        {"Do": "Cast", "Spell": "Natural Attack", "SpellID": 848156681, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A charm, global or manipulation: Natural Attack first." },
+
+    { "When": "PlayerCasts", "Kind": "Manipulation",
+      "Actions": [
+        {"Do": "Interrupt"},
+        {"Do": "Cast", "Spell": "Natural Attack", "SpellID": 848156681, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "" },
+
+    { "When": "PlayerDefeated",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Scarecrow", "SpellID": 1199756839, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A wizard falls: Scarecrow." },
+
+    { "When": "MinionDefeated",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Scarecrow", "SpellID": 1199756839, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "An ally falls: Scarecrow." }
+  ]
+}

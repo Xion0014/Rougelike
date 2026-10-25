@@ -1,0 +1,44 @@
+{
+  // Doctor Jackall (Rank 6, Ice, 4,860 health), Unknown. Doctor Jackall: Balefrost, Legion Shield when hit, Steal Ward after his attack, and Mister Hound in round 4.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1302674,
+  "Name": "Doctor Jackall (Rank 6)",
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000473"},
+        {"Do": "Cast", "Spell": "Balefrost", "SpellID": 1615064713, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Balefrost." },
+
+    { "When": "BossHit", "Category": "Damage",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000472"},
+        {"Do": "Cast", "Spell": "Legion Shield", "SpellID": 1572253145, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Hurt: Legion Shield." },
+
+    { "When": "ICast", "Spells": ["Natural Attack"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000476"},
+        {"Do": "Cast", "Spell": "Steal Ward", "SpellID": 991342922, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "After his Natural Attack: Steal Ward." },
+
+    { "When": "RoundEnd", "Round": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000480"},
+        {"Do": "Polymorph", "Spell": "Polymorph Elemental", "SpellID": 1023579664, "Target": "Self"}
+      ],
+      "Notes": "End of round 4: he turns into Mister Hound." },
+
+    { "When": "MinionDefeated", "Creature": 1302666, "AlliesMax": 0,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000475"},
+        {"Do": "Cast", "Spell": "Lava Giant", "SpellID": 1929262457, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "His last Lanyon Scratcher falls: Lava Giant." }
+  ]
+}

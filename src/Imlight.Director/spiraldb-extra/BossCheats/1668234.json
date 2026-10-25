@@ -1,0 +1,44 @@
+{
+  // Enki the Heretic (Rank 23, Fire, 13,095 health), Krokotopia. Enki the Heretic: Scald after his attacks or for a late wizard, Lightkeeper's Beam, Incindiate, Sprite for a charm.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1668234,
+  "Name": "Enki the Heretic (Rank 23)",
+  "Cheats": [
+    { "When": "ICast", "Category": "Damage",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003435"},
+        {"Do": "Cast", "Spell": "Scald", "SpellID": 73862227, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "After his damage spell: Scald." },
+
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003435"},
+        {"Do": "Cast", "Spell": "Scald", "SpellID": 73862227, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Scald on them." },
+
+    { "When": "RoundStart", "Round": 2, "Every": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003502"},
+        {"Do": "Cast", "Spell": "Lightkeeper's Beam", "SpellID": 110181219, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Every two rounds: Lightkeeper's Beam." },
+
+    { "When": "RoundStart", "Round": 5, "Every": 5,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003434"},
+        {"Do": "Cast", "Spell": "Incindiate", "SpellID": 1986646109, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Every 5th round: Incindiate." },
+
+    { "When": "PlayerCasts", "Category": "Charm",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003433"},
+        {"Do": "Cast", "Spell": "Sprite", "SpellID": 1522776157, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "A charm: Sprite on all wizards." }
+  ]
+}

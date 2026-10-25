@@ -1,0 +1,24 @@
+{
+  // Basil the Brigand (Rank 22, Death, 13,265 health), Novus. Basil the Brigand: a random answer to blades, traps and globals.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1569393,
+  "Name": "Basil the Brigand (Rank 22)",
+  "ShadowPips": 1,
+  "Cheats": [
+    { "When": "PlayerCasts", "Category": "Blade,Trap,Global", "Chance": 50,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002424"},
+        {"Do": "PickOne", "Count": 7},
+        {"Do": "Cast", "Spell": "Plague", "SpellID": 1888318032, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Plague", "SpellID": 1690482774, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Mass Weakness", "SpellID": 1798627878, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Tower Shield", "SpellID": 432324968, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Tower Shield", "SpellID": 2134617217, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Legion Shield", "SpellID": 3605232, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Frozen Armor", "SpellID": 692672375, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A blade, trap or global: maybe (50%) one of seven spells." }
+  ]
+}

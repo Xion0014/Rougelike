@@ -1,0 +1,167 @@
+{
+  // The Nullity (Rank 21, Shadow, 40,000 health), Unknown. The Nullity: Force Pass in round 1, Power Current each round, and a school cycle every three rounds.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  // Checked against its Wizard101 Central page (saved 2026-10-24): the school cycle and the fire cycle's Fire Elf match; Threefold Fever goes on one wizard.
+  "TemplateID": 1569037,
+  "Name": "The Nullity (Rank 21)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Force Pass", "SpellID": 423978274, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Force Pass on all wizards." },
+
+    { "When": "RoundEnd", "Round": 1,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Force Pass End", "SpellID": 1376816564, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "End of round 1: Force Pass End." },
+
+    { "When": "RoundEnd",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Power Current", "SpellID": 23303614, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "End of each round: Power Current on itself." },
+
+    { "When": "RoundStart", "Round": 1, "Every": 3,
+      "Actions": [
+        {"Do": "Unmark", "Mark": "Fire cycle", "Target": "Self"},
+        {"Do": "Unmark", "Mark": "Ice cycle", "Target": "Self"},
+        {"Do": "Unmark", "Mark": "Storm cycle", "Target": "Self"},
+        {"Do": "Unmark", "Mark": "Myth cycle", "Target": "Self"},
+        {"Do": "Unmark", "Mark": "Life cycle", "Target": "Self"},
+        {"Do": "Unmark", "Mark": "Death cycle", "Target": "Self"},
+        {"Do": "PickOne", "Count": 6, "Group": 2},
+        {"Do": "Cast", "Spell": "Hex", "SpellID": 1345152781, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Mark", "Mark": "Fire cycle", "Target": "Self"},
+        {"Do": "Cast", "Spell": "Hex", "SpellID": 1518430585, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Mark", "Mark": "Ice cycle", "Target": "Self"},
+        {"Do": "Cast", "Spell": "Hex", "SpellID": 86833113, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Mark", "Mark": "Storm cycle", "Target": "Self"},
+        {"Do": "Cast", "Spell": "Hex", "SpellID": 1345060102, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Mark", "Mark": "Myth cycle", "Target": "Self"},
+        {"Do": "Cast", "Spell": "Hex", "SpellID": 1345140487, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Mark", "Mark": "Life cycle", "Target": "Self"},
+        {"Do": "Cast", "Spell": "Hex", "SpellID": 92261870, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Mark", "Mark": "Death cycle", "Target": "Self"}
+      ],
+      "Notes": "Round 1 and every 3rd after: one of six Hexes picks its school cycle." },
+
+    { "When": "RoundEnd", "Round": 1, "Every": 3, "Mark": "Fire cycle", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002393"},
+        {"Do": "Cast", "Spell": "Fire Elf", "SpellID": 1415711502, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Fire cycle, end of its round 1: Fire Elf." },
+
+    { "When": "RoundEnd", "Round": 2, "Every": 3, "Mark": "Fire cycle", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Scald", "SpellID": 73862227, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Fire cycle, end of its round 2: Scald." },
+
+    { "When": "RoundEnd", "Round": 3, "Every": 3, "Mark": "Fire cycle", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Scion of Fire", "SpellID": 740288547, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Fire cycle, end of its round 3: Scion of Fire." },
+
+    { "When": "RoundEnd", "Round": 1, "Every": 3, "Mark": "Ice cycle", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002390"},
+        {"Do": "Cast", "Spell": "Tower Shield", "SpellID": 432324968, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Ice cycle, end of its round 1: Tower Shield." },
+
+    { "When": "RoundEnd", "Round": 2, "Every": 3, "Mark": "Ice cycle", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Shield Wall", "SpellID": 2042371563, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Ice cycle, end of its round 2: Shield Wall." },
+
+    { "When": "RoundEnd", "Round": 3, "Every": 3, "Mark": "Ice cycle", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Scion of Ice", "SpellID": 1095413599, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Ice cycle, end of its round 3: Scion of Ice." },
+
+    { "When": "RoundEnd", "Round": 1, "Every": 3, "Mark": "Storm cycle", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002391"},
+        {"Do": "Cast", "Spell": "Star Blade", "SpellID": 1143007400, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Storm cycle, end of its round 1: Star Blade." },
+
+    { "When": "RoundEnd", "Round": 2, "Every": 3, "Mark": "Storm cycle", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Guiding Light x3", "SpellID": 1007680666, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Storm cycle, end of its round 2: Guiding Light x3." },
+
+    { "When": "RoundEnd", "Round": 3, "Every": 3, "Mark": "Storm cycle", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Scion of Storm", "SpellID": 2102004441, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Storm cycle, end of its round 3: Scion of Storm." },
+
+    { "When": "RoundEnd", "Round": 1, "Every": 3, "Mark": "Myth cycle", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002394"},
+        {"Do": "Cast", "Spell": "Mythic Fuel", "SpellID": 1403968637, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Myth cycle, end of its round 1: Mythic Fuel." },
+
+    { "When": "RoundEnd", "Round": 2, "Every": 3, "Mark": "Myth cycle", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Mass Myth Trap", "SpellID": 1815254796, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Myth cycle, end of its round 2: Mass Myth Trap." },
+
+    { "When": "RoundEnd", "Round": 3, "Every": 3, "Mark": "Myth cycle", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Scion of Myth", "SpellID": 741030011, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Myth cycle, end of its round 3: Scion of Myth." },
+
+    { "When": "RoundEnd", "Round": 1, "Every": 3, "Mark": "Life cycle", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002389"},
+        {"Do": "Cast", "Spell": "Sprite", "SpellID": 1889156557, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Life cycle, end of its round 1: Sprite." },
+
+    { "When": "RoundEnd", "Round": 2, "Every": 3, "Mark": "Life cycle", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Sprite Swarm", "SpellID": 1465535317, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Life cycle, end of its round 2: Sprite Swarm." },
+
+    { "When": "RoundEnd", "Round": 3, "Every": 3, "Mark": "Life cycle", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Scion of Life", "SpellID": 740124787, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Life cycle, end of its round 3: Scion of Life." },
+
+    { "When": "RoundEnd", "Round": 1, "Every": 3, "Mark": "Death cycle", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002392"},
+        {"Do": "Cast", "Spell": "Threefold Fever", "SpellID": 174822216, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Death cycle, end of its round 1: Threefold Fever on a wizard (Central)." },
+
+    { "When": "RoundEnd", "Round": 2, "Every": 3, "Mark": "Death cycle", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Mass Infection", "SpellID": 133227446, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Death cycle, end of its round 2: Mass Infection." },
+
+    { "When": "RoundEnd", "Round": 3, "Every": 3, "Mark": "Death cycle", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Scion of Death", "SpellID": 2144590689, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Death cycle, end of its round 3: Scion of Death." }
+  ]
+}

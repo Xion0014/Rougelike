@@ -1,0 +1,19 @@
+{
+  // Broodmother (Rank 15, Balance, 4,395 health), Doomsday Krok Gauntlet. Broodmother (Time Butterfly's summon).
+  // From Wizard404's data on the gauntlets (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove).
+  // Built first from blocks that were there, then from the new universal blocks each Notes names (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1502695,
+  "Name": "Broodmother (Rank 15)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "RoundStart", "Every": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000194"},
+        {"Do": "Cast", "Spell": "Cheat", "SpellID": 1235168433, "Target": "Summoner", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Dragonblade", "SpellID": 736547457, "Target": "Ally", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Mass Tower Shield", "SpellID": 2090465101, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Every 3 rounds: Cheat on Time Butterfly, Dragonblade on a random ally, Mass Tower Shield." }
+  ]
+}

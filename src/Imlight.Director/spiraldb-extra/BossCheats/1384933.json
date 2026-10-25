@@ -1,0 +1,31 @@
+{
+  // Renegade Djinni (Rank 15, Myth, 6,000 health), Mirage. Renegade Djinni: Renegade Puppet, its shield, and a polymorph in round 4.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1384933,
+  "Name": "Renegade Djinni (Rank 15)",
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000953"},
+        {"Do": "Cast", "Spell": "Golem Minion", "SpellID": 1237809180, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: a Renegade Puppet." },
+
+    { "When": "RoundStart", "Round": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000954"},
+        {"Do": "Cast", "Spell": "Shield Minion", "SpellID": 1886640585, "Target": "Ally", "DispelImmune": false},
+        {"Do": "AddCharm", "Kind": "Shield", "Amount": 70, "Target": "Self"}
+      ],
+      "Notes": "Round 2: Shield Minion on the puppet, and a -70% shield on himself." },
+
+    { "When": "RoundStart", "Round": 4, "AlliesUp": ["1384954"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000955"},
+        {"Do": "Cast", "Spell": "Polymorph Renegade Puppet", "SpellID": 1683571609, "Target": "Ally", "DispelImmune": false}
+      ],
+      "Notes": "Round 4: the puppet is turned into its second form." }
+  ]
+}

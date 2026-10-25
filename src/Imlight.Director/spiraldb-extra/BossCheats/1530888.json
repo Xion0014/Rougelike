@@ -1,0 +1,42 @@
+{
+  // Sugarr Eater of Souls (Rank 20, Death, 13,200 health), Lemuria. Sugarr Eater of Souls: S'More Machine for a late wizard, a revive if he falls first, Sugar Rush when hurt.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1530888,
+  "Name": "Sugarr Eater of Souls (Rank 20)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002013"},
+        {"Do": "Cast", "Spell": "S'More Machine", "SpellID": 431966943, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Impede", "SpellID": 1906062967, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: S'More Machine, Impede on them." },
+
+    { "When": "BossDefeated", "HasAllies": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002016"},
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 840466244, "Target": "Self", "DispelImmune": false},
+        {"Do": "SetHealth", "Amount": 9900},
+        {"Do": "Cast", "Spell": "S'More Machine", "SpellID": 1019087961, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "Defeated before his minions: Blessing (75%) and S'More Machine defeats that wizard." },
+
+    { "When": "MinionDefeated", "Creature": 1530889,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002017"},
+        {"Do": "Cast", "Spell": "S'More Machine", "SpellID": 431966943, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Impede", "SpellID": 1906062967, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A Sugar Cube defeated: S'More Machine and Impede on that wizard." },
+
+    { "When": "BossHit", "Category": "Damage", "Cooldown": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002014"},
+        {"Do": "Cast", "Spell": "Sugar Rush", "SpellID": 1703462777, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Hurt: Sugar Rush." }
+  ]
+}

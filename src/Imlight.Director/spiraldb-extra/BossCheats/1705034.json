@@ -1,0 +1,36 @@
+{
+  // Moonbeam Bear (Rank 25, Myth, 15,960 health), Darkmoor. Moonbeam Bear: Sunburn Bear's global cycle that sets off the bears' Natural Attacks.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1705034,
+  "Name": "Moonbeam Bear (Rank 25)",
+  "Cheats": [
+    { "When": "RoundStart", "Round": 1, "Every": 2,
+      "Actions": [
+        {"Do": "InTurn", "Count": 3, "Group": 2},
+        {"Do": "Say", "Line": "CombatMessages_00004125"},
+        {"Do": "Cast", "Spell": "Azoth - Global", "SpellID": 1506888817, "Target": "", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00004126"},
+        {"Do": "Cast", "Spell": "Azoth - Global", "SpellID": 1506888817, "Target": "", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00004127"},
+        {"Do": "Cast", "Spell": "Azoth - Global", "SpellID": 1506888817, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Every other round (a guess): Sunburn Bear's Azoth - Global (Time of Legend, Balance of Power, Circle of Thorns in turn)." },
+
+    { "When": "RoundEnd", "Round": 2, "Every": 2,
+      "Actions": [
+        {"Do": "InTurn", "Count": 3, "Group": 3},
+        {"Do": "Say", "Line": "CombatMessages_00004128"},
+        {"Do": "Say", "Line": "CombatMessages_00003998"},
+        {"Do": "Cast", "Spell": "Natural Attack", "SpellID": 2064573242, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00004129"},
+        {"Do": "Say", "Line": "CombatMessages_00003998"},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Natural Attack", "SpellID": 2064575290, "Target": "Enemy", "DispelImmune": false, "Creature": 1705035},
+        {"Do": "Say", "Line": "CombatMessages_00004130"},
+        {"Do": "Say", "Line": "CombatMessages_00003998"},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Natural Attack", "SpellID": 2064569146, "Target": "Enemy", "DispelImmune": false, "Creature": 1705047}
+      ],
+      "Notes": "The round after: Azoth - Bear sets off the matching bear's Natural Attack." }
+  ]
+}

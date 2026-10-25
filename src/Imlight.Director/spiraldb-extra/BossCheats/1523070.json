@@ -1,0 +1,64 @@
+{
+  // Stay-Puffed Marshfellow (Rank 19, Fire, 51,200 health), Karamelle. Stay-Puffed Marshfellow: Tenebrous Trebuchet for a late wizard, the Hot Potato bomb, and answers to Triage, Feints and blades.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  // Checked against its Wizard101 Central page (saved 2026-10-24): Shift counts with Triage; any Feint or Mass Feint; the blade cycle hits the blade's receiver.
+  "TemplateID": 1523070,
+  "Name": "Stay-Puffed Marshfellow (Rank 19)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001768"},
+        {"Do": "Cast", "Spell": "Tenebrous Trebuchet", "SpellID": 248168361, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Tenebrous Trebuchet on them." },
+
+    { "When": "RoundStart", "Round": 1, "Every": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001769"},
+        {"Do": "Cast", "Spell": "Deferred Bomb", "SpellID": 528989753, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "ASTH Hot Potato: Enemy", "SpellID": 1060444649, "Target": "Last", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "ASTH Hot Potato: Friend", "SpellID": 823183655, "Target": "Last", "DispelImmune": false}
+      ],
+      "Notes": "Round 1 and every 4: Deferred Bomb on a wizard, and the two Hot Potato cards." },
+
+    { "When": "RoundStart", "HasWho": "Self", "HasSpell": "Deferred Bomb",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001771"},
+        {"Do": "Cast", "Spell": "Hot Potato: Friend", "SpellID": 2112900328, "Target": "Ally", "DispelImmune": false}
+      ],
+      "Notes": "He has the bomb: he passes it to a minion." },
+
+    { "When": "PlayerCasts", "Spells": ["Triage", "Mass Triage", "Shift"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001770"},
+        {"Do": "Cast", "Spell": "Banish", "SpellID": 343003124, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Banish", "SpellID": 343003124, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "Triage, Mass Triage or Shift (Central): Banish on the caster and on the one it was cast on." },
+
+    { "When": "PlayerCasts", "Spells": ["Feint", "Mass Feint"],
+      "Actions": [
+        {"Do": "Cast", "Spell": "Cleanse Ward AOE", "SpellID": 1924801312, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Feint or Mass Feint, on anyone (Balance Feint does not count; Central): Cleanse Ward AOE takes the traps off his side." },
+
+    { "When": "PlayerCasts", "Category": "Blade,Global",
+      "Actions": [
+        {"Do": "InTurn", "Count": 3},
+        {"Do": "Cast", "Spell": "Mana Burn", "SpellID": 1052298331, "Target": "Receiver", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Bad Juju", "SpellID": 1317678274, "Target": "Receiver", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Double Disarm", "SpellID": 2078137459, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "A blade or a global: Mana Burn, Bad Juju, Double Disarm in turn, on the one the blade went on (Bladestorm: its caster; Central)." },
+
+    { "When": "MinionDefeated", "HasWho": "Receiver", "HasSpell": "Deferred Bomb",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001773"},
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 1131057749, "Target": "AllAllies", "DispelImmune": false}
+      ],
+      "Notes": "A Marshfellow felled by the bomb: Blessing revives all his allies." }
+  ]
+}

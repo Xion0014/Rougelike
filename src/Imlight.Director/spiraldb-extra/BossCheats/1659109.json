@@ -1,0 +1,59 @@
+{
+  // Poison Oak (Rank 23, Life, 84,750 health), Unknown. Poison Oak: a triple shield of the school it was hit by.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1659109,
+  "Name": "Poison Oak (Rank 23)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "BossHit", "Category": "Damage", "School": "Fire",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003275"},
+        {"Do": "Cast", "Spell": "Fire Wall", "SpellID": 1440691712, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Hurt by Fire: Fire Wall." },
+
+    { "When": "BossHit", "Category": "Damage", "School": "Ice",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003275"},
+        {"Do": "Cast", "Spell": "Glacial Wall", "SpellID": 802572678, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Hurt by Ice: Glacial Wall." },
+
+    { "When": "BossHit", "Category": "Damage", "School": "Storm",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003275"},
+        {"Do": "Cast", "Spell": "Cloud Wall", "SpellID": 565127515, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Hurt by Storm: Cloud Wall." },
+
+    { "When": "BossHit", "Category": "Damage", "School": "Myth",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003275"},
+        {"Do": "Cast", "Spell": "Reflective Wall", "SpellID": 348075731, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Hurt by Myth: Reflective Wall." },
+
+    { "When": "BossHit", "Category": "Damage", "School": "Life",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003275"},
+        {"Do": "Cast", "Spell": "Energy Wall", "SpellID": 1419720202, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Hurt by Life: Energy Wall." },
+
+    { "When": "BossHit", "Category": "Damage", "School": "Death",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003275"},
+        {"Do": "Cast", "Spell": "Silencing Wall", "SpellID": 1733239612, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Hurt by Death: Silencing Wall." },
+
+    { "When": "BossHit", "Category": "Damage", "School": "Balance",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003275"},
+        {"Do": "Cast", "Spell": "Stone Wall", "SpellID": 306709295, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Hurt by Balance: Stone Wall." }
+  ]
+}

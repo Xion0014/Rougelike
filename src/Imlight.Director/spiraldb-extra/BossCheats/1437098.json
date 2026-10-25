@@ -1,0 +1,95 @@
+{
+  // Doctor Demented (Rank 17, Fire, 8,720 health), Empyrea. Doctor Demented: Burning Rampage for a late wizard, a Fortify by her enemies' number, Frenzy and Supernova with no minions.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1437098,
+  "Name": "Doctor Demented (Rank 17)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001276"},
+        {"Do": "Cast", "Spell": "Burning Rampage", "SpellID": 435741089, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 2: Burning Rampage on them." },
+
+    { "When": "BattleStart", "PlayersMin": 1, "PlayersMax": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001277"},
+        {"Do": "Cast", "Spell": "Fortify", "SpellID": 1058845488, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 1, 1 wizard(s): Fortify." },
+
+    { "When": "BattleStart", "PlayersMin": 2, "PlayersMax": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001277"},
+        {"Do": "Cast", "Spell": "Fortify", "SpellID": 1059369776, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 1, 2 wizard(s): Fortify." },
+
+    { "When": "BattleStart", "PlayersMin": 3, "PlayersMax": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001277"},
+        {"Do": "Cast", "Spell": "Fortify", "SpellID": 1057010479, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 1, 3 wizard(s): Fortify." },
+
+    { "When": "BattleStart", "PlayersMin": 4, "PlayersMax": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001277"},
+        {"Do": "Cast", "Spell": "Fortify", "SpellID": 1040233263, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 1, 4 wizard(s): Fortify." },
+
+    { "When": "EnemyJoins", "PlayersMin": 2, "PlayersMax": 2, "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001278"},
+        {"Do": "Cast", "Spell": "Fortify", "SpellID": 1059369776, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Someone joins, now 2: her Fortify changes." },
+
+    { "When": "EnemyJoins", "PlayersMin": 3, "PlayersMax": 3, "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001278"},
+        {"Do": "Cast", "Spell": "Fortify", "SpellID": 1057010479, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Someone joins, now 3: her Fortify changes." },
+
+    { "When": "EnemyJoins", "PlayersMin": 4, "PlayersMax": 4, "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001278"},
+        {"Do": "Cast", "Spell": "Fortify", "SpellID": 1040233263, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Someone joins, now 4: her Fortify changes." },
+
+    { "When": "PlayerFlees", "PlayersMin": 1, "PlayersMax": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001278"},
+        {"Do": "Cast", "Spell": "Fortify", "SpellID": 1058845488, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Someone flees, now 1: her Fortify changes." },
+
+    { "When": "PlayerFlees", "PlayersMin": 2, "PlayersMax": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001278"},
+        {"Do": "Cast", "Spell": "Fortify", "SpellID": 1059369776, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Someone flees, now 2: her Fortify changes." },
+
+    { "When": "PlayerFlees", "PlayersMin": 3, "PlayersMax": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001278"},
+        {"Do": "Cast", "Spell": "Fortify", "SpellID": 1057010479, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Someone flees, now 3: her Fortify changes." },
+
+    { "When": "RoundStart", "NoAllies": true, "Once": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001280"},
+        {"Do": "Cast", "Spell": "Frenzy", "SpellID": 1215947162, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Supernova", "SpellID": 1493403952, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A round she starts with no minions: Frenzy, then Supernova." }
+  ]
+}

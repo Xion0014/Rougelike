@@ -1,0 +1,17 @@
+{
+  // Imperial Justice Payne (Rank 15, Myth, 10,480 health), Polaris. Imperial Justice Payne: Dark Fiend at two shadow pips.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1340658,
+  "Name": "Imperial Justice Payne (Rank 15)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "Pips", "Pips": 2, "PipsKind": "Shadow", "HasWho": "Self", "HasSpell": "Dark Fiend", "HasNot": true, "Chance": 75,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Dark Fiend", "SpellID": 1675274933, "Target": "Self", "DispelImmune": false},
+        {"Do": "Pips", "Amount": -2, "Kind": "Shadow"}
+      ],
+      "Notes": "2 shadow pips and no Dark Fiend on it: Dark Fiend (likely)." }
+  ]
+}

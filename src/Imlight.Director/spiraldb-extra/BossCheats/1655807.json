@@ -1,0 +1,30 @@
+{
+  // Annoushka (Rank 24, Death, 17,240 health), Darkmoor. Annoushka: Failed Formulation and poison, and she turns a fallen wizard into her doll.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1655807,
+  "Name": "Annoushka (Rank 24)",
+  "Cheats": [
+    { "When": "RoundEnd", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003990"},
+        {"Do": "Cast", "Spell": "Failed Formulation", "SpellID": 2033606247, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "End of round 1: Failed Formulation on all wizards." },
+
+    { "When": "RoundEnd", "Round": 2, "Every": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003988"},
+        {"Do": "Cast", "Spell": "Poison - AoE", "SpellID": 492201930, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "End of round 2 and each round after: Poison - AoE." },
+
+    { "When": "PlayerDefeated", "PlayersMin": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003991"},
+        {"Do": "Polymorph", "Spell": "Polymorph - Doll", "SpellID": 1523286232, "Target": "Receiver"}
+      ],
+      "Notes": "A wizard falls while 2 or more are in the battle: Polymorph - Doll turns them into Annoushka's doll." }
+  ]
+}

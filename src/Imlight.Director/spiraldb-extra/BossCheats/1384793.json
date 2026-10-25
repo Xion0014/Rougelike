@@ -1,0 +1,85 @@
+{
+  // Eerkala (Rank 16, Shadow, 19,600 health), Mirage. Eerkala: Mana Burn for a late wizard, Curse and Weakness for blades, Berserks for traps and Supernovas, Diablo Qarin.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1384793,
+  "Name": "Eerkala (Rank 16)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000948"},
+        {"Do": "Cast", "Spell": "Mana Burn", "SpellID": 1052298331, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Mana Burn on them." },
+
+    { "When": "PlayerCasts", "Category": "Blade,Global",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000951"},
+        {"Do": "Cast", "Spell": "Curse", "SpellID": 1644343655, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Weakness", "SpellID": 1204556169, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "A blade or damage global." },
+
+    { "When": "PlayerCasts", "Category": "Trap", "MaxTimes": 10,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000949"},
+        {"Do": "InTurn", "Count": 10},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1149410832, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1149404688, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1149406736, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1149416976, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1149419024, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1149412880, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1149414928, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1149425168, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1149427216, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1182965264, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A trap: the next Berserk." },
+
+    { "When": "PlayerCasts", "Spells": ["Supernova"], "OnBoss": true, "MaxTimes": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000950"},
+        {"Do": "InTurn", "Count": 2},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1149419024, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 1182965264, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Supernova on her." },
+
+    { "When": "RoundStart", "Round": 5, "Every": 5, "PlayersMin": 1, "PlayersMax": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000952"},
+        {"Do": "Cast", "Spell": "Diablo Qarin", "SpellID": 791611966, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Every five rounds, 1 wizard(s): Diablo Qarin 1 time(s)." },
+
+    { "When": "RoundStart", "Round": 5, "Every": 5, "PlayersMin": 2, "PlayersMax": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000952"},
+        {"Do": "Cast", "Spell": "Diablo Qarin", "SpellID": 791611966, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Diablo Qarin", "SpellID": 791611966, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Every five rounds, 2 wizard(s): Diablo Qarin 2 time(s)." },
+
+    { "When": "RoundStart", "Round": 5, "Every": 5, "PlayersMin": 3, "PlayersMax": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000952"},
+        {"Do": "Cast", "Spell": "Diablo Qarin", "SpellID": 791611966, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Diablo Qarin", "SpellID": 791611966, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Diablo Qarin", "SpellID": 791611966, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Every five rounds, 3 wizard(s): Diablo Qarin 3 time(s)." },
+
+    { "When": "RoundStart", "Round": 5, "Every": 5, "PlayersMin": 4, "PlayersMax": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000952"},
+        {"Do": "Cast", "Spell": "Diablo Qarin", "SpellID": 791611966, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Diablo Qarin", "SpellID": 791611966, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Diablo Qarin", "SpellID": 791611966, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Diablo Qarin", "SpellID": 791611966, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Every five rounds, 4 wizard(s): Diablo Qarin 4 time(s)." }
+  ]
+}

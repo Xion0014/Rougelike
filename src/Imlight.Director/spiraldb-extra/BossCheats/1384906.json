@@ -1,0 +1,101 @@
+{
+  // Grandfather Spider (Rank 17, Shadow, 30,800 health), Mirage. Grandfather Spider: Insane Bolt for a late wizard, Spiderlings, Swap Ward, Sacrifice for Bad Juju, two Dimension Shifts.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1384906,
+  "Name": "Grandfather Spider (Rank 17)",
+  "ShadowPips": 7,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000932"},
+        {"Do": "Cast", "Spell": "Insane Bolt", "SpellID": 1746041147, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Pips", "Amount": -3}
+      ],
+      "Notes": "A late wizard: Insane Bolt, and he loses 3 pips." },
+
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000935"},
+        {"Do": "Cast", "Spell": "Golem Minion", "SpellID": 649234228, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: a Spiderling." },
+
+    { "When": "RoundStart", "Round": 2,
+      "Actions": [
+        {"Do": "CastBy", "By": "Creature", "Spell": "Shadow Sentinel MOB", "SpellID": 1763092362, "Target": "Owner", "DispelImmune": false, "Creature": 1405991}
+      ],
+      "Notes": "Round 2: the Spiderling's Shadow Sentinel (90% intercept)." },
+
+    { "When": "MinionDefeated", "Creature": 1405991, "PlayersMin": 2,
+      "Actions": [
+        {"Do": "Wait", "Rounds": 3},
+        {"Do": "Cast", "Spell": "Golem Minion", "SpellID": 649234228, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A Spiderling falls with 2+ wizards: another 3 rounds later." },
+
+    { "When": "PlayerCasts", "Spells": ["Feint"], "OnBoss": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000934"},
+        {"Do": "Cast", "Spell": "Swap Ward", "SpellID": 584566847, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A Feint on him (not Mass Feint): Swap Ward." },
+
+    { "When": "PlayerCasts", "Spells": ["Bad Juju"], "OnBoss": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001008"},
+        {"Do": "Cast", "Spell": "Sacrifice", "SpellID": 761482201, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Bad Juju on him: Sacrifice." },
+
+    { "When": "RoundStart", "Round": 3, "Every": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001007"},
+        {"Do": "Cast", "Spell": "Dimension Shift", "SpellID": 1983639969, "Target": "", "DispelImmune": false},
+        {"Do": "FirstTurn", "Side": "Swap"}
+      ],
+      "Notes": "Every 3 rounds: Dimension Shift swaps who goes first." },
+
+    { "When": "RoundStart", "Round": 8, "Every": 8, "PlayersMin": 1, "PlayersMax": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000933"},
+        {"Do": "Cast", "Spell": "Dimension Shift", "SpellID": 2050071618, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "1 wizard(s): every 8 rounds the stealing Dimension Shift." },
+
+    { "When": "RoundStart", "Round": 7, "Every": 7, "PlayersMin": 2, "PlayersMax": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000933"},
+        {"Do": "Cast", "Spell": "Dimension Shift", "SpellID": 2050071618, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "2 wizard(s): every 7 rounds the stealing Dimension Shift." },
+
+    { "When": "RoundStart", "Round": 6, "Every": 6, "PlayersMin": 3, "PlayersMax": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000933"},
+        {"Do": "Cast", "Spell": "Dimension Shift", "SpellID": 2050071618, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "3 wizard(s): every 6 rounds the stealing Dimension Shift." },
+
+    { "When": "RoundStart", "Round": 5, "Every": 5, "PlayersMin": 4, "PlayersMax": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000933"},
+        {"Do": "Cast", "Spell": "Dimension Shift", "SpellID": 2050071618, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "4 wizard(s): every 5 rounds the stealing Dimension Shift." },
+
+    { "When": "ICast", "Spells": ["Shadow Sultan"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000936"}
+      ],
+      "Notes": "His Shadow Sultan." },
+
+    { "When": "ICast", "Spells": ["Natural Attack"], "Chance": 50,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000937"},
+        {"Do": "Cast", "Spell": "Healing Current", "SpellID": 2033316751, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Sometimes (50%) after his Natural Attack: Healing Current." }
+  ]
+}

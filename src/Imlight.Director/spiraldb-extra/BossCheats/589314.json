@@ -1,0 +1,50 @@
+{
+  // Yoshinobu (Rank 3, Storm, 695 health), Midnight Sun Pagoda. Yoshinobu and his three (589302 Hisamoto, 589306 Kensaburo, 589310 Takazane): a chain that changes as they fall.
+  // From Wizard404's data on the gauntlets (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove).
+  // Built first from blocks that were there, then from the new universal blocks each Notes names (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 589314,
+  "Name": "Yoshinobu (Rank 3)",
+  "Cheats": [
+    { "When": "Passive", "Passive": "Minions", "Brings": ["589302", "589306", "589310"],
+      "Notes": "He fights with Hisamoto, Kensaburo and Takazane (Wizard404: his minions). New block: comes with." },
+
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Mass Infection", "SpellID": 133227446, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Mass Infection, free. Existing blocks." },
+
+    { "When": "RoundStart", "Round": 1, "Every": 3,
+      "Actions": [
+        {"Do": "CastBy", "By": "Creature", "Spell": "Legion Shield", "SpellID": 3605232, "Target": "", "DispelImmune": false, "Creature": 589302}
+      ],
+      "Notes": "Round 1 and every 3 rounds: Hisamoto casts Legion Shield, free. New block: an ally casts." },
+
+    { "When": "PlayerCasts", "Category": "Damage", "OnBoss": true, "CostMin": 6, "AlliesUp": ["589302"],
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000161"},
+        {"Do": "Cast", "Spell": "Smoke Screen", "SpellID": 583267359, "Target": "Caster", "DispelImmune": false},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Unicorn", "SpellID": 1458774339, "Target": "", "DispelImmune": false, "Creature": 589302},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Meteor Strike", "SpellID": 458887403, "Target": "", "DispelImmune": false, "Creature": 589306}
+      ],
+      "Notes": "\"Chain Reaction!\" A 6+ pip damage spell on him while Hisamoto stands: Smoke Screen, then Hisamoto's Unicorn, then Kensaburo's Meteor Strike. New blocks: these allies, an ally casts. \"A {pips} pip\" is read as {pips} or more (a guess)." },
+
+    { "When": "PlayerCasts", "Category": "Damage", "OnBoss": true, "CostMin": 6, "AlliesUp": ["589306"], "AlliesDown": ["589302"],
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000163"},
+        {"Do": "Cast", "Spell": "Blizzard", "SpellID": 21705452, "Target": "", "DispelImmune": false},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Minor Blessing", "SpellID": 249008459, "Target": "AllAllies", "DispelImmune": false, "Creature": 589306},
+        {"Do": "Cast", "Spell": "Hex", "SpellID": 1270599381, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Weakness", "SpellID": 1192072777, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "\"The Chain Continues!\" The same once Hisamoto is down but Kensaburo stands: Blizzard, then Kensaburo's Minor Blessing on each ally, then Hex and Weakness on each wizard. New blocks: these allies, an ally casts." },
+
+    { "When": "PlayerCasts", "Category": "Damage", "OnBoss": true, "CostMin": 6, "AlliesDown": ["589302", "589306"],
+      "Actions": [
+        {"Do": "Cast", "Spell": "Blizzard", "SpellID": 21705452, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Sandstorm", "SpellID": 1875380096, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Once both are down: Blizzard, then Sandstorm. New block: these allies." }
+  ]
+}

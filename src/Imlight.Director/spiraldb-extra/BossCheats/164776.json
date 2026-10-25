@@ -1,0 +1,61 @@
+{
+  // Orrick Nightglider (Rank 8, Death, 4,800 health), Dungeons. Orrick Nightglider: three phases by health: Heck Hound and Meteor Strike, Stompers and shields, Earthquake.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 164776,
+  "Name": "Orrick Nightglider (Rank 8)",
+  "Cheats": [
+    { "When": "PlayerCasts", "Category": "Trap", "OnBoss": true, "SingleTarget": true,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000014"},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 1048474958, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A single-target trap on him: Cleanse Ward." },
+
+    { "When": "RoundStart", "Round": 3, "Every": 3, "Phase": 1,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Heck Hound", "SpellID": 1221211050, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Phase 1: every 3 rounds Heck Hound." },
+
+    { "When": "RoundStart", "Round": 4, "Every": 4, "Phase": 1,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Meteor Strike", "SpellID": 1632058557, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Phase 1: every 4 rounds Meteor Strike." },
+
+    { "When": "HealthBelow", "Percent": 66,
+      "Actions": [
+        {"Do": "Minion", "Creature": 191270},
+        {"Do": "Minion", "Creature": 191270},
+        {"Do": "Minion", "Creature": 191270},
+        {"Do": "SetPhase", "Phase": 2}
+      ],
+      "Notes": "Under 66%: three Stompers, phase 2." },
+
+    { "When": "PlayerCasts", "Category": "Damage", "OnBoss": true, "Phase": 2,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Tower Shield", "SpellID": 1005934076, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Phase 2: a damage spell on him, Tower Shield." },
+
+    { "When": "RoundStart", "Round": 3, "Every": 3, "Phase": 2,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Meteor Strike", "SpellID": 1632058557, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Phase 2: every 3 rounds Meteor Strike." },
+
+    { "When": "HealthBelow", "Percent": 33,
+      "Actions": [
+        {"Do": "SetPhase", "Phase": 3}
+      ],
+      "Notes": "Under 33%: phase 3." },
+
+    { "When": "RoundStart", "Round": 3, "Every": 3, "Phase": 3,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Earthquake", "SpellID": 1045748355, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Phase 3: every 3 rounds Earthquake." }
+  ]
+}

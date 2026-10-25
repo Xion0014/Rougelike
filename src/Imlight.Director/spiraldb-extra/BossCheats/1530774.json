@@ -1,0 +1,38 @@
+{
+  // The Malughast (Rank 20, Shadow, 12,145 health), Lemuria. The Malughast: Malughast's Feint cards, cleanses for Feints, and Sacrifice for its own Feint.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1530774,
+  "Name": "The Malughast (Rank 20)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001988"},
+        {"Do": "Cast", "Spell": "Malughast's Feint", "SpellID": 196895132, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: three Malughast's Feints for each wizard." },
+
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Malughast's Feint", "SpellID": 506789355, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A late wizard: their three." },
+
+    { "When": "PlayerCasts", "Spells": ["Feint", "Mass Feint"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001989"},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 1018758999, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 1018758999, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A Feint or Mass Feint: Cleanse Ward twice." },
+
+    { "When": "PlayerCasts", "Spells": ["Malughast's Feint"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001990"},
+        {"Do": "Cast", "Spell": "Sacrifice", "SpellID": 1781924367, "Target": "AllAllies", "DispelImmune": false}
+      ],
+      "Notes": "Malughast's Feint: Sacrifice (1,000 off its side, 1,000 to the wizards)." }
+  ]
+}

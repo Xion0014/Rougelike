@@ -1,0 +1,42 @@
+{
+  // Lyon Lorestriker (Rank 13, Storm, 17,560 health), Dungeons. Lyon Lorestriker: Cleanse Ward for a jinx, minions each round, Blizzard with a full side.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 469546,
+  "Name": "Lyon Lorestriker (Rank 13)",
+  "Cheats": [
+    { "When": "PlayerCasts", "Category": "Trap", "OnBoss": true, "SingleTarget": true,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 1048474958, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A single-target jinx on him: Cleanse Ward." },
+
+    { "When": "RoundStart", "HealthAbove": 50, "AlliesMax": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000098"},
+        {"Do": "Minion", "Creature": 469547}
+      ],
+      "Notes": "Each round above half health, with a circle free: a minion." },
+
+    { "When": "RoundStart", "HealthUnder": 50, "AlliesMax": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000128"},
+        {"Do": "Minion", "Creature": 469714}
+      ],
+      "Notes": "Under half health: the other minion." },
+
+    { "When": "RoundStart", "AlliesMin": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000097"},
+        {"Do": "Cast", "Spell": "Blizzard", "SpellID": 793374203, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A full team of minions: Blizzard." },
+
+    { "When": "MinionDefeated", "NoAllies": true, "Once": true,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000112"}
+      ],
+      "Notes": "His minions defeated the first time: he says so (they come back by the cheat above)." }
+  ]
+}

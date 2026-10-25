@@ -1,0 +1,78 @@
+{
+  // The Abyss (Rank 22, Shadow, 14,595 health), Novus. The Abyss: Mass Infection for a late wizard, Beguile by circle, Heal Shield, Doom and Gloom, and answers to heals.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1577332,
+  "Name": "The Abyss (Rank 22)",
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002277"},
+        {"Do": "Cast", "Spell": "Mass Infection", "SpellID": 1402464141, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Mass Infection on them." },
+
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002459"},
+        {"Do": "Cast", "Spell": "Doom and Gloom", "SpellID": 1688646018, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Guardian Spirit", "SpellID": 1661162562, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Doom and Gloom and Guardian Spirit." },
+
+    { "When": "RoundStart", "Round": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002265"},
+        {"Do": "Cast", "Spell": "Beguile", "SpellID": 1437049085, "Target": "e1", "DispelImmune": false}
+      ],
+      "Notes": "Round 2: Beguile on the wizard in circle 1." },
+
+    { "When": "RoundStart", "Round": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002265"},
+        {"Do": "Cast", "Spell": "Beguile", "SpellID": 1437049085, "Target": "e2", "DispelImmune": false}
+      ],
+      "Notes": "Round 4: Beguile on the wizard in circle 2." },
+
+    { "When": "RoundStart", "Round": 6,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002265"},
+        {"Do": "Cast", "Spell": "Beguile", "SpellID": 1437049085, "Target": "e3", "DispelImmune": false}
+      ],
+      "Notes": "Round 6: Beguile on the wizard in circle 3." },
+
+    { "When": "RoundStart", "Round": 8,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002265"},
+        {"Do": "Cast", "Spell": "Beguile", "SpellID": 1437049085, "Target": "e4", "DispelImmune": false}
+      ],
+      "Notes": "Round 8: Beguile on the wizard in circle 4." },
+
+    { "When": "RoundStart", "Round": 3, "Every": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002256"},
+        {"Do": "Cast", "Spell": "Heal Shield", "SpellID": 1355579341, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Every third round: Heal Shield." },
+
+    { "When": "RoundStart", "Round": 4, "Every": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002255"},
+        {"Do": "Cast", "Spell": "Doom and Gloom", "SpellID": 1688646018, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 4 and every 2: Doom and Gloom." },
+
+    { "When": "PlayerCasts", "Category": "Heal", "Chance": 50,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002460"},
+        {"Do": "PickOne", "Count": 5},
+        {"Do": "Cast", "Spell": "Heal Brace", "SpellID": 1031098960, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Power Current", "SpellID": 23303614, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Power Stunner", "SpellID": 356800941, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Dragonlance", "SpellID": 1601563251, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Ominous Scarecrow", "SpellID": 436548989, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A heal: maybe (50%) one of five spells." }
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  // Dynt (Rank 17, Fire, 10,165 health), Empyrea. Dynt: Fireblade after his Natural Attack, Grand Phoenix for a late wizard, and the good and bad heads each round.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1391640,
+  "Name": "Dynt (Rank 17)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "ICast", "Spells": ["Natural Attack"],
+      "Actions": [
+        {"Do": "Cast", "Spell": "Fireblade", "SpellID": 957287442, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "After his Natural Attack: Fireblade on himself." },
+
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001134"},
+        {"Do": "Cast", "Spell": "Grand Phoenix", "SpellID": 61387751, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Grand Phoenix on them." },
+
+    { "When": "RoundEnd", "Round": 1, "Every": 8,
+      "Actions": [
+        {"Do": "PickOne", "Count": 2, "Group": 2},
+        {"Do": "Say", "Line": "CombatMessages_00001095"},
+        {"Do": "Cast", "Spell": "Guidance", "SpellID": 634218202, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00001094"},
+        {"Do": "Cast", "Spell": "Smoke Screen", "SpellID": 1485064446, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "End of round 1 (of each 8): the good heads' Guidance or the bad heads' Smoke Screen." },
+
+    { "When": "RoundEnd", "Round": 2, "Every": 8,
+      "Actions": [
+        {"Do": "PickOne", "Count": 2, "Group": 2},
+        {"Do": "Say", "Line": "CombatMessages_00001095"},
+        {"Do": "Cast", "Spell": "Sprite Swarm", "SpellID": 247622480, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00001094"},
+        {"Do": "Cast", "Spell": "Scald", "SpellID": 859475452, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "End of round 2 (of each 8): the good heads' Sprite Swarm or the bad heads' Scald." },
+
+    { "When": "RoundEnd", "Round": 3, "Every": 8,
+      "Actions": [
+        {"Do": "PickOne", "Count": 2, "Group": 2},
+        {"Do": "Say", "Line": "CombatMessages_00001095"},
+        {"Do": "Cast", "Spell": "Stun Block", "SpellID": 1123621328, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00001094"},
+        {"Do": "Cast", "Spell": "Choke", "SpellID": 858338444, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "End of round 3 (of each 8): the good heads' Stun Block or the bad heads' Choke." },
+
+    { "When": "RoundEnd", "Round": 4, "Every": 8,
+      "Actions": [
+        {"Do": "PickOne", "Count": 2, "Group": 2},
+        {"Do": "Say", "Line": "CombatMessages_00001095"},
+        {"Do": "Cast", "Spell": "Rebirth", "SpellID": 1628802348, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00001094"},
+        {"Do": "Cast", "Spell": "Rain of Fire", "SpellID": 2029312134, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "End of round 4 (of each 8): the good heads' Rebirth or the bad heads' Rain of Fire." },
+
+    { "When": "RoundEnd", "Round": 5, "Every": 8,
+      "Actions": [
+        {"Do": "PickOne", "Count": 2, "Group": 2},
+        {"Do": "Say", "Line": "CombatMessages_00001095"},
+        {"Do": "Cast", "Spell": "Bladestorm", "SpellID": 1532191801, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00001094"},
+        {"Do": "Cast", "Spell": "Backdraft", "SpellID": 90724358, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "End of round 5 (of each 8): the good heads' Bladestorm or the bad heads' Backdraft." },
+
+    { "When": "RoundEnd", "Round": 6, "Every": 8,
+      "Actions": [
+        {"Do": "PickOne", "Count": 2, "Group": 2},
+        {"Do": "Say", "Line": "CombatMessages_00001095"},
+        {"Do": "Cast", "Spell": "Unicorn", "SpellID": 322920374, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00001094"},
+        {"Do": "Cast", "Spell": "Wicked Bull", "SpellID": 1676291521, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "End of round 6 (of each 8): the good heads' Unicorn or the bad heads' Wicked Bull." },
+
+    { "When": "RoundEnd", "Round": 7, "Every": 8,
+      "Actions": [
+        {"Do": "PickOne", "Count": 2, "Group": 2},
+        {"Do": "Say", "Line": "CombatMessages_00001095"},
+        {"Do": "Cast", "Spell": "Legion Shield", "SpellID": 858980741, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00001094"},
+        {"Do": "Cast", "Spell": "Mass Fuel", "SpellID": 1710457537, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "End of round 7 (of each 8): the good heads' Legion Shield or the bad heads' Mass Fuel." },
+
+    { "When": "RoundEnd", "Round": 8, "Every": 8,
+      "Actions": [
+        {"Do": "PickOne", "Count": 2, "Group": 2},
+        {"Do": "Say", "Line": "CombatMessages_00001095"},
+        {"Do": "Cast", "Spell": "Spirit Armor", "SpellID": 585761504, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00001094"},
+        {"Do": "Cast", "Spell": "Lava Giant", "SpellID": 1929262457, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "End of round 8 (of each 8): the good heads' Spirit Armor or the bad heads' Lava Giant." }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  // Jack (Rank 23, Myth, 15,150 health), Unknown. Jack: Shift Chaney for a spell of rank 7 or more, MOB HoT under 80%.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1619207,
+  "Name": "Jack (Rank 23)",
+  "Cheats": [
+    { "When": "PlayerCasts", "CostMin": 7,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002977"},
+        {"Do": "Cast", "Spell": "Shift Chaney", "SpellID": 472600862, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A spell of 7 pips or more: Shift Chaney (1,050) on the caster." },
+
+    { "When": "HealthBelow", "Percent": 80,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002978"},
+        {"Do": "Cast", "Spell": "MOB HoT", "SpellID": 613844634, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Under 80%: MOB HoT." }
+  ]
+}

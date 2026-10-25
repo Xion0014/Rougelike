@@ -1,0 +1,82 @@
+{
+  // Dream Jabberwock (Rank 16, Shadow, 3,275 health), Empyrea. Dream Jabberwock: Black Mantle after its Natural Attack, Empower on a fizzle, trap clearing and Meteor Strike.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  // Checked against its Wizard101 Central page (saved 2026-10-24): its own and its allies' fizzles also give Empower (new When SideFizzles).
+  "TemplateID": 1437129,
+  "Name": "Dream Jabberwock (Rank 16)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "ICast", "Spells": ["Natural Attack"],
+      "Actions": [
+        {"Do": "Cast", "Spell": "Black Mantle", "SpellID": 1425661579, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "After its Natural Attack: Black Mantle on the wizard." },
+
+    { "When": "PlayerCasts", "Fizzle": "Fizzled",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Empower", "SpellID": 1104187399, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A wizard fizzles: Empower on itself." },
+
+    { "When": "SideFizzles",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Empower", "SpellID": 1104187399, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "It or an ally fizzles: Empower on itself (Central: the opponents' fizzles too, cheat above; Central calls it a Dark Empower of 2 power pips)." },
+
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001000"},
+        {"Do": "Cast", "Spell": "Mana Burn", "SpellID": 0, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A late wizard: Mana Burn." },
+
+    { "When": "PlayerCasts", "Spells": ["Feint"], "OnBoss": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000999"},
+        {"Do": "Cast", "Spell": "Swap Ward", "SpellID": 584566847, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A Feint on it (not Mass Feint): Swap Ward." },
+
+    { "When": "RoundStart", "Round": 2, "Every": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001002"},
+        {"Do": "RemoveWards", "Kind": "Bad", "Target": "Self"}
+      ],
+      "Notes": "Every 2nd round: all traps off itself." },
+
+    { "When": "RoundStart", "Round": 3, "Every": 3, "PlayersMin": 1, "PlayersMax": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001001"},
+        {"Do": "Cast", "Spell": "Meteor Strike-Jabberwock", "SpellID": 265516524, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Curse-Jabberwock", "SpellID": 966358310, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Every 3rd round, 1 wizard(s): Meteor Strike, then a curse on itself." },
+
+    { "When": "RoundStart", "Round": 3, "Every": 3, "PlayersMin": 2, "PlayersMax": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001001"},
+        {"Do": "Cast", "Spell": "Meteor Strike-Jabberwock", "SpellID": 1876129260, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Curse-Jabberwock", "SpellID": 966358310, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Every 3rd round, 2 wizard(s): Meteor Strike, then a curse on itself." },
+
+    { "When": "RoundStart", "Round": 3, "Every": 3, "PlayersMin": 3, "PlayersMax": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001001"},
+        {"Do": "Cast", "Spell": "Meteor Strike-Jabberwock", "SpellID": 1339258348, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Curse-Jabberwock", "SpellID": 966358310, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Every 3rd round, 3 wizard(s): Meteor Strike, then a curse on itself." },
+
+    { "When": "RoundStart", "Round": 3, "Every": 3, "PlayersMin": 4, "PlayersMax": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001001"},
+        {"Do": "Cast", "Spell": "Meteor Strike-Jabberwock", "SpellID": 1032208603, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Curse-Jabberwock", "SpellID": 966358310, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Every 3rd round, 4 wizard(s): Meteor Strike, then a curse on itself." }
+  ]
+}

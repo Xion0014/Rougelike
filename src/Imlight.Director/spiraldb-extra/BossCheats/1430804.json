@@ -1,0 +1,126 @@
+{
+  // Corporal Tenni'syn (Rank 16, Storm, 64,000 health), Empyrea. Corporal Tenni'syn: Natural Attack chains, Donate Power, Lord of the Squall at 7 shadow pips, and dispel and feint cycles.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  // Checked against its Wizard101 Central page (saved 2026-10-24): late join after round 2; power pips one fewer than the wizards; Mass Feint counts as a Feint (Balance Feint does not).
+  "TemplateID": 1430804,
+  "Name": "Corporal Tenni'syn (Rank 16)",
+  "ShadowPips": 7,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001228"},
+        {"Do": "Cast", "Spell": "Natural Attack", "SpellID": 1286778288, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00001189"},
+        {"Do": "Cast", "Spell": "Wild Bolt", "SpellID": 1630528836, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Wild Bolt", "SpellID": 1630528836, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Wild Bolt", "SpellID": 1630528836, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Wild Bolt", "SpellID": 1630528836, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Wild Bolt", "SpellID": 1630528836, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Wild Bolt", "SpellID": 1630528836, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Wild Bolt", "SpellID": 1630528836, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "A wizard who joins after round 2: Natural Attack, then Wild Bolt up to 7 times." },
+
+    { "When": "RoundEnd", "PlayersMin": 2, "PlayersMax": 2,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Donate Power", "SpellID": 1001011877, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "End of each round, 2 wizards: Donate Power, 1 power pip (Central: one fewer than the wizards; 1 wizard: none)." },
+
+    { "When": "RoundEnd", "PlayersMin": 3, "PlayersMax": 3,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Donate Power", "SpellID": 598358693, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "3 wizards: 2 power pips." },
+
+    { "When": "RoundEnd", "PlayersMin": 4,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Donate Power", "SpellID": 732576421, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "4 wizards: 3 power pips." },
+
+    { "When": "Pips", "Pips": 7, "PipsKind": "Shadow",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001206"},
+        {"Do": "Cast", "Spell": "Lord of the Squall", "SpellID": 412824894, "Target": "", "DispelImmune": false},
+        {"Do": "Pips", "Amount": -7, "Kind": "Shadow"}
+      ],
+      "Notes": "7 shadow pips: Lord of the Squall (uses them)." },
+
+    { "When": "RoundStart", "Round": 4, "Every": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001190"},
+        {"Do": "Cast", "Spell": "Natural Attack", "SpellID": 1286778288, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00001189"},
+        {"Do": "Cast", "Spell": "Wild Bolt", "SpellID": 1630528836, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Wild Bolt", "SpellID": 1630528836, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Wild Bolt", "SpellID": 1630528836, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Wild Bolt", "SpellID": 1630528836, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Wild Bolt", "SpellID": 1630528836, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Wild Bolt", "SpellID": 1630528836, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Wild Bolt", "SpellID": 1630528836, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Every 4 rounds: Natural Attack and the Wild Bolt chain." },
+
+    { "When": "PlayerCasts", "Category": "Dispel", "OnBoss": true,
+      "Actions": [
+        {"Do": "InTurn", "Count": 5, "Group": 4},
+        {"Do": "Say", "Line": "CombatMessages_00001191"},
+        {"Do": "Cast", "Spell": "Cleanse Charm", "SpellID": 1128690575, "Target": "Self", "DispelImmune": false},
+        {"Do": "Say"},
+        {"Do": "Say"},
+        {"Do": "Say", "Line": "CombatMessages_00001192"},
+        {"Do": "Cast", "Spell": "Cleanse Charm", "SpellID": 1128690575, "Target": "Self", "DispelImmune": false},
+        {"Do": "Say"},
+        {"Do": "Say"},
+        {"Do": "Say", "Line": "CombatMessages_00001193"},
+        {"Do": "Cast", "Spell": "Cleanse Charm", "SpellID": 1128690575, "Target": "Self", "DispelImmune": false},
+        {"Do": "Say"},
+        {"Do": "Say"},
+        {"Do": "Say", "Line": "CombatMessages_00001194"},
+        {"Do": "Cast", "Spell": "Cleanse Charm", "SpellID": 1128690575, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Healing Current", "SpellID": 2033316751, "Target": "Self", "DispelImmune": false},
+        {"Do": "Say"},
+        {"Do": "Say", "Line": "CombatMessages_00001205"},
+        {"Do": "Cast", "Spell": "Cleanse Charm", "SpellID": 1128690575, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Natural Attack", "SpellID": 1286778288, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Say"}
+      ],
+      "Notes": "A dispel on him: Cleanse Charm each time; the 4th also Healing Current; then Natural Attack." },
+
+    { "When": "PlayerCasts", "Spells": ["Feint", "Mass Feint"], "OnBoss": true, "Mark": "feinted", "MarkWho": "Self", "NotMarked": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001191"},
+        {"Do": "Mark", "Mark": "feinted", "Target": "Self"}
+      ],
+      "Notes": "The first Feint on him in a round is let through." },
+
+    { "When": "PlayerCasts", "Spells": ["Feint", "Mass Feint"], "OnBoss": true, "Mark": "feinted", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001192"},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 55434460, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Another Feint the same round: Cleanse Ward." },
+
+    { "When": "PlayerCasts", "Category": "DoT", "OnBoss": true, "Mark": "feinted", "MarkWho": "Self",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001194"},
+        {"Do": "Cast", "Spell": "Windstorm", "SpellID": 2011171660, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Supercharge", "SpellID": 1338514146, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Stormspear", "SpellID": 56848756, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Storm Hound", "SpellID": 2020416889, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Shift", "SpellID": 90320179, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Incindiate", "SpellID": 1986646109, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 55434460, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A DoT after a Feint the same round: seven spells." },
+
+    { "When": "RoundEnd",
+      "Actions": [
+        {"Do": "Unmark", "Mark": "feinted", "Target": "Self"}
+      ],
+      "Notes": "End of the round: the feint count starts again." }
+  ]
+}

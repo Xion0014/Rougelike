@@ -1,0 +1,53 @@
+{
+  // Khonsu (Rank 24, Moon, 50,000 health), Krokotopia. Khonsu: cute polymorphs and the final arc bosses' forms.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1674097,
+  "Name": "Khonsu (Rank 24)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003407"},
+        {"Do": "PickOne", "Count": 7},
+        {"Do": "Polymorph", "Spell": "Marshmallow", "SpellID": 1728494765, "Target": "AllEnemies"},
+        {"Do": "Polymorph", "Spell": "Snowball", "SpellID": 1647907267, "Target": "AllEnemies"},
+        {"Do": "Polymorph", "Spell": "Glowbuq", "SpellID": 176291552, "Target": "AllEnemies"},
+        {"Do": "Polymorph", "Spell": "Snipe", "SpellID": 500473230, "Target": "AllEnemies"},
+        {"Do": "Polymorph", "Spell": "Horned Frog", "SpellID": 239932067, "Target": "AllEnemies"},
+        {"Do": "Polymorph", "Spell": "Gummy Bunny", "SpellID": 1234924315, "Target": "AllEnemies"},
+        {"Do": "Polymorph", "Spell": "Wombat", "SpellID": 1194707192, "Target": "AllEnemies"},
+        {"Do": "Pips", "Amount": -14, "Kind": "Normal", "Target": "AllEnemies"}
+      ],
+      "Notes": "Round 1: the wizards become cute creatures and lose their pips (one form for all here; the game gives each by school)." },
+
+    { "When": "PlayerCasts", "OnBoss": true, "CostMin": 8, "CostMax": 12,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003408"},
+        {"Do": "Mark", "Mark": "broke free", "Target": "Caster"}
+      ],
+      "Notes": "Hit with an 8-12 pip polymorph spell." },
+
+    { "When": "HealthBelow", "Percent": 60,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003410"},
+        {"Do": "Polymorph", "Spell": "Polymorph", "SpellID": 2078036362, "Target": "Self"}
+      ],
+      "Notes": "Under 60%." },
+
+    { "When": "HealthBelow", "Percent": 40,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003411"},
+        {"Do": "Polymorph", "Spell": "Polymorph", "SpellID": 625559936, "Target": "Self"}
+      ],
+      "Notes": "Under 40%." },
+
+    { "When": "HealthBelow", "Percent": 20,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003412"},
+        {"Do": "Polymorph", "Spell": "Polymorph", "SpellID": 940551784, "Target": "Self"}
+      ],
+      "Notes": "Under 20%." }
+  ]
+}

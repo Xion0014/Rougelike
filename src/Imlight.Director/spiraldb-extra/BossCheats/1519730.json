@@ -1,0 +1,23 @@
+{
+  // Ms. Felicity (Rank 19, Balance, 11,000 health), Great Sky Train Robbery. Ms. Felicity.
+  // From Wizard404's data on the gauntlets (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove).
+  // Built first from blocks that were there, then from the new universal blocks each Notes names (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1519730,
+  "Name": "Ms. Felicity (Rank 19)",
+  "Cheats": [
+    { "When": "PlayerCasts", "Category": "Blade",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001779"},
+        {"Do": "Cast", "Spell": "Disarm", "SpellID": 1627273980, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "\"Blades off the table!\" A blade on a wizard: Disarm on whoever got it (the exact spell is unconfirmed)." },
+
+    { "When": "AllyHealthBelow", "Percent": 20, "Creature": 1519725,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00001781"},
+        {"Do": "Cast", "Spell": "Expel", "SpellID": 343003124, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "\"Your invitation has been rescinded\" Kenny Rooster under 20%: Expel." }
+  ]
+}

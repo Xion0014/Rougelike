@@ -1,0 +1,32 @@
+{
+  // General Benedict Brutus von Booth (Rank 22, Fire, 11,940 health), Novus. General Benedict Brutus von Booth: Brace for rounds 1-3, Furnace, Fire Dragon and Incindiate in round 4, and again.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1569410,
+  "Name": "General Benedict Brutus von Booth (Rank 22)",
+  "ShadowPips": 1,
+  "Cheats": [
+    { "When": "RoundStart", "Round": 1, "Every": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002425"},
+        {"Do": "Cast", "Spell": "Brace", "SpellID": 1391415840, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 1 of each 4: Brace (-200% incoming)." },
+
+    { "When": "RoundEnd", "Round": 3, "Every": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002426"},
+        {"Do": "Cast", "Spell": "Furnace", "SpellID": 2129722954, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "End of round 3: Furnace." },
+
+    { "When": "RoundEnd", "Round": 4, "Every": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002427"},
+        {"Do": "Cast", "Spell": "Fire Dragon", "SpellID": 921541606, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Incindiate", "SpellID": 1986646109, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "End of round 4: Fire Dragon and Incindiate." }
+  ]
+}

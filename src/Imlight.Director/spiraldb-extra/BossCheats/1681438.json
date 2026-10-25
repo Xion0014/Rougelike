@@ -1,0 +1,40 @@
+{
+  // Professor Fuzzlewort (Rank 12, Ice, 7,310 health), Unknown. Professor Fuzzlewort: a shield spell each round until a Ward Gambit, and a second life if it is still on.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1681438,
+  "Name": "Professor Fuzzlewort (Rank 12)",
+  "Cheats": [
+    { "When": "RoundStart", "Mark": "cheat off", "MarkWho": "Self", "NotMarked": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003607"},
+        {"Do": "PickOne", "Count": 5},
+        {"Do": "Cast", "Spell": "Shield Wall", "SpellID": 2042371563, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Star Shield", "SpellID": 1731316201, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Tower Shield", "SpellID": 432324968, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Volcanic Golem", "SpellID": 1157455945, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Reindeer Knight", "SpellID": 1775573695, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Each round while the cheat is on: one of five spells." },
+
+    { "When": "PlayerCasts", "Spells": ["Ward Gambit"], "AnyVersion": true, "OnBoss": true,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Shatter", "SpellID": 243908144, "Target": "AllAllies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Shatter", "SpellID": 243908144, "Target": "Self", "DispelImmune": false},
+        {"Do": "Mark", "Mark": "cheat off", "Target": "Self"}
+      ],
+      "Notes": "A Ward Gambit on him: Shatter on his side, and the cheat is off." },
+
+    { "When": "BossDefeated", "Mark": "cheat off", "MarkWho": "Self", "NotMarked": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003608"},
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 1641304242, "Target": "Self", "DispelImmune": false},
+        {"Do": "SetHealth", "Amount": 7310},
+        {"Do": "PickOne", "Count": 2},
+        {"Do": "Cast", "Spell": "ASTH Minotaur", "SpellID": 1571065196, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "ASTH Basilisk", "SpellID": 857497436, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Defeated with the cheat on: Blessing, and a Minotaur or Basilisk card for all." }
+  ]
+}

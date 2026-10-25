@@ -1,0 +1,38 @@
+{
+  // Ra (Rank 4, Balance, 3,000 health), Krokotopia. Ra (Rank 4): Balance of Power, and Amplify or Fortify every 4th round.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1376346,
+  "Name": "Ra (Rank 4)",
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000854"},
+        {"Do": "Cast", "Spell": "Balance of Power", "SpellID": 84457148, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Balance of Power." },
+
+    { "When": "PlayerGlobals",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000855"},
+        {"Do": "Cast", "Spell": "Balance of Power", "SpellID": 84457148, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Replaced: again." },
+
+    { "When": "ICast", "Spells": ["Precision", "Black Mantle"],
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000857"}
+      ],
+      "Notes": "His Precision or Black Mantle." },
+
+    { "When": "RoundEnd", "Round": 4, "Every": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000856"},
+        {"Do": "InTurn", "Count": 2},
+        {"Do": "Cast", "Spell": "Amplify", "SpellID": 385923945, "Target": "all", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Fortify", "SpellID": 386708272, "Target": "all", "DispelImmune": false}
+      ],
+      "Notes": "End of every 4th round: Amplify, then Fortify, on everyone." }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  // Tyrfing (Rank 13, Myth, 18,000 health), Winterbane Hall. Tyrfing and his three Grendels, who buff him in turn and are avenged.
+  // From Wizard404's data on the gauntlets (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove).
+  // Built first from blocks that were there, then from the new universal blocks each Notes names (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 742810,
+  "Name": "Tyrfing (Rank 13)",
+  "Cheats": [
+    { "When": "Passive", "Passive": "Minions", "Brings": ["742760", "742770", "742775"],
+      "Notes": "He fights with Grendel Cracknail, Ransacker and Scavenger (Wizard404: his minions). New block: comes with." },
+
+    { "When": "RoundStart", "Round": 1, "Every": 3,
+      "Actions": [
+        {"Do": "CastBy", "By": "Creature", "Spell": "Tower Shield", "SpellID": 909851304, "Target": "Summoner", "DispelImmune": false, "Creature": 742770}
+      ],
+      "Notes": "Round 1, 4, 7...: the Ransacker's Tower Shield on him. New block: an ally casts." },
+
+    { "When": "RoundStart", "Round": 2, "Every": 3,
+      "Actions": [
+        {"Do": "CastBy", "By": "Creature", "Spell": "Dragonblade", "SpellID": 1507757585, "Target": "Summoner", "DispelImmune": false, "Creature": 742760}
+      ],
+      "Notes": "Round 2, 5, 8...: the Cracknail's Dragonblade on him." },
+
+    { "When": "RoundStart", "Round": 3, "Every": 3,
+      "Actions": [
+        {"Do": "CastBy", "By": "Creature", "Spell": "Regenerate", "SpellID": 50291343, "Target": "Summoner", "DispelImmune": false, "Creature": 742775}
+      ],
+      "Notes": "Round 3, 6, 9...: the Scavenger's Regenerate on him." },
+
+    { "When": "MinionDefeated", "Creature": 742770,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Ominous Scarecrow", "SpellID": 436484425, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "The Ransacker falls: Ominous Scarecrow. Existing blocks." },
+
+    { "When": "MinionDefeated", "Creature": 742760,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Deer Knight", "SpellID": 1374771710, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "The Cracknail falls: Deer Knight." },
+
+    { "When": "MinionDefeated", "Creature": 742775,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Blinding Light", "SpellID": 1261981915, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "The Scavenger falls: Blinding Light." }
+  ]
+}

@@ -5,6 +5,18 @@
 ;   anything else     one change (leave a blank line between changes)
 ;   ; comment         not shown
 
+# v1.0.133 (October 25, 2026)
+
+Q: New
+
+Boss cheats! Arc 2 bosses cheat like they do in the real game: free spells, lines over the boss, second phases. Mithraya smoke-screens you, Belloq, the Jabberwock and Morganthe have their own tricks, and Xibalba's random boss cheats too if it has any.
+
+The cheats are Niduus's: 517 creature files from his fork, in spiraldb-extra/BossCheats (one editable JSON file per creature, with a README). Anyone can write or change a boss's cheats there and send them in.
+
+Cheats only work from tier 6 on, so arc 1 plays as before. Settings has "Boss cheats" (on or off) and "Boss cheats from tier".
+
+Some cheats need things the gauntlet doesn't do yet (a minion joining, the boss being defeated, the boss's own casts and a few more). Those are skipped and named in the server log; they come in later updates.
+
 # v1.0.132 (October 24, 2026)
 
 Q: Fixed

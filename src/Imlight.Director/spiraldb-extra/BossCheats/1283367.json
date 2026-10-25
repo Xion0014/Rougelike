@@ -1,0 +1,22 @@
+{
+  // Morganthe (Rank 14, Storm, 19,920 health), Khrysalis. Morganthe (Storm): Poison on herself for a global; Shadow Queen if the first two have fallen.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1283367,
+  "Name": "Morganthe (Rank 14)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "PlayerGlobals",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Poison", "SpellID": 1322356343, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A wizard's global: Poison on herself at once." },
+
+    { "When": "RoundStart", "Round": 4, "AlliesDown": ["1283364", "1283366"],
+      "Actions": [
+        {"Do": "Cast", "Spell": "Shadow Queen", "SpellID": 802243006, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 4 with the first two down." }
+  ]
+}

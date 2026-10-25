@@ -1,0 +1,47 @@
+{
+  // Kaizoku (Rank 3, Fire, 795 health), Midnight Sun Pagoda. Kaizoku: a Tower Shield he keeps up, a fire bolt round, and more once his minions fall.
+  // From Wizard404's data on the gauntlets (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove).
+  // Built first from blocks that were there, then from the new universal blocks each Notes names (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 589242,
+  "Name": "Kaizoku (Rank 3)",
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Cast", "Spell": "Tower Shield", "SpellID": 1621264842, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Tower Shield on himself. Existing blocks." },
+
+    { "When": "BossHit", "HasWho": "Self", "HasKind": "Shield", "HasNot": true, "Phase": 1,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Tower Shield", "SpellID": 1621264842, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "His Tower Shield took the hit: he casts it again (read as: hit with no shield left on him). New block: has a charm or ward." },
+
+    { "When": "RoundStart", "Round": 2, "Every": 2, "Phase": 1,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Minor Fire Bolt", "SpellID": 1610941040, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Every 2nd round: Minor Fire Bolt on each wizard. The halberd swing that changes for a shielded wizard (\"You stopped my halberd?!\") is not made: Wizard404 says it needs confirming." },
+
+    { "When": "MinionDefeated", "NoAllies": true, "Once": true,
+      "Actions": [
+        {"Do": "Say", "Line": "WizardBossFights_00000147"},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 2007994870, "Target": "Self", "DispelImmune": false},
+        {"Do": "SetPhase", "Phase": 2}
+      ],
+      "Notes": "\"Time to turn things up!\" His minions are all down: Cleanse Ward on himself, and the bolts come every round (phase 2). Wizard404: needs confirming." },
+
+    { "When": "RoundStart", "Phase": 2,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Minor Fire Bolt", "SpellID": 1610941040, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Phase 2: the bolts every round." },
+
+    { "When": "RoundStart", "Every": 4, "Phase": 2,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Minor Fire Bolt", "SpellID": 1610941040, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Phase 2: twice every 4th round." }
+  ]
+}

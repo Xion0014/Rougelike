@@ -1,0 +1,12 @@
+{
+  // Pendragon (Rank 14, Death, 11,670 health), Pendragon Rematch. Pendragon: comes into a battle with its minions.
+  // From Wizard404's data on the gauntlets (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove).
+  // Built first from blocks that were there, then from the new universal blocks each Notes names (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1592136,
+  "Name": "Pendragon (Rank 14)",
+  "Cheats": [
+    { "When": "Passive", "Passive": "Minions", "Brings": ["1592148", "1592138"],
+      "Notes": "It fights with White Dragon and Black Dragon (Wizard404: its minions). New block: comes with." }
+  ]
+}

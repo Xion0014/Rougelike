@@ -1,0 +1,43 @@
+{
+  // Malificus Mangemort (Rank 21, Death, 40,000 health), Avalon. Malificus Mangemort: ASTH Storm every fourth round, and the death answers to charms, auras and heals.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1690358,
+  "Name": "Malificus Mangemort (Rank 21)",
+  "Cheats": [
+    { "When": "RoundStart", "Round": 4, "Every": 4,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003750"},
+        {"Do": "Cast", "Spell": "ASTH Storm", "SpellID": 518754922, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Every fourth round: ASTH Storm gives the wizards a spell." },
+
+    { "When": "PlayerCasts", "Spells": ["Woolly Mammoth"], "AnyVersion": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003771"}
+      ],
+      "Notes": "Woolly Mammoth cast: he says so." },
+
+    { "When": "PlayerCasts", "Category": "Charm",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002774"},
+        {"Do": "Cast", "Spell": "Mob Jinn's Larceny", "SpellID": 651370901, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A charm: Mob Jinn's Larceny." },
+
+    { "When": "PlayerCasts", "Category": "Aura",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002774"},
+        {"Do": "Cast", "Spell": "Monster Mash", "SpellID": 1831689579, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "An aura: Monster Mash." },
+
+    { "When": "PlayerCasts", "Category": "HoT",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002775"},
+        {"Do": "Cast", "Spell": "Mob Oni's Morbidity", "SpellID": 651305365, "Target": "Receiver", "DispelImmune": false}
+      ],
+      "Notes": "A heal over time: Mob Oni's Morbidity." }
+  ]
+}

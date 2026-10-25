@@ -1,0 +1,34 @@
+{
+  // Shadow Trickster (Rank 22, Shadow, 16,380 health), Darkmoor. Shadow Trickster: a charm, ward or AoE trap that is not used at once is taken off, and it heals.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1655789,
+  "Name": "Shadow Trickster (Rank 22)",
+  "ShadowPips": 2,
+  "Cheats": [
+    { "When": "PlayerCasts", "Category": "Blade",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003936"},
+        {"Do": "Cast", "Spell": "Disarm", "SpellID": 22564810, "Target": "Receiver", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 784367636, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A charm: Disarm takes it off and Blessing (10%) on itself." },
+
+    { "When": "PlayerCasts", "Category": "Shield",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003936"},
+        {"Do": "Cast", "Spell": "Shatter", "SpellID": 1000713067, "Target": "Receiver", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 784367636, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A ward: Shatter." },
+
+    { "When": "PlayerCasts", "Category": "Trap", "MultiTarget": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003936"},
+        {"Do": "Cast", "Spell": "Cleanse Ward", "SpellID": 1744091377, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 784367636, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "An AoE trap: Cleanse Ward on itself." }
+  ]
+}

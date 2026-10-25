@@ -1,0 +1,32 @@
+{
+  // Shaka Zebu (Rank 10, Balance, 5,015 health), Zafaria. Shaka Zebu: Satyr when hit with minions, Meteor Strikes once alone.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 469941,
+  "Name": "Shaka Zebu (Rank 10)",
+  "Cheats": [
+    { "When": "PlayerDamages", "OnBoss": true, "HasAllies": true,
+      "Actions": [
+        {"Do": "Say", "Line": "Nature Spirit protect me!"},
+        {"Do": "Cast", "Spell": "Satyr", "SpellID": 84793363, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "A damage spell on him while he has minions: Satyr on himself." },
+
+    { "When": "MinionDefeated", "AlliesMax": 0, "Once": true,
+      "Actions": [
+        {"Do": "Say", "Line": "Where did everyone go?"},
+        {"Do": "Mark", "Mark": "alone", "Target": "Self"}
+      ],
+      "Notes": "No minions left." },
+
+    { "When": "RoundStart", "Mark": "alone", "MarkWho": "Self", "Chance": 40,
+      "Actions": [
+        {"Do": "Say", "Line": "Feel Shaka Zebu's Might!"},
+        {"Do": "PickOne", "Count": 2},
+        {"Do": "Cast", "Spell": "Meteor Strike", "SpellID": 497211044, "Target": "", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Meteor Strike", "SpellID": 1632058557, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Every 2-3 rounds once alone (made as most rounds, 40%): Meteor Strike." }
+  ]
+}

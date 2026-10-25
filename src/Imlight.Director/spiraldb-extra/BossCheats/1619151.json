@@ -1,0 +1,54 @@
+{
+  // Mr Cane (Rank 23, Death, 13,860 health), Unknown. Mr Cane: Mob Trap Auras on his Hostages, Exit Combat for a hurt Hostage, Blessing if he falls first, Poison every 3 rounds.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1619151,
+  "Name": "Mr Cane (Rank 23)",
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002992"},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Mob Trap Aura", "SpellID": 552554663, "Target": "Self", "DispelImmune": false, "Creature": 1626360},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Mob Trap Aura", "SpellID": 552554663, "Target": "Self", "DispelImmune": false, "Creature": 1626361}
+      ],
+      "Notes": "Round 1: Mob Trap Aura (a 6,000 absorb) on both Hostages." },
+
+    { "When": "PlayerCasts", "Spells": ["Supernova"], "AnyVersion": true,
+      "Actions": [
+        {"Do": "CastBy", "By": "Creature", "Spell": "Mob Trap Aura", "SpellID": 552554663, "Target": "Self", "DispelImmune": false, "Creature": 1626360},
+        {"Do": "CastBy", "By": "Creature", "Spell": "Mob Trap Aura", "SpellID": 552554663, "Target": "Self", "DispelImmune": false, "Creature": 1626361}
+      ],
+      "Notes": "A Supernova: the auras go on again." },
+
+    { "When": "AllyHit", "Creature": 1626360, "Category": "Damage",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002994"},
+        {"Do": "Cast", "Spell": "Exit Combat", "SpellID": 2127696416, "Target": "Hit", "DispelImmune": false},
+        {"Do": "Mark", "Mark": "hostage hurt", "Target": "Self"}
+      ],
+      "Notes": "A Hostage takes real damage: Exit Combat on it." },
+
+    { "When": "AllyHit", "Creature": 1626361, "Category": "Damage",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002994"},
+        {"Do": "Cast", "Spell": "Exit Combat", "SpellID": 2127696416, "Target": "Hit", "DispelImmune": false},
+        {"Do": "Mark", "Mark": "hostage hurt", "Target": "Self"}
+      ],
+      "Notes": "The other Hostage." },
+
+    { "When": "BossDefeated", "Mark": "hostage hurt", "MarkWho": "Self", "NotMarked": true,
+      "Actions": [
+        {"Do": "Cast", "Spell": "Blessing", "SpellID": 1022053292, "Target": "Self", "DispelImmune": false},
+        {"Do": "SetHealth", "Amount": 13860}
+      ],
+      "Notes": "Defeated before a Hostage is hurt: Blessing back to full." },
+
+    { "When": "RoundStart", "Round": 3, "Every": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00002993"},
+        {"Do": "Cast", "Spell": "Poison", "SpellID": 1730630192, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Every three rounds: Poison." }
+  ]
+}

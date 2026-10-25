@@ -1,0 +1,36 @@
+{
+  // Mysterious Werewolf (Rank 24, Balance, 16,000 health), Darkmoor. Mysterious Werewolf: Bladestorms, Curses, and a parting attack.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1705265,
+  "Name": "Mysterious Werewolf (Rank 24)",
+  "Cheats": [
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "Sharpen your claws"},
+        {"Do": "Cast", "Spell": "Bladestorm", "SpellID": 89076168, "Target": "Self", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Bladestorm", "SpellID": 89076168, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Bladestorm twice." },
+
+    { "When": "RoundStart", "Round": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "We hunt as a pack"},
+        {"Do": "Cast", "Spell": "Curse", "SpellID": 1218520866, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Curse", "SpellID": 1218520866, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Curse", "SpellID": 1218520866, "Target": "Enemy", "DispelImmune": false}
+      ],
+      "Notes": "Round 2: Curse three times." },
+
+    { "When": "BossDefeated",
+      "Actions": [
+        {"Do": "Say", "Line": "*Growl* I'll get you yet"},
+        {"Do": "PickOne", "Count": 2},
+        {"Do": "Cast", "Spell": "Arid Hound", "SpellID": 2090104282, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Hydra", "SpellID": 1804196021, "Target": "Enemy", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Exit Combat", "SpellID": 2127696416, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Defeated: Arid Hound or Hydra on a wizard, then Exit Combat." }
+  ]
+}

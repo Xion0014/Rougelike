@@ -1,0 +1,65 @@
+{
+  // Lord Barghest (Rank 25, Fire, 25,000 health), Darkmoor. Lord Barghest: a trap rule, Scald, a polymorph into Bruno and back, his minions' cheats and helpful cheats.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1705032,
+  "Name": "Lord Barghest (Rank 25)",
+  "Cheats": [
+    { "When": "PlayerCasts", "Category": "Trap", "OnBoss": true, "HasWho": "Receiver", "HasKind": "Trap", "HasNot": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003893"}
+      ],
+      "Notes": "A first trap on him: a warning." },
+
+    { "When": "PlayerCasts", "Category": "Trap", "HasWho": "Receiver", "HasKind": "Trap",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003895"},
+        {"Do": "RemoveWards", "Kind": "Bad", "Target": "AllAllies"}
+      ],
+      "Notes": "A trap on him over one: all traps off his side." },
+
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003897"},
+        {"Do": "Cast", "Spell": "Scald", "SpellID": 1626145646, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Scald." },
+
+    { "When": "RoundEnd", "Round": 3,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003898"},
+        {"Do": "Polymorph", "Spell": "Polymorph", "SpellID": 1309476192, "Target": "Self"},
+        {"Do": "Cast", "Spell": "Scald", "SpellID": 1626145646, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "End of round 3: he turns into Bruno and casts Scald." },
+
+    { "When": "RoundEnd", "Round": 7,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003915"},
+        {"Do": "Cast", "Spell": "Fortify", "SpellID": 1236255529, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00003900"},
+        {"Do": "Polymorph", "Spell": "Unpolymorph", "SpellID": 1965093060, "Target": "Self"},
+        {"Do": "Cast", "Spell": "Incindiate", "SpellID": 1986646109, "Target": "", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00003917"},
+        {"Do": "Cast", "Spell": "Quicken", "SpellID": 1036252775, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "End of round 7: Fortify on the wizards, he turns back and casts Incindiate, and Quicken again." },
+
+    { "When": "RoundEnd", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003916"},
+        {"Do": "Cast", "Spell": "Quicken", "SpellID": 1036252775, "Target": "AllEnemies", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00003914"},
+        {"Do": "Cast", "Spell": "Guardian Spirit", "SpellID": 365876391, "Target": "AllEnemies", "DispelImmune": false}
+      ],
+      "Notes": "Helpful: end of round 1, Quicken and Guardian Spirit on all wizards." },
+
+    { "When": "RoundStart", "Round": 1, "Every": 2, "HasAllies": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00003881"},
+        {"Do": "CastBy", "By": "Ally", "Spell": "Bladestorm", "SpellID": 89076168, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Odd rounds: his minion casts Bladestorm." }
+  ]
+}

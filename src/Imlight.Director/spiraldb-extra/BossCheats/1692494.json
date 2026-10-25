@@ -1,0 +1,16 @@
+{
+  // The Red Herring (Rank 23, Storm, 24,140 health), Unknown. The Red Herring: Storm Shark for a late wizard.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1692494,
+  "Name": "The Red Herring (Rank 23)",
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 1,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000943"},
+        {"Do": "Cast", "Spell": "Storm Shark", "SpellID": 334928255, "Target": "Caster", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 1: Storm Shark on them." }
+  ]
+}

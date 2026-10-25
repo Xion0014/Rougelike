@@ -1,0 +1,41 @@
+{
+  // Baron Hairkonnen (Rank 16, Myth, 9 health), Mirage. Baron Hairkonnen: Brace and Mirror Images, Steal Pips for a late wizard, Berserk when they fall.
+  // From Wizard404's data (fetched 2026-10-24; its cheat notes are wiki-written, so they guide, not prove; ones it marks as needing verification are made as if confirmed).
+  // Built first from blocks that were there, then from new universal blocks where a Notes names one (Niduus,
+  // 2026-10-23: "ALL CHEATS are to be compatible for PLAYERS and CREATURES"). Lines are the game's own, by key.
+  "TemplateID": 1402219,
+  "Name": "Baron Hairkonnen (Rank 16)",
+  "ShadowPips": 1,
+  "Cheats": [
+    { "When": "EnemyJoins", "Round": 2,
+      "Actions": [
+        {"Do": "Say", "Line": "H-H-Hruh. You're late!"},
+        {"Do": "Cast", "Spell": "Steal Pips", "SpellID": 81906935, "Target": "Caster", "DispelImmune": false},
+        {"Do": "Cast", "Spell": "Summon Mirror Images", "SpellID": 206129773, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "A wizard joins after round 2." },
+
+    { "When": "BattleStart",
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000922"},
+        {"Do": "Cast", "Spell": "Brace", "SpellID": 1391415840, "Target": "Self", "DispelImmune": false},
+        {"Do": "Say", "Line": "CombatMessages_00000924"},
+        {"Do": "Cast", "Spell": "Summon Mirror Images", "SpellID": 206129773, "Target": "", "DispelImmune": false}
+      ],
+      "Notes": "Round 1: Brace, then Summon Mirror Images." },
+
+    { "When": "PlayerCasts", "Spells": ["Supernova"], "OnBoss": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000923"},
+        {"Do": "Cast", "Spell": "Brace", "SpellID": 1391415840, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "Supernova on his aura: Brace again." },
+
+    { "When": "MinionDefeated", "NoAllies": true,
+      "Actions": [
+        {"Do": "Say", "Line": "CombatMessages_00000925"},
+        {"Do": "Cast", "Spell": "Berserk", "SpellID": 377388109, "Target": "Self", "DispelImmune": false}
+      ],
+      "Notes": "All his minions down: Berserk replaces his invulnerable aura." }
+  ]
+}
