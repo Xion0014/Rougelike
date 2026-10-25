@@ -438,13 +438,16 @@ internal sealed partial class LauncherWindow : Window {
 
     private static readonly string[] ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV"];
 
-    // The default tiers, for before the server is installed (arc 1; arc 2's streets are not built yet).
-    private static readonly string[] DEFAULT_WORLDS = ["Wizard City", "Krokotopia", "Marleybone", "MooShu", "Dragonspyre"];
+    // The default tiers, for before the server is installed: arc 1's streets, then arc 2's boss rush.
+    private static readonly string[] DEFAULT_WORLDS = [
+        "Wizard City", "Krokotopia", "Marleybone", "MooShu", "Dragonspyre",
+        "Celestia", "Grizzleheim", "Avalon", "Azteca", "Wintertusk",
+    ];
 
     /// <summary>
     /// The run's tiers as a row of waypoints, named after each tier's world (read from the server's TierN lines),
-    /// with the arcs' last bosses (ArcEndTiers, and the last tier) larger and lit. Only tiers up to the last one with
-    /// a street are shown: boss-only tiers ("none" for the street) are not ready to play yet.
+    /// with the arcs' last bosses (ArcEndTiers, and the last tier) larger and lit. Boss-only tiers (arc 2's boss rush,
+    /// "none" for the street) are shown too.
     /// </summary>
     private Control TierMap() {
         var (worlds, bosses) = _tiers;
@@ -497,15 +500,16 @@ internal sealed partial class LauncherWindow : Window {
             Canvas.SetTop(numeral, 2);
             canvas.Children.Add(numeral);
 
+            var labelWidth = Math.Min(96, Math.Max(60, step - 2));
             var label = new TextBlock {
                 Text = worlds[i],
-                FontSize = 11,
+                FontSize = worlds.Count > 7 ? 10 : 11,
                 Foreground = SOFT,
-                Width = 96,
+                Width = labelWidth,
                 TextAlignment = TextAlignment.Center,
                 TextTrimming = TextTrimming.CharacterEllipsis,
             };
-            Canvas.SetLeft(label, x - 48);
+            Canvas.SetLeft(label, x - labelWidth / 2);
             Canvas.SetTop(label, 56);
             canvas.Children.Add(label);
         }
@@ -523,7 +527,6 @@ internal sealed partial class LauncherWindow : Window {
         var bosses = new HashSet<int>();
         try {
             if (_manager.IsInstalled) {
-                var lastWithStreet = 0;
                 for (var tier = 1; tier <= ROMAN.Length; tier++) {
                     var line = _manager.GetSetting("Roguelike", $"Tier{tier}");
                     if (string.IsNullOrWhiteSpace(line)) {
@@ -533,14 +536,6 @@ internal sealed partial class LauncherWindow : Window {
                     var parts = line.Split(',', StringSplitOptions.TrimEntries);
                     var zone = parts.Length > 1 ? parts[1] : parts[0];
                     worlds.Add(WorldName(zone));
-                    if (parts.Length > 1 && !parts[0].Equals("none", StringComparison.OrdinalIgnoreCase) && parts[0].Length > 0) {
-                        lastWithStreet = tier;
-                    }
-                }
-
-                // Boss-only tiers after the last street are not ready to play, so they are left off the map.
-                if (lastWithStreet > 0 && lastWithStreet < worlds.Count) {
-                    worlds.RemoveRange(lastWithStreet, worlds.Count - lastWithStreet);
                 }
 
                 foreach (var end in (_manager.GetSetting("Roguelike", "ArcEndTiers") ?? "5").Split(',', StringSplitOptions.RemoveEmptyEntries)) {

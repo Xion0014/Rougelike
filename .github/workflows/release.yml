@@ -1,4 +1,4 @@
-# Publishes a GitHub release on every push to the roguelike branch (versions 1.0.<run number>),
+# Publishes a GitHub release on every push to the roguelike branch (versions 2.0.<run number - 135>),
 # and when a version tag (v1.2.3) is pushed. Installed ImlightManager.exe and launchers update
 # themselves from the newest release here, so every push reaches every install.
 #
@@ -64,8 +64,9 @@ jobs:
             $version = "${{ github.ref_name }}"
             $branch = $env:DEFAULT_INSTALL_BRANCH
           } else {
-            # A branch push: number the release by this workflow's run count.
-            $version = "1.0.${{ github.run_number }}"
+            # A branch push: number the release by this workflow's run count. 2.0 (arc 2) began at run 135,
+            # which is 2.0.0; runs before it were 1.0.<run number>.
+            $version = "2.0.$([int]'${{ github.run_number }}' - 135)"
             $branch = "${{ github.ref_name }}"
           }
           $version = $version.TrimStart('v')
