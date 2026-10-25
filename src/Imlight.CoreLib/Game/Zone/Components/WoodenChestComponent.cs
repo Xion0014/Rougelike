@@ -242,7 +242,7 @@ internal sealed class WoodenChestComponent(ZoneEntity entity) : ZoneEntityCompon
         return true;
     }
 
-    private static bool GivePet(IActorRef playerActor, Wizard wizard) {
+    internal static bool GivePet(IActorRef playerActor, Wizard wizard) {
         var pet = Imlight.CoreLib.Game.Runs.RoguelikePets.Build(wizard);
         if (pet is null || !wizard.AddPetToInventory(pet)) {
             return false;

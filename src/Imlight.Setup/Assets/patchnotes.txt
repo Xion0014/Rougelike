@@ -5,6 +5,16 @@
 ;   anything else     one change (leave a blank line between changes)
 ;   ; comment         not shown
 
+# v1.0.130 (October 24, 2026)
+
+Q: Fixed
+
+Enchantments go on the card you put them on. With two copies of the same card in hand, the server took the wrong copy out, so its hand stopped matching yours: enchants landed on another card, said "already enchanted", or did nothing (Epic, Simplify and others).
+
+Long May Casts (Meteor Storm, Virulence and the like) play out before the next turn starts. Each May Cast now waits for its own animation instead of at most 4 seconds.
+
+Silver chests pay out on a run: winning the lock game gives 2 rewards (gear, jewels or spells), 10,000 to 50,000 gold, and a 20% chance of a pet.
+
 # v1.0.129 (October 24, 2026)
 
 Q: Fixed

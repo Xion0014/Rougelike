@@ -63,10 +63,21 @@ internal static class ChestRewardGranter {
                                                ulong chestTemplateId,
                                                IReadOnlyList<string> lootTables) {
         var wizard = character.Wizard;
-        var rolled = ChestLootRoller.Roll(lootTables, playerActor, character.WizardGameObject, wizard);
+
+        // On a roguelike run a silver chest holds the run's better rewards (its loot tables gave nothing here).
+        var onRun = Imlight.CoreLib.Game.Runs.RoguelikeConfig.Enabled && wizard?.Roguelike is not null;
+        var runGold = 0;
+        var rolled = onRun ? RunLoot(playerActor, wizard, out runGold)
+            : ChestLootRoller.Roll(lootTables, playerActor, character.WizardGameObject, wizard);
         FitGoldToPouch(rolled, wizard);
 
         var granted = LootGranter.Grant(playerActor, wizard, rolled);
+        if (runGold > 0) {
+            // Given as it is (not multiplied), like the wooden chests' gold, and shown in the window.
+            runGold = Math.Min(runGold, Math.Max(0, wizard.GameStats.m_baseGoldPouch - wizard.GameStats.m_currentGold));
+            LootGranter.UpdateWizardGold(playerActor, wizard, runGold);
+            granted.GoldAmount = runGold;
+        }
         var lootList = DropTableConverter.ToLootInfoList(granted);
 
         // The window draws items and treasure cards only (and the gold), so it is given only those.
@@ -87,6 +98,63 @@ internal static class ChestRewardGranter {
         var finalPhase = MinigameRewardTiers.FinalPhaseForSlots(Math.Min(slots, WINDOW_SLOTS));
 
         return new MinigameRewardResult(lootList, finalPhase, slots > 0);
+    }
+
+    // [Roguelike] Silver chests: SilverChestItems rewards picked by SilverChestRewards ("kind:weight": gear, jewel,
+    // spell), SilverChestGoldMin to SilverChestGoldMax gold, and a SilverChestPetChance% chance of a run pet as well.
+    private static readonly (string Kind, int Weight)[] s_silverRewards = [.. (ConfigurationManager.GetValue(
+            "Roguelike.SilverChestRewards", "gear:40, jewel:35, spell:25") ?? "")
+        .Split(',', StringSplitOptions.RemoveEmptyEntries)
+        .Select(part => part.Split(':', 2))
+        .Where(pair => pair.Length == 2 && int.TryParse(pair[1].Trim(), out var w) && w > 0)
+        .Select(pair => (pair[0].Trim().ToLowerInvariant(), int.Parse(pair[1].Trim())))];
+    private static readonly int s_silverItems = Math.Clamp(ConfigurationManager.GetValue("Roguelike.SilverChestItems", 2), 0, 3);
+    private static readonly int s_silverGoldMin = Math.Max(0, ConfigurationManager.GetValue("Roguelike.SilverChestGoldMin", 10000));
+    private static readonly int s_silverGoldMax = Math.Max(s_silverGoldMin, ConfigurationManager.GetValue("Roguelike.SilverChestGoldMax", 50000));
+    private static readonly int s_silverPetChance = Math.Clamp(ConfigurationManager.GetValue("Roguelike.SilverChestPetChance", 20), 0, 100);
+
+    private static DropTableResult RunLoot(IActorRef playerActor, Wizard wizard, out int gold) {
+        var loot = new DropTableResult();
+        var given = new List<string>();
+        for (var i = 0; i < s_silverItems; i++) {
+            var kind = RollSilverKind();
+            uint? id = kind switch {
+                "gear" => Imlight.CoreLib.Game.Runs.RoguelikeStock.PickChestGear(wizard),
+                "jewel" => Imlight.CoreLib.Game.Runs.RoguelikeStock.PickJewel(wizard),
+                "spell" => Imlight.CoreLib.Game.Runs.RoguelikeStock.RollSpellToLearn(wizard, 100),
+                _ => null,
+            };
+            id ??= Imlight.CoreLib.Game.Runs.RoguelikeStock.PickChestGear(wizard);
+            if (id is { } itemId) {
+                loot.Items.Add(new DropItemResult { ItemId = itemId.ToString(), Quantity = 1 });
+                given.Add(kind);
+            }
+        }
+
+        gold = Random.Shared.Next(s_silverGoldMin, s_silverGoldMax + 1);
+        if (Random.Shared.Next(100) < s_silverPetChance
+            && Imlight.CoreLib.Game.Zone.Components.WoodenChestComponent.GivePet(playerActor, wizard)) {
+            given.Add("pet");
+        }
+
+        Logger.Information("[Roguelike] {0} won a silver chest: {1} and {2} gold.",
+            Logger.Args(wizard.CharId, string.Join(", ", given), gold));
+
+        return loot;
+    }
+
+    private static string RollSilverKind() {
+        var total = s_silverRewards.Sum(r => r.Weight);
+        var roll = total > 0 ? Random.Shared.Next(total) : 0;
+        foreach (var (kind, weight) in s_silverRewards) {
+            if (roll < weight) {
+                return kind;
+            }
+
+            roll -= weight;
+        }
+
+        return "gear";
     }
 
     private static void FitGoldToPouch(DropTableResult rolled, Wizard wizard) {

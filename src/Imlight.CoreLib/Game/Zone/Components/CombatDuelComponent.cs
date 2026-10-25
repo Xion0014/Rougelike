@@ -1842,7 +1842,7 @@ internal sealed class CombatDuelComponent(ZoneEntity entity)
         Spell target = null;
         foreach (var index in candidates) {
             if (index != (uint) spellSelection && index < byte.MaxValue
-                && caster.GetSpellFromLastHand((byte) index) is { } card && card != enchantment) {
+                && caster.GetSpellFromLastHand((byte) index) is { } card && !ReferenceEquals(card, enchantment)) {
                 target = card;
                 break;
             }

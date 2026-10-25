@@ -105,7 +105,7 @@ internal class CombatDeck {
         var newCards = new List<Spell>();
         // Discard the cards that were used up or discarded.
         foreach (var spell in _cardsDiscardedThisTurn) {
-            LastGivenHand.Remove(spell);
+            RemoveFromHand(spell);
 
             var spellData = _usedUpSpellData.FirstOrDefault(s => s.TemplateId == spell.m_templateID);
             if (spellData == null) {
@@ -158,6 +158,22 @@ internal class CombatDeck {
     }
 
     /// <summary>
+    /// Takes this very card out of the hand. Spells are records, so List.Remove took out the first card that only
+    /// looked the same: with two copies of a card the wrong one left the hand, the server's hand stopped matching the
+    /// game's, and enchantments went on the wrong card (or "it is already enchanted").
+    /// </summary>
+    private bool RemoveFromHand(Spell spell) {
+        var index = LastGivenHand.FindIndex(card => ReferenceEquals(card, spell));
+        if (index < 0) {
+            return false;
+        }
+
+        LastGivenHand.RemoveAt(index);
+
+        return true;
+    }
+
+    /// <summary>
     /// Discards a spell from the current hand. Treasure cards are returned to the vault.
     /// </summary>
     /// <param name="spell">The spell to discard.</param>
@@ -169,7 +185,7 @@ internal class CombatDeck {
             _cardsDiscardedThisTurn.Add(spell);
 
             // Free the slot now so a vault draw can be made this turn; GetHand's removal is a no-op.
-            LastGivenHand.Remove(spell);
+            RemoveFromHand(spell);
         }
     }
 
@@ -183,7 +199,7 @@ internal class CombatDeck {
         }
 
         _cardsDiscardedThisTurn.Add(spell);
-        LastGivenHand.Remove(spell);
+        RemoveFromHand(spell);
     }
 
     /// <summary>
@@ -254,7 +270,7 @@ internal class CombatDeck {
         }
 
         // Remove from hand.
-        LastGivenHand.Remove(spell);
+        RemoveFromHand(spell);
         if (TreasureCardsInHand > 0) {
             TreasureCardsInHand--;
         }
@@ -283,7 +299,7 @@ internal class CombatDeck {
         }
 
         // Remove from hand.
-        LastGivenHand.Remove(spell);
+        RemoveFromHand(spell);
         if (TreasureCardsInHand > 0) {
             TreasureCardsInHand--;
         }

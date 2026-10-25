@@ -473,7 +473,7 @@ public class CombatResolver(Duel duel, CombatDuelSubCircle[] actorSubCircles) {
         owner._duelActor.CurrentActionCinematicOffsetSeconds = cinematicTimeSoFar;
         var action = new QueuedCombatAction { SpellCaster = owner, SelectedTarget = target, Spell = spell, SpellTemplate = template };
         var before = combatActionList.m_actionList.Count;
-        var cinematicTime = Math.Min(HandleSuccessfulAction(action, combatActionList, alreadyPaid: true), PetMayCasts.CastSeconds);
+        var cinematicTime = PetMayCasts.WaitFor(HandleSuccessfulAction(action, combatActionList, alreadyPaid: true));
         ShowInHand(owner, spell, template, combatActionList, before);
         for (var i = before; i < combatActionList.m_actionList.Count; i++) {
             combatActionList.m_actionList[i].m_forceSpell = PetMayCasts.ForceSpell;
