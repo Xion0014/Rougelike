@@ -272,19 +272,38 @@ internal static class RoguelikeStock {
             return null;
         }
 
-        var level = Math.Max(1, (int) wizard.MagicSchoolBehavior.Level);
+        // As for gear, a wizard above JewelShopMaxLevel shops as one at it (the window slides down).
+        var level = Math.Clamp((int) wizard.MagicSchoolBehavior.Level, 1, JewelShopMaxLevel);
         var high = Math.Min(level + JewelShopRange, JewelShopMaxLevel);
         var low = Math.Max(1, Math.Min(level - JewelShopRange, high));
         var vendorCount = original.Count(g => IsJewelTemplate(g.MParts.TemplateId));
-        var count = JewelShopCount > 0 ? JewelShopCount : vendorCount > 0 ? vendorCount : 15;
+        // At least 30, so every shape (square, circle, triangle, tear, pet, pins) has some.
+        var count = JewelShopCount > 0 ? JewelShopCount : Math.Max(30, vendorCount);
 
         var random = new Random(Seed(wizard, "jewelshop", vendorTemplateId));
         var upper = original.Where(g => IsJewelTemplate(g.MParts.TemplateId)).Select(g => g.Full).FirstOrDefault() & 0xFFFFFFFF00000000UL;
-        var picks = s_jewels.Value
+
+        // Shape by shape in turn, so pins (most of the high-level pool) don't crowd the jewels out.
+        var byShape = s_jewels.Value
             .Where(j => j.Level >= low && j.Level <= high)
+            .GroupBy(j => j.Shape)
+            .Select(g => new Queue<JewelEntry>(g.OrderBy(_ => random.Next())))
             .OrderBy(_ => random.Next())
-            .Take(count)
-            .OrderBy(j => j.Level)
+            .ToList();
+        var chosen = new List<JewelEntry>();
+        while (chosen.Count < count && byShape.Any(q => q.Count > 0)) {
+            foreach (var queue in byShape.Where(q => q.Count > 0)) {
+                if (chosen.Count >= count) {
+                    break;
+                }
+
+                chosen.Add(queue.Dequeue());
+            }
+        }
+
+        var picks = chosen
+            .OrderBy(j => j.Shape)
+            .ThenBy(j => j.Level)
             .Select(j => new GID(upper | j.Id))
             .ToList();
 
@@ -307,6 +326,11 @@ internal static class RoguelikeStock {
         }
 
         var inWindow = all.Where(g => g.Level >= low && g.Level <= high).ToList();
+        if (inWindow.Count < 4) {
+            // Too little in the window (few decks are that high): the highest pieces below it as well.
+            inWindow = [.. inWindow.Concat(all.Where(g => g.Level < low).OrderByDescending(g => g.Level).Take(8))];
+        }
+
         var forSchool = inWindow.Where(g => IsWearableBy(g.School, school)).ToList();
 
         // Prefer gear the wizard can wear; fall back to any school if there is too little.
@@ -739,7 +763,9 @@ internal static class RoguelikeStock {
 
     /// <summary>The level range stock is picked from: around the wizard's level, never above the cap.</summary>
     private static (int Low, int High) LevelWindow(Wizard wizard) {
-        var level = Math.Max(1, (int) wizard.MagicSchoolBehavior.Level);
+        // A wizard above MaxStockLevel shops as one at it: the window slides down instead of shrinking to
+        // MaxStockLevel alone (a level 110 wizard saw only level 100 stock, and the deck shop had none).
+        var level = Math.Clamp((int) wizard.MagicSchoolBehavior.Level, 1, s_maxLevel);
         var high = Math.Clamp(level + s_levelsAbove, 1, s_maxLevel);
         var low = Math.Clamp(level - s_levelsBelow, 1, high);
 

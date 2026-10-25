@@ -5,6 +5,14 @@
 ;   anything else     one change (leave a blank line between changes)
 ;   ; comment         not shown
 
+# v1.0.134 (October 25, 2026)
+
+Q: Fixed
+
+Shops for wizards above level 100: the stock was only ever level 100, so the deck shop had nothing to swap in and sold its own Novice decks. Wizards above the highest stock level now shop as a level 100 wizard (levels 90 to 100), and a slot with little in that range (decks) adds the highest pieces just below it.
+
+RockHammer's jewel shop: jewels from levels 95 to 100 for high wizards (not just level 100), at least 30 of them, and every shape in turn, so square, circle, triangle and tear jewels (damage, pierce, accuracy...) show up next to the pins instead of pins taking most of the shop.
+
 # v1.0.133 (October 25, 2026)
 
 Q: New
