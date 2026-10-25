@@ -33,7 +33,7 @@ Use the Tome of Travels again to start the next tier's street. Want to shop some
 Q: Arcs
 Arc 1 runs from Wizard City to Malistaire in Dragonspyre. After its last boss you can take a break, and your run waits for you.
 
-Arc 2 is a boss rush: tiers 6 to 10 (Celestia, Grizzleheim, Avalon, Azteca and Wintertusk) go straight from the shops to the boss. Each boss gives the experience for the next tier's level (up to 110) and 100,000 gold, and arc 2's bosses cheat like they do in the real game.
+Arc 2 is a boss rush: tiers 6 to 10 (Celestia, Grizzleheim, Avalon, Azteca and Morganthe) go straight from the shops to the boss. Each boss gives the experience for the next tier's level (up to 110) and 100,000 gold, and arc 2's bosses cheat like they do in the real game.
 
 Q: One life?
 With Die = Delete on (under Run options), a wizard who dies in battle and is still dead when the battle ends is gone for good. Fleeing doesn't count.

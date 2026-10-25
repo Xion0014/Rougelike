@@ -5,13 +5,19 @@
 ;   anything else     one change (leave a blank line between changes)
 ;   ; comment         not shown
 
+# v2.0.1 (October 25, 2026)
+
+Q: Changed
+
+The launcher's map calls tier 10 "Morganthe" instead of Wintertusk (she fights in a Wintertusk cave for now, since her own room doesn't work yet). Any tier can be renamed on the map with TierNName in Imlight.ini.
+
 # v2.0.0 (October 25, 2026)
 
 Q: New
 
-Spiral Gauntlet 2.0: Arc 2! The run goes on past Malistaire with a boss rush through five more worlds, ten tiers in all:
+Spiral Gauntlet 2.0: Arc 2! The run goes on past Malistaire with a boss rush through five more bosses, ten tiers in all:
 
-Tier 6, Celestia: Mithraya. Tier 7, Grizzleheim: Belloq. Tier 8, Avalon: the Jabberwock. Tier 9, Azteca: a random boss in Xibalba. Tier 10, Wintertusk: Morganthe.
+Tier 6, Celestia: Mithraya. Tier 7, Grizzleheim: Belloq. Tier 8, Avalon: the Jabberwock. Tier 9, Azteca: a random boss in Xibalba. Tier 10: Morganthe.
 
 Each arc 2 tier goes straight from the shops to its boss. Bosses give the experience for the next tier (to level 60, 70, 80, 90, 100 and 110) and 100,000 gold, and from Malistaire on battles give experience and gold at x1.
 

@@ -441,7 +441,7 @@ internal sealed partial class LauncherWindow : Window {
     // The default tiers, for before the server is installed: arc 1's streets, then arc 2's boss rush.
     private static readonly string[] DEFAULT_WORLDS = [
         "Wizard City", "Krokotopia", "Marleybone", "MooShu", "Dragonspyre",
-        "Celestia", "Grizzleheim", "Avalon", "Azteca", "Wintertusk",
+        "Celestia", "Grizzleheim", "Avalon", "Azteca", "Morganthe",
     ];
 
     /// <summary>
@@ -535,7 +535,9 @@ internal sealed partial class LauncherWindow : Window {
 
                     var parts = line.Split(',', StringSplitOptions.TrimEntries);
                     var zone = parts.Length > 1 ? parts[1] : parts[0];
-                    worlds.Add(WorldName(zone));
+                    // TierNName names it on the map instead of its zone's world (tier 10: Morganthe, in a Wintertusk cave).
+                    var name = _manager.GetSetting("Roguelike", $"Tier{tier}Name");
+                    worlds.Add(string.IsNullOrWhiteSpace(name) ? WorldName(zone) : name.Trim());
                 }
 
                 foreach (var end in (_manager.GetSetting("Roguelike", "ArcEndTiers") ?? "5").Split(',', StringSplitOptions.RemoveEmptyEntries)) {
