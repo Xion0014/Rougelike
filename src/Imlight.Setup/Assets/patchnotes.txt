@@ -5,6 +5,12 @@
 ;   anything else     one change (leave a blank line between changes)
 ;   ; comment         not shown
 
+# v1.0.132 (October 24, 2026)
+
+Q: Fixed
+
+Opening the pets page could crash the game: a run pet could roll a talent with no icon (a retired or unused one), and the game fell over drawing it. Run pets only roll talents with an icon and a name now, and such talents are taken off pets you already have when you log in or change zones.
+
 # v1.0.131 (October 24, 2026)
 
 Q: Changed

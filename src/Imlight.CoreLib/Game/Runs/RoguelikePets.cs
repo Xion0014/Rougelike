@@ -144,7 +144,7 @@ internal static class RoguelikePets {
         try {
             foreach (var talent in PetData.AllTalents.OfType<PetTalentTemplate>()) {
                 var effects = talent.m_effectList ?? [];
-                if (effects.Count == 0 || string.IsNullOrEmpty(talent.m_talentName)) {
+                if (effects.Count == 0 || string.IsNullOrEmpty(talent.m_talentName) || !Showable(talent)) {
                     continue;
                 }
 
@@ -162,6 +162,49 @@ internal static class RoguelikePets {
         return list;
     }
 
+    /// <summary>
+    /// True for a talent the game's pet page can show: it has an icon and a name, and is not retired or a developer's
+    /// ("DNU", test). The pet page crashed the game on a talent with no icon ("Failed to load texture ''").
+    /// </summary>
+    internal static bool Showable(PetTalentBaseTemplate talent) {
+        if (talent is null || talent.m_bRetired) {
+            return false;
+        }
+
+        string image = talent.m_imageName;
+        string display = talent.m_displayName;
+        string name = talent.m_talentName;
+
+        return !string.IsNullOrWhiteSpace(image) && !string.IsNullOrWhiteSpace(display)
+               && !(name ?? "").Contains("DNU", StringComparison.OrdinalIgnoreCase)
+               && !(name ?? "").Contains("Test", StringComparison.OrdinalIgnoreCase);
+    }
+
+    /// <summary>
+    /// Takes talents the pet page cannot show (see <see cref="Showable"/>) off this wizard's pets, so run pets rolled
+    /// before the check no longer crash the game. Returns how many talents were taken off.
+    /// </summary>
+    internal static int RemoveUnshowableTalents(Wizard wizard) {
+        var removed = 0;
+        var items = (wizard?.InventoryBehavior?.Items ?? []).Concat(wizard?.EquipmentBehavior?.EquippedItems ?? []);
+        foreach (var item in items) {
+            if (item is null || PetProgress.GetBehavior(item) is not { } behavior) {
+                continue;
+            }
+
+            bool Bad(uint id) => PetData.GetTalent(id) is { } talent && !Showable(talent);
+            removed += behavior.m_allTalents?.RemoveAll(Bad) ?? 0;
+            removed += behavior.m_expressedTalents?.RemoveAll(Bad) ?? 0;
+        }
+
+        if (removed > 0) {
+            Logger.Information("Roguelike: took {0} talents the pet page cannot show off {1}'s pets.",
+                Logger.Args(removed, wizard.CharId));
+        }
+
+        return removed;
+    }
+
     // May Cast talents whose card the server can cast.
     private static List<string> BuildMayCastTalents() {
         var list = new List<string>();
@@ -171,7 +214,8 @@ internal static class RoguelikePets {
 
         try {
             foreach (var talent in PetData.AllTalents.OfType<PetTalentTemplate>()) {
-                if (!string.IsNullOrEmpty(talent.m_talentName) && Imlight.CoreLib.Game.Combat.PetMayCasts.IsCastable(talent)) {
+                if (!string.IsNullOrEmpty(talent.m_talentName) && Showable(talent)
+                    && Imlight.CoreLib.Game.Combat.PetMayCasts.IsCastable(talent)) {
                     list.Add(talent.m_talentName);
                 }
             }

@@ -90,6 +90,9 @@ internal static class CharacterHelper {
         }
 
         // Pet talents and socketed jewels, on top of the gear.
+        // Pet talents the game's pet page cannot show (no icon) crash it; take them off first.
+        Imlight.CoreLib.Game.Runs.RoguelikePets.RemoveUnshowableTalents(wizard);
+
         EquipmentExtras.Forget(wizard);
         EquipmentExtras.Refresh(wizard);
 
