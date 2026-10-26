@@ -1,3 +1,7 @@
+# Test realm: a push to roguelike/test publishes a prerelease (v2.0.<n>-test) with only SpiralGauntletTest.exe, which
+# installs and updates from that branch. Prereleases are never "latest", so players never get them; once a test build
+# is good, merge roguelike/test into roguelike/run-loop to release it.
+#
 # Publishes a GitHub release on every push to the roguelike branch (versions 2.0.<run number - 135>),
 # and when a version tag (v1.2.3) is pushed. Installed ImlightManager.exe and launchers update
 # themselves from the newest release here, so every push reaches every install.
@@ -19,7 +23,7 @@ name: Release
 
 on:
   push:
-    branches: ['roguelike/run-loop']
+    branches: ['roguelike/run-loop', 'roguelike/test']
     tags: ['v*']
   workflow_dispatch:
     inputs:
@@ -70,11 +74,26 @@ jobs:
             $branch = "${{ github.ref_name }}"
           }
           $version = $version.TrimStart('v')
+          $test = "$branch" -eq "roguelike/test"
           "version=$version" >> $env:GITHUB_OUTPUT
-          "tag=v$version" >> $env:GITHUB_OUTPUT
+          "tag=v$version$(if ($test) { '-test' })" >> $env:GITHUB_OUTPUT
           "branch=$branch" >> $env:GITHUB_OUTPUT
+          "test=$(if ($test) { 'true' } else { 'false' })" >> $env:GITHUB_OUTPUT
+
+      - name: Build the test realm
+        if: steps.version.outputs.test == 'true'
+        shell: pwsh
+        run: |
+          $typeInput = "submodule/Imcodec/src/Imcodec.ObjectProperty/GeneratorInput"
+          New-Item -ItemType Directory -Force $typeInput, release | Out-Null
+          Copy-Item submodule/Imcodec/test/CodeGen/Inputs/*.json $typeInput/
+          dotnet publish src/Imlight.Setup/Imlight.Setup.csproj -c Release -r win-x64 --self-contained true `
+            -p:PublishSingleFile=true -p:Version=${{ steps.version.outputs.version }} -p:ImlightEdition=Test `
+            -p:ImlightBranch=${{ steps.version.outputs.branch }} -o out/test
+          Copy-Item out/test/SpiralGauntletTest.exe release/
 
       - name: Build the launcher
+        if: steps.version.outputs.test != 'true'
         shell: pwsh
         run: |
           dotnet publish src/Imlight.Launcher/Imlight.Launcher.csproj -c Release -r win-x64 --self-contained true `
@@ -83,6 +102,7 @@ jobs:
           Compress-Archive -Path installer/publish/launcher/* -DestinationPath release/ImlightLauncher-win-x64.zip
 
       - name: Build ImlightManager.exe
+        if: steps.version.outputs.test != 'true'
         # Builds this fork on the player's own PC from their own game files, so it needs no secret.
         # The Game Files tab decodes game data with the type dump Imcodec ships for its tests.
         shell: pwsh
@@ -96,6 +116,7 @@ jobs:
           Copy-Item out/manager/ImlightManager.exe release/
 
       - name: Build the Spiral Gauntlet launcher
+        if: steps.version.outputs.test != 'true'
         # The playful roguelike launcher: installs the roguelike server on the player's PC, updates it and plays on it.
         shell: pwsh
         run: |
@@ -105,7 +126,7 @@ jobs:
           Copy-Item out/roguelike/SpiralGauntlet.exe release/
 
       - name: Add the generator inputs
-        if: env.GENERATOR_INPUTS != ''
+        if: env.GENERATOR_INPUTS != '' && steps.version.outputs.test != 'true'
         shell: pwsh
         run: |
           [IO.File]::WriteAllBytes("$env:RUNNER_TEMP/inputs.zip", [Convert]::FromBase64String($env:GENERATOR_INPUTS))
@@ -118,7 +139,7 @@ jobs:
           Copy-Item "$env:RUNNER_TEMP/inputs/MessageLayer/*" "$codec/Imcodec.MessageLayer/GeneratorInput/"
 
       - name: Build the server
-        if: env.GENERATOR_INPUTS != ''
+        if: env.GENERATOR_INPUTS != '' && steps.version.outputs.test != 'true'
         shell: pwsh
         run: |
           dotnet publish src/Imlight.Director/Imlight.Director.csproj -c Release -r win-x64 --self-contained true `
@@ -127,7 +148,7 @@ jobs:
           Compress-Archive -Path installer/publish/server/* -DestinationPath release/ImlightServer-win-x64.zip
 
       - name: Build the installer
-        if: env.GENERATOR_INPUTS != ''
+        if: env.GENERATOR_INPUTS != '' && steps.version.outputs.test != 'true'
         shell: pwsh
         run: |
           choco install innosetup --no-progress -y
@@ -145,7 +166,12 @@ jobs:
           $notes = "Built from $branch at $commit. Players: download SpiralGauntlet.exe and press the big button; it sets up the " +
                    "roguelike on your own PC from your Wizard101 files and keeps itself updated. Server owners: ImlightManager.exe " +
                    "installs the roguelike server from the $branch branch with the full control panel."
-          if (-not $env:GENERATOR_INPUTS) {
+          $test = "${{ steps.version.outputs.test }}" -eq "true"
+          if ($test) {
+            $notes = "TEST REALM build from $branch at $commit, not for players. SpiralGauntletTest.exe installs its own " +
+                     "server from the $branch branch, beside Spiral Gauntlet, and updates from these test builds only."
+          }
+          elseif (-not $env:GENERATOR_INPUTS) {
             $notes += " The launcher in this release cannot update the server by itself; use ImlightManager.exe."
           }
 
@@ -155,9 +181,12 @@ jobs:
           ($lines -join "`n").Trim() | Set-Content release/PatchNotes.txt -Encoding utf8
           $section = @()
           $inSection = $false
+          $seen = $false
           foreach ($line in $lines) {
             if ($line.StartsWith('# ')) {
-              $inSection = $line -match "^# $([regex]::Escape($tag))(\s|$)"
+              # A test build (v2.0.7-test) shows the newest section, the one being tested.
+              $inSection = $(if ($test) { $section.Count -eq 0 -and -not $seen } else { $line -match "^# $([regex]::Escape($tag))(\s|$)" })
+              $seen = $true
               continue
             }
             if ($inSection) {
@@ -167,5 +196,11 @@ jobs:
           if ($section.Count -gt 0) {
             $notes = "## What's new in $tag`n" + ($section -join "`n").Trim() + "`n`nEvery change so far is in PatchNotes.txt and on the launcher's Patch notes page.`n`n" + $notes
           }
-          gh release create $tag (Get-ChildItem release/*).FullName --title "$tag (roguelike)" --notes $notes `
-            --target "${{ github.sha }}" --latest
+          if ($test) {
+            gh release create $tag (Get-ChildItem release/*).FullName --title "$tag (test realm)" --notes $notes `
+              --target "${{ github.sha }}" --prerelease --latest=false
+          }
+          else {
+            gh release create $tag (Get-ChildItem release/*).FullName --title "$tag (roguelike)" --notes $notes `
+              --target "${{ github.sha }}" --latest
+          }

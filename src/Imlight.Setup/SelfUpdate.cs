@@ -58,8 +58,8 @@ internal static class SelfUpdate {
             http.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("ImlightSetup", CurrentVersion.ToString()));
             http.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github+json"));
 
-            using var document = JsonDocument.Parse(await http.GetStringAsync($"https://api.github.com/repos/{RELEASE_REPOSITORY}/releases/latest"));
-            var release = document.RootElement;
+            using var document = await ReleaseDocumentAsync(http);
+            var release = NewestRelease(document);
             var version = ParseVersion(release.GetProperty("tag_name").GetString());
             var asset = release.GetProperty("assets").EnumerateArray()
                 .FirstOrDefault(a => string.Equals(a.GetProperty("name").GetString(), ASSET, StringComparison.OrdinalIgnoreCase));
@@ -116,8 +116,8 @@ internal static class SelfUpdate {
             http.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("ImlightSetup", CurrentVersion.ToString()));
             http.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github+json"));
 
-            using var document = JsonDocument.Parse(await http.GetStringAsync($"https://api.github.com/repos/{RELEASE_REPOSITORY}/releases/latest"));
-            var release = document.RootElement;
+            using var document = await ReleaseDocumentAsync(http);
+            var release = NewestRelease(document);
             var version = ParseVersion(release.GetProperty("tag_name").GetString());
             var asset = release.GetProperty("assets").EnumerateArray()
                 .FirstOrDefault(a => string.Equals(a.GetProperty("name").GetString(), ASSET, StringComparison.OrdinalIgnoreCase));
@@ -157,8 +157,8 @@ internal static class SelfUpdate {
             http.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("ImlightSetup", CurrentVersion.ToString()));
             http.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github+json"));
 
-            using var document = JsonDocument.Parse(await http.GetStringAsync($"https://api.github.com/repos/{RELEASE_REPOSITORY}/releases/latest"));
-            var release = document.RootElement;
+            using var document = await ReleaseDocumentAsync(http);
+            var release = NewestRelease(document);
             var version = ParseVersion(release.GetProperty("tag_name").GetString());
             var hasAsset = release.GetProperty("assets").EnumerateArray()
                 .Any(a => string.Equals(a.GetProperty("name").GetString(), ASSET, StringComparison.OrdinalIgnoreCase));
@@ -169,6 +169,32 @@ internal static class SelfUpdate {
                                        or KeyNotFoundException or InvalidOperationException) {
             return null;
         }
+    }
+
+    // The public builds update from the latest release; the test realm from the newest release carrying its own exe
+    // (the test releases are prereleases, which "latest" never is).
+    private static async Task<JsonDocument> ReleaseDocumentAsync(HttpClient http)
+        => JsonDocument.Parse(await http.GetStringAsync(Edition.IS_TEST
+            ? $"https://api.github.com/repos/{RELEASE_REPOSITORY}/releases?per_page=30"
+            : $"https://api.github.com/repos/{RELEASE_REPOSITORY}/releases/latest"));
+
+    private static JsonElement NewestRelease(JsonDocument document) {
+        if (document.RootElement.ValueKind != JsonValueKind.Array) {
+            return document.RootElement;
+        }
+
+        foreach (var release in document.RootElement.EnumerateArray()) {
+            if (release.TryGetProperty("draft", out var draft) && draft.ValueKind == JsonValueKind.True) {
+                continue;
+            }
+
+            if (release.GetProperty("assets").EnumerateArray()
+                .Any(a => string.Equals(a.GetProperty("name").GetString(), ASSET, StringComparison.OrdinalIgnoreCase))) {
+                return release;
+            }
+        }
+
+        throw new KeyNotFoundException($"No release carries {ASSET}.");
     }
 
     internal static Version? ParseVersion(string? text) {

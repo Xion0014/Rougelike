@@ -1,9 +1,17 @@
 ; The launcher's Patch notes page, newest first. It also goes out with every release as PatchNotes.txt, and the
 ; release's own notes on GitHub are its section here. Same format as the other pages:
 ;   # vX.Y.Z (date)   one release; the heading must start with the version, like "# v1.0.123"
+;                     (on roguelike/test the newest section is "# Next update (in testing)"; it gets its
+;                     version when it is merged into roguelike/run-loop)
 ;   Q: line           a group within a release (New, Changed, Fixed), shown in gold
 ;   anything else     one change (leave a blank line between changes)
 ;   ; comment         not shown
+
+# Next update (in testing)
+
+Q: New
+
+Behind the scenes: a test realm. Updates now go to a separate Spiral Gauntlet Test Realm first (its own install, server and wizards) and only reach everyone once they've been tried out, so a broken update shouldn't reach your game.
 
 # v2.0.1 (October 25, 2026)
 

@@ -42,11 +42,25 @@ internal static class Edition {
         .FirstOrDefault(a => a.Key == "ImlightBranch" && !string.IsNullOrWhiteSpace(a.Value))?.Value
         ?? "quality-assurance";
 
-#if ROGUELIKE_EDITION
+#if TEST_EDITION
+    // The test realm (built with -p:ImlightEdition=Test): the Spiral Gauntlet launcher, installed and updated on its own
+    // from the roguelike/test branch, so updates can be tried before they go out to players. Its own folder, shortcuts
+    // and database; it updates from the test releases (prereleases carrying SpiralGauntletTest.exe), never the public ones.
+    internal const bool IS_MANAGER = true;
+    internal const bool IS_ROGUELIKE = true;
+    internal const bool IS_TEST = true;
+    internal const string NAME = "Spiral Gauntlet Test Realm";
+    internal const string DEFAULT_REPOSITORY = "Xion0014/Rougelike";
+    internal const string INSTALL_FOLDER_NAME = "SpiralGauntletTest";
+    internal const string RELEASE_ASSET = "SpiralGauntletTest.exe";
+    internal const string REGISTRY_KEY = "SpiralGauntletTest";
+    internal const string INSTALLED_EXE = "SpiralGauntletTest.exe";
+#elif ROGUELIKE_EDITION
     // The roguelike launcher (built with -p:ImlightEdition=Roguelike): a playful window that installs the roguelike
     // server on the player's own PC, keeps it updated, and plays Wizard101 on it. Accounts are made at first login.
     internal const bool IS_MANAGER = true;
     internal const bool IS_ROGUELIKE = true;
+    internal const bool IS_TEST = false;
     // Spiral Gauntlet. The install folder keeps the first name (SpiralRoguelike), so existing installs carry on.
     internal const string NAME = "Spiral Gauntlet";
     internal const string DEFAULT_REPOSITORY = "Xion0014/Rougelike";
@@ -57,6 +71,7 @@ internal static class Edition {
 #elif MANAGER_EDITION
     internal const bool IS_MANAGER = true;
     internal const bool IS_ROGUELIKE = false;
+    internal const bool IS_TEST = false;
     internal const string INSTALLED_EXE = "Imlight.exe";
     internal const string NAME = "Imlight Manager";
     internal const string DEFAULT_REPOSITORY = "Xion0014/Rougelike";
@@ -66,6 +81,7 @@ internal static class Edition {
 #else
     internal const bool IS_MANAGER = false;
     internal const bool IS_ROGUELIKE = false;
+    internal const bool IS_TEST = false;
     internal const string INSTALLED_EXE = "Imlight.exe";
     internal const string NAME = "Imlight Server";
     internal const string DEFAULT_REPOSITORY = "Revive101/Imlight";

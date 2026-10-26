@@ -28,6 +28,14 @@
     <ApplicationIcon>Assets\launcher.ico</ApplicationIcon>
   </PropertyGroup>
 
+  <!-- dotnet publish -p:ImlightEdition=Test builds SpiralGauntletTest.exe, the test realm (the launcher, on its own
+       install, updated from the roguelike/test branch's prereleases). -->
+  <PropertyGroup Condition="'$(ImlightEdition)' == 'Test'">
+    <AssemblyName>SpiralGauntletTest</AssemblyName>
+    <DefineConstants>$(DefineConstants);MANAGER_EDITION;ROGUELIKE_EDITION;TEST_EDITION</DefineConstants>
+    <ApplicationIcon>Assets\launcher.ico</ApplicationIcon>
+  </PropertyGroup>
+
   <ItemGroup>
     <!-- The launcher window's fonts (see Assets\Fonts\README.txt) and icon. -->
     <AvaloniaResource Include="Assets\**\*.ttf" />
