@@ -7,7 +7,7 @@
 ;   anything else     one change (leave a blank line between changes)
 ;   ; comment         not shown
 
-# Next update (in testing)
+# v2.1.0 (October 26, 2026) - Achievement Update
 
 Q: New
 
@@ -16,6 +16,8 @@ Behind the scenes: a test realm. Updates now go to a separate Spiral Gauntlet Te
 In the test realm every account is an administrator, so testers can use every command (.run goto, .run pwn, .jewel and the rest).
 
 Achievements! 25 of them, from clearing each world to beating a boss in 3 rounds, finding an Ultra pet or holding a million gold (and two hidden ones). The game tells you when you earn one, the launcher has an Achievements page showing what you've earned and what's left, and .run achievements lists them in game. Achievements stay earned on your PC even if the wizard who earned them is lost to Die = Delete.
+
+The launcher window is a little bigger, so its buttons no longer run into the rest of the window.
 
 Settings has each street's minutes for tiers 1 to 5 (Wizard City 10, the rest 15 to start), under The run.
 

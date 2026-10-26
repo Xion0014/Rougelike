@@ -2,7 +2,7 @@
 # installs and updates from that branch. Prereleases are never "latest", so players never get them; once a test build
 # is good, merge roguelike/test into roguelike/run-loop to release it.
 #
-# Publishes a GitHub release on every push to the roguelike branch (versions 2.0.<run number - 135>),
+# Publishes a GitHub release on every push to the roguelike branch (versions 2.1.<run number - 141>),
 # and when a version tag (v1.2.3) is pushed. Installed ImlightManager.exe and launchers update
 # themselves from the newest release here, so every push reaches every install.
 #
@@ -68,9 +68,9 @@ jobs:
             $version = "${{ github.ref_name }}"
             $branch = $env:DEFAULT_INSTALL_BRANCH
           } else {
-            # A branch push: number the release by this workflow's run count. 2.0 (arc 2) began at run 135,
-            # which is 2.0.0; runs before it were 1.0.<run number>.
-            $version = "2.0.$([int]'${{ github.run_number }}' - 135)"
+            # A branch push: number the release by this workflow's run count. 2.1 (the Achievement Update) began at
+            # run 141, which is 2.1.0; 2.0 ran from run 135 (2.0.0), and runs before it were 1.0.<run number>.
+            $version = "2.1.$([int]'${{ github.run_number }}' - 141)"
             $branch = "${{ github.ref_name }}"
           }
           $version = $version.TrimStart('v')
@@ -182,10 +182,13 @@ jobs:
           $section = @()
           $inSection = $false
           $seen = $false
+          $releaseName = ""
           foreach ($line in $lines) {
             if ($line.StartsWith('# ')) {
               # A test build (v2.0.7-test) shows the newest section, the one being tested.
               $inSection = $(if ($test) { $section.Count -eq 0 -and -not $seen } else { $line -match "^# $([regex]::Escape($tag))(\s|$)" })
+              # A named update ("# v2.1.0 (October 26, 2026) - Achievement Update") puts its name in the release title.
+              if ($inSection -and -not $test -and $line -match "\)\s*-\s*(.+)$") { $releaseName = $Matches[1].Trim() }
               $seen = $true
               continue
             }
@@ -201,6 +204,7 @@ jobs:
               --target "${{ github.sha }}" --prerelease --latest=false
           }
           else {
-            gh release create $tag (Get-ChildItem release/*).FullName --title "$tag (roguelike)" --notes $notes `
+            $title = $(if ($releaseName) { "$tag - $releaseName" } else { "$tag (roguelike)" })
+            gh release create $tag (Get-ChildItem release/*).FullName --title $title --notes $notes `
               --target "${{ github.sha }}" --latest
           }

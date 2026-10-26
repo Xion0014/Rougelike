@@ -147,10 +147,11 @@ internal sealed partial class LauncherWindow : Window {
     internal LauncherWindow(ServerManager manager) {
         _manager = manager;
         Title = Edition.NAME;
-        Width = 980;
-        Height = 700;
-        MinWidth = 980;
-        MinHeight = 700;
+        // Room for the pill buttons (Achievements made them wrap onto another row) under the card.
+        Width = 1060;
+        Height = 780;
+        MinWidth = 1060;
+        MinHeight = 780;
         CanResize = false;
         WindowStartupLocation = WindowStartupLocation.CenterScreen;
         FontFamily = BODY_FONT;
@@ -361,7 +362,7 @@ internal sealed partial class LauncherWindow : Window {
             BorderBrush = BRASS,
             BorderThickness = new Thickness(1),
             Padding = new Thickness(28, 20),
-            Width = 580,
+            Width = 680,
             BoxShadow = BoxShadows.Parse("0 18 40 0 #80000000"),
             Child = new StackPanel {
                 Spacing = 12,
