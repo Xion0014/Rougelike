@@ -102,7 +102,12 @@ internal static class PlayerSettings {
             new("Roguelike", "BossCheatsFromTier", "Boss cheats from tier", "The first tier whose bosses cheat (6: arc 2).", SettingKind.Whole, 1, 100),
         ]),
         ("The run", [
-            new("Roguelike", "StreetMinutes", "Minutes per street", "How long each street lasts before the boss (tiers with their own time keep it).", SettingKind.Whole, 1, 240),
+            new("Roguelike", "StreetMinutes", "Minutes per street", "How long each street lasts before the boss (tiers 1 to 5 have their own below).", SettingKind.Whole, 1, 240),
+            new("Roguelike", "Tier1Minutes", "Tier 1 street minutes (Wizard City)", "How long tier 1's street lasts before its boss. 0: Minutes per street.", SettingKind.Whole, 0, 240),
+            new("Roguelike", "Tier2Minutes", "Tier 2 street minutes (Krokotopia)", "How long tier 2's street lasts before its boss. 0: Minutes per street.", SettingKind.Whole, 0, 240),
+            new("Roguelike", "Tier3Minutes", "Tier 3 street minutes (Marleybone)", "How long tier 3's street lasts before its boss. 0: Minutes per street.", SettingKind.Whole, 0, 240),
+            new("Roguelike", "Tier4Minutes", "Tier 4 street minutes (MooShu)", "How long tier 4's street lasts before its boss. 0: Minutes per street.", SettingKind.Whole, 0, 240),
+            new("Roguelike", "Tier5Minutes", "Tier 5 street minutes (Dragonspyre)", "How long tier 5's street lasts before its boss. 0: Minutes per street.", SettingKind.Whole, 0, 240),
             new("Roguelike", "StartingSpells", "Starting spells", "Random spells a new wizard starts with.", SettingKind.Whole, 0, 50),
             new("Character", "StartingPotions", "Potion bottles", "How many potion bottles every wizard has.", SettingKind.Whole, 0, 20),
             new("Character", "MaxInventoryItems", "Backpack size", "How many items the backpack holds.", SettingKind.Whole, 10, 1000),
