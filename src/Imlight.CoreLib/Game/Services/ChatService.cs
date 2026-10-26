@@ -92,7 +92,11 @@ internal class ChatService(SessionActor sessionActor) : MessageService(sessionAc
         var cleanedMessage = CleanMessageTrash(message.Message);
 
         // Parse in-game chat commands. Do not broadcast it to the zone.
-        if (cleanedMessage.StartsWith(CommandPrefix) && account.AuthLevel > AuthLevel.None) {
+        // Players use the .run commands too (.run status, stats, cards); the staff ones check their own auth level.
+        var playerCommand = Imlight.CoreLib.Game.Runs.RoguelikeConfig.Enabled
+                            && (cleanedMessage.Equals(".run", StringComparison.OrdinalIgnoreCase)
+                                || cleanedMessage.StartsWith(".run ", StringComparison.OrdinalIgnoreCase));
+        if (cleanedMessage.StartsWith(CommandPrefix) && (account.AuthLevel > AuthLevel.None || playerCommand)) {
             SendChatCommand(cleanedMessage, charObj, wizard);
 
             return;

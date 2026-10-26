@@ -86,6 +86,14 @@ internal static class UserAuthenticator {
     /// </summary>
     private static readonly bool s_autoCreateAccounts = ConfigurationManager.GetValue("Login Server.AutoCreateAccounts", false);
 
+    /// <summary>
+    /// [Login Server] AccountAuthLevel: the least auth level every account on this server has (None, QualityAssurance,
+    /// HallMonitor, Developer, Administrator). An account below it is raised to it when it logs in. The test realm
+    /// sets Administrator, so its testers can use every command; leave it at None anywhere else.
+    /// </summary>
+    private static readonly AuthLevel s_accountAuthLevel
+        = Enum.TryParse<AuthLevel>(ConfigurationManager.GetValue("Login Server.AccountAuthLevel", "None"), true, out var level) ? level : AuthLevel.None;
+
     /// <summary>The stored password of an account made at login: any password is let in until one is set.</summary>
     internal const string AUTO_PASSWORD = "AUTO-CREATED-NO-PASSWORD";
 
@@ -172,6 +180,12 @@ internal static class UserAuthenticator {
             details._result = UserAuthenResult.AuthenFailed;
 
             return details;
+        }
+
+        if (matchedAccount.AuthLevel < s_accountAuthLevel && AccountCollection.UpdateAuthLevel(username, s_accountAuthLevel)) {
+            Logger.Information("Login: {0} raised from {1} to {2} (AccountAuthLevel).",
+                Logger.Args(username, matchedAccount.AuthLevel, s_accountAuthLevel));
+            matchedAccount.AuthLevel = s_accountAuthLevel;
         }
 
         if (stopwatch.Elapsed > s_deadline) {

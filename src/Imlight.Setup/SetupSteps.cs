@@ -348,6 +348,11 @@ internal sealed class SetupSteps : IDisposable {
             var added = IniFile.AddMissing(lines, File.ReadAllLines(defaults));
             var keep = PlayerSettings.Changed(Path.GetDirectoryName(ConfigFile)!);
             var refreshed = Edition.IS_ROGUELIKE ? IniFile.CopyRunDesign(lines, File.ReadAllLines(defaults), keep) : 0;
+            if (Edition.IS_TEST && IniFile.GetFrom(lines, "Login Server", "AccountAuthLevel") != "Administrator") {
+                // The test realm's testers can use every command (an install from before this setting gets it here).
+                IniFile.Set(lines, "Login Server", "AccountAuthLevel", "Administrator");
+                refreshed++;
+            }
             if (added > 0 || refreshed > 0) {
                 File.WriteAllLines(ConfigFile, lines);
                 SetupLog.Detail($"Added {added} new settings to Config\\Imlight.ini and refreshed {refreshed} run settings.");
@@ -411,6 +416,11 @@ internal sealed class SetupSteps : IDisposable {
             // A roguelike server on the player's own PC: runs on, and any new name at the login screen is an account.
             IniFile.Set(lines, "Roguelike", "Enabled", "true");
             IniFile.Set(lines, "Login Server", "AutoCreateAccounts", "true");
+        }
+
+        if (Edition.IS_TEST) {
+            // The test realm: every account is an administrator, so testers can use every command (.run goto, .jewel...).
+            IniFile.Set(lines, "Login Server", "AccountAuthLevel", "Administrator");
         }
 
         File.WriteAllLines(ConfigFile, lines);

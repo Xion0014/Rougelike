@@ -13,6 +13,12 @@ Q: New
 
 Behind the scenes: a test realm. Updates now go to a separate Spiral Gauntlet Test Realm first (its own install, server and wizards) and only reach everyone once they've been tried out, so a broken update shouldn't reach your game.
 
+In the test realm every account is an administrator, so testers can use every command (.run goto, .run pwn, .jewel and the rest).
+
+Q: Fixed
+
+.run status, .run stats and .run cards work for every player. Commands were only read for staff accounts, and the accounts the launcher makes at the login screen aren't staff, so the game treated them as chat.
+
 # v2.0.1 (October 25, 2026)
 
 Q: Changed

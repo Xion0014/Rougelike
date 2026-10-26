@@ -199,7 +199,7 @@ internal static class IniFile {
     /// <summary>
     /// Returns a value from an ini file, or null when the file, section or key is missing.
     /// </summary>
-    private static string? GetFrom(IEnumerable<string> lines, string section, string key) {
+    internal static string? GetFrom(IEnumerable<string> lines, string section, string key) {
         var inSection = false;
         foreach (var line in lines) {
             var trimmed = line.Trim();
