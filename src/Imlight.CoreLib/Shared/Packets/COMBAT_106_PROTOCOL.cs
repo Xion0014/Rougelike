@@ -187,6 +187,9 @@ public sealed class COMBAT_106_PROTOCOL : IServerProtocol {
         /// </summary>
         public ulong[] AllyCharIds;
 
+        /// <summary>The rounds the battle took (achievements: a boss beaten in so many rounds).</summary>
+        public int Rounds;
+
     }
 
     public sealed class MSG_COMBATEFFECT : IServerMessage {

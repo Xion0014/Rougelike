@@ -303,6 +303,8 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
 
         var mobs = message.MobTemplateIds ?? [];
         run.Kills += mobs.Length;
+        Achievements.Count(wizard, "BattlesWon");
+        Achievements.Count(wizard, "Kills", mobs.Length);
 
         // The battle's music gave way to the zone's own as it ended; bring the run's track back.
         if (RoguelikeConfig.RandomMusic || RoguelikeConfig.RandomBattleMusic) {
@@ -320,6 +322,7 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
 
         if (mobs.Length > 0 && RoguelikeStock.RollJewel(wizard) is { } jewelId) {
             finds.Add(GiveJewel(wizard, jewelId));
+            Achievements.Count(wizard, "JewelsFound");
         }
 
         if (mobs.Length > 0 && RoguelikeBoosts.RollAfterBattle(wizard) is { } potion) {
@@ -336,18 +339,25 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         if (mobs.Length > 0
             && RoguelikeStock.RollSpellToLearn(wizard, isTierBoss ? RoguelikeStock.BossSpellChance : RoguelikeStock.BattleSpellChance) is { } spellId) {
             TeachSpell(wizard, spellId);
+            Achievements.Count(wizard, "SpellsLearned");
         }
 
         // Sometimes a pet: any age, stat talents only, every stat at its maximum.
-        if (mobs.Length > 0 && RoguelikePets.RollsDrop(wizard, isTierBoss)) {
-            GiveRunPet(wizard);
+        Achievements.Moment petMoment = null;
+        if (mobs.Length > 0 && RoguelikePets.RollsDrop(wizard, isTierBoss) && GiveRunPet(wizard) is { } pet) {
+            Achievements.Count(wizard, "PetsFound");
+            petMoment = new Achievements.Moment("PetFound", Amount: Imlight.CoreLib.Game.Pet.PetProgress.GetBehavior(pet)?.m_level ?? 0);
         }
 
         if (isTierBoss) {
-            ClearBoss(wizard);
+            Achievements.Count(wizard, "BossesBeaten");
+            AnnounceAchievements(Achievements.Check(wizard, petMoment));
+            ClearBoss(wizard, message.Rounds);
 
             return;
         }
+
+        AnnounceAchievements(Achievements.Check(wizard, petMoment));
 
         WizardCollection.UpdateCharacterRoguelike(wizard);
 
@@ -363,6 +373,16 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         if (!RoguelikeConfig.Enabled || run is null) {
             return;
         }
+
+        if (message.DiedInDuel) {
+            Achievements.Count(GetActiveWizard(), "Deaths");
+            Achievements.Count(GetActiveWizard(), "DeathsThisTier");
+        }
+        else {
+            Achievements.Count(GetActiveWizard(), "Flees");
+        }
+
+        AnnounceAchievements(Achievements.Check(GetActiveWizard()));
 
         // A death with permadeath on deletes the wizard; there is nothing left to do.
         if (message.DiedInDuel && RoguelikeConfig.Permadeath) {
@@ -519,6 +539,14 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
             case "stats":
                 InformGameClient(RoguelikeBoosts.DescribeStats(wizard), isImportant: true);
                 break;
+            case "achievements":
+                // After a boss (its experience has landed by now), or .run achievements.
+                AnnounceAchievements(Achievements.Check(wizard));
+                if (message.Argument == "list") {
+                    InformGameClient(DescribeAchievements(wizard), isImportant: true);
+                }
+
+                break;
             case "here":
                 InformGameClient($"You are in zone: {wizard.Zone}");
                 break;
@@ -549,6 +577,7 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
     }
 
     private const string MUSIC_TIMER_KEY = "RoguelikeMusic";
+    private const string ACHIEVEMENTS_TIMER_KEY = "RoguelikeAchievements";
     private const string MUSIC_ROTATE_KEY = "RoguelikeMusicRotate";
     private string _runTrack;
 
@@ -827,7 +856,7 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
                                    new SERVICE_101_PROTOCOL.MSG_ROGUELIKE_COMMAND { Action = "place" },
                                    s_afterBattleDelay);
 
-    private void ClearBoss(Wizard wizard) {
+    private void ClearBoss(Wizard wizard, int rounds = 0) {
         var run = wizard.Roguelike;
         run.BossesDefeated++;
         run.Phase = run.Tier >= RoguelikeConfig.TierCount ? RoguelikePhase.Complete : RoguelikePhase.Shop;
@@ -836,6 +865,12 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         WizardCollection.UpdateCharacterRoguelike(wizard);
         GiveBossTrainingPoints(wizard);
         GiveBossRewards(wizard, run.Tier);
+
+        // Achievements for the tier, then a look again once the boss's experience has landed (levels).
+        AnnounceAchievements(Achievements.Check(wizard, new Achievements.Moment("TierCleared", run.Tier, rounds)));
+        Achievements.Reset(wizard, "DeathsThisTier");
+        Timers.StartSingleTimer(ACHIEVEMENTS_TIMER_KEY,
+            new SERVICE_101_PROTOCOL.MSG_ROGUELIKE_COMMAND { Action = "achievements" }, TimeSpan.FromSeconds(5));
 
         // Streets are too short to finish every quest; the boss settles them all, with their rewards.
         if (RoguelikeConfig.CompleteQuestsAfterBoss) {
@@ -920,8 +955,23 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         Logger.Information("[Roguelike] {0} learned spell {1} from a battle.", Logger.Args(wizard.CharId, spellId));
     }
 
+    /// <summary>Tells the wizard of achievements they just earned.</summary>
+    private void AnnounceAchievements(List<Achievements.Achievement> earned) {
+        foreach (var achievement in earned) {
+            InformGameClient($"Achievement unlocked: {achievement.Name}! {achievement.Description}", isImportant: true);
+        }
+    }
+
+    private static string DescribeAchievements(Wizard wizard) {
+        var earned = Achievements.All.Where(a => Achievements.HasEarned(wizard, a.Id)).Select(a => a.Name).ToList();
+
+        return earned.Count == 0
+            ? $"No achievements yet (0 of {Achievements.All.Count}). The launcher's Achievements page shows what there is to earn."
+            : $"Achievements ({earned.Count} of {Achievements.All.Count}): {string.Join(", ", earned)}.";
+    }
+
     /// <summary>Gives the wizard a run pet (RoguelikePets): a random one, or of the given age (1 Baby to 7 Ultra).</summary>
-    private void GiveRunPet(Wizard wizard, byte? age = null) {
+    private WizClientObjectItem GiveRunPet(Wizard wizard, byte? age = null) {
         var pet = RoguelikePets.Build(wizard, age);
         if (pet is null || !wizard.AddPetToInventory(pet)) {
             Logger.Warning("[Roguelike] Could not give {0} a pet.", Logger.Args(wizard.CharId));
@@ -929,7 +979,7 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
                 InformGameClient("Could not build a pet. Check the server log.");
             }
 
-            return;
+            return null;
         }
 
         if (!Imlight.CoreLib.Shared.Items.ItemSync.SendAdded(SessionActor.ActorRef, wizard, pet)) {
@@ -949,6 +999,8 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
                          isImportant: true);
         Logger.Information("[Roguelike] {0} got pet {1} ({2}): {3}.",
             Logger.Args(wizard.CharId, pet.m_templateID.Full, RoguelikePets.AgeOf(pet), talents));
+
+        return pet;
     }
 
     /// <summary>Gives a jewel or pin and returns the line that tells of it.</summary>

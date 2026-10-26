@@ -2304,6 +2304,7 @@ internal sealed class CombatDuelComponent(ZoneEntity entity)
                 MobAdjectives = [.. adjectivesOfDefeatedMobs],
                 MobTemplateIds = [.. templateIdsOfDefeatedMobs],
                 AllyCharIds = [.. allyCharIds],
+                Rounds = (int) Duel.m_roundNum,
             };
             circle.ParticipantActor.Tell(victoryMsg);
         });

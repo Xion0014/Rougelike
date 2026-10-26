@@ -48,4 +48,4 @@ Q: Gear cards
 On a run, the cards your gear gives are swapped for random ones of the same type and pip cost (the gear's tooltip still shows its own). When you put gear on, chat tells you what its cards really are.
 
 Q: Handy commands
-Type .run status to see where your run stands, .run stats for your stats, and .run cards for what your gear's cards are on this run.
+Type .run status to see where your run stands, .run stats for your stats, and .run cards for what your gear's cards are on this run. .run achievements lists the achievements you've earned; the launcher's Achievements page shows them all.

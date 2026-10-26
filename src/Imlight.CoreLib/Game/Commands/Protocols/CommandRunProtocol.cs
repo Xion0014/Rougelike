@@ -30,6 +30,7 @@ namespace Imlight.CoreLib.Game.Commands.Protocols;
 ///   .run return        Go back to the run's current street, boss or shop zone.
 ///   .run here          Show the current zone's full name.
 ///   .run cards         What each piece of equipped gear's cards are on this run.
+///   .run achievements  The achievements this wizard has earned (also .run ach).
 ///   .run music [off|on] Another random track, or run music off/on for you.
 ///   .run jewel [shape] Get a random jewel or pin, of a shape if named (staff only).
 ///   .run pet [age]     Get a run pet, random or of an age (staff only).
@@ -59,6 +60,10 @@ internal class CommandRunProtocol : CommandProtocol {
 
     [Command("cards")]
     private void CardsCommand() => Send("cards");
+
+    [Command("achievements")]
+    [Alias("ach")]
+    private void AchievementsCommand() => Send("achievements", "list");
 
     [Command("here")]
     private void HereCommand() => Send("here");

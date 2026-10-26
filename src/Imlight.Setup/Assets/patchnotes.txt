@@ -15,6 +15,8 @@ Behind the scenes: a test realm. Updates now go to a separate Spiral Gauntlet Te
 
 In the test realm every account is an administrator, so testers can use every command (.run goto, .run pwn, .jewel and the rest).
 
+Achievements! 25 of them, from clearing each world to beating a boss in 3 rounds, finding an Ultra pet or holding a million gold (and two hidden ones). The game tells you when you earn one, the launcher has an Achievements page showing what you've earned and what's left, and .run achievements lists them in game. Achievements stay earned on your PC even if the wizard who earned them is lost to Die = Delete.
+
 Q: Fixed
 
 .run status, .run stats and .run cards work for every player. Commands were only read for staff accounts, and the accounts the launcher makes at the login screen aren't staff, so the game treated them as chat.

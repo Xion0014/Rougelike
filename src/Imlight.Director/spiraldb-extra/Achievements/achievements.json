@@ -1,0 +1,33 @@
+// Spiral Gauntlet achievements. The launcher's Achievements page shows them in this order.
+// See README.md next to this file for every "When".
+[
+  { "Id": "first-win", "Name": "First Steps", "Description": "Win your first battle on a run.", "When": "Counter", "Counter": "BattlesWon", "Amount": 1 },
+
+  { "Id": "tier-1", "Name": "Wizard City Cleared", "Description": "Beat tier 1's boss.", "When": "TierCleared", "Tier": 1 },
+  { "Id": "tier-2", "Name": "Krokotopia Cleared", "Description": "Beat tier 2's boss.", "When": "TierCleared", "Tier": 2 },
+  { "Id": "tier-3", "Name": "Marleybone Cleared", "Description": "Beat tier 3's boss.", "When": "TierCleared", "Tier": 3 },
+  { "Id": "tier-4", "Name": "MooShu Cleared", "Description": "Beat tier 4's boss.", "When": "TierCleared", "Tier": 4 },
+  { "Id": "arc-1", "Name": "Arc 1 Complete", "Description": "Beat Malistaire, the end of arc 1.", "When": "TierCleared", "Tier": 5 },
+  { "Id": "tier-6", "Name": "Mithraya Falls", "Description": "Beat tier 6's boss in Celestia.", "When": "TierCleared", "Tier": 6 },
+  { "Id": "tier-7", "Name": "Belloq Falls", "Description": "Beat tier 7's boss in Grizzleheim.", "When": "TierCleared", "Tier": 7 },
+  { "Id": "tier-8", "Name": "Jabberwock Slain", "Description": "Beat tier 8's boss in Avalon.", "When": "TierCleared", "Tier": 8 },
+  { "Id": "tier-9", "Name": "Xibalba Survived", "Description": "Beat tier 9's boss in Azteca.", "When": "TierCleared", "Tier": 9 },
+  { "Id": "arc-2", "Name": "Arc 2 Complete", "Description": "Beat Morganthe, the end of arc 2.", "When": "TierCleared", "Tier": 10 },
+
+  { "Id": "untouchable", "Name": "Untouchable", "Description": "Clear a tier without dying once on it.", "When": "TierClearedNoDeath" },
+  { "Id": "no-second-chances", "Name": "No Second Chances", "Description": "Beat Malistaire with Die = Delete on.", "When": "TierClearedDieDelete", "Tier": 5 },
+  { "Id": "blitz", "Name": "Blitz", "Description": "Beat a tier's boss in 3 rounds or fewer.", "When": "BossInRounds", "Amount": 3 },
+
+  { "Id": "kills-100", "Name": "Monster Hunter", "Description": "Defeat 100 creatures.", "When": "Counter", "Counter": "Kills", "Amount": 100 },
+  { "Id": "kills-1000", "Name": "Exterminator", "Description": "Defeat 1,000 creatures.", "When": "Counter", "Counter": "Kills", "Amount": 1000 },
+  { "Id": "jewels-25", "Name": "Jeweler", "Description": "Find 25 jewels in battle.", "When": "Counter", "Counter": "JewelsFound", "Amount": 25 },
+  { "Id": "spells-25", "Name": "Spellbound", "Description": "Learn 25 spells from battles.", "When": "Counter", "Counter": "SpellsLearned", "Amount": 25 },
+  { "Id": "pets-5", "Name": "Menagerie", "Description": "Find 5 pets in battle.", "When": "Counter", "Counter": "PetsFound", "Amount": 5 },
+  { "Id": "ultra-pet", "Name": "Ultra Rare", "Description": "Find an Ultra pet in battle.", "When": "PetAge", "Amount": 7 },
+  { "Id": "millionaire", "Name": "Millionaire", "Description": "Hold 1,000,000 gold at once.", "When": "Gold", "Amount": 1000000 },
+  { "Id": "level-50", "Name": "Halfway There", "Description": "Reach level 50.", "When": "Level", "Amount": 50 },
+  { "Id": "level-110", "Name": "Legendary", "Description": "Reach level 110.", "When": "Level", "Amount": 110 },
+
+  { "Id": "tactical-retreat", "Name": "Tactical Retreat", "Description": "Flee 10 battles.", "When": "Counter", "Counter": "Flees", "Amount": 10, "Hidden": true },
+  { "Id": "persistence", "Name": "Persistence", "Description": "Fall in battle 10 times and keep going.", "When": "Counter", "Counter": "Deaths", "Amount": 10, "Hidden": true }
+]
