@@ -37,7 +37,7 @@ internal static class IniFile {
         // Section.Key, plus every [Roguelike] TierN... key.
         string[] keys = [
             "Roguelike.StreetMinutes", "Roguelike.ArcEndTiers", "Roguelike.XpMultiplier", "Roguelike.GoldMultiplier",
-            "Roguelike.BossTrainingPoints", "Roguelike.BossGold", "Roguelike.BossGoldFromTier", "Roguelike.FlatRatesFromTier", "Roguelike.BossCheats", "Roguelike.BossCheatsFromTier", "Roguelike.MaxStockLevel", "Roguelike.JewelShopMaxLevel", "Roguelike.CrownDropChance", "Roguelike.NoCrowns",
+            "Roguelike.BossTrainingPoints", "Roguelike.BossGold", "Roguelike.BossGoldFromTier", "Roguelike.FlatRatesFromTier", "Roguelike.BossCheats", "Roguelike.BossCheatsFromTier", "Roguelike.MaxStockLevel", "Roguelike.TrainerSpells", "Roguelike.TreeSpells", "Roguelike.JewelShopMaxLevel", "Roguelike.CrownDropChance", "Roguelike.NoCrowns",
             "Roguelike.CreatureCritByTier", "Roguelike.CreatureBlockByTier", "Roguelike.MaxSpellDamage", "Roguelike.BannedSpells",
             "Roguelike.ChestRewards", "Roguelike.ChestGoldMin", "Roguelike.ChestGoldMax",
             "Roguelike.PetMayCastShare", "PetCasting.Enabled", "PetCasting.OnCast", "PetCasting.OnDamage", "PetCasting.OnHeal",

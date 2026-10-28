@@ -61,8 +61,19 @@ internal static class RoguelikeStock {
     // demand. Grouped by slot so every slot drops as often: there is far more crown headgear than crown athames.
     private static readonly Lazy<Dictionary<string, uint[]>> s_crownGearIds = new(BuildCrownGearIds, LazyThreadSafetyMode.ExecutionAndPublication);
 
-    /// <summary>How many random spells each trainer offers a wizard on a run.</summary>
-    internal static readonly int TrainerSpellCount = Math.Clamp(ConfigurationManager.GetValue("Roguelike.TrainerSpells", 10), 1, 50);
+    /// <summary>How many random spells each trainer offers a wizard on a run (the school professors and the rest).</summary>
+    internal static readonly int TrainerSpellCount = Math.Clamp(ConfigurationManager.GetValue("Roguelike.TrainerSpells", 15), 1, 50);
+
+    /// <summary>[Roguelike] TreeSpells: how many random spells each of Ravenwood's school trees offers on a run.</summary>
+    internal static readonly int TreeSpellCount = Math.Clamp(ConfigurationManager.GetValue("Roguelike.TreeSpells", 8), 1, 50);
+
+    /// <summary>
+    /// [Roguelike] TreeTrainers: the trainers that offer TreeSpells instead of TrainerSpells (template ids): Ravenwood's
+    /// school trees, Fire 44207, Ice 82294, Life 39158, Storm 39178, Myth 38275 and Death (Mortis) 39390.
+    /// </summary>
+    internal static readonly HashSet<ulong> TreeTrainers = [.. ConfigurationManager.GetValue("Roguelike.TreeTrainers", "44207, 82294, 39158, 39178, 38275, 39390")
+        .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+        .Select(id => ulong.TryParse(id, out var v) ? v : 0).Where(v => v != 0)];
 
     // Wearable gear, told apart by the folder its template lives in (ObjectData/Tier1/Hats/Hat-T1-042.xml):
     // the templates' object type does not reliably name the slot. Housing, pets, mounts, reagents, jewels and
@@ -371,7 +382,7 @@ internal static class RoguelikeStock {
         var picks = new List<SpellEntry>();
         var seen = new HashSet<uint>();
 
-        while (picks.Count < Math.Min(count, TrainerSpellCount) && (normal.Count > 0 || special.Count > 0)) {
+        while (picks.Count < count && (normal.Count > 0 || special.Count > 0)) {
             var fromSpecial = special.Count > 0 && (normal.Count == 0 || random.Next(100) < s_retiredSpellShare);
             var pick = (fromSpecial ? special : normal).Dequeue();
             if (seen.Add(pick.Id)) {

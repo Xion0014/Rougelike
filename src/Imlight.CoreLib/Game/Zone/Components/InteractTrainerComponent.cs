@@ -65,6 +65,23 @@ internal sealed class InteractTrainerComponent(ZoneEntity entity) : ZoneEntityCo
     public List<NPCSpellEntry> SpellInventory { get; private set; } = [];
     private List<ServiceOptionBase> _serviceOptionBases = [];
 
+    // The trainer whose spells this NPC teaches: its own template, or the one it stands in for (TrainerStandIns).
+    private ulong _teacherId;
+
+    /// <summary>
+    /// How many random spells this trainer offers on a run: TreeSpells for Ravenwood's school trees, TrainerSpells for
+    /// the rest. It can be more than the trainer's own list; the extra slots reuse its options with their own index.
+    /// </summary>
+    internal int RunSpellCount
+        => _serviceOptionBases.Count == 0 ? 0
+            : Imlight.CoreLib.Game.Runs.RoguelikeStock.TreeTrainers.Contains(_teacherId)
+                ? Imlight.CoreLib.Game.Runs.RoguelikeStock.TreeSpellCount
+                : Imlight.CoreLib.Game.Runs.RoguelikeStock.TrainerSpellCount;
+
+    /// <summary>Whether a wizard sees this trainer's run spells (a run's random trainer, not a test trainer).</summary>
+    internal bool RunSpellsFor(Wizard wizard)
+        => !IsTestTrainer && !RetiredFor(wizard) && Imlight.CoreLib.Game.Runs.RoguelikeStock.TrainersActiveFor(wizard);
+
     public static bool ShouldAttachToEntity(CoreTemplate template) 
         // Attach if the template is an NPC and has a spell inventory in Dragon database.
         => template is GameObjectTemplate goTemplate 
@@ -341,6 +358,7 @@ internal sealed class InteractTrainerComponent(ZoneEntity entity) : ZoneEntityCo
             && Imlight.CoreLib.Game.Runs.RoguelikeConfig.TrainerStandIns.TryGetValue(standIn.m_templateID, out var teacherId)
             && NpcSpellInventoryCollection.TryGetNpcInventory(teacherId, out var teacherInventory)) {
             SpellInventory = WithMovedSpells(teacherId, teacherInventory.Spells);
+            _teacherId = teacherId;
             InitializeServiceBases();
             Logger.Information("{0} teaches the spells of trainer {1} ({2} spells).",
                 Logger.Args(standIn.m_objectName, teacherId, SpellInventory.Count));
@@ -367,6 +385,7 @@ internal sealed class InteractTrainerComponent(ZoneEntity entity) : ZoneEntityCo
         }
 
         SpellInventory = WithMovedSpells(goTemplate.m_templateID, spellInventory.Spells);
+        _teacherId = goTemplate.m_templateID;
         InitializeServiceBases();
     }
 
@@ -441,7 +460,7 @@ internal sealed class InteractTrainerComponent(ZoneEntity entity) : ZoneEntityCo
 
         if (!IsTestTrainer && Imlight.CoreLib.Game.Runs.RoguelikeStock.TrainersActiveFor(wizard)) {
             // A roguelike run offers a short list of random spells.
-            return Enumerable.Range(0, System.Math.Min(_serviceOptionBases.Count, Imlight.CoreLib.Game.Runs.RoguelikeStock.TrainerSpellCount));
+            return Enumerable.Range(0, RunSpellCount);
         }
 
         if (!IsTestTrainer) {
@@ -491,7 +510,9 @@ internal sealed class InteractTrainerComponent(ZoneEntity entity) : ZoneEntityCo
         foreach (var i in OfferedIndexes(wizard)) {
             // In randomizer mode the wizard learns a swapped spell, so the trainer offers that one instead.
             // A roguelike run offers its own random spells.
-            var trainerSpellId = (uint) SpellInventory[i].TemplateID;
+            // A run's extra slots (past the trainer's own list) reuse an option of its own, with their own index.
+            var own = i % _serviceOptionBases.Count;
+            var trainerSpellId = (uint) SpellInventory[own].TemplateID;
             var (spellId, offeredLevel, isRunSpell) = SpellFor(wizard, i);
             if (CoreObjectFactory.GetCoreTemplate(spellId) is not SpellTemplate spellTemplate) {
                 continue;
@@ -503,8 +524,12 @@ internal sealed class InteractTrainerComponent(ZoneEntity entity) : ZoneEntityCo
             }
 
             // Copy the shared option so one wizard's view never leaks into another's.
-            var newBase = (WizTrainingOption) _serviceOptionBases[i] with { };
-            if (spellId != trainerSpellId) {
+            var newBase = (WizTrainingOption) _serviceOptionBases[own] with { };
+            if (i != own) {
+                newBase.m_trainingIndex = i;
+            }
+
+            if (spellId != trainerSpellId || i != own) {
                 newBase.m_spellName = spellTemplate.m_name;
                 newBase.m_displayKey = spellTemplate.m_displayName;
             }
@@ -529,7 +554,7 @@ internal sealed class InteractTrainerComponent(ZoneEntity entity) : ZoneEntityCo
 
             // If the spell has no required spell, it can be trained, else check if the wizard has the required spell.
             // A run's random spells have no prerequisites.
-            var originalRequiredId = isRunSpell ? 0 : RequiredSpellFor(wizard, SpellInventory[i]);
+            var originalRequiredId = isRunSpell ? 0 : RequiredSpellFor(wizard, SpellInventory[own]);
             if (originalRequiredId == 0) {
                 newBase.m_bCanTrain = true;
                 newBase.m_failedRequirement = null;
@@ -547,7 +572,7 @@ internal sealed class InteractTrainerComponent(ZoneEntity entity) : ZoneEntityCo
                     continue;
                 }
 
-                if (requiredSpellId != SpellInventory[i].RequiredSpellID) {
+                if (requiredSpellId != SpellInventory[own].RequiredSpellID) {
                     newBase.m_requirements = HasSpellRequirement(reqSpellTemplate);
                 }
 
@@ -580,7 +605,6 @@ internal sealed class InteractTrainerComponent(ZoneEntity entity) : ZoneEntityCo
     /// roguelike run's random pick. Used both to list the spells and to teach one, so the two always agree.
     /// </summary>
     internal (uint SpellId, int Level, bool IsRunSpell) SpellFor(Wizard wizard, int index) {
-        var entry = SpellInventory[index];
         if (RetiredFor(wizard)) {
             // Nothing to train here on a run (spell 0 is not a spell).
             return (0u, int.MaxValue, true);
@@ -589,10 +613,16 @@ internal sealed class InteractTrainerComponent(ZoneEntity entity) : ZoneEntityCo
         if (!IsTestTrainer && Imlight.CoreLib.Game.Runs.RoguelikeStock.TrainersActiveFor(wizard)) {
             // Past the run's short list there is nothing to train (spell 0 is not a spell).
             return Imlight.CoreLib.Game.Runs.RoguelikeStock.TrainerSpellFor(
-                       wizard, Entity.ActiveGameObject.m_templateID, index, SpellInventory.Count) is { } pick
+                       wizard, Entity.ActiveGameObject.m_templateID, index, RunSpellCount) is { } pick
                 ? (pick.SpellId, Randomizer.NoLevelRequirements ? 1 : pick.Level, true)
                 : (0u, int.MaxValue, true);
         }
+
+        if (index < 0 || index >= SpellInventory.Count) {
+            return (0u, int.MaxValue, false);
+        }
+
+        var entry = SpellInventory[index];
 
         var spellId = IsTestTrainer ? (uint) entry.TemplateID : Randomizer.MapSpell(wizard, (uint) entry.TemplateID);
 

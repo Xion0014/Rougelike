@@ -82,15 +82,19 @@ internal class TrainService(SessionActor sessionActor) : MessageService(sessionA
         // doesn't even send an interaction message upon training.
         var wizard = GetActiveWizard();
 
-        // Ensure that the training index is within the bounds of the spell inventory.
-        if (message.TrainingIndex < 0 || message.TrainingIndex >= trainerComponent.SpellInventory.Count) {
+        // Ensure that the training index is within the bounds of the spell inventory (or, on a run, of the trainer's
+        // run spells, which can be more than its own list).
+        var slots = trainerComponent.RunSpellsFor(wizard) ? trainerComponent.RunSpellCount : trainerComponent.SpellInventory.Count;
+        if (message.TrainingIndex < 0 || message.TrainingIndex >= slots) {
             Logger.Error("Wizard {0} attempted to train spell at index {1}, but it is out of bounds.",
                 Logger.Args(wizard.PlayerNameBehavior.GetWizardName(), message.TrainingIndex));
 
             return;
         }
 
-        var spellEntry = trainerComponent.SpellInventory[message.TrainingIndex];
+        // A run's extra slots have no entry of their own; the badge check looks at the spell actually taught then.
+        var spellEntryId = message.TrainingIndex < trainerComponent.SpellInventory.Count
+            ? trainerComponent.SpellInventory[(int) message.TrainingIndex].TemplateID : 0;
 
         // Teach the spell the trainer offered this wizard: a randomizer swap or a roguelike run's random pick.
         var (spellId, requiredLevel, _) = trainerComponent.SpellFor(wizard, (int) message.TrainingIndex);
@@ -102,9 +106,9 @@ internal class TrainService(SessionActor sessionActor) : MessageService(sessionA
             return;
         }
 
-        if (BadgeGate.Blocks(spellTemplate?.m_purchaseRequirements, spellEntry.TemplateID, SessionActor.ActorRef, GetActiveGameObject(), wizard, SessionActor.GetZoneActor())) {
+        if (BadgeGate.Blocks(spellTemplate?.m_purchaseRequirements, (spellEntryId != 0 ? spellEntryId : spellId), SessionActor.ActorRef, GetActiveGameObject(), wizard, SessionActor.GetZoneActor())) {
             Logger.Warning("Wizard {0} attempted to train spell {1} without the badge it requires.",
-                Logger.Args(wizard.PlayerNameBehavior.GetWizardName(), spellEntry.TemplateID));
+                Logger.Args(wizard.PlayerNameBehavior.GetWizardName(), spellId));
 
             return;
         }

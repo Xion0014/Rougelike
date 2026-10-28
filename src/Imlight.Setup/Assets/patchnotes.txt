@@ -17,6 +17,8 @@ The Rat gives the experience to reach level 120, and Grandfather Spider to 130, 
 
 Shops, drops, jewels and trainers now stock up to level 130.
 
+Trainers offer more spells, from level 1 to 130: 15 for each school professor (and the other trainers) and 8 for each of Ravenwood's school trees, even past what they normally teach. Settings has "Spells per trainer" and "Spells per tree".
+
 Achievements for arc 3: The Rat Caught, Web Unwoven, Arc 3 Complete, and At the Summit (reach level 130).
 
 The launcher's map shows all 13 tiers, and Morganthe ends arc 2 with the "continue or take a break" choice.
