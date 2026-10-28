@@ -898,6 +898,15 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
     private void GiveBossRewards(Wizard wizard, int tier) {
         var gold = RoguelikeConfig.BossGoldFor(tier);
         var exp = RoguelikeConfig.GetTier(tier)?.BossExp ?? 0;
+        if (RoguelikeConfig.GetTier(tier) is { BossLevel: > 0 } leveled) {
+            // TierNBossLevel: whatever it takes to reach that level, from the game's own experience table.
+            var target = Math.Min(leveled.BossLevel, Imlight.CoreLib.Shared.Character.MagicLevelsConfig.MaxLevel);
+            var needed = (long) Imlight.CoreLib.Shared.Character.MagicLevelsConfig.GetExperiencePointsAtLevel(target)
+                         - wizard.MagicSchoolBehavior.ExperiencePoints - exp;
+            if (needed > 0) {
+                exp += (int) Math.Min(needed, int.MaxValue - exp);
+            }
+        }
         if (gold <= 0 && exp <= 0) {
             return;
         }

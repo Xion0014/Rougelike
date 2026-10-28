@@ -7,6 +7,20 @@
 ;   anything else     one change (leave a blank line between changes)
 ;   ; comment         not shown
 
+# Next update (in testing)
+
+Q: New
+
+Arc 3, another boss rush through three new worlds, tiers 11 to 13: Polaris (The Rat, in the Jeweled Slopes), Mirage (Grandfather Spider, in the South Time Dune in the Shadowwock's place) and Empyrea (Medulla, in the Brain).
+
+The Rat gives the experience to reach level 120, and Grandfather Spider to 130, the new cap.
+
+Shops, drops, jewels and trainers now stock up to level 130.
+
+Achievements for arc 3: The Rat Caught, Web Unwoven, Arc 3 Complete, and At the Summit (reach level 130).
+
+The launcher's map shows all 13 tiers, and Morganthe ends arc 2 with the "continue or take a break" choice.
+
 # v2.1.0 (October 26, 2026) - Achievement Update
 
 Q: New

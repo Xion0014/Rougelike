@@ -71,6 +71,12 @@ internal sealed record RoguelikeTier(int Number, string Street, string Boss) {
     /// <summary>TierNBossExp: experience given, as it is (no multiplier), for beating this tier's boss.</summary>
     public int BossExp { get; init; }
 
+    /// <summary>
+    /// TierNBossLevel: beating this tier's boss gives the experience to reach this level (worked out from the game's own
+    /// experience table and the wizard's experience), on top of TierNBossExp. 0: none.
+    /// </summary>
+    public int BossLevel { get; init; }
+
     /// <summary>TierNBossGold: gold given for beating this tier's boss (-1: BossGold).</summary>
     public int BossGold { get; init; } = -1;
 
@@ -476,6 +482,7 @@ internal static class RoguelikeConfig {
                 Level = Math.Max(0, ConfigurationManager.GetValue($"Roguelike.Tier{i}Level", 0)),
                 Xp = Math.Max(0, ConfigurationManager.GetValue($"Roguelike.Tier{i}Xp", 0.0)),
                 BossExp = Math.Max(0, ConfigurationManager.GetValue($"Roguelike.Tier{i}BossExp", 0)),
+                BossLevel = Math.Max(0, ConfigurationManager.GetValue($"Roguelike.Tier{i}BossLevel", 0)),
                 BossGold = ConfigurationManager.GetValue($"Roguelike.Tier{i}BossGold", -1),
             });
         }

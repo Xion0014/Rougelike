@@ -13,6 +13,9 @@
   { "Id": "tier-8", "Name": "Jabberwock Slain", "Description": "Beat tier 8's boss in Avalon.", "When": "TierCleared", "Tier": 8 },
   { "Id": "tier-9", "Name": "Xibalba Survived", "Description": "Beat tier 9's boss in Azteca.", "When": "TierCleared", "Tier": 9 },
   { "Id": "arc-2", "Name": "Arc 2 Complete", "Description": "Beat Morganthe, the end of arc 2.", "When": "TierCleared", "Tier": 10 },
+  { "Id": "tier-11", "Name": "The Rat Caught", "Description": "Beat tier 11's boss in Polaris.", "When": "TierCleared", "Tier": 11 },
+  { "Id": "tier-12", "Name": "Web Unwoven", "Description": "Beat tier 12's boss, Grandfather Spider, in Mirage.", "When": "TierCleared", "Tier": 12 },
+  { "Id": "arc-3", "Name": "Arc 3 Complete", "Description": "Beat Medulla in Empyrea, the end of arc 3.", "When": "TierCleared", "Tier": 13 },
 
   { "Id": "untouchable", "Name": "Untouchable", "Description": "Clear a tier without dying once on it.", "When": "TierClearedNoDeath" },
   { "Id": "no-second-chances", "Name": "No Second Chances", "Description": "Beat Malistaire with Die = Delete on.", "When": "TierClearedDieDelete", "Tier": 5 },
@@ -27,6 +30,7 @@
   { "Id": "millionaire", "Name": "Millionaire", "Description": "Hold 1,000,000 gold at once.", "When": "Gold", "Amount": 1000000 },
   { "Id": "level-50", "Name": "Halfway There", "Description": "Reach level 50.", "When": "Level", "Amount": 50 },
   { "Id": "level-110", "Name": "Legendary", "Description": "Reach level 110.", "When": "Level", "Amount": 110 },
+  { "Id": "level-130", "Name": "At the Summit", "Description": "Reach level 130.", "When": "Level", "Amount": 130 },
 
   { "Id": "tactical-retreat", "Name": "Tactical Retreat", "Description": "Flee 10 battles.", "When": "Counter", "Counter": "Flees", "Amount": 10, "Hidden": true },
   { "Id": "persistence", "Name": "Persistence", "Description": "Fall in battle 10 times and keep going.", "When": "Counter", "Counter": "Deaths", "Amount": 10, "Hidden": true }

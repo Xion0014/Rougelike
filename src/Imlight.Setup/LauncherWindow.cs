@@ -445,10 +445,11 @@ internal sealed partial class LauncherWindow : Window {
 
     private static readonly string[] ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV"];
 
-    // The default tiers, for before the server is installed: arc 1's streets, then arc 2's boss rush.
+    // The default tiers, for before the server is installed: arc 1's streets, then arc 2's and arc 3's boss rushes.
     private static readonly string[] DEFAULT_WORLDS = [
         "Wizard City", "Krokotopia", "Marleybone", "MooShu", "Dragonspyre",
         "Celestia", "Grizzleheim", "Avalon", "Azteca", "Morganthe",
+        "Polaris", "Mirage", "Empyrea",
     ];
 
     /// <summary>
@@ -526,7 +527,7 @@ internal sealed partial class LauncherWindow : Window {
 
     private static string CountWord(int n) => n switch {
         1 => "ONE", 2 => "TWO", 3 => "THREE", 4 => "FOUR", 5 => "FIVE", 6 => "SIX", 7 => "SEVEN", 8 => "EIGHT", 9 => "NINE",
-        10 => "TEN", 11 => "ELEVEN", 12 => "TWELVE", _ => n.ToString(),
+        10 => "TEN", 11 => "ELEVEN", 12 => "TWELVE", 13 => "THIRTEEN", _ => n.ToString(),
     };
 
     private (List<string> Worlds, HashSet<int> Bosses) ReadTiers() {

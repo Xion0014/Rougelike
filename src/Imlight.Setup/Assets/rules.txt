@@ -35,6 +35,8 @@ Arc 1 runs from Wizard City to Malistaire in Dragonspyre. After its last boss yo
 
 Arc 2 is a boss rush: tiers 6 to 10 (Celestia, Grizzleheim, Avalon, Azteca and Morganthe) go straight from the shops to the boss. Each boss gives the experience for the next tier's level (up to 110) and 100,000 gold, and arc 2's bosses cheat like they do in the real game.
 
+Arc 3 is another boss rush: Polaris (The Rat), Mirage (Grandfather Spider) and Empyrea (Medulla), tiers 11 to 13. The Rat takes you to level 120 and Grandfather Spider to 130, the arc's cap, and shops, drops and trainers stock up to level 130.
+
 Q: One life?
 With Die = Delete on (under Run options), a wizard who dies in battle and is still dead when the battle ends is gone for good. Fleeing doesn't count.
 
