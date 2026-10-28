@@ -45,6 +45,23 @@ internal static class RoguelikeStock {
     internal static readonly bool RandomShops = ConfigurationManager.GetValue("Roguelike.RandomShops", true);
     internal static readonly bool RandomTrainers = ConfigurationManager.GetValue("Roguelike.RandomTrainers", true);
     private static readonly bool s_shopDropGear = ConfigurationManager.GetValue("Roguelike.ShopDropGear", true);
+    private static readonly bool s_shopWorldGear = ConfigurationManager.GetValue("Roguelike.ShopWorldGear", true);
+
+    /// <summary>
+    /// A world's or gauntlet's own gear: ObjectData/EM Equipment/Hats/..., ObjectData/Gauntlet/Catacombs/Rings/... (not
+    /// raid or polymorph gear). Its slot still comes from its folder (SlotOf).
+    /// </summary>
+    private static bool IsWorldGearPath(string path) {
+        var parts = (path ?? "").Replace('\\', '/').Split('/');
+        if (parts.Length < 4 || !parts[0].Equals("ObjectData", StringComparison.OrdinalIgnoreCase)) {
+            return false;
+        }
+
+        return parts[1].Equals("Gauntlet", StringComparison.OrdinalIgnoreCase)
+               || (parts[1].EndsWith(" Equipment", StringComparison.OrdinalIgnoreCase)
+                   && !parts[1].StartsWith("Raids", StringComparison.OrdinalIgnoreCase)
+                   && !parts[1].StartsWith("Polymorph", StringComparison.OrdinalIgnoreCase));
+    }
     // Shops and trainers stock up to MaxStockLevel, or the highest tier level (TierNLevel) when that is higher.
     private static readonly int s_maxLevel = Math.Clamp(
         Math.Max(ConfigurationManager.GetValue("Roguelike.MaxStockLevel", 50), RoguelikeConfig.HighestTierLevel), 1, 200);
@@ -809,8 +826,18 @@ internal static class RoguelikeStock {
                 .Where(id => !vendorIds.Contains(id))
                 .ToHashSet()
             : [];
-        var ids = vendorIds.Concat(dropIds)
+        // ShopWorldGear: every world's own gear (the "<World> Equipment" folders: Empyrea's, Polaris's...) and the
+        // gauntlets' (Gauntlet/..., such as the Catacombs' level 130 Vanguard gear), which SpiralDB's drop tables
+        // mostly leave out, so shops have gear all the way up to the stock cap. Raid and polymorph gear stays out.
+        var worldIds = s_shopWorldGear
+            ? s_templatePaths.Value
+                .Where(pair => IsWorldGearPath(pair.Value) && !vendorIds.Contains(pair.Key) && !dropIds.Contains(pair.Key))
+                .Select(pair => pair.Key)
+                .ToHashSet()
+            : [];
+        var ids = vendorIds.Concat(dropIds).Concat(worldIds)
             .Where(id => id is > 0 and <= uint.MaxValue && !IsCrownItem(id));
+        var fromWorld = 0;
 
         var pool = new Dictionary<string, List<GearEntry>>(StringComparer.OrdinalIgnoreCase);
         var fromDrops = 0;
@@ -825,12 +852,17 @@ internal static class RoguelikeStock {
             }
 
             // A dropped piece is sold for its own value; one the game never priced would be free.
-            if (dropIds.Contains(id)) {
-                if (item.m_baseCost <= 0) {
+            if (dropIds.Contains(id) || worldIds.Contains(id)) {
+                if (item.m_baseCost <= 0 || IsTestItem(s_templatePaths.Value.GetValueOrDefault(id, ""), item)) {
                     continue;
                 }
 
-                fromDrops++;
+                if (worldIds.Contains(id)) {
+                    fromWorld++;
+                }
+                else {
+                    fromDrops++;
+                }
             }
 
             var level = Math.Max(1, EquipLevel(item));
@@ -846,9 +878,9 @@ internal static class RoguelikeStock {
             list.Add(new GearEntry((uint) id, level, school ?? ""));
         }
 
-        Logger.Information("Roguelike: {Count} pieces of gear up to level {Max} for random shops, {Drops} of them dropped by creatures ({Slots}).",
-            Logger.Args(pool.Values.Sum(l => l.Count), s_maxLevel, fromDrops,
-                string.Join(", ", pool.Select(p => $"{p.Key} {p.Value.Count}, {p.Value.Count(g => g.Level > 1)} above level 1"))));
+        Logger.Information("Roguelike: {Count} pieces of gear up to level {Max} for random shops, {Drops} of them dropped by creatures and {World} world and gauntlet gear ({Slots}).",
+            Logger.Args(pool.Values.Sum(l => l.Count), s_maxLevel, fromDrops, fromWorld,
+                string.Join(", ", pool.Select(p => $"{p.Key} {p.Value.Count}, {p.Value.Count(g => g.Level > 1)} above level 1, up to level {p.Value.Max(g => g.Level)}"))));
 
         return pool;
     }

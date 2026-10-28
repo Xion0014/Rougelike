@@ -15,7 +15,7 @@ Arc 3, another boss rush through three new worlds, tiers 11 to 13: Polaris (The 
 
 The Rat gives the experience to reach level 120, and Grandfather Spider to 130, the new cap.
 
-Shops, drops, jewels and trainers now stock up to level 130.
+Shops, drops, jewels and trainers now stock up to level 130. Shops also sell each world's own gear and the gauntlets' gear (such as the level 130 Vanguard gear from the Catacombs), so every slot has gear up to 130; before, boots stopped around 106 and rings and athames at 118.
 
 Trainers offer more spells, from level 1 to 130: 15 for each school professor (and the other trainers) and 8 for each of Ravenwood's school trees, even past what they normally teach. Settings has "Spells per trainer" and "Spells per tree".
 
