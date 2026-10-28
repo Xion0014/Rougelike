@@ -23,6 +23,12 @@ Achievements for arc 3: The Rat Caught, Web Unwoven, Arc 3 Complete, and At the 
 
 The launcher's map shows all 13 tiers, and Morganthe ends arc 2 with the "continue or take a break" choice.
 
+Q: Fixed
+
+Drops come from your own level: gear, crown gear and jewels that drop (or come from chests) are from your level down to 10 levels under it, never above it, and no longer anything you have the level for (a level 130 wizard got a level 35 jewel). Shops still stock a few levels above you.
+
+No random music in the Shopping District: it plays its own Wizard City tune, so the random music made two songs at once. Random music starts again on the streets and in boss rooms.
+
 # v2.1.0 (October 26, 2026) - Achievement Update
 
 Q: New

@@ -226,6 +226,14 @@ internal static class RoguelikeConfig {
 
     internal const string TravelBlockedText = "That way is closed during your run.";
 
+    /// <summary>
+    /// [Roguelike] NoRandomMusicZones: zones where the run's random music never plays, so the zone's own sounds (the
+    /// Shopping District's Wizard City tune) aren't doubled. Default: the shops (ShopZone).
+    /// </summary>
+    internal static readonly HashSet<string> NoRandomMusicZones = new(
+        SplitList(ConfigurationManager.GetValue("Roguelike.NoRandomMusicZones", ShopZone)).Select(z => z.Trim()),
+        StringComparer.OrdinalIgnoreCase);
+
     /// <summary>On a run, NPCs only offer main story quests.</summary>
     internal static readonly bool MainQuestsOnly = ConfigurationManager.GetValue("Roguelike.MainQuestsOnly", true);
 

@@ -501,12 +501,18 @@ internal static class RoguelikeStock {
     /// tear, pet or pin). Null when none fits.
     /// </summary>
     internal static uint? PickJewel(Wizard wizard, string shape = null) {
-        var level = Math.Max(1, (int) (wizard?.MagicSchoolBehavior.Level ?? 1));
-        var fits = s_jewels.Value
-            .Where(j => j.Level <= level
+        // From the wizard's level and a little under (DropWindow); with nothing there, the highest ones under it.
+        var (low, high) = DropWindow(wizard);
+        var ofShapeAsked = s_jewels.Value
+            .Where(j => j.Level <= high
                         && (string.IsNullOrEmpty(shape)
                             || Imlight.CoreLib.Shared.Items.JewelSockets.ShapeName(j.Shape).Contains(shape, StringComparison.OrdinalIgnoreCase)))
             .ToList();
+        var fits = ofShapeAsked.Where(j => j.Level >= low).ToList();
+        if (fits.Count == 0 && ofShapeAsked.Count > 0) {
+            var best = ofShapeAsked.Max(j => j.Level);
+            fits = [.. ofShapeAsked.Where(j => j.Level >= best - s_levelsBelow)];
+        }
         if (fits.Count == 0) {
             return null;
         }
@@ -677,7 +683,7 @@ internal static class RoguelikeStock {
         => Random.Shared.Next(2) == 0 ? PickCrownGear(wizard) ?? PickGear(wizard) : PickGear(wizard) ?? PickCrownGear(wizard);
 
     private static uint? PickGear(Wizard wizard) {
-        var (low, high) = LevelWindow(wizard);
+        var (low, high) = DropWindow(wizard);
         var school = wizard.MagicSchoolBehavior.MagicSchool.ToString();
         foreach (var slot in s_gear.Value.Keys.OrderBy(_ => Random.Shared.Next())) {
             var candidates = Candidates(slot, school, low, high).ToList();
@@ -695,7 +701,7 @@ internal static class RoguelikeStock {
             return null;
         }
 
-        var (low, high) = LevelWindow(wizard);
+        var (low, high) = DropWindow(wizard);
         var school = wizard.MagicSchoolBehavior.MagicSchool.ToString();
         uint? anySchool = null;
 
@@ -800,6 +806,16 @@ internal static class RoguelikeStock {
     // ---------------------------------------------------------------------
 
     /// <summary>The level range stock is picked from: around the wizard's level, never above the cap.</summary>
+    /// <summary>
+    /// The levels a drop (gear, crown gear, a jewel) comes from: the wizard's level and up to StockLevelsBelow under it,
+    /// never above it (a level 130 wizard no longer finds level 35 jewels). Shops still reach above (LevelWindow).
+    /// </summary>
+    private static (int Low, int High) DropWindow(Wizard wizard) {
+        var level = Math.Clamp((int) (wizard?.MagicSchoolBehavior.Level ?? 1), 1, s_maxLevel);
+
+        return (Math.Max(1, level - s_levelsBelow), level);
+    }
+
     private static (int Low, int High) LevelWindow(Wizard wizard) {
         // A wizard above MaxStockLevel shops as one at it: the window slides down instead of shrinking to
         // MaxStockLevel alone (a level 110 wizard saw only level 100 stock, and the deck shop had none).

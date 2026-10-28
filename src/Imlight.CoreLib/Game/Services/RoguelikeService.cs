@@ -598,6 +598,13 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
             return;
         }
 
+        // The shops play their own tune; random music on top of it would be two songs at once.
+        if (GetActiveWizard()?.Zone is { } zone && RoguelikeConfig.NoRandomMusicZones.Contains(zone)) {
+            Timers.Cancel(MUSIC_ROTATE_KEY);
+
+            return;
+        }
+
         if (!RoguelikeConfig.RandomMusic) {
             // Only battles are random: after one, the zone's own music, which the game may not bring back itself.
             if (!newTrack && RoguelikeConfig.RandomBattleMusic && !string.IsNullOrEmpty(_zoneMusic)) {
