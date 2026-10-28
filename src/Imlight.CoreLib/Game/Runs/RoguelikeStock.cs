@@ -48,20 +48,30 @@ internal static class RoguelikeStock {
     private static readonly bool s_shopWorldGear = ConfigurationManager.GetValue("Roguelike.ShopWorldGear", true);
 
     /// <summary>
-    /// A world's or gauntlet's own gear: ObjectData/EM Equipment/Hats/..., ObjectData/Gauntlet/Catacombs/Rings/... (not
-    /// raid or polymorph gear). Its slot still comes from its folder (SlotOf).
+    /// Gear from anywhere in the game's files, by its slot folder (ObjectData/EM Equipment/Hats/..., ObjectData/Gauntlet/
+    /// Catacombs/Rings/..., ObjectData/Tier6/Robes/...): world drops, gauntlet, dungeon and boss gear that SpiralDB's
+    /// vendor and drop tables leave out. Not crown, pack, PvP, tourney, raid, polymorph, blank, monster or henchman gear.
     /// </summary>
+    private static readonly string[] s_notShopGearFolders = [
+        "CrownItems", "World Pack Gear", "SpecialSets", "Blanks", "PVP", "Tourney", "Raids", "Polymorph", "MonsterItems",
+        "HenchmenEquipment", "NewEquipment", "Community Event", "Housing", "Pets", "Mounts", "QA",
+    ];
+
     private static bool IsWorldGearPath(string path) {
         var parts = (path ?? "").Replace('\\', '/').Split('/');
-        if (parts.Length < 4 || !parts[0].Equals("ObjectData", StringComparison.OrdinalIgnoreCase)) {
+        if (parts.Length < 3 || !parts[0].Equals("ObjectData", StringComparison.OrdinalIgnoreCase)) {
             return false;
         }
 
-        return parts[1].Equals("Gauntlet", StringComparison.OrdinalIgnoreCase)
-               || (parts[1].EndsWith(" Equipment", StringComparison.OrdinalIgnoreCase)
-                   && !parts[1].StartsWith("Raids", StringComparison.OrdinalIgnoreCase)
-                   && !parts[1].StartsWith("Polymorph", StringComparison.OrdinalIgnoreCase));
+        // ObjectData/Decks/ holds the creatures' decks (Mdeck-...), not decks a wizard can buy.
+        if (parts[1].Equals("Decks", StringComparison.OrdinalIgnoreCase)) {
+            return false;
+        }
+
+        return !parts.Take(parts.Length - 1).Any(folder => s_notShopGearFolders.Any(
+            no => folder.StartsWith(no, StringComparison.OrdinalIgnoreCase)));
     }
+
     // Shops and trainers stock up to MaxStockLevel, or the highest tier level (TierNLevel) when that is higher.
     private static readonly int s_maxLevel = Math.Clamp(
         Math.Max(ConfigurationManager.GetValue("Roguelike.MaxStockLevel", 50), RoguelikeConfig.HighestTierLevel), 1, 200);
@@ -826,12 +836,13 @@ internal static class RoguelikeStock {
                 .Where(id => !vendorIds.Contains(id))
                 .ToHashSet()
             : [];
-        // ShopWorldGear: every world's own gear (the "<World> Equipment" folders: Empyrea's, Polaris's...) and the
-        // gauntlets' (Gauntlet/..., such as the Catacombs' level 130 Vanguard gear), which SpiralDB's drop tables
-        // mostly leave out, so shops have gear all the way up to the stock cap. Raid and polymorph gear stays out.
+        // ShopWorldGear: gear from anywhere in the game's files (each world's own drops, the gauntlets' such as the
+        // Catacombs' level 130 Vanguard gear, dungeon and boss sets at 50 and 100), which SpiralDB's tables mostly leave
+        // out, so every slot has gear all the way up to the stock cap (IsWorldGearPath says what stays out).
         var worldIds = s_shopWorldGear
             ? s_templatePaths.Value
-                .Where(pair => IsWorldGearPath(pair.Value) && !vendorIds.Contains(pair.Key) && !dropIds.Contains(pair.Key))
+                .Where(pair => SlotOf(pair.Key) is not null && IsWorldGearPath(pair.Value)
+                               && !vendorIds.Contains(pair.Key) && !dropIds.Contains(pair.Key))
                 .Select(pair => pair.Key)
                 .ToHashSet()
             : [];
