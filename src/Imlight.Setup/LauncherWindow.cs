@@ -334,7 +334,7 @@ internal sealed partial class LauncherWindow : Window {
             },
         };
         var tagline = new TextBlock {
-            Text = $"{CountWord(_tiers.Worlds.Count)} TIERS  ·  ONE LIFE  ·  EVERY RUN RESHUFFLED",
+            Text = $"{CountWord(Arcs(_tiers.Worlds.Count, _tiers.Bosses).Count)} ARCS  ·  {CountWord(_tiers.Worlds.Count)} TIERS  ·  ONE LIFE",
             FontFamily = HEADING_FONT,
             FontWeight = FontWeight.SemiBold,
             FontSize = 14,
@@ -346,6 +346,7 @@ internal sealed partial class LauncherWindow : Window {
 
         _statusText.Foreground = TEXT;
         _hint.Foreground = SOFT;
+        _hint.IsVisible = !string.IsNullOrWhiteSpace(_hint.Text);
         var status = new StackPanel {
             Orientation = Orientation.Horizontal,
             Spacing = 10,
@@ -453,16 +454,18 @@ internal sealed partial class LauncherWindow : Window {
     ];
 
     /// <summary>
-    /// The run's tiers as a row of waypoints, named after each tier's world (read from the server's TierN lines),
-    /// with the arcs' last bosses (ArcEndTiers, and the last tier) larger and lit. Boss-only tiers (arc 2's boss rush,
-    /// "none" for the street) are shown too.
+    /// The run as a road of its arcs: a small waypoint for each tier, a large lit one where each arc ends (ArcEndTiers,
+    /// and the last tier), and under each arc its name, its first and last world, and its tiers.
     /// </summary>
     private Control TierMap() {
         var (worlds, bosses) = _tiers;
-        // Fewer tiers sit closer together, centred.
-        var width = Math.Min(860, 60 + 150.0 * Math.Max(1, worlds.Count - 1));
-        var canvas = new Canvas { Width = width, Height = 84, HorizontalAlignment = HorizontalAlignment.Center };
+        var arcs = Arcs(worlds.Count, bosses);
+        const double width = 780;
+        const double lineY = 14;
+        var canvas = new Canvas { Width = width, Height = 74, HorizontalAlignment = HorizontalAlignment.Center };
         var step = worlds.Count > 1 ? (width - 60) / (worlds.Count - 1) : 0;
+        double X(int tier) => 30 + (tier - 1) * step;
+
         var line = new Border {
             Width = width - 60,
             Height = 2,
@@ -475,54 +478,73 @@ internal sealed partial class LauncherWindow : Window {
             },
         };
         Canvas.SetLeft(line, 30);
-        Canvas.SetTop(line, 34);
+        Canvas.SetTop(line, lineY - 1);
         canvas.Children.Add(line);
 
-        for (var i = 0; i < worlds.Count; i++) {
-            var x = 30 + i * step;
-            var boss = bosses.Contains(i + 1);
-            var size = boss ? 24.0 : 18.0;
+        for (var tier = 1; tier <= worlds.Count; tier++) {
+            var end = bosses.Contains(tier);
+            var size = end ? 20.0 : 8.0;
             var node = new Border {
                 Width = size,
                 Height = size,
-                Background = new SolidColorBrush(Color.Parse(boss ? "#5A1D14" : "#1B1412")),
-                BorderBrush = boss ? GOLD : GOLD_DIM,
-                BorderThickness = new Thickness(2),
+                Background = new SolidColorBrush(Color.Parse(end ? "#5A1D14" : "#2A1E18")),
+                BorderBrush = end ? GOLD : GOLD_DIM,
+                BorderThickness = new Thickness(end ? 2 : 1),
                 RenderTransform = TransformOperations.Parse("rotate(45deg)"),
-                BoxShadow = boss ? BoxShadows.Parse("0 0 14 2 #99E9783C") : default,
+                BoxShadow = end ? BoxShadows.Parse("0 0 14 2 #99E9783C") : default,
             };
-            Canvas.SetLeft(node, x - size / 2);
-            Canvas.SetTop(node, 35 - size / 2);
+            ToolTip.SetTip(node, $"Tier {tier}: {worlds[tier - 1]}");
+            Canvas.SetLeft(node, X(tier) - size / 2);
+            Canvas.SetTop(node, lineY - size / 2);
             canvas.Children.Add(node);
+        }
 
-            var numeral = new TextBlock {
-                Text = i < ROMAN.Length ? ROMAN[i] : (i + 1).ToString(),
-                FontFamily = HEADING_FONT,
-                FontWeight = FontWeight.Bold,
-                FontSize = 11,
-                Foreground = GOLD_DIM,
-                Width = 40,
-                TextAlignment = TextAlignment.Center,
-            };
-            Canvas.SetLeft(numeral, x - 20);
-            Canvas.SetTop(numeral, 2);
-            canvas.Children.Add(numeral);
-
-            var labelWidth = Math.Min(96, Math.Max(60, step - 2));
-            var label = new TextBlock {
-                Text = worlds[i],
-                FontSize = worlds.Count > 7 ? 10 : 11,
-                Foreground = SOFT,
+        for (var a = 0; a < arcs.Count; a++) {
+            var (first, last) = arcs[a];
+            var centre = (X(first) + X(last)) / 2;
+            var labelWidth = Math.Max(150, X(last) - X(first) + 40);
+            var label = new StackPanel {
                 Width = labelWidth,
-                TextAlignment = TextAlignment.Center,
-                TextTrimming = TextTrimming.CharacterEllipsis,
+                Spacing = 1,
+                Children = {
+                    new TextBlock {
+                        Text = $"ARC {(a < ROMAN.Length ? ROMAN[a] : (a + 1).ToString())}",
+                        FontFamily = HEADING_FONT, FontWeight = FontWeight.Bold, FontSize = 13, LetterSpacing = 3,
+                        Foreground = GOLD, TextAlignment = TextAlignment.Center,
+                    },
+                    new TextBlock {
+                        Text = first == last ? worlds[first - 1] : $"{worlds[first - 1]}  –  {worlds[last - 1]}",
+                        FontSize = 11, Foreground = SOFT, TextAlignment = TextAlignment.Center,
+                        TextTrimming = TextTrimming.CharacterEllipsis,
+                    },
+                    new TextBlock {
+                        Text = first == last ? $"Tier {ROMAN[first - 1]}" : $"Tiers {ROMAN[first - 1]} – {ROMAN[last - 1]}",
+                        FontSize = 10, Foreground = FAINT, TextAlignment = TextAlignment.Center,
+                    },
+                },
             };
-            Canvas.SetLeft(label, x - labelWidth / 2);
-            Canvas.SetTop(label, 56);
+            Canvas.SetLeft(label, centre - labelWidth / 2);
+            Canvas.SetTop(label, lineY + 16);
             canvas.Children.Add(label);
         }
 
         return canvas;
+    }
+
+    // Each arc's first and last tier: an arc ends at each of its arc-end tiers (and the last tier ends the last arc).
+    private static List<(int First, int Last)> Arcs(int tierCount, HashSet<int> ends) {
+        var arcs = new List<(int, int)>();
+        var first = 1;
+        foreach (var end in ends.Where(e => e >= 1 && e <= tierCount).OrderBy(e => e)) {
+            arcs.Add((first, end));
+            first = end + 1;
+        }
+
+        if (first <= tierCount) {
+            arcs.Add((first, tierCount));
+        }
+
+        return arcs;
     }
 
     private static string CountWord(int n) => n switch {
@@ -773,6 +795,8 @@ internal sealed partial class LauncherWindow : Window {
 
     private void Hint(string text, bool isError = false) {
         _hint.Text = text;
+        // An empty hint takes no room, so the card has no gap under the big button.
+        _hint.IsVisible = !string.IsNullOrWhiteSpace(text);
         _hint.Foreground = isError ? ERROR : SOFT;
     }
 

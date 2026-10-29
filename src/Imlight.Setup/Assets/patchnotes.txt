@@ -23,7 +23,7 @@ Boss rush bosses (tier 6 on) give 5 to 10 stat potions each, drunk on the spot. 
 
 Achievements for arc 3: The Rat Caught, Web Unwoven, Arc 3 Complete, and At the Summit (reach level 130).
 
-The launcher's map shows all 13 tiers, and Morganthe ends arc 2 with the "continue or take a break" choice.
+The launcher's map shows the run as its three arcs (Arc I, Arc II, Arc III, with each arc's worlds and tiers under it) instead of thirteen crowded names; hover a waypoint to see its tier. The gap under the big button is gone. Morganthe ends arc 2 with the "continue or take a break" choice.
 
 Q: Changed
 
