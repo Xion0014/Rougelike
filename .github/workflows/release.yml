@@ -2,7 +2,7 @@
 # installs and updates from that branch. Prereleases are never "latest", so players never get them; once a test build
 # is good, merge roguelike/test into roguelike/run-loop to release it.
 #
-# Publishes a GitHub release on every push to the roguelike branch (versions 2.1.<run number - 141>),
+# Publishes a GitHub release on every push to the roguelike branch (versions 3.0.<run number - 151>),
 # and when a version tag (v1.2.3) is pushed. Installed ImlightManager.exe and launchers update
 # themselves from the newest release here, so every push reaches every install.
 #
@@ -68,9 +68,9 @@ jobs:
             $version = "${{ github.ref_name }}"
             $branch = $env:DEFAULT_INSTALL_BRANCH
           } else {
-            # A branch push: number the release by this workflow's run count. 2.1 (the Achievement Update) began at
-            # run 141, which is 2.1.0; 2.0 ran from run 135 (2.0.0), and runs before it were 1.0.<run number>.
-            $version = "2.1.$([int]'${{ github.run_number }}' - 141)"
+            # A branch push: number the release by this workflow's run count. 3.0 (the Arc 3 Update) began at run 151,
+            # which is 3.0.0; 2.1 began at run 141 and 2.0 at run 135, and runs before those were 1.0.<run number>.
+            $version = "3.0.$([int]'${{ github.run_number }}' - 151)"
             $branch = "${{ github.ref_name }}"
           }
           $version = $version.TrimStart('v')

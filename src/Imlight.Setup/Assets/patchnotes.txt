@@ -7,7 +7,7 @@
 ;   anything else     one change (leave a blank line between changes)
 ;   ; comment         not shown
 
-# Next update (in testing)
+# v3.0.0 (October 29, 2026) - Arc 3 Update
 
 Q: New
 
