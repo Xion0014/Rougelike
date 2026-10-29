@@ -74,6 +74,9 @@ internal static class PlayerSettings {
             new("Roguelike", "FlatRatesFromTier", "x1 rates from tier", "From this tier's boss on, battles give experience and gold at x1 (the bosses give the levels instead). 0: never.", SettingKind.Whole, 0, 100),
             new("Roguelike", "BossTrainingPoints", "Training points per boss", "Training points for beating each tier's boss.", SettingKind.Whole, 0, 100),
             new("Roguelike", "BoostChance", "Stat potion chance (%)", "The chance a won battle gives a stat potion.", SettingKind.Whole, 0, 100),
+            new("Roguelike", "BossBoostsMin", "Boss stat potions (fewest)", "The fewest stat potions a boss rush boss gives.", SettingKind.Whole, 0, 100),
+            new("Roguelike", "BossBoostsMax", "Boss stat potions (most)", "The most stat potions a boss rush boss gives.", SettingKind.Whole, 0, 100),
+            new("Roguelike", "BossBoostsFromTier", "Boss stat potions from tier", "The first tier whose boss gives stat potions (6: the arc 2 boss rush).", SettingKind.Whole, 1, 100),
             new("Roguelike", "QuestItemChance", "Gear from quests (%)", "The chance a completed quest also gives a random piece of gear.", SettingKind.Whole, 0, 100),
         ]),
         ("Drops", [

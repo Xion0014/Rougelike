@@ -102,6 +102,44 @@ internal static class RoguelikeBoosts {
             return null;
         }
 
+        var (potion, amount, unit, total) = DrinkRandom(wizard);
+
+        return $"You found and drank a {potion}: +{amount}{unit} for the rest of your run (+{total}{unit} so far).";
+    }
+
+    /// <summary>[Roguelike] BossBoostsMin/Max: how many stat potions a boss gives, from BossBoostsFromTier on (the boss rush).</summary>
+    internal static readonly int BossBoostsMin = Math.Clamp(ConfigurationManager.GetValue("Roguelike.BossBoostsMin", 5), 0, 100);
+    internal static readonly int BossBoostsMax = Math.Clamp(ConfigurationManager.GetValue("Roguelike.BossBoostsMax", 10), 0, 100);
+    internal static readonly int BossBoostsFromTier = Math.Max(1, ConfigurationManager.GetValue("Roguelike.BossBoostsFromTier", 6));
+
+    /// <summary>
+    /// A boss's stat potions on the boss rush (BossBoostsMin to BossBoostsMax of them, from BossBoostsFromTier on), each a
+    /// random stat and amount like a battle's. Returns what the wizard should be told, or null for none.
+    /// </summary>
+    internal static string GiveBossBoosts(Wizard wizard, int tier) {
+        if (!RoguelikeConfig.Enabled || wizard?.Roguelike is null || tier < BossBoostsFromTier || BossBoostsMax <= 0) {
+            return null;
+        }
+
+        var count = Random.Shared.Next(Math.Min(BossBoostsMin, BossBoostsMax), BossBoostsMax + 1);
+        if (count <= 0) {
+            return null;
+        }
+
+        var gained = new Dictionary<string, (int Amount, string Unit)>();
+        for (var i = 0; i < count; i++) {
+            var (potion, amount, unit, _) = DrinkRandom(wizard);
+            var (sum, _) = gained.GetValueOrDefault(potion);
+            gained[potion] = (sum + amount, unit);
+        }
+
+        return $"The boss left {count} stat potions, and you drank them all: " +
+               string.Join(", ", gained.Select(g => $"{g.Key} +{g.Value.Amount}{g.Value.Unit}")) + ".";
+    }
+
+    // One stat potion: a random stat goes up by a random amount, at once and for the rest of the run.
+    private static (string Potion, int Amount, string Unit, int Total) DrinkRandom(Wizard wizard) {
+        var run = wizard.Roguelike;
         var boost = s_boosts[Random.Shared.Next(s_boosts.Length)];
         var amount = Random.Shared.Next(boost.Min, boost.Max + 1);
 
@@ -123,8 +161,7 @@ internal static class RoguelikeBoosts {
         Logger.Information("[Roguelike] {0} drank a {1}: +{2}{3} (+{4} in all).",
             Logger.Args(wizard.CharId, boost.Potion, amount, boost.Unit, run.Boosts[boost.Key]));
 
-        return $"You found and drank a {boost.Potion}: +{amount}{boost.Unit} for the rest of your run " +
-               $"(+{run.Boosts[boost.Key]}{boost.Unit} so far).";
+        return (boost.Potion, amount, boost.Unit, run.Boosts[boost.Key]);
     }
 
     /// <summary>One line per stat the run's potions raised, for .run.</summary>

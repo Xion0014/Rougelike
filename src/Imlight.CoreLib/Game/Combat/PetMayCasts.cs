@@ -28,7 +28,7 @@ internal static class PetMayCasts {
     internal sealed record MayCast(string Talent, string Key, string SpellName, uint SpellTemplateId);
 
     internal static readonly bool Enabled = ConfigurationManager.GetValue("PetCasting.Enabled", true);
-    internal static readonly int MaxPerRound = Math.Max(0, ConfigurationManager.GetValue("PetCasting.MaxPerRound", 5));
+    internal static readonly int MaxPerRound = Math.Max(0, ConfigurationManager.GetValue("PetCasting.MaxPerRound", 2));
     // [PetCasting] ShowAsPetCast: the cast is flagged as the pet's, so the game plays the pet's May Cast animation. The card
     // is put in the owner's hand first (the game skips a card it cannot find there).
     internal static readonly bool ShowAsPetCast = ConfigurationManager.GetValue("PetCasting.ShowAsPetCast", true);

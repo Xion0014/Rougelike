@@ -872,6 +872,10 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         WizardCollection.UpdateCharacterRoguelike(wizard);
         GiveBossTrainingPoints(wizard);
         GiveBossRewards(wizard, run.Tier);
+        if (RoguelikeBoosts.GiveBossBoosts(wizard, run.Tier) is { } bossBoosts) {
+            WizardCollection.UpdateCharacterGameStats(wizard);
+            InformGameClient(bossBoosts, isImportant: true);
+        }
 
         // Achievements for the tier, then a look again once the boss's experience has landed (levels).
         AnnounceAchievements(Achievements.Check(wizard, new Achievements.Moment("TierCleared", run.Tier, rounds)));
