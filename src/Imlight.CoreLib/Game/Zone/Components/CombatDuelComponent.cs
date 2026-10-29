@@ -1029,8 +1029,11 @@ internal sealed class CombatDuelComponent(ZoneEntity entity)
         => circle.RemoveParticipant();
 
     private void SpawnAndAssignMinion(uint creatureTid, CombatDuelSubCircle caster) {
-        // A PvE minion fights for the wizards whoever summoned it; in PvP it fights for its summoner.
-        var slot = Duel.m_bPVP ? GetAvailableSubCircle(caster.OccupiedTeam) : GetAvailableSubCircleTeamPlayer();
+        // A minion fights for whoever summoned it: a creature's (Grandfather Spider's spiderlings, the Fairy Queen's
+        // fairies) comes in on the creatures' side, a wizard's on the wizards'. In PvP, on its summoner's side. (Niduus's fork.)
+        var forEnemies = caster?.OccupiedTeam == CombatTeam.Monster;
+        var slot = Duel.m_bPVP ? GetAvailableSubCircle(caster.OccupiedTeam)
+            : forEnemies ? GetAvailableSubCircleTeamCreature() : GetAvailableSubCircleTeamPlayer();
         if (slot is null) {
             Logger.Information("Duel {0} | minion summon (tid {1}) skipped, no free slot on the side of the caster.",
                 Logger.Args(Duel.m_duelID.Full, creatureTid));
@@ -1073,8 +1076,8 @@ internal sealed class CombatDuelComponent(ZoneEntity entity)
             return;
         }
 
-        Logger.Information("Duel {0} | summoned minion tid {1} into player-team slot {2} (caught up next round).",
-            Logger.Args(Duel.m_duelID.Full, creatureTid, slot.SlotIndex));
+        Logger.Information("Duel {0} | summoned minion tid {1} into {2}-team slot {3} (caught up next round).",
+            Logger.Args(Duel.m_duelID.Full, creatureTid, forEnemies ? "enemy" : "player", slot.SlotIndex));
     }
 
     private void AddParticipant(CoreObject participantObject, IActorRef participantActor) {

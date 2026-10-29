@@ -27,6 +27,8 @@ Q: Fixed
 
 Drops come from your own level: gear, crown gear and jewels that drop (or come from chests) are from your level down to 10 levels under it, never above it, and no longer anything you have the level for (a level 130 wizard got a level 35 jewel). Shops still stock a few levels above you.
 
+A creature's minions fight on its side: Grandfather Spider's spiderlings (and every other creature's summons) came in on the wizards' side. (Fixed in Niduus's fork too.)
+
 No random music in the Shopping District: it plays its own Wizard City tune, so the random music made two songs at once. Random music starts again on the streets and in boss rooms.
 
 # v2.1.0 (October 26, 2026) - Achievement Update
