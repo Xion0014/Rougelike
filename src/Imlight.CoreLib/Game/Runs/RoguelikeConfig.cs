@@ -431,6 +431,35 @@ internal static class RoguelikeConfig {
     /// <summary>How long a tier's street lasts before its boss, in seconds.</summary>
     internal static int StreetSecondsFor(int tier) => GetTier(tier) is { StreetSeconds: > 0 } t ? t.StreetSeconds : StreetSeconds;
 
+    /// <summary>How many arcs the run has: one per arc-end tier within the run, plus the last.</summary>
+    internal static int ArcCount => ArcEndTiers.Count(end => end < TierCount) + 1;
+
+    /// <summary>
+    /// A tier's name for players: TierNName (tier 10's "Morganthe"), else the world its street (or boss room) is in.
+    /// </summary>
+    internal static string TierName(int number) {
+        var named = ConfigurationManager.GetValue($"Roguelike.Tier{number}Name", "")?.Trim();
+        if (!string.IsNullOrEmpty(named)) {
+            return named;
+        }
+
+        var tier = GetTier(number);
+        var zone = tier is null ? "" : tier.HasStreet ? tier.Street : tier.Boss;
+        if (zone.Contains("GH_HFjord", StringComparison.OrdinalIgnoreCase)) {
+            return "Wintertusk";
+        }
+
+        var folder = zone.Split('/')[0];
+
+        return folder switch {
+            "WizardCity" => "Wizard City",
+            "DragonSpire" => "Dragonspyre",
+            "MooShu" => "MooShu",
+            "" => $"Tier {number}",
+            _ => System.Text.RegularExpressions.Regex.Replace(folder, "(?<=[a-z])(?=[A-Z])", " "),
+        };
+    }
+
     internal static RoguelikeTier GetTier(int number)
         => Tiers.Count == 0 ? null : Tiers[Math.Clamp(number, 1, Tiers.Count) - 1];
 

@@ -80,6 +80,12 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
             return;
         }
 
+        // Discord's "Playing Spiral Gauntlet" status: now, then every half minute while this session lasts.
+        if (DiscordPresence.Enabled) {
+            Timers.StartPeriodicTimer(PRESENCE_TIMER_KEY,
+                new SERVICE_101_PROTOCOL.MSG_ROGUELIKE_COMMAND { Action = "presence" }, TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(30));
+        }
+
         if (wizard.Roguelike is null) {
             StartRun(wizard);
 
@@ -270,6 +276,7 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         run.StreetSeconds += TICK_SECONDS;
         var left = RoguelikeConfig.StreetSecondsFor(run.Tier) - run.StreetSeconds;
         WizardCollection.UpdateCharacterRoguelike(wizard);
+        UpdatePresence(wizard);
 
         if (left <= 0) {
             Timers.Cancel(TICK_TIMER_KEY);
@@ -440,6 +447,9 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
                 // Sent by this service's own timer after a battle.
                 SendToPhaseZone(wizard);
                 break;
+            case "presence":
+                UpdatePresence(wizard);
+                break;
             case "timerui":
                 // Staff test: try a zone timer layout by name, for this session.
                 HideRunTimer();
@@ -578,6 +588,10 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
 
     private const string MUSIC_TIMER_KEY = "RoguelikeMusic";
     private const string ACHIEVEMENTS_TIMER_KEY = "RoguelikeAchievements";
+    private const string PRESENCE_TIMER_KEY = "RoguelikeDiscordPresence";
+
+    // When each wizard's Discord status first showed in this server's life, for its "elapsed" time.
+    private static readonly System.Collections.Concurrent.ConcurrentDictionary<ulong, long> s_presenceSince = new();
     private const string MUSIC_ROTATE_KEY = "RoguelikeMusicRotate";
     private string _runTrack;
 
@@ -847,6 +861,7 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
     private void BeginBoss(Wizard wizard, bool afterBattle = false) {
         wizard.Roguelike.Phase = RoguelikePhase.Boss;
         WizardCollection.UpdateCharacterRoguelike(wizard);
+        UpdatePresence(wizard);
         HideRunTimer();
 
         InformGameClient("Time's up! The boss awaits. Win, and the shops are yours.", isImportant: true);
@@ -870,6 +885,7 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         // The end of an arc (ArcEndTiers, and the last tier) asks the wizard whether to go on or take a break.
         run.ArcPromptPending = run.Phase == RoguelikePhase.Complete || RoguelikeConfig.ArcEndTiers.Contains(run.Tier);
         WizardCollection.UpdateCharacterRoguelike(wizard);
+        UpdatePresence(wizard);
         GiveBossTrainingPoints(wizard);
         GiveBossRewards(wizard, run.Tier);
         if (RoguelikeBoosts.GiveBossBoosts(wizard, run.Tier) is { } bossBoosts) {
@@ -973,6 +989,43 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         loot.Items.Add(new Imlight.CoreLib.WizardData.Models.World.DropItemResult { ItemId = spellId.ToString(), Quantity = 1 });
         Imlight.CoreLib.Game.DropTables.LootGranter.GrantAndDisplay(SessionActor.ActorRef, wizard, loot);
         Logger.Information("[Roguelike] {0} learned spell {1} from a battle.", Logger.Args(wizard.CharId, spellId));
+    }
+
+    /// <summary>
+    /// Discord's "Playing Spiral Gauntlet" status (DiscordPresence): the wizard and their level, the tier, its world and
+    /// what they are doing, the street's time left (or the time played), and the arc's image.
+    /// </summary>
+    private void UpdatePresence(Wizard wizard) {
+        var run = wizard?.Roguelike;
+        if (!DiscordPresence.Enabled || run is null) {
+            return;
+        }
+
+        var now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        var since = s_presenceSince.GetOrAdd(wizard.CharId, now);
+        var tier = Math.Max(1, run.Tier);
+        var world = RoguelikeConfig.TierName(tier);
+        var arc = 1 + RoguelikeConfig.ArcEndTiers.Count(end => end < tier);
+        string[] roman = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
+        var arcName = $"Arc {(arc <= roman.Length ? roman[arc - 1] : arc.ToString())}";
+        long? end = null;
+        var state = run.Phase switch {
+            _ when run.AwaitingStart => "Starting a new run",
+            RoguelikePhase.Street => $"Tier {tier} · {world} street",
+            RoguelikePhase.Boss => $"Tier {tier} · {world} boss",
+            RoguelikePhase.Shop => $"Shopping · tier {tier} cleared",
+            RoguelikePhase.Complete => $"Run complete · all {RoguelikeConfig.TierCount} tiers cleared",
+            _ => $"Tier {tier} · {world}",
+        };
+        if (run.Phase == RoguelikePhase.Street && !run.AwaitingStart) {
+            var left = Math.Max(0, RoguelikeConfig.StreetSecondsFor(run.Tier) - run.StreetSeconds);
+            end = now + left;
+        }
+
+        var name = wizard.PlayerNameBehavior?.GetWizardName() ?? "A wizard";
+        DiscordPresence.Set(new DiscordPresence.Activity(
+            $"{name} · Level {wizard.MagicSchoolBehavior.Level}", state, end is null ? since : null, end,
+            "logo", "Spiral Gauntlet", $"arc{Math.Min(arc, 3)}", $"{arcName} of {RoguelikeConfig.ArcCount}"));
     }
 
     /// <summary>Tells the wizard of achievements they just earned.</summary>
@@ -1079,6 +1132,8 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         run.ArcPromptPending = false;
         WizardCollection.UpdateCharacterRoguelike(wizard);
         RoguelikeCreatures.Register(wizard);
+        Timers.StartSingleTimer(PRESENCE_TIMER_KEY + "Now",
+            new SERVICE_101_PROTOCOL.MSG_ROGUELIKE_COMMAND { Action = "presence" }, TimeSpan.FromSeconds(1));
 
         // A tier without a street goes straight to its boss.
         if (RoguelikeConfig.GetTier(run.Tier) is { HasStreet: false }) {

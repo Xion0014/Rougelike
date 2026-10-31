@@ -105,6 +105,7 @@ internal static class PlayerSettings {
             new("Roguelike", "BossCheatsFromTier", "Boss cheats from tier", "The first tier whose bosses cheat (6: arc 2).", SettingKind.Whole, 1, 100),
         ]),
         ("The run", [
+            new("Discord", "RichPresence", "Discord status", "On: your Discord profile shows \"Playing Spiral Gauntlet\" with your wizard, tier and what you're doing, while Discord is open.", SettingKind.Switch),
             new("Roguelike", "StreetMinutes", "Minutes per street", "How long each street lasts before the boss (tiers 1 to 5 have their own below).", SettingKind.Whole, 1, 240),
             new("Roguelike", "Tier1Minutes", "Tier 1 street minutes (Wizard City)", "How long tier 1's street lasts before its boss. 0: Minutes per street.", SettingKind.Whole, 0, 240),
             new("Roguelike", "Tier2Minutes", "Tier 2 street minutes (Krokotopia)", "How long tier 2's street lasts before its boss. 0: Minutes per street.", SettingKind.Whole, 0, 240),
