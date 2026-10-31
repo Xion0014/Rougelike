@@ -73,6 +73,9 @@ public class QueuedCombatAction {
     public CombatDuelSubCircle SelectedTarget;
     public Spell Spell;
     public SpellTemplate SpellTemplate;
+
+    /// <summary>True for a spell that never crits: a boss cheat's (unless [Roguelike] CheatsCanCrit).</summary>
+    public bool CantCrit;
     
 }
 

@@ -861,7 +861,9 @@ public partial class CombatResolver {
 
             by._duelActor.CurrentActionCinematicOffsetSeconds = cinematicTimeSoFar + cinematicTime;
             var before = combatActionList.m_actionList.Count;
-            var action = new QueuedCombatAction { SpellCaster = by, SelectedTarget = target, Spell = spell, SpellTemplate = template };
+            var action = new QueuedCombatAction {
+                SpellCaster = by, SelectedTarget = target, Spell = spell, SpellTemplate = template, CantCrit = !BossCheats.CanCrit,
+            };
             var time = !step.DispelImmune && ConsumeDispell(by, spell.m_magicSchoolID)
                 ? HandleFizzleAction(action, combatActionList)
                 : HandleSuccessfulAction(action, combatActionList, alreadyPaid: true);

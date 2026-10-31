@@ -99,6 +99,7 @@ internal static class PlayerSettings {
             new("Roguelike", "CreatureBlockByTier", "Creature block by tier (%)", "Each tier's creature block chance, tier 1 first, comma-separated.", SettingKind.Text),
         ]),
         ("Creatures", [
+            new("Roguelike", "CheatsCanCrit", "Boss cheats can crit", "On: a boss's cheat spells can land critical hits. Off (as in the real game): they never crit.", SettingKind.Switch),
             new("Roguelike", "SwapStreetCreatures", "Random creatures", "On: streets and their dungeons show random creatures of a similar level. Off: they keep their own creatures.", SettingKind.Switch),
             new("Roguelike", "RandomCreatureDecks", "Random creature decks", "On: street creatures (bosses aside) fight with a random deck of normal spells for their level and school.", SettingKind.Switch),
             new("Roguelike", "BossCheats", "Boss cheats", "On: bosses with a cheat file cast free spells and show lines mid-battle, as in the real game.", SettingKind.Switch),

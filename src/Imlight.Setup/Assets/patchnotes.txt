@@ -13,6 +13,10 @@ Q: New
 
 Discord status: while you play, your Discord profile shows "Playing Spiral Gauntlet" with your wizard and level, the tier and its world, whether you're on the street, at the boss or shopping, and the street's time left. It needs the Discord app open on the same PC, and can be turned off in Settings ("Discord status", under The run).
 
+Q: Changed
+
+Boss cheats no longer crit, as in the real game (Belloq's cheat Ra could one-shot you with a critical). Settings, "Boss cheats can crit", turns it back on for a harder run.
+
 Q: Fixed
 
 Marleybone's Ironworks is closed on a run. Fast wizards could reach it from tier 3's street, and the areas past Marleybone don't work on this server yet (their quests came twice). Walking in sends you back where you came from.

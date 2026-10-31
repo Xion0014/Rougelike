@@ -77,7 +77,8 @@ internal static class CombatActionResolver {
         var critMultiplier = 1f;
         var landedCrit = false;
         var blockedCrit = false;
-        var critPrimaryTarget = action.SelectedTarget;
+        // A boss cheat's spell never crits, as on live, unless [Roguelike] CheatsCanCrit is on.
+        var critPrimaryTarget = action.CantCrit ? null : action.SelectedTarget;
         if (critPrimaryTarget is not null && CombatCriticals.UsesSimpleCriticals(action.SpellCaster, critPrimaryTarget)) {
             // A roguelike run: only attacks crit, for double damage, unless the target blocks it.
             var spellSchool = MagicSchools.GetMagicSchool(action.Spell.m_magicSchoolID)?.m_schoolName;

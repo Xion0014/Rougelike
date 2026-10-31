@@ -469,6 +469,12 @@ internal static class BossCheats {
     // [BossCheats] Enabled (Niduus's) and our [Roguelike] BossCheats (the launcher's Settings switch); both on by default.
     internal static readonly bool Enabled = ConfigurationManager.GetValue("BossCheats.Enabled", true) && ConfigurationManager.GetValue("Roguelike.BossCheats", true);
 
+    /// <summary>
+    /// Whether a cheat's spell can crit. Off as on live, where a boss's cheat never crits; [Roguelike] CheatsCanCrit
+    /// (the launcher's "Boss cheats can crit") turns it on.
+    /// </summary>
+    internal static readonly bool CanCrit = ConfigurationManager.GetValue("Roguelike.CheatsCanCrit", false);
+
     private static readonly JsonSerializerOptions s_options = new() {
         PropertyNameCaseInsensitive = true,
         AllowTrailingCommas = true,
