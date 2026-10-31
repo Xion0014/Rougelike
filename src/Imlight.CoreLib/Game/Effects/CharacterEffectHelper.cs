@@ -67,7 +67,7 @@ internal static class CharacterEffectHelper {
     /// <param name="wizard">The wizard to add effects to.</param>
     /// <param name="template">The template containing the effects to be added.</param>
     /// <returns>A list of the added effects.</returns>
-    internal static List<GameEffectBase> AddEffectsToWizard(Wizard wizard, WizItemTemplate template) {
+    internal static List<GameEffectBase> AddEffectsToWizard(Wizard wizard, WizItemTemplate template, ulong itemGlobalId = 0) {
         var addedEffects = new List<GameEffectBase>();
         var slotHash = ItemHelper.GetItemSlotHash(template);
 
@@ -95,7 +95,7 @@ internal static class CharacterEffectHelper {
                 if (Imlight.CoreLib.Game.Randomization.Randomizer.RunItemCards
                     && SpellFactory.GetSpell(provideSpellEffect.m_spellName) is { } original) {
                     var swappedId = Imlight.CoreLib.Game.Randomization.Randomizer.MapRunItemCard(
-                        wizard, (uint) template.m_templateID, original.m_templateID);
+                        wizard, (uint) template.m_templateID, original.m_templateID, itemGlobalId);
                     if (swappedId != original.m_templateID
                         && Imlight.CoreLib.Shared.Resources.CoreObjectFactory.GetCoreTemplate(swappedId) is SpellTemplate swapped) {
                         provideSpellEffect.m_spellName = swapped.m_name;

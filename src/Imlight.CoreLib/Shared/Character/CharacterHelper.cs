@@ -83,7 +83,7 @@ internal static class CharacterHelper {
                 continue;
             }
 
-            var activatedEffects = CharacterEffectHelper.AddEffectsToWizard(wizard, template);
+            var activatedEffects = CharacterEffectHelper.AddEffectsToWizard(wizard, template, item.m_globalID.Full);
 
             Logger.Debug("{0} Applied {1} effects for item {2}.",
                 Logger.Args(wizard.PlayerNameBehavior.GetWizardName(), activatedEffects.Count, template.m_objectName));

@@ -286,16 +286,18 @@ public static class Randomizer {
 
     /// <summary>
     /// The card a piece of gear gives a wizard on a roguelike run in place of <paramref name="spellTemplateId"/>:
-    /// a spell of the same type and pip cost, the same every time for this run and item. Returns the spell itself
-    /// when it is not swapped.
+    /// a spell of the same type and pip cost, the same every time for this run and this piece of gear. Each copy rolls
+    /// its own (<paramref name="itemGlobalId"/>), so buying the same gear again can give other cards; 0 rolls by the
+    /// gear's template alone. Returns the spell itself when it is not swapped.
     /// </summary>
-    internal static uint MapRunItemCard(Wizard wizard, uint itemTemplateId, uint spellTemplateId) {
+    internal static uint MapRunItemCard(Wizard wizard, uint itemTemplateId, uint spellTemplateId, ulong itemGlobalId = 0) {
         if (!RunItemCards || wizard?.Roguelike is not { } run) {
             return spellTemplateId;
         }
 
         try {
-            var seed = SeededShuffle.Mix(run.Seed ^ SeededShuffle.Mix(itemTemplateId) ^ SeededShuffle.Fnv1a("itemcard"));
+            var seed = SeededShuffle.Mix(run.Seed ^ SeededShuffle.Mix(itemTemplateId) ^ SeededShuffle.Fnv1a("itemcard")
+                                         ^ (itemGlobalId == 0 ? 0 : SeededShuffle.Mix(itemGlobalId)));
 
             return (uint) s_combatSpells.Value.Map(spellTemplateId, seed);
         }
@@ -349,7 +351,7 @@ public static class Randomizer {
     /// What a piece of gear's cards are on this wizard's run (the game's tooltip still shows the gear's own), as
     /// "Card x2 (instead of Original)" per card, or null when the gear gives no cards or none are swapped.
     /// </summary>
-    internal static string DescribeRunItemCards(Wizard wizard, WizItemTemplate template) {
+    internal static string DescribeRunItemCards(Wizard wizard, WizItemTemplate template, ulong itemGlobalId = 0) {
         if (!RunItemCards || wizard?.Roguelike is null || template?.m_equipEffects is null) {
             return null;
         }
@@ -361,7 +363,7 @@ public static class Randomizer {
                 continue;
             }
 
-            var swappedId = MapRunItemCard(wizard, (uint) template.m_templateID, original.m_templateID);
+            var swappedId = MapRunItemCard(wizard, (uint) template.m_templateID, original.m_templateID, itemGlobalId);
             // An unusable card (Extract ... Animus) is given as a +100 damage enchantment.
             if (CoreObjectFactory.GetCoreTemplate(swappedId) is SpellTemplate given
                 && Imlight.CoreLib.Game.Spells.SpellFactory.GetSpell(UsableCardName(given.m_name)) is { } usable) {

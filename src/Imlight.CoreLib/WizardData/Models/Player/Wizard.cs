@@ -697,7 +697,7 @@ public class Wizard {
         // Debug log.
         Logger.Debug("{0} equips item {1}", Logger.Args(PlayerNameBehavior.GetWizardName(), itemId));
 
-        equipEffects = CharacterEffectHelper.AddEffectsToWizard(this, template);
+        equipEffects = CharacterEffectHelper.AddEffectsToWizard(this, template, inventoryItem.m_globalID.Full);
         EquipmentExtras.Refresh(this);
 
         return true;

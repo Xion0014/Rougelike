@@ -506,7 +506,7 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
                 var lines = new List<string>();
                 foreach (var item in wizard.EquipmentBehavior.EquippedItems ?? []) {
                     if (Imlight.CoreLib.Shared.Items.ItemHelper.GetItemTemplate(item) is { } gear
-                        && Imlight.CoreLib.Game.Randomization.Randomizer.DescribeRunItemCards(wizard, gear) is { } gearCards) {
+                        && Imlight.CoreLib.Game.Randomization.Randomizer.DescribeRunItemCards(wizard, gear, item.m_globalID.Full) is { } gearCards) {
                         string key = gear.m_displayName;
                         lines.Add($"{(string.IsNullOrEmpty(key) ? "Gear" : Imlight.CoreLib.Shared.Resources.Locale.GetEnglishName(key) ?? "Gear")}: {gearCards}");
                     }

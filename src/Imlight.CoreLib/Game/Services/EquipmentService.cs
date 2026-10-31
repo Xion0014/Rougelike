@@ -211,7 +211,7 @@ internal class EquipmentService(SessionActor sessionActor) : MessageService(sess
         SendCardEffectChanges(wizard);
 
         // On a run the gear's cards are swapped, while its tooltip shows its own: say what it really gives.
-        if (Imlight.CoreLib.Game.Randomization.Randomizer.DescribeRunItemCards(wizard, itemTemplate) is { } runCards) {
+        if (Imlight.CoreLib.Game.Randomization.Randomizer.DescribeRunItemCards(wizard, itemTemplate, item.m_globalID.Full) is { } runCards) {
             string gearKey = itemTemplate.m_displayName;
             var gearName = string.IsNullOrEmpty(gearKey) ? "This gear" : Locale.GetEnglishName(gearKey) ?? "This gear";
             InformGameClient($"{gearName} gives you on this run: {runCards}.");
