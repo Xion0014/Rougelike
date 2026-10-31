@@ -7,7 +7,7 @@
 ;   anything else     one change (leave a blank line between changes)
 ;   ; comment         not shown
 
-# Next update (in testing)
+# v3.0.10 (October 31, 2026)
 
 Q: New
 
