@@ -7,6 +7,12 @@
 ;   anything else     one change (leave a blank line between changes)
 ;   ; comment         not shown
 
+# Next update (in testing)
+
+Q: Fixed
+
+Marleybone's Ironworks is closed on a run. Fast wizards could reach it from tier 3's street, and the areas past Marleybone don't work on this server yet (their quests came twice). Walking in sends you back where you came from.
+
 # v3.0.0 (October 29, 2026) - Arc 3 Update
 
 Q: New

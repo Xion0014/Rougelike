@@ -211,7 +211,8 @@ internal static class RoguelikeConfig {
     internal static readonly bool BlockTravel = ConfigurationManager.GetValue("Roguelike.BlockTravel", true);
 
     internal static readonly HashSet<string> BlockedZones = new(
-        SplitList(ConfigurationManager.GetValue("Roguelike.BlockedZones", "WizardCity/WC_Hub, WizardCity/WC_Streets/WC_OldeTown")),
+        SplitList(ConfigurationManager.GetValue("Roguelike.BlockedZones",
+            "WizardCity/WC_Hub, WizardCity/WC_Streets/WC_OldeTown, Marleybone/MB_Station/MB_Ironworks")),
         StringComparer.OrdinalIgnoreCase);
 
     /// <summary>True when this wizard is on a run that keeps them to its own zones.</summary>
