@@ -15,6 +15,8 @@ Discord status: while you play, your Discord profile shows "Playing Spiral Gaunt
 
 Q: Changed
 
+The bug report button is gone from the game's screen, and the gift button works: the server no longer tells the game it is a test realm. (From Niduus's fork.)
+
 Run pets no longer get Fishing Luck, the wisp talents or energy talents, which do nothing on a run. Pets you already have lose them the next time you log in or change zones.
 
 Each piece of gear rolls its own cards: buy the same wand again and it can give different cards than the first. (Gear you already have rolls its cards anew once, the next time you put it on or log in.)

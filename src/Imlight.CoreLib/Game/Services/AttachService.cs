@@ -109,11 +109,10 @@ internal class AttachService(SessionActor sessionActor) : MessageService(session
         Gifting = 1 << 5,
 
         /// <summary>
-        /// Controls access to the Crowns Shop button on the player HUD.
-        /// If missing, the shop icon is disabled under parental spending locks.
-        /// (The client automatically bypasses this check when TestServer == 1).
+        /// Shows the bug report button (btnFeedback in HUDWindow.gui) on the player HUD.
+        /// The client shows it when TestServer == 1 or this bit is set; live realms leave it off. (Niduus's fork.)
         /// </summary>
-        CrownShopPurchasing = 1 << 6,
+        BugReporting = 1 << 6,
 
         /// <summary>
         /// Controls access to Player vs. Player (PvP) matches, tournaments,
@@ -170,7 +169,12 @@ internal class AttachService(SessionActor sessionActor) : MessageService(session
         /// </summary>
         FriendSocialActions = 1 << 16,
 
-        All = uint.MaxValue
+        All = uint.MaxValue,
+
+        /// <summary>
+        /// Everything a live realm player gets: all bits except the test realm bug report button.
+        /// </summary>
+        Live = All & ~BugReporting
     }
 
     protected static Props Props(SessionActor parentActor)
@@ -287,7 +291,7 @@ internal class AttachService(SessionActor sessionActor) : MessageService(session
             Data = Compression.CompressWithLength(localGameObjectData),
             IsCSR = _account.AuthLevel > AuthLevel.None ? 1 : 0, // todo: Change this back before prod!
 
-            Permissions = (uint) AccountPermissions.All,
+            Permissions = (uint) AccountPermissions.Live,
 
             // Set zone data.
             ZoneName = zoneName,
@@ -299,7 +303,9 @@ internal class AttachService(SessionActor sessionActor) : MessageService(session
 
             // Misc
             ShowSubscriberIcon = 0,
-            TestServer = 1,
+            // 0, like a live realm: 1 shows the bug report button on the HUD and blocks the gift button ("This is not
+            // accessible on the Test Realm"). (Niduus's fork.)
+            TestServer = 0,
 
             // Every captured login sends 1, in every zone; the client hides its Pick Up All button while it is 0.
             PickUpAllEnabled = 1
