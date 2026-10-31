@@ -15,6 +15,10 @@ Discord status: while you play, your Discord profile shows "Playing Spiral Gaunt
 
 Q: Changed
 
+Run pets no longer get Fishing Luck, the wisp talents or energy talents, which do nothing on a run. Pets you already have lose them the next time you log in or change zones.
+
+Pet jewels drop and are sold at RockHammer's at every level. Most have a low level or none, so they had stopped showing up past the early tiers.
+
 Boss cheats no longer crit, as in the real game (Belloq's cheat Ra could one-shot you with a critical). Settings, "Boss cheats can crit", turns it back on for a harder run.
 
 Q: Fixed

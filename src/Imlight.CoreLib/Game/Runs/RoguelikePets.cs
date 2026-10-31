@@ -144,7 +144,7 @@ internal static class RoguelikePets {
         try {
             foreach (var talent in PetData.AllTalents.OfType<PetTalentTemplate>()) {
                 var effects = talent.m_effectList ?? [];
-                if (effects.Count == 0 || string.IsNullOrEmpty(talent.m_talentName) || !Showable(talent)) {
+                if (effects.Count == 0 || string.IsNullOrEmpty(talent.m_talentName) || !Showable(talent) || LeftOut(talent)) {
                     continue;
                 }
 
@@ -160,6 +160,32 @@ internal static class RoguelikePets {
         Logger.Information("Roguelike: {0} stat talents for dropped pets.", Logger.Args(list.Count));
 
         return list;
+    }
+
+    /// <summary>
+    /// [Roguelike] PetTalentsLeftOut: words (comma-separated) that keep a talent off run pets when its name, its shown
+    /// name or one of its effects has one: fishing luck, the wisp talents and energy talents do nothing on a run.
+    /// </summary>
+    private static readonly string[] s_leftOut = (ConfigurationManager.GetValue("Roguelike.PetTalentsLeftOut", "Fish, Wisp, Energy") ?? "")
+        .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+    /// <summary>True when a name (a pet jewel's file, say) has one of the PetTalentsLeftOut words.</summary>
+    internal static bool LeftOutName(string name)
+        => !string.IsNullOrEmpty(name) && s_leftOut.Any(no => name.Contains(no, StringComparison.OrdinalIgnoreCase));
+
+    /// <summary>True for a talent run pets never get (PetTalentsLeftOut).</summary>
+    internal static bool LeftOut(PetTalentBaseTemplate talent) {
+        if (talent is null || s_leftOut.Length == 0) {
+            return false;
+        }
+
+        string name = talent.m_talentName;
+        string displayKey = talent.m_displayName;
+        var shown = string.IsNullOrEmpty(displayKey) ? "" : Imlight.CoreLib.Shared.Resources.Locale.GetEnglishName(displayKey) ?? "";
+        var effects = (talent as PetTalentTemplate)?.m_effectList?.OfType<StatisticEffectInfo>().Select(e => (string) e.m_effectName) ?? [];
+        var words = new[] { name ?? "", shown }.Concat(effects).ToList();
+
+        return s_leftOut.Any(no => words.Any(w => w.Contains(no, StringComparison.OrdinalIgnoreCase)));
     }
 
     /// <summary>
@@ -192,13 +218,15 @@ internal static class RoguelikePets {
                 continue;
             }
 
-            bool Bad(uint id) => PetData.GetTalent(id) is { } talent && !Showable(talent);
+            // On a run, the talents run pets never get (PetTalentsLeftOut) come off too.
+            var onRun = RoguelikeConfig.Enabled && wizard.Roguelike is not null;
+            bool Bad(uint id) => PetData.GetTalent(id) is { } talent && (!Showable(talent) || (onRun && LeftOut(talent)));
             removed += behavior.m_allTalents?.RemoveAll(Bad) ?? 0;
             removed += behavior.m_expressedTalents?.RemoveAll(Bad) ?? 0;
         }
 
         if (removed > 0) {
-            Logger.Information("Roguelike: took {0} talents the pet page cannot show off {1}'s pets.",
+            Logger.Information("Roguelike: took {0} talents (unshowable, or left out of run pets) off {1}'s pets.",
                 Logger.Args(removed, wizard.CharId));
         }
 

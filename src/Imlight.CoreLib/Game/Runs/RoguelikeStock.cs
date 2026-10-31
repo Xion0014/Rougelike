@@ -323,7 +323,7 @@ internal static class RoguelikeStock {
 
         // Shape by shape in turn, so pins (most of the high-level pool) don't crowd the jewels out.
         var byShape = s_jewels.Value
-            .Where(j => j.Level >= low && j.Level <= high)
+            .Where(j => j.Level <= high && (j.Level >= low || j.Shape == JewelSocketType.SOCKETTYPE_PET))
             .GroupBy(j => j.Shape)
             .Select(g => new Queue<JewelEntry>(g.OrderBy(_ => random.Next())))
             .OrderBy(_ => random.Next())
@@ -508,7 +508,8 @@ internal static class RoguelikeStock {
                         && (string.IsNullOrEmpty(shape)
                             || Imlight.CoreLib.Shared.Items.JewelSockets.ShapeName(j.Shape).Contains(shape, StringComparison.OrdinalIgnoreCase)))
             .ToList();
-        var fits = ofShapeAsked.Where(j => j.Level >= low).ToList();
+        // Pet jewels count at any level up to the wizard's: many have a low level or none, and would never drop late.
+        var fits = ofShapeAsked.Where(j => j.Level >= low || j.Shape == JewelSocketType.SOCKETTYPE_PET).ToList();
         if (fits.Count == 0 && ofShapeAsked.Count > 0) {
             var best = ofShapeAsked.Max(j => j.Level);
             fits = [.. ofShapeAsked.Where(j => j.Level >= best - s_levelsBelow)];
@@ -552,7 +553,10 @@ internal static class RoguelikeStock {
                     // Developer test jewels ("TESTING PURPOSES", the ...TEST jewels).
                     || IsTestItem(path, template)
                     // Crown-only and no-trade jewels stay out, like crown gear in the gold shops.
-                    || IsCrownItem(id)) {
+                    || IsCrownItem(id)
+                    // Pet jewels of the talents run pets never get (fishing luck, wisps, energy).
+                    || (Imlight.CoreLib.Shared.Items.JewelSockets.GetShape(template) == JewelSocketType.SOCKETTYPE_PET
+                        && RoguelikePets.LeftOutName(System.IO.Path.GetFileName(path)))) {
                     continue;
                 }
 
@@ -563,7 +567,8 @@ internal static class RoguelikeStock {
             Logger.Error("Roguelike could not build the jewel pool. {0}", Logger.Args(ex.Message));
         }
 
-        Logger.Information("Roguelike: {0} jewels and pins can drop.", Logger.Args(list.Count));
+        Logger.Information("Roguelike: {0} jewels and pins can drop ({1}).", Logger.Args(list.Count,
+            string.Join(", ", list.GroupBy(j => j.Shape).Select(g => $"{Imlight.CoreLib.Shared.Items.JewelSockets.ShapeName(g.Key)} {g.Count()}, levels {g.Min(j => j.Level)}-{g.Max(j => j.Level)}"))));
 
         return list;
     }
