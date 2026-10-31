@@ -19,6 +19,8 @@ Boss cheats no longer crit, as in the real game (Belloq's cheat Ra could one-sho
 
 Q: Fixed
 
+Global spells (Balefrost, Wyldfire and the other bubbles) work: casting one passed your turn instead of putting the bubble up. (Ported from Niduus's fork.)
+
 Marleybone's Ironworks is closed on a run. Fast wizards could reach it from tier 3's street, and the areas past Marleybone don't work on this server yet (their quests came twice). Walking in sends you back where you came from.
 
 # v3.0.0 (October 29, 2026) - Arc 3 Update

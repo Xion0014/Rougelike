@@ -106,6 +106,7 @@ internal static class CombatActionResolver {
         }
 
         var critEligibleTargetSlots = new List<int>();
+        var isGlobal = false;
 
         // The effects to go off, in order. A conditional effect ("if the target has a charm...") is replaced, when it
         // is reached, by the effect of its first element whose requirements hold, for the participant it was checked on.
@@ -191,6 +192,17 @@ internal static class CombatActionResolver {
 
             charmsAffectingThisSpell = CombatCharms.FindAppliedCharms(action.SpellCaster, [.. allEffects]);
 
+            // A global (a bubble such as Balefrost) has no targets: it goes on the battlefield. It used to stop at the
+            // empty target list below, so the card was thrown away as "not worth casting" and the wizard passed.
+            // (Ported from Niduus's fork.)
+            if (chosenEffect.m_effectTarget == kEffectTarget.kGlobal) {
+                spellWorthCasting = true;
+                isGlobal = true;
+                cinematicTime += CombatEffectApplicator.ApplyEffect(chosenEffect, [], action.SpellCaster, []);
+
+                continue;
+            }
+
             var targets = GetEffectTargets(chosenEffect, action.SpellCaster, selectedTarget);
             // Inside a team-wide conditional, a team-wide effect goes only on the participant the condition held for.
             if (onlyTarget is not null && IsGroupTarget(chosenEffect.m_effectTarget)) {
@@ -249,6 +261,12 @@ internal static class CombatActionResolver {
         combatAction.m_handledRandomSpellPerTarget = true;
 
         CheckForPolarCombatActionTargets(ref combatAction, action.SpellTemplate);
+
+        // A global still needs a target in the action: with none the game casts it and then drops it, so the bubble
+        // never shows. It goes on the caster, as a self spell (Niduus's fork).
+        if (isGlobal && combatAction.m_targetSubcircleList is { Count: 0 } && action.SpellCaster is not null) {
+            combatAction.m_targetSubcircleList.Add(action.SpellCaster.SlotIndex);
+        }
 
         return spellWorthCasting;
     }
