@@ -7,7 +7,7 @@
 ;   anything else     one change (leave a blank line between changes)
 ;   ; comment         not shown
 
-# v3.0.10 (October 31, 2026)
+# v3.1.0 (October 31, 2026) - Discord and Polish Update
 
 Q: New
 
