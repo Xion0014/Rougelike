@@ -7,6 +7,18 @@
 ;   anything else     one change (leave a blank line between changes)
 ;   ; comment         not shown
 
+# Next update (in testing)
+
+Q: Fixed
+
+Hits now take the same damage on the server as the game shows. Stacked blades, traps and shields used to count as just one each on the server (they carried no spell id), so a big hit the game showed as a kill (270,874 on Medulla) only did a few thousand and the boss lived. Every blade, trap and shield now counts (still one of each spell, as in the game), and only the ones a hit uses go away: a second copy of the same shield stays.
+
+Pierce now works on the server: gear, potions, spears and the card's own pierce go through shields first and then the target's resist. Before, the server never used it.
+
+Prisms change the hit's school again; the server read their school wrong and set them off for any school. Charm and ward removals (and steals) find the charms and wards they should.
+
+Damage over time ticks no longer run through a random shield or trap each round.
+
 # v3.1.0 (October 31, 2026) - Discord and Polish Update
 
 Q: New

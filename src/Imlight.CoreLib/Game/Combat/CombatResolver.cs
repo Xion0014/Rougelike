@@ -797,12 +797,11 @@ public partial class CombatResolver(Duel duel, CombatDuelSubCircle[] actorSubCir
 
         foreach (var effect in dotEffects) {
             var initialDamage = effect.m_paramPerRound;
-            var wards = CombatWards.FindAppliedWards(caster, effect).ToList();
-            var damage = CombatWards.GetIncomingDamageFromWards(wards, initialDamage);
+            // A tick's damage was set when the spell was cast: shields and traps do not change it (as in the game).
+            // It used to run each tick through one ward of any school without using it up.
+            var damage = initialDamage;
 
             // We don't need to calculate stats from gear because the initial application already did that.
-
-            cinematicTime += HANGING_EFFECT_CONSUME_TIME * wards.Count;
             caster.DamageParticipant(damage);
             effect.m_numRounds--;
 

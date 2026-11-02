@@ -240,7 +240,8 @@ internal static class CombatActionResolver {
                                                                 [.. charmsAffectingThisSpell],
                                                                 action.SpellCaster,
                                                                 targets,
-                                                                critMultiplier);
+                                                                critMultiplier,
+                                                                action.Spell?.m_templateID ?? 0);
         }
 
         if (critEligibleTargetSlots.Count > 0) {
@@ -256,7 +257,8 @@ internal static class CombatActionResolver {
         }
 
         // Remove all charms that were applied to this spell from the caster's hanging effects.
-        action.SpellCaster._hangingEffects.RemoveAll(x => charmsAffectingThisSpell.Contains(x));
+        // Only these exact charms go (by reference): a second copy of the same blade stays for the next spell.
+        CombatCharms.RemoveExact(action.SpellCaster._hangingEffects, charmsAffectingThisSpell);
         combatAction.m_effectChosen = effectStack.GetStackAsUint();
         combatAction.m_handledRandomSpellPerTarget = true;
 

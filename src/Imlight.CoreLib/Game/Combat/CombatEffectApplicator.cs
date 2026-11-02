@@ -39,6 +39,7 @@
 
 using Imcodec.ObjectProperty.TypeCache;
 using Imlight.Common;
+using Imlight.CoreLib.Game.Spells;
 using System;
 using System.Linq;
 
@@ -69,7 +70,8 @@ internal static class CombatEffectApplicator {
                                       SpellEffect[] charms,
                                       CombatDuelSubCircle caster,
                                       CombatDuelSubCircle[] targets,
-                                      float critMultiplier = 1) {
+                                      float critMultiplier = 1,
+                                      uint spellTemplateId = 0) {
         var cinematicTime = 0.0f;
 
         if (effect.m_effectTarget == kEffectTarget.kGlobal) {
@@ -109,7 +111,7 @@ internal static class CombatEffectApplicator {
             case kSpellEffects.kAbsorbDamage:
             case kSpellEffects.kCritBoost:
             case kSpellEffects.kCritBlock:
-                ApplyHangingEffect(effect, targets);
+                ApplyHangingEffect(effect, targets, spellTemplateId);
                 break;
             case kSpellEffects.kStun:
                 cinematicTime += ApplyStunEffect(effect, targets);
@@ -287,21 +289,29 @@ internal static class CombatEffectApplicator {
         // wards and resist still reduce it.
         damageFromCaster = (int) Math.Floor(damageFromCaster * critMultiplier);
 
+        // Pierce (armor piercing) goes through the target's shields first, then what is left through its resist.
+        var pierce = OutgoingPierce(effect, charms, caster);
+
         // Apply damage to each target
         var damageDealt = 0;
         foreach (var target in targets) {
+            if (target?._hangingEffects is null) {
+                continue;
+            }
+
             var damage = damageFromCaster;
+            var pierceLeft = pierce;
 
             // Calculate damage changes from target hanging effects.
             var wards = CombatWards.FindAppliedWards(target, effect);
             wards = CombatWards.GetWardsBySchool([.. wards], effect.m_sDamageType, out var finalSchool);
             cinematicTime += wards.Count * HANGING_EFFECT_CONSUME_TIME;
-            damage = CombatWards.GetIncomingDamageFromWards(wards, damage);
+            damage = CombatWards.GetIncomingDamageFromWards(wards, damage, ref pierceLeft);
 
-            damageDealt += DoDamageToTarget(target, damage, finalSchool);
+            damageDealt += DoDamageToTarget(target, damage, finalSchool, pierceLeft);
 
-            // Remove the wards that were applied to this spell from the target's hanging effects.
-            target._hangingEffects.RemoveAll(x => wards.Contains(x) && x.m_paramPerRound <= 0);
+            // The shields, traps and prism this hit used go; an absorb stays until it is used up.
+            CombatWards.Consume(target, wards);
         }
 
         return (cinematicTime, damageDealt);
@@ -349,13 +359,11 @@ internal static class CombatEffectApplicator {
         var charmRemoveCount = effect.m_effectParam == -1 ? effect.m_effectParam = int.MaxValue : effect.m_effectParam;
 
         foreach (var target in targets) {
-            var hangingEffects = target._hangingEffects.ToArray();
-            var charmsInQuesiton = CombatCharms.FindAppliedCharms(target, hangingEffects, effect.m_disposition)
-                                               .Take(charmRemoveCount);
+            var charmsInQuesiton = CombatCharms.All(target, effect.m_disposition).Take(charmRemoveCount).ToList();
 
-            cinematicTime += charmsInQuesiton.Count() * HANGING_EFFECT_CONSUME_TIME;
+            cinematicTime += charmsInQuesiton.Count * HANGING_EFFECT_CONSUME_TIME;
 
-            target._hangingEffects.RemoveAll(x => charmsInQuesiton.Contains(x));
+            CombatCharms.RemoveExact(target._hangingEffects, charmsInQuesiton);
         }
 
         return cinematicTime;
@@ -369,13 +377,14 @@ internal static class CombatEffectApplicator {
 
         foreach (var target in targets) {
             // Remove all wards except for stun blocks.
-            var wards = CombatWards.FindAppliedWards(target, effect)
+            var wards = CombatWards.All(target, effect.m_disposition)
                                    .Where(x => x.m_effectType != kSpellEffects.kStunBlock)
-                                   .Take(wardRemoveCount);
+                                   .Take(wardRemoveCount)
+                                   .ToList();
 
-            cinematicTime += wards.Count() * HANGING_EFFECT_CONSUME_TIME;
+            cinematicTime += wards.Count * HANGING_EFFECT_CONSUME_TIME;
 
-            target._hangingEffects.RemoveAll(x => wards.Contains(x));
+            CombatCharms.RemoveExact(target._hangingEffects, wards);
         }
 
         return cinematicTime;
@@ -390,13 +399,11 @@ internal static class CombatEffectApplicator {
         // This is the same as the remove charm function, but we're moving the charms from the target to the caster.
 
         foreach (var target in targets) {
-            var hangingEffects = target._hangingEffects.ToArray();
-            var charmsInQuesiton = CombatCharms.FindAppliedCharms(target, hangingEffects, effect.m_disposition)
-                                               .Take(charmRemoveCount);
+            var charmsInQuesiton = CombatCharms.All(target, effect.m_disposition).Take(charmRemoveCount).ToList();
 
-            cinematicTime += charmsInQuesiton.Count() * HANGING_EFFECT_CONSUME_TIME;
+            cinematicTime += charmsInQuesiton.Count * HANGING_EFFECT_CONSUME_TIME;
 
-            target._hangingEffects.RemoveAll(x => charmsInQuesiton.Contains(x));
+            CombatCharms.RemoveExact(target._hangingEffects, charmsInQuesiton);
             caster._hangingEffects.AddRange(charmsInQuesiton);
         }
 
@@ -412,26 +419,32 @@ internal static class CombatEffectApplicator {
         // This is the same as the remove ward function, but we're moving the wards from the target to the caster.
 
         foreach (var target in targets) {
-            var wards = CombatWards.FindAppliedWards(target, effect)
-                                   .Take(wardRemoveCount);
+            var wards = CombatWards.All(target, effect.m_disposition)
+                                   .Take(wardRemoveCount)
+                                   .ToList();
 
-            cinematicTime += wards.Count() * HANGING_EFFECT_CONSUME_TIME;
+            cinematicTime += wards.Count * HANGING_EFFECT_CONSUME_TIME;
 
-            target._hangingEffects.RemoveAll(x => wards.Contains(x));
+            CombatCharms.RemoveExact(target._hangingEffects, wards);
             caster._hangingEffects.AddRange(wards);
         }
 
         return cinematicTime;
     }
 
-    private static void ApplyHangingEffect(SpellEffect effect, CombatDuelSubCircle[] targets) {
+    // Each target gets its own copy, carrying the spell's id: charms and wards count one of each spell, and a shared
+    // object let one target's absorb or removal change another's.
+    private static void ApplyHangingEffect(SpellEffect effect, CombatDuelSubCircle[] targets, uint spellTemplateId) {
+        var id = spellTemplateId != 0 ? spellTemplateId : effect.m_spellTemplateID;
         foreach (var target in targets) {
-            // If this is an absorb ward, set the initial value.
-            if (effect.m_effectType == kSpellEffects.kAbsorbDamage) {
-                effect.m_paramPerRound = effect.m_effectParam;
+            if (target?._hangingEffects is not { } hanging) {
+                continue;
             }
 
-            target._hangingEffects.Add(effect);
+            hanging.Add(effect with {
+                m_spellTemplateID = id,
+                m_paramPerRound = effect.m_effectType == kSpellEffects.kAbsorbDamage ? effect.m_effectParam : effect.m_paramPerRound,
+            });
         }
     }
 
@@ -547,10 +560,13 @@ internal static class CombatEffectApplicator {
         return heal;
     }
 
-    private static int DoDamageToTarget(CombatDuelSubCircle target, int damage, string damageType) {
-        // Calculate damage reduction from target stats
+    private static int DoDamageToTarget(CombatDuelSubCircle target, int damage, string damageType, float pierce = 0) {
+        // Calculate damage reduction from target stats; pierce lowers resist down to zero (a weakness stays).
         var damageReductionFlat = GetFlatDamageReduction(target, damageType);
         var damageReductionPercent = GetPercentDamageReduction(target, damageType);
+        if (damageReductionPercent > 0 && pierce > 0) {
+            damageReductionPercent = Math.Max(0f, damageReductionPercent - pierce);
+        }
         var reducedDamage = (int) Math.Floor(damage * (1 - damageReductionPercent) - damageReductionFlat);
 
         // Ensure that damage isn't negative.
@@ -587,6 +603,23 @@ internal static class CombatEffectApplicator {
         damagePercentIncrease = Math.Min(damagePercentIncrease, DAMAGE_PERCENT_MAX);
 
         return damagePercentIncrease;;
+    }
+
+    /// <summary>
+    /// The caster's pierce for a damage effect, as a fraction 0 to 1: gear and potions (m_apBonusPercent), spears on
+    /// the caster and the card's own pierce. Nothing in battle read pierce before.
+    /// </summary>
+    private static float OutgoingPierce(SpellEffect effect, SpellEffect[] charms, CombatDuelSubCircle caster) {
+        var stats = caster?.ParticipantGameStats;
+        var pierce = 0f;
+        if (stats is not null && MagicSchools.GetMagicSchool(effect.m_sDamageType) is not null) {
+            pierce += caster.GetStatBySchool(stats.m_apBonusPercent, effect.m_sDamageType) + stats.m_apBonusPercentAll;
+        }
+
+        pierce += charms.Where(c => c.m_effectType == kSpellEffects.kModifyOutgoingArmorPiercing).Sum(c => c.m_effectParam) / 100f;
+        pierce += effect.m_armorPiercingParam / 100f;
+
+        return Math.Clamp(pierce, 0f, 1f);
     }
 
     private static float GetFlatDamageReduction(CombatDuelSubCircle target, string damageType) {

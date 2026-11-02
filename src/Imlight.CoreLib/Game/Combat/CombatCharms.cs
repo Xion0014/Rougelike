@@ -54,71 +54,115 @@ namespace Imlight.CoreLib.Game.Combat;
 internal static class CombatCharms {
 
     /// <summary>
-    /// Finds the applied charms from the given array of spell effects based on the caster.
+    /// The charms on the caster that change the spell's effects: for damage the blades, weaknesses and spears of its
+    /// school (or of all schools), for a heal the heal charms. One of each spell counts, as in the game.
     /// </summary>
-    /// <param name="caster">The combat duel actor sub-circle representing the caster.</param>
-    /// <param name="effects">The array of spell effects to search for applied charms.</param>
-    /// <returns>A list of spell effects representing the applied charms.</returns>
+    /// <remarks>
+    /// Charms used to carry no spell id, so "one of each spell" kept just one charm in all: a stack of blades counted
+    /// as one on the server while the game counted them all (Medulla took a fraction of the damage the game showed).
+    /// </remarks>
     internal static List<SpellEffect> FindAppliedCharms(CombatDuelSubCircle caster,
                                                         SpellEffect[] effects,
                                                         kHangingDisposition disposition = kHangingDisposition.kBoth) {
-        var appliedCharms = new List<SpellEffect>();
+        if (caster?._hangingEffects is not { } hanging) {
+            return [];
+        }
 
+        var appliedCharms = new List<SpellEffect>();
         foreach (var effect in effects) {
+            if (effect is null) {
+                continue;
+            }
+
             var isDamageEffect = effect.m_effectType is kSpellEffects.kDamage
                                                      or kSpellEffects.kDamageOverTime
                                                      or kSpellEffects.kDamageNoCrit
                                                      or kSpellEffects.kDamagePerTotalPipPower
                                                      or kSpellEffects.kDivideDamage
                                                      or kSpellEffects.kStealHealth;
-            var isHealEffect = effect.m_effectType is (kSpellEffects) 3 or (kSpellEffects) 76;
-
-            // Choose the beneficial or harmful charms based on the disposition.
-            var beneficialCharms = GetBeneficialCharms(caster);
-            var harmfulCharms = GetHarmfulCharms(caster);
-            var charms = disposition switch {
-                kHangingDisposition.kBeneficial => beneficialCharms,
-                kHangingDisposition.kHarmful => harmfulCharms,
-                _ => [.. beneficialCharms.Concat(harmfulCharms).Reverse()]
-            };
+            var isHealEffect = effect.m_effectType is kSpellEffects.kHeal or kSpellEffects.kHealOverTime;
 
             if (isDamageEffect) {
-                appliedCharms = [.. beneficialCharms
-                    .Where(x => x.m_sDamageType == effect.m_sDamageType || x.m_sDamageType == "All")
-                    .Concat(harmfulCharms.Where(x => x.m_sDamageType == effect.m_sDamageType || x.m_sDamageType == "All"))
-                    .Reverse()];
+                appliedCharms = [.. hanging.Where(x => x is not null
+                    && x.m_effectType is kSpellEffects.kModifyOutgoingDamage or kSpellEffects.kModifyOutgoingDamageFlat
+                                         or kSpellEffects.kModifyOutgoingArmorPiercing
+                    && SchoolMatches(x.m_sDamageType, effect.m_sDamageType))];
             }
             else if (isHealEffect) {
-                appliedCharms = [.. beneficialCharms.Where(x => x.m_effectType is kSpellEffects.kModifyOutgoingHeal
-                                                                           or kSpellEffects.kModifyOutgoingHealFlat)
-                                                .Reverse()];
+                appliedCharms = [.. hanging.Where(x => x is not null
+                    && x.m_effectType is kSpellEffects.kModifyOutgoingHeal or kSpellEffects.kModifyOutgoingHealFlat)];
             }
         }
 
-        return [.. appliedCharms.DistinctBy(x => x.m_spellTemplateID)];
+        return OnePerSpell(appliedCharms.Where(x => Disposed(x, disposition)));
     }
 
     /// <summary>
-    /// Calculates the outgoing damage from the given array of charms and initial damage.
+    /// Every charm on the participant of a disposition, newest first: what a charm removal or steal takes.
     /// </summary>
-    /// <param name="charms">The array of spell effects representing the charms.</param>
-    /// <param name="initialDamage">The initial damage value.</param>
-    /// <returns>The calculated outgoing damage.</returns>
+    internal static List<SpellEffect> All(CombatDuelSubCircle target, kHangingDisposition disposition = kHangingDisposition.kBoth)
+        => target?._hangingEffects is { } hanging
+            ? [.. hanging.Where(x => x is not null && CombatRequirements.IsCharm(x) && Disposed(x, disposition)).Reverse()]
+            : [];
+
+    internal static bool Disposed(SpellEffect effect, kHangingDisposition disposition) => disposition switch {
+        kHangingDisposition.kBeneficial => CombatRequirements.IsBeneficial(effect),
+        kHangingDisposition.kHarmful => !CombatRequirements.IsBeneficial(effect),
+        _ => true,
+    };
+
+    /// <summary>A charm or ward of <paramref name="modifierSchool"/> changes a spell of <paramref name="school"/>.</summary>
+    internal static bool SchoolMatches(string modifierSchool, string school)
+        => string.Equals(modifierSchool, "All", StringComparison.OrdinalIgnoreCase)
+           || string.Equals(modifierSchool, school, StringComparison.OrdinalIgnoreCase);
+
+    /// <summary>
+    /// Keeps the first of each spell's modifiers. One with no spell id (a boss cheat's, say) counts as its own.
+    /// </summary>
+    internal static List<SpellEffect> OnePerSpell(IEnumerable<SpellEffect> effects) {
+        var seen = new HashSet<uint>();
+        var kept = new List<SpellEffect>();
+        foreach (var effect in effects) {
+            if (effect.m_spellTemplateID == 0 || seen.Add(effect.m_spellTemplateID)) {
+                kept.Add(effect);
+            }
+        }
+
+        return kept;
+    }
+
+    /// <summary>
+    /// Takes these exact effects off the participant (by reference, one entry each). Comparing by value took off every
+    /// identical copy at once: two Tower Shields went when one was used.
+    /// </summary>
+    internal static void RemoveExact(List<SpellEffect> hanging, IEnumerable<SpellEffect> effects) {
+        if (hanging is null) {
+            return;
+        }
+
+        foreach (var effect in effects.ToList()) {
+            var index = hanging.FindIndex(x => ReferenceEquals(x, effect));
+            if (index >= 0) {
+                hanging.RemoveAt(index);
+            }
+        }
+    }
+
+    /// <summary>
+    /// The outgoing damage once the charms are applied: each percent charm multiplies, then flat ones add. Spears and
+    /// heal charms do not change damage.
+    /// </summary>
     internal static int GetOutgoingDamageFromCharms(SpellEffect[] charms, int initialDamage = 0) {
-        foreach (var charm in charms) {
+        foreach (var charm in charms.Where(c => c.m_effectType == kSpellEffects.kModifyOutgoingDamage)) {
             var damageChange = charm.m_effectParam / 100.0f;
             initialDamage = (int) Math.Floor(initialDamage * (1 + damageChange));
         }
 
-        return initialDamage;
+        foreach (var charm in charms.Where(c => c.m_effectType == kSpellEffects.kModifyOutgoingDamageFlat)) {
+            initialDamage += charm.m_effectParam;
+        }
+
+        return Math.Max(0, initialDamage);
     }
 
-    private static IEnumerable<SpellEffect> GetBeneficialCharms(CombatDuelSubCircle target) => target._hangingEffects
-            .Where(x => x.m_effectType is kSpellEffects.kModifyOutgoingDamage && x.m_effectParam > 0
-                                       || x.m_effectType == kSpellEffects.kModifyOutgoingHeal
-                                       || x.m_effectType == kSpellEffects.kModifyOutgoingHealFlat);
-
-    private static IEnumerable<SpellEffect> GetHarmfulCharms(CombatDuelSubCircle target) => target._hangingEffects
-            .Where(x => x.m_effectType is kSpellEffects.kModifyOutgoingDamage && x.m_effectParam < 0);
-            
 }
