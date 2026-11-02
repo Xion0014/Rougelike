@@ -7,7 +7,7 @@
 ;   anything else     one change (leave a blank line between changes)
 ;   ; comment         not shown
 
-# Next update (in testing)
+# v3.1.3 (November 2, 2026) - Damage Fix
 
 Q: Fixed
 
