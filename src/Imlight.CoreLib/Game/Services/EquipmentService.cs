@@ -164,13 +164,9 @@ internal class EquipmentService(SessionActor sessionActor) : MessageService(sess
                     }
                 }
 
-                EquipItem(new GAME_5_PROTOCOL.MSG_EQUIPITEM { ItemID = item.m_globalID, SlotName = slot.SlotType.ToString(), IsEquip = 1 });
+                EquipItem(new GAME_5_PROTOCOL.MSG_EQUIPITEM { ItemID = item.m_globalID, SlotName = slot.SlotType.ToString(), IsEquip = 1 },
+                          shadowWear: true);
                 Logger.Information("[Shadow] {0}: put on {1} for them ({2}).", Logger.Args(wizard.CharId, template.m_templateID, slot.SlotType));
-                if (wizard.EquipmentBehavior.HasItemEquipped(item.m_globalID)) {
-                    string key = template.m_displayName;
-                    var name = string.IsNullOrEmpty(key) ? "your new gear" : Locale.GetEnglishName(key) ?? "your new gear";
-                    InformGameClient($"Shadow: you put on {name}. Shadow wizards can wear any school's gear; the game shows it as school only.");
-                }
             }
 
             RememberBackpack(wizard);
@@ -217,7 +213,9 @@ internal class EquipmentService(SessionActor sessionActor) : MessageService(sess
         }
     }
 
-    private void EquipItem(GAME_5_PROTOCOL.MSG_EQUIPITEM message) {
+    /// <param name="shadowWear">Set when the server puts a Shadow wizard's gear on for them: the one message they get
+    /// says so, and what the gear's cards are on this run, instead of two boxes drawn over each other.</param>
+    private void EquipItem(GAME_5_PROTOCOL.MSG_EQUIPITEM message, bool shadowWear = false) {
         var wizard = GetActiveWizard();
         var account = GetActiveAccount();
         var itemId = message.ItemID;
@@ -290,9 +288,19 @@ internal class EquipmentService(SessionActor sessionActor) : MessageService(sess
         SendCardEffectChanges(wizard);
 
         // On a run the gear's cards are swapped, while its tooltip shows its own: say what it really gives.
-        if (Imlight.CoreLib.Game.Randomization.Randomizer.DescribeRunItemCards(wizard, itemTemplate, item.m_globalID.Full) is { } runCards) {
-            string gearKey = itemTemplate.m_displayName;
-            var gearName = string.IsNullOrEmpty(gearKey) ? "This gear" : Locale.GetEnglishName(gearKey) ?? "This gear";
+        var runCards = Imlight.CoreLib.Game.Randomization.Randomizer.DescribeRunItemCards(wizard, itemTemplate, item.m_globalID.Full);
+        string gearKey = null;
+        if (itemTemplate is not null) {
+            gearKey = itemTemplate.m_displayName;
+        }
+
+        var gearName = string.IsNullOrEmpty(gearKey) ? "This gear" : Locale.GetEnglishName(gearKey) ?? "This gear";
+        if (shadowWear) {
+            InformGameClient(runCards is null
+                ? $"Put on {gearName} (Shadow wizards wear any school's gear)."
+                : $"Put on {gearName} (Shadow wizards wear any school's gear). Its cards on this run: {runCards}.");
+        }
+        else if (runCards is not null) {
             InformGameClient($"{gearName} gives you on this run: {runCards}.");
         }
 
