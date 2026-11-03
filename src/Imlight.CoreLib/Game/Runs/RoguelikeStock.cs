@@ -1029,7 +1029,7 @@ internal static class RoguelikeStock {
                 pool[slot] = list = [];
             }
 
-            list.Add(new GearEntry((uint) id, level, school ?? "", item.m_baseCost, worldIds.Contains(id)));
+            list.Add(new GearEntry((uint) id, level, school ?? "", (long) item.m_baseCost, worldIds.Contains(id)));
         }
 
         // World gear priced far above what vendors and drops ask at its level is a developer or test piece (a level 1
