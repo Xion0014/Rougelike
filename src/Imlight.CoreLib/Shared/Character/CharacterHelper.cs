@@ -99,6 +99,9 @@ internal static class CharacterHelper {
         // A roguelike run's stat potions.
         Imlight.CoreLib.Game.Runs.RoguelikeBoosts.ApplyTo(wizard);
 
+        // A Shadow wizard masters every school (power pips count double for any school's cards).
+        Imlight.CoreLib.Game.Runs.ShadowSchool.GiveMastery(wizard.GameStats);
+
         // Check for level/XP mismatches, but don't modify XP on login.
         // Any mismatch will be corrected on the next XP gain.
         var xp = wizard.MagicSchoolBehavior.ExperiencePoints;
@@ -131,8 +134,14 @@ internal static class CharacterHelper {
             school = s_primarySchools[Random.Shared.Next(s_primarySchools.Length)];
             nameIndices = Imlight.CoreLib.Shared.Resources.WizardNameBank.RandomNameKeys(wizardAvatar.m_eGender, nameIndices);
         }
+        // 3.2: the launcher's "Next new wizard is Shadow" makes this one a Shadow wizard, whatever was picked or rolled.
+        if (Imlight.CoreLib.Game.Runs.ShadowSchool.TakeNextWizard()) {
+            school = MagicSchool.Shadow;
+        }
+
         var character = new Wizard(school, wizardAvatar, nameIndices);
         Randomizer.GiveStartingSpells(character);
+        Imlight.CoreLib.Game.Runs.RoguelikeStock.GiveShadowStartingSpells(character);
 
         return character;
     }

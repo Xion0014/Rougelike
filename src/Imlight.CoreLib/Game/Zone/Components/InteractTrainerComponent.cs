@@ -123,7 +123,13 @@ internal sealed class InteractTrainerComponent(ZoneEntity entity) : ZoneEntityCo
     /// True for spells players should never get: developer and test cards, monster and boss fight spells, and spells
     /// that only work in one place (gardening, fishing, minigames and the like).
     /// </summary>
-    internal static bool IsDevOrMonsterSpell(string path, SpellTemplate spell) {
+    internal static bool IsDevOrMonsterSpell(string path, SpellTemplate spell) => IsDevOrMonsterSpell(path, spell, allowBoss: false);
+
+    /// <summary>
+    /// <see cref="IsDevOrMonsterSpell(string, SpellTemplate)"/>, with monster and boss fight spells let through when
+    /// <paramref name="allowBoss"/> (a Shadow wizard's Shadow spells are mostly boss spells).
+    /// </summary>
+    internal static bool IsDevOrMonsterSpell(string path, SpellTemplate spell, bool allowBoss) {
         string name = spell?.m_name;
         if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(path)) {
             return true;
@@ -136,7 +142,7 @@ internal sealed class InteractTrainerComponent(ZoneEntity entity) : ZoneEntityCo
 
         if (s_skippedFolders.Any(folder => path.Contains(folder, System.StringComparison.OrdinalIgnoreCase))
             || s_devFolders.Any(folder => path.Contains(folder, System.StringComparison.OrdinalIgnoreCase))
-            || IsBossSpell(path, name)
+            || (!allowBoss && IsBossSpell(path, name))
             || System.Text.RegularExpressions.Regex.IsMatch(name, @"\b(DEV|Dev|Test|TEST|Debug|GM|Kill All|KillAll)\b")
             || name.Contains("Defeat", System.StringComparison.OrdinalIgnoreCase)) {
             return true;

@@ -128,6 +128,10 @@ internal static class RoguelikeStock {
     private static readonly Lazy<List<SpellEntry>> s_spells
         = new(BuildSpellPool, LazyThreadSafetyMode.ExecutionAndPublication);
 
+    // Every Shadow-school spell a player can use, the boss ones included: a Shadow wizard's own spells (ShadowSchool).
+    private static readonly Lazy<List<SpellEntry>> s_shadowSpells
+        = new(BuildShadowSpellPool, LazyThreadSafetyMode.ExecutionAndPublication);
+
     // The spells of the test trainers a run retires (Mr. Lincoln, Mellori, Merle Ambrose), for the random trainers.
     private static readonly Lazy<List<SpellEntry>> s_retiredSpells
         = new(BuildRetiredSpellPool, LazyThreadSafetyMode.ExecutionAndPublication);
@@ -377,6 +381,8 @@ internal static class RoguelikeStock {
 
     private static bool IsWearableBy(string itemSchool, string wizardSchool)
         => string.IsNullOrEmpty(itemSchool)
+           // A Shadow wizard wears every school's gear.
+           || wizardSchool.Equals(nameof(Imlight.CoreLib.Shared.Behaviors.MagicSchool.Shadow), StringComparison.OrdinalIgnoreCase)
            || itemSchool.Equals("Any", StringComparison.OrdinalIgnoreCase)
            || itemSchool.Equals("All", StringComparison.OrdinalIgnoreCase)
            || itemSchool.Equals(wizardSchool, StringComparison.OrdinalIgnoreCase);
@@ -406,10 +412,25 @@ internal static class RoguelikeStock {
         var random = new Random(Seed(wizard, "trainer", trainerTemplateId));
         var normal = new Queue<SpellEntry>(s_spells.Value.OrderBy(_ => random.Next()));
         var special = new Queue<SpellEntry>(s_retiredSpells.Value.OrderBy(_ => random.Next()));
+        // A Shadow wizard's trainers teach Shadow spells too (ShadowSpellShare % of picks).
+        var shadow = new Queue<SpellEntry>(ShadowSchool.Is(wizard) ? [.. s_shadowSpells.Value.OrderBy(_ => random.Next())] : new List<SpellEntry>());
         var picks = new List<SpellEntry>();
         var seen = new HashSet<uint>();
 
-        while (picks.Count < count && (normal.Count > 0 || special.Count > 0)) {
+        while (picks.Count < count && (normal.Count > 0 || special.Count > 0 || shadow.Count > 0)) {
+            if (shadow.Count > 0 && (normal.Count == 0 && special.Count == 0 || random.Next(100) < ShadowSchool.SpellShare)) {
+                var shadowPick = shadow.Dequeue();
+                if (seen.Add(shadowPick.Id)) {
+                    picks.Add(shadowPick);
+                }
+
+                continue;
+            }
+
+            if (normal.Count == 0 && special.Count == 0) {
+                break;
+            }
+
             var fromSpecial = special.Count > 0 && (normal.Count == 0 || random.Next(100) < s_retiredSpellShare);
             var pick = (fromSpecial ? special : normal).Dequeue();
             if (seen.Add(pick.Id)) {
@@ -440,6 +461,88 @@ internal static class RoguelikeStock {
             Logger.Args(pool.Count, s_retiredSpellShare));
 
         return pool;
+    }
+
+    /// <summary>
+    /// Every Shadow-school spell a player can use, the boss ones included, one per card name: what a Shadow wizard
+    /// learns besides the other schools' spells. Developer and test cards, one-shot spells (MaxSpellDamage), treasure
+    /// cards and spells for one place only stay out. Each needs the level its pips give (LevelForPips).
+    /// </summary>
+    private static List<SpellEntry> BuildShadowSpellPool() {
+        var pool = new List<SpellEntry>();
+        try {
+            var templateIds = new Dictionary<string, uint>(StringComparer.OrdinalIgnoreCase);
+            foreach (var location in CoreObjectFactory.TemplateManifest?.m_serializedTemplates ?? []) {
+                templateIds.TryAdd(location.m_filename, location.m_id);
+            }
+
+            var best = new Dictionary<string, (uint Id, int Level, int Rank)>(StringComparer.OrdinalIgnoreCase);
+            foreach (var (path, spell) in Imlight.CoreLib.Game.Spells.SpellFactory.AllSpellTemplates()) {
+                string name = spell.m_name;
+                string typeName = spell.m_sTypeName;
+                if (!string.Equals((string) spell.m_sMagicSchoolName, "Shadow", StringComparison.OrdinalIgnoreCase)
+                    || spell.m_Treasure || string.IsNullOrEmpty(name) || name.EndsWith(" TC")
+                    || string.IsNullOrEmpty(typeName) || typeName == "None"
+                    || spell.m_effects is null || !spell.m_effects.Any()
+                    || !templateIds.TryGetValue(path, out var id)
+                    || Imlight.CoreLib.Game.Zone.Components.InteractTrainerComponent.IsDevOrMonsterSpell(path, spell, allowBoss: true)) {
+                    continue;
+                }
+
+                string displayKey = spell.m_displayName;
+                var shown = string.IsNullOrEmpty(displayKey) ? null : Locale.GetEnglishName(displayKey);
+                if (string.IsNullOrWhiteSpace(shown) || !shown.Any(char.IsUpper)) {
+                    continue;
+                }
+
+                // The plainest copy of a card wins: no " - " variant suffix, then the shortest name.
+                var rank = (name.Contains(" - ") ? 200 : 0) + name.Length;
+                if (!best.TryGetValue(shown, out var have) || rank < have.Rank) {
+                    best[shown] = (id, LevelForPips(spell), rank);
+                }
+            }
+
+            pool = [.. best.Values.Select(b => new SpellEntry(b.Id, b.Level))];
+        }
+        catch (Exception ex) {
+            Logger.Error("Roguelike could not build the Shadow spells. {Exception}", Logger.Args(ex));
+        }
+
+        Logger.Information("Roguelike: {Count} Shadow spells for Shadow wizards ({Share}% of their trainer picks).",
+            Logger.Args(pool.Count, ShadowSchool.SpellShare));
+
+        return pool;
+    }
+
+    /// <summary>
+    /// A new Shadow wizard's first Shadow spells (ShadowStartingSpells): random ones of the lowest levels.
+    /// </summary>
+    internal static void GiveShadowStartingSpells(Wizard wizard) {
+        if (!ShadowSchool.Is(wizard) || ShadowSchool.StartingSpells <= 0) {
+            return;
+        }
+
+        try {
+            var all = s_shadowSpells.Value;
+            if (all.Count == 0) {
+                return;
+            }
+
+            // The cheapest ones (up to one pip), or the cheapest there are.
+            var low = all.Where(s => s.Level <= 7).ToList();
+            if (low.Count < ShadowSchool.StartingSpells) {
+                low = [.. all.OrderBy(s => s.Level).Take(Math.Max(ShadowSchool.StartingSpells * 2, 4))];
+            }
+
+            foreach (var entry in low.OrderBy(_ => Random.Shared.Next()).Take(ShadowSchool.StartingSpells)) {
+                if (Imlight.CoreLib.Game.Spells.SpellFactory.GetSpell(entry.Id) is { } spell) {
+                    wizard.SpellbookBehavior.AddSpellToBook(spell);
+                }
+            }
+        }
+        catch (Exception ex) {
+            Logger.Error("Roguelike could not give a Shadow wizard their first Shadow spells. {Exception}", Logger.Args(ex));
+        }
     }
 
     /// <summary>
@@ -607,7 +710,16 @@ internal static class RoguelikeStock {
         }
 
         var level = Math.Max(1, (int) wizard.MagicSchoolBehavior.Level);
-        var candidates = s_spells.Value.Concat(s_retiredSpells.Value)
+        var pool = s_spells.Value.Concat(s_retiredSpells.Value);
+        // A Shadow wizard rolls a Shadow spell ShadowSpellShare % of the time, while any are left to learn.
+        if (ShadowSchool.Is(wizard)) {
+            var shadow = s_shadowSpells.Value.Where(spell => spell.Level <= level && !wizard.SpellbookBehavior.HasSpell(spell.Id)).ToList();
+            if (shadow.Count > 0 && Random.Shared.Next(100) < ShadowSchool.SpellShare) {
+                return shadow[Random.Shared.Next(shadow.Count)].Id;
+            }
+        }
+
+        var candidates = pool
             .Where(spell => spell.Level <= level && !wizard.SpellbookBehavior.HasSpell(spell.Id))
             .ToList();
 

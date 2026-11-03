@@ -110,7 +110,8 @@ internal class MagicLevelsConfig : RootSingleResourceSingleton<MagicLevelsConfig
     /// <param name="level">The level.</param>
     /// <returns>The level information for the specified magic school and level.</returns>
     internal static MagicLevelInfo GetPlayerLevelInfo(MagicSchool magicSchool, int level)
-        => GetPlayerLevelInfo(magicSchool.ToString(), level);
+        => GetPlayerLevelInfo(magicSchool == MagicSchool.Shadow ? Imlight.CoreLib.Game.Runs.ShadowSchool.BaseSchool
+                                                                : magicSchool.ToString(), level);
 
     /// <summary>
     /// Retrieves the level information for a specific class and level.

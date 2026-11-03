@@ -113,6 +113,8 @@ internal static class PlayerSettings {
             new("Roguelike", "Tier3Minutes", "Tier 3 street minutes (Marleybone)", "How long tier 3's street lasts before its boss. 0: Minutes per street.", SettingKind.Whole, 0, 240),
             new("Roguelike", "Tier4Minutes", "Tier 4 street minutes (MooShu)", "How long tier 4's street lasts before its boss. 0: Minutes per street.", SettingKind.Whole, 0, 240),
             new("Roguelike", "Tier5Minutes", "Tier 5 street minutes (Dragonspyre)", "How long tier 5's street lasts before its boss. 0: Minutes per street.", SettingKind.Whole, 0, 240),
+            new("Roguelike", "NextWizardShadow", "Next new wizard is Shadow", "On: the next wizard you make is a Shadow wizard, whatever school you pick. It turns itself off once that wizard is made. Shadow wizards' power pips count double for every school's cards.", SettingKind.Switch),
+            new("Roguelike", "ShadowSpellShare", "Shadow spells (%)", "For a Shadow wizard, the chance each trainer spell (or spell after a battle) is a Shadow spell.", SettingKind.Whole, 0, 100),
             new("Roguelike", "StartingSpells", "Starting spells", "Random spells a new wizard starts with.", SettingKind.Whole, 0, 50),
             new("Character", "StartingPotions", "Potion bottles", "How many potion bottles every wizard has.", SettingKind.Whole, 0, 20),
             new("Character", "MaxInventoryItems", "Backpack size", "How many items the backpack holds.", SettingKind.Whole, 10, 1000),

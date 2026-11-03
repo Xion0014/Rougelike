@@ -7,6 +7,14 @@
 ;   anything else     one change (leave a blank line between changes)
 ;   ; comment         not shown
 
+# Next update (in testing)
+
+Q: New
+
+Shadow wizards: a new school. Turn on "Next new wizard is Shadow" in Settings (under The run) and the next wizard you make is a Shadow wizard, whatever school you pick on the creation screen; the setting turns itself off once that wizard is made.
+
+A Shadow wizard's power pips count double for every school's cards, not just one school's, since there are far fewer Shadow spells. Their trainers and battles also teach Shadow spells (the boss ones included; "Shadow spells (%)" in Settings sets how often), they start with 2 of them, and they can wear any school's gear, which shops and drops now roll from too. Health and mana follow Balance's.
+
 # v3.1.3 (November 2, 2026) - Damage Fix
 
 Q: Fixed

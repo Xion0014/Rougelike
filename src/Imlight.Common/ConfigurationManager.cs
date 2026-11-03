@@ -62,6 +62,9 @@ public static class ConfigurationManager {
     /// </summary>
     public static ConfigSettings Settings { get; } = new();
 
+    /// <summary>The INI file the settings were read from ("" before <see cref="Initialize"/>).</summary>
+    public static string FilePath => s_configFilePath;
+
     /// <summary>
     /// Initializes the configuration manager with the specified INI file.
     /// </summary>

@@ -46,6 +46,11 @@ internal sealed class ReqSchoolOfFocusHandler : BaseRequirementHandler<ReqSchool
             return false;
         }
 
+        // A Shadow wizard counts as every school for gear and the like.
+        if (Imlight.CoreLib.Game.Runs.ShadowSchool.Is(wizard) && Imlight.CoreLib.Game.Runs.ShadowSchool.IsPrimarySchool(schoolName)) {
+            return true;
+        }
+
         return string.Equals(
             wizard.MagicSchoolBehavior.MagicSchool.ToString(),
             schoolName,
