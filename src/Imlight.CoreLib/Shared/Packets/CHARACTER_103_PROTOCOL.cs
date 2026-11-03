@@ -496,6 +496,17 @@ public class CHARACTER_103_PROTOCOL : IServerProtocol {
     }
 
     /// <summary>
+    /// Internal, sent by the SessionActor whenever an item goes into the player's backpack: the EquipmentService puts a
+    /// Shadow wizard's new gear on when it is an upgrade the game would not let them wear (another school's).
+    /// </summary>
+    public sealed class MSG_SHADOWWEARUPGRADES : IServerMessage {
+
+        public byte MessageOrder { get; } = 64;
+        public byte ServiceID { get; } = 103;
+
+    }
+
+    /// <summary>
     /// Internal timer message and request to the RentalService: expires every rental of the player that has run out,
     /// then arms the timer for the next one.
     /// </summary>

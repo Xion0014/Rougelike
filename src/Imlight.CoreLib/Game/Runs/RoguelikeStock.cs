@@ -1113,7 +1113,7 @@ internal static class RoguelikeStock {
         return paths;
     }
 
-    private static int EquipLevel(ItemTemplate item)
+    internal static int EquipLevel(ItemTemplate item)
         => (int) (item.m_equipRequirements?.m_requirements?
             .OfType<ReqMagicLevel>()
             .Select(req => req.m_numericValue)

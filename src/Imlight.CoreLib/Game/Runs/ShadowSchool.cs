@@ -37,6 +37,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Imcodec.ObjectProperty.TypeCache;
 using Imlight.Common;
 using Imlight.CoreLib.Shared.Behaviors;
 using Imlight.CoreLib.WizardData.Models.Player;
@@ -82,6 +83,14 @@ internal static class ShadowSchool {
         stats.m_mythMastery = Math.Max(1, stats.m_mythMastery);
         stats.m_stormMastery = Math.Max(1, stats.m_stormMastery);
     }
+
+    /// <summary>
+    /// True for gear only one of the seven schools may wear (the game shows it as "School Only" to a Shadow wizard and
+    /// will not put it on), so the server has to put it on for them.
+    /// </summary>
+    internal static bool NeedsServerToWear(ItemTemplate template)
+        => template?.m_equipRequirements?.m_requirements?.OfType<ReqSchoolOfFocus>()
+               .Any(r => IsPrimarySchool((string) r.m_magicSchool)) == true;
 
     private static readonly object s_lock = new();
     private static readonly Regex s_setting = new(@"^(\s*NextWizardShadow\s*=\s*)(\S+)(.*)$", RegexOptions.IgnoreCase);

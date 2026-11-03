@@ -111,10 +111,79 @@ internal class EquipmentService(SessionActor sessionActor) : MessageService(sess
         }
     }
 
+    // A Shadow wizard's backpack as last seen, so only new gear is put on (Shadow wizards: ShadowSchool).
+    private readonly HashSet<ulong> _seenBackpack = [];
+    private bool _backpackSeen;
+
+    /// <summary>
+    /// The game will not let a Shadow wizard put on another school's gear ("School Only"), so the server puts it on
+    /// for them when a new piece goes into the backpack and is an upgrade: its slot is empty, or it needs a higher
+    /// level than what they wear there. Gear of their own (no school) they put on themselves as usual.
+    /// </summary>
+    [MessageHandler(typeof(CHARACTER_103_PROTOCOL.MSG_SHADOWWEARUPGRADES))]
+    private void ReceiveShadowWearUpgrades(CHARACTER_103_PROTOCOL.MSG_SHADOWWEARUPGRADES message) {
+        try {
+            var wizard = GetActiveWizard();
+            if (wizard?.InventoryBehavior?.Items is not { } items) {
+                return;
+            }
+
+            var newItems = _backpackSeen ? items.Where(i => !_seenBackpack.Contains(i.m_globalID.Full)).ToList() : [];
+            RememberBackpack(wizard);
+            if (!Imlight.CoreLib.Game.Runs.ShadowSchool.Is(wizard)) {
+                return;
+            }
+
+            foreach (var item in newItems) {
+                var template = ItemHelper.GetItemTemplate(item);
+                if (template is null || !Imlight.CoreLib.Game.Runs.ShadowSchool.NeedsServerToWear(template)
+                    || ItemHelper.GetItemSlot(template) is not { } slot
+                    || slot.SlotType is not (EquipmentSlotType.Hat or EquipmentSlotType.Robe or EquipmentSlotType.Shoes
+                        or EquipmentSlotType.Weapon or EquipmentSlotType.Athame or EquipmentSlotType.Amulet
+                        or EquipmentSlotType.Ring or EquipmentSlotType.Deck)) {
+                    continue;
+                }
+
+                var level = Imlight.CoreLib.Game.Runs.RoguelikeStock.EquipLevel(template);
+                if (level > wizard.MagicSchoolBehavior.Level) {
+                    continue;
+                }
+
+                var worn = wizard.EquipmentBehavior.GetItemInSlot(slot.SlotType);
+                var wornTemplate = worn is null ? null : ItemHelper.GetItemTemplate(worn);
+                if (wornTemplate is not null && Imlight.CoreLib.Game.Runs.RoguelikeStock.EquipLevel(wornTemplate) >= level) {
+                    continue;
+                }
+
+                EquipItem(new GAME_5_PROTOCOL.MSG_EQUIPITEM { ItemID = item.m_globalID, SlotName = slot.SlotType.ToString(), IsEquip = 1 });
+                if (wizard.EquipmentBehavior.HasItemEquipped(item.m_globalID)) {
+                    string key = template.m_displayName;
+                    var name = string.IsNullOrEmpty(key) ? "your new gear" : Locale.GetEnglishName(key) ?? "your new gear";
+                    InformGameClient($"Shadow: you put on {name}. Shadow wizards can wear any school's gear; the game shows it as school only.");
+                }
+            }
+
+            RememberBackpack(wizard);
+        }
+        catch (Exception ex) {
+            Logger.Error("Could not put a Shadow wizard's new gear on: {0} {1}", Logger.Args(ex.Message, ex.StackTrace));
+        }
+    }
+
+    private void RememberBackpack(Wizard wizard) {
+        _seenBackpack.Clear();
+        foreach (var item in wizard?.InventoryBehavior?.Items ?? []) {
+            _seenBackpack.Add(item.m_globalID.Full);
+        }
+
+        _backpackSeen = true;
+    }
+
     [MessageHandler(typeof(SERVICE_101_PROTOCOL.MSG_ATTACHCOMPLETE))]
     private void ReceiveAttachComplete(SERVICE_101_PROTOCOL.MSG_ATTACHCOMPLETE message) {
         try {
             var playerCharacter = GetActiveWizard();
+            RememberBackpack(playerCharacter);
             var effects = playerCharacter.GameEffects;
 
             // Every effect goes out now, the pet's and jewels' included.

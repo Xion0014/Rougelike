@@ -418,6 +418,11 @@ public sealed class SessionActor : ReceiveActor, IDisposable {
 
     private void SendToSocket(IMessage message) {
         _socketSenderRef.Forward(message);
+
+        // Something went into the backpack: a Shadow wizard may get it put on (EquipmentService).
+        if (message is Imcodec.MessageLayer.Generated.GAME_5_PROTOCOL.MSG_INVENTORYBEHAVIOR_ADDITEM && SessionValid) {
+            Self.Tell(new CHARACTER_103_PROTOCOL.MSG_SHADOWWEARUPGRADES(), ActorRefs.NoSender);
+        }
     }
 
     private void InitializeActiveSession(SERVICE_101_PROTOCOL.MSG_GETALLSERVICES message) {
