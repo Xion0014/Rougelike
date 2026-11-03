@@ -57,11 +57,11 @@ internal static class ShadowSchool {
     internal static readonly int StartingSpells = Math.Clamp(ConfigurationManager.GetValue("Roguelike.ShadowStartingSpells", 2), 0, 20);
 
     /// <summary>
-    /// [Roguelike] ShadowTitle: the title a Shadow wizard shows (on the character page, next to the school icon, and
-    /// on the name tag) while no badge is picked. The game keeps the seven schools' titles (Pyromancer...) as badges and
-    /// has none for Shadow.
+    /// [Roguelike] ShadowTitle: the title a Shadow wizard shows while no badge is picked. It is a key into the game's
+    /// own text (a badge title is: Pyromancer is ClientBadgeNames_SchoolFireMage_01), never the words themselves; the
+    /// game shows nothing for words it has no key for. The default, WizardMobs_00000714, reads "Shadow Weaver".
     /// </summary>
-    internal static readonly string Title = ConfigurationManager.GetValue("Roguelike.ShadowTitle", "ShadowMancer")?.Trim() ?? "";
+    internal static readonly string Title = ConfigurationManager.GetValue("Roguelike.ShadowTitle", "WizardMobs_00000714")?.Trim() ?? "";
 
     internal static bool Is(MagicSchool school) => school == MagicSchool.Shadow;
 
