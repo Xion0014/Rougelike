@@ -46,6 +46,11 @@ internal sealed class ReqIsSchoolHandler : BaseRequirementHandler<ReqIsSchool> {
             return false;
         }
 
+        // A Shadow wizard counts as ShadowBaseSchool (Balance), as for ReqSchoolOfFocus.
+        if (Imlight.CoreLib.Game.Runs.ShadowSchool.Is(wizard)) {
+            return string.Equals(Imlight.CoreLib.Game.Runs.ShadowSchool.BaseSchool, schoolName, StringComparison.OrdinalIgnoreCase);
+        }
+
         return string.Equals(
             wizard.MagicSchoolBehavior.MagicSchool.ToString(),
             schoolName,

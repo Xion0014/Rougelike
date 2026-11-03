@@ -19,6 +19,8 @@ The game itself won't let a Shadow wizard put on another school's gear (it shows
 
 Shadow wizards carry the title ShadowMancer (next to the school icon on the character page, and on the name tag) while no badge is picked, the way the other schools show Pyromancer, Thaumaturge and the rest. Picking a badge shows that badge instead.
 
+For quests, a Shadow wizard counts as a Balance wizard, so a quest that gives each school something different gives them the Balance reward (once). Counting as every school had Unicorn Way teach Fairy seven times over.
+
 # v3.1.3 (November 2, 2026) - Damage Fix
 
 Q: Fixed

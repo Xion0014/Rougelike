@@ -46,9 +46,10 @@ internal sealed class ReqSchoolOfFocusHandler : BaseRequirementHandler<ReqSchool
             return false;
         }
 
-        // A Shadow wizard counts as every school for gear and the like.
-        if (Imlight.CoreLib.Game.Runs.ShadowSchool.Is(wizard) && Imlight.CoreLib.Game.Runs.ShadowSchool.IsPrimarySchool(schoolName)) {
-            return true;
+        // A Shadow wizard counts as ShadowBaseSchool (Balance) for quests and the like: quests that branch by school
+        // take one branch. (Counting as every school took all seven: Unicorn Way taught Fairy seven times over.)
+        if (Imlight.CoreLib.Game.Runs.ShadowSchool.Is(wizard)) {
+            return string.Equals(Imlight.CoreLib.Game.Runs.ShadowSchool.BaseSchool, schoolName, StringComparison.OrdinalIgnoreCase);
         }
 
         return string.Equals(
