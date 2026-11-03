@@ -176,6 +176,8 @@ internal class BadgeService(SessionActor sessionActor) : MessageService(sessionA
         wizard.SetBadgeOverride(chosen?.Title ?? NoBadgeTitle(wizard));
 
         SendToSocket(new GAME_5_PROTOCOL.MSG_SELECT_BADGE { BadgeNameID = GetClientBadgeId(requestedId), Error = 0 });
+        Logger.Information("{0} picked badge {1}: title {2}.", Logger.Args(wizard.PlayerNameBehavior.GetWizardName(), requestedId,
+                                                                        (string) wizard.PlayerNameBehavior.BadgeTitle));
 
         BroadcastTitle(wizard);
     }

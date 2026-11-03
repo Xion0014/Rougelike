@@ -119,7 +119,7 @@ internal static class RoguelikeStock {
     private static readonly Lazy<Dictionary<ulong, string>> s_templatePaths
         = new(BuildTemplatePaths, LazyThreadSafetyMode.ExecutionAndPublication);
 
-    private sealed record GearEntry(uint Id, int Level, string School);
+    private sealed record GearEntry(uint Id, int Level, string School, long Cost = 0, bool World = false);
 
     private sealed record SpellEntry(uint Id, int Level);
 
@@ -199,7 +199,7 @@ internal static class RoguelikeStock {
             }
 
             if (!queues.TryGetValue(slot, out var queue)) {
-                queue = new Queue<GearEntry>(Candidates(slot, school, low, high).OrderBy(_ => random.Next()));
+                queue = new Queue<GearEntry>(Candidates(slot, school, low, high, shop: true).OrderBy(_ => random.Next()));
                 queues[slot] = queue;
             }
 
@@ -362,7 +362,7 @@ internal static class RoguelikeStock {
         return stock;
     }
 
-    private static IEnumerable<GearEntry> Candidates(string slot, string school, int low, int high) {
+    private static IEnumerable<GearEntry> Candidates(string slot, string school, int low, int high, bool shop = false) {
         if (!s_gear.Value.TryGetValue(slot, out var all)) {
             return [];
         }
@@ -371,6 +371,12 @@ internal static class RoguelikeStock {
         if (inWindow.Count < 4) {
             // Too little in the window (few decks are that high): the highest pieces below it as well.
             inWindow = [.. inWindow.Concat(all.Where(g => g.Level < low).OrderByDescending(g => g.Level).Take(8))];
+        }
+
+        // The game will not sell a Shadow wizard another school's gear ("School Only"), so their shops stock gear for
+        // any school only; drops (which the server puts on for them) still come from every school.
+        if (shop && ShadowSchool.Is(Enum.TryParse<Imlight.CoreLib.Shared.Behaviors.MagicSchool>(school, true, out var parsed) ? parsed : default)) {
+            return inWindow.Where(g => IsWearableBy(g.School, "")).ToList();
         }
 
         var forSchool = inWindow.Where(g => IsWearableBy(g.School, school)).ToList();
@@ -953,6 +959,10 @@ internal static class RoguelikeStock {
         return (int) (SeededShuffle.Mix(seed) & 0x7FFFFFFF);
     }
 
+    // [Roguelike] WorldGearPriceLimit: world gear priced over this many times the dearest vendor or drop gear of its
+    // level (within 10 levels) is left out as developer and test gear.
+    private static readonly int s_worldGearPriceLimit = Math.Max(1, ConfigurationManager.GetValue("Roguelike.WorldGearPriceLimit", 4));
+
     private static Dictionary<string, List<GearEntry>> BuildGearPool() {
         // Gear some vendor in the game sells, and (with ShopDropGear) gear creatures and bosses drop. Crown shop
         // gear is left out wherever it comes from: a gold shop cannot sell it, and it is a rare drop on a run instead.
@@ -1019,7 +1029,32 @@ internal static class RoguelikeStock {
                 pool[slot] = list = [];
             }
 
-            list.Add(new GearEntry((uint) id, level, school ?? ""));
+            list.Add(new GearEntry((uint) id, level, school ?? "", item.m_baseCost, worldIds.Contains(id)));
+        }
+
+        // World gear priced far above what vendors and drops ask at its level is a developer or test piece (a level 1
+        // Harmonious Wolfen Helm at 612,501 gold with +80% power pip): it stays out.
+        var overpriced = 0;
+        foreach (var list in pool.Values) {
+            int Band(int level) => (level - 1) / 10;
+            var caps = list.Where(g => !g.World && g.Cost > 0)
+                .GroupBy(g => Band(g.Level))
+                .ToDictionary(g => g.Key, g => g.Max(x => x.Cost));
+            overpriced += list.RemoveAll(g => {
+                if (!g.World) {
+                    return false;
+                }
+
+                var band = Band(g.Level);
+                var reference = new[] { band - 1, band, band + 1 }.Where(caps.ContainsKey).Select(b => caps[b]).DefaultIfEmpty(0).Max();
+
+                return reference > 0 && g.Cost > reference * s_worldGearPriceLimit;
+            });
+        }
+
+        if (overpriced > 0) {
+            Logger.Information("Roguelike: {0} world gear pieces left out of the shops, priced over {1}x what vendors ask at their level (developer and test gear).",
+                Logger.Args(overpriced, s_worldGearPriceLimit));
         }
 
         Logger.Information("Roguelike: {Count} pieces of gear up to level {Max} for random shops, {Drops} of them dropped by creatures and {World} world and gauntlet gear ({Slots}).",

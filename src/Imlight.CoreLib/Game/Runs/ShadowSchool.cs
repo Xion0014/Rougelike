@@ -57,11 +57,45 @@ internal static class ShadowSchool {
     internal static readonly int StartingSpells = Math.Clamp(ConfigurationManager.GetValue("Roguelike.ShadowStartingSpells", 2), 0, 20);
 
     /// <summary>
-    /// [Roguelike] ShadowTitle: the title a Shadow wizard shows while no badge is picked. It is a key into the game's
-    /// own text (a badge title is: Pyromancer is ClientBadgeNames_SchoolFireMage_01), never the words themselves; the
-    /// game shows nothing for words it has no key for. The default, WizardMobs_00000714, reads "Shadow Weaver".
+    /// [Roguelike] ShadowTitle: the title a Shadow wizard shows on their name tag while no badge is picked, as words
+    /// ("Shadow Weaver") or a key. The game shows a title by a key into its own text (Pyromancer is
+    /// ClientBadgeNames_SchoolFireMage_01), so words are looked up in the game's text for a line that says exactly
+    /// that; the game has no line for words it never uses (ShadowMancer), and shows nothing then.
     /// </summary>
-    internal static readonly string Title = ConfigurationManager.GetValue("Roguelike.ShadowTitle", "WizardMobs_00000714")?.Trim() ?? "";
+    internal static string Title => s_title.Value;
+
+    private static readonly Lazy<string> s_title = new(ResolveTitle, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
+
+    private static string ResolveTitle() {
+        var wanted = ConfigurationManager.GetValue("Roguelike.ShadowTitle", "Shadow Weaver")?.Trim() ?? "";
+        if (wanted.Length == 0) {
+            return "";
+        }
+
+        try {
+            // Already a key the game has.
+            if (Imlight.CoreLib.Shared.Resources.Locale.GetEnglishName(wanted) is { Length: > 0 } shown) {
+                Logger.Information("[Shadow] Title {0} reads \"{1}\".", Logger.Args(wanted, shown));
+
+                return wanted;
+            }
+
+            var match = Imlight.CoreLib.Shared.Resources.Locale.Search(wanted, 20)
+                .FirstOrDefault(found => found.Text.Trim().Equals(wanted, StringComparison.OrdinalIgnoreCase));
+            if (match.Key is { Length: > 0 }) {
+                Logger.Information("[Shadow] Title \"{0}\" is the game's {1}.", Logger.Args(wanted, match.Key));
+
+                return match.Key;
+            }
+        }
+        catch (Exception e) {
+            Logger.Warning("[Shadow] Could not look up the title \"{0}\": {1}", Logger.Args(wanted, e.Message));
+        }
+
+        Logger.Warning("[Shadow] The game has no line \"{0}\", so Shadow wizards show no title. Pick words the game uses.", Logger.Args(wanted));
+
+        return "";
+    }
 
     internal static bool Is(MagicSchool school) => school == MagicSchool.Shadow;
 
