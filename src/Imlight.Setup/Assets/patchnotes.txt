@@ -27,6 +27,8 @@ Q: Fixed
 The game's tutorial tips no longer pop up while leveling. Their window art is missing from the game files, and the game kept trying to load it until it lagged out. ([Roguelike] TutorialTips = true brings them back.)
 
 Shops no longer sell developer and test gear (a level 1 Harmonious Wolfen Helm with +80% power pip for 612,501 gold and the like): gear from the game files priced far above what vendors ask at its level stays out.
+
+Spells that hit several enemies at once (many boss and Shadow spells) are cast instead of passing, and a spell aimed at an empty slot on the enemy side no longer turns on your own side. A pass no longer holds the battle up for a while.
 # v3.1.3 (November 2, 2026) - Damage Fix
 
 Q: Fixed

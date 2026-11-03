@@ -480,6 +480,7 @@ internal static class CombatActionResolver {
 
         switch (effect.m_effectTarget) {
             case kEffectTarget.kEnemySingle:
+            case kEffectTarget.kPreselectedEnemySingle:
             case kEffectTarget.kFriendlySingle:
                 targets = [target];
                 break;
@@ -512,6 +513,15 @@ internal static class CombatActionResolver {
             case kEffectTarget.kEnemyTeam:
             case kEffectTarget.kEnemyTeamAllAtOnce:
                 targets = [.. _activeSubCircles.Where(x => x.OccupiedTeam != caster.OccupiedTeam)];
+                break;
+            // Several enemies (or allies) at once, as many boss and Shadow spells do: the whole side. These found no
+            // targets before, so the spell was "not worth casting" and the wizard passed.
+            case kEffectTarget.kMultiTargetEnemy:
+            case kEffectTarget.kAtLeastOneEnemy:
+                targets = [.. _activeSubCircles.Where(x => x.OccupiedTeam != caster.OccupiedTeam)];
+                break;
+            case kEffectTarget.kMultiTargetFriendly:
+                targets = [.. _activeSubCircles.Where(x => x.OccupiedTeam == caster.OccupiedTeam)];
                 break;
             case kEffectTarget.kGlobal:
                 return [];

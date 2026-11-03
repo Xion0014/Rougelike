@@ -601,7 +601,10 @@ public partial class CombatResolver(Duel duel, CombatDuelSubCircle[] actorSubCir
             return;
         }
 
-        var living = ActiveSubCircles.FirstOrDefault(x => x.OccupiedTeam == target.OccupiedTeam && x.IsAlive && x.AddedToDuel);
+        // The side the target was on goes by its slot: an empty creature slot counts as the players' side
+        // (OccupiedTeam), which sent an all-enemies spell aimed at an empty slot at the caster's own side.
+        var side = target.SlotType == CombatSlotType.Creature ? CombatTeam.Monster : target.OccupiedTeam;
+        var living = ActiveSubCircles.FirstOrDefault(x => x.OccupiedTeam == side && x.IsAlive && x.AddedToDuel);
         if (living is not null) {
             Logger.Debug("Duel {0} | Slot {1} | The spell's target is gone; it goes to slot {2} of the same side.",
                 Logger.Args(_duel.m_duelID.Full, action.SpellCaster.SlotIndex, living.SlotIndex));
@@ -864,7 +867,9 @@ public partial class CombatResolver(Duel duel, CombatDuelSubCircle[] actorSubCir
         else {
             Logger.Debug("Duel {0} | Slot {1} | Spell {2} not worth casting. Passing turn.",
                 Logger.Args(_duel.m_duelID.Full, action.SpellCaster.SlotIndex, action.Spell.m_templateID));
+            // Sent as a plain pass (as HandlePassAction does): a pass that still said the spell hit held the game up.
             combatAction.m_spell = null;
+            combatAction.m_spellHits = (char) 0;
         }
     }
 
