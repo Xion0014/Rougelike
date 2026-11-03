@@ -140,6 +140,10 @@ internal static class CharacterHelper {
         }
 
         var character = new Wizard(school, wizardAvatar, nameIndices);
+        if (Imlight.CoreLib.Game.Runs.ShadowSchool.Is(character)) {
+            character.PlayerNameBehavior.BadgeTitle = Imlight.CoreLib.Game.Runs.ShadowSchool.Title;
+        }
+
         Randomizer.GiveStartingSpells(character);
         Imlight.CoreLib.Game.Runs.RoguelikeStock.GiveShadowStartingSpells(character);
 

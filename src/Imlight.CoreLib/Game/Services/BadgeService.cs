@@ -74,6 +74,13 @@ internal class BadgeService(SessionActor sessionActor) : MessageService(sessionA
 
     [MessageHandler(typeof(ZONE_102_PROTOCOL.MSG_PRELOGIN))]
     private void ReceivePreLogin(ZONE_102_PROTOCOL.MSG_PRELOGIN message) {
+        // A Shadow wizard with no badge picked shows the Shadow title (ShadowSchool.Title) before the game draws them.
+        var shadow = GetActiveWizard();
+        if (Imlight.CoreLib.Game.Runs.ShadowSchool.Is(shadow) && shadow.BadgeBehavior.SelectedBadgeId == 0
+            && (string) shadow.PlayerNameBehavior.BadgeTitle != Imlight.CoreLib.Game.Runs.ShadowSchool.Title) {
+            shadow.SetBadgeOverride(Imlight.CoreLib.Game.Runs.ShadowSchool.Title);
+        }
+
         var catalog = BadgeCatalog.Current;
         if (!catalog.IsReady) {
             return;
@@ -166,7 +173,7 @@ internal class BadgeService(SessionActor sessionActor) : MessageService(sessionA
 
         state.SelectedBadgeId = requestedId;
         Persist(wizard);
-        wizard.SetBadgeOverride(chosen?.Title ?? string.Empty);
+        wizard.SetBadgeOverride(chosen?.Title ?? NoBadgeTitle(wizard));
 
         SendToSocket(new GAME_5_PROTOCOL.MSG_SELECT_BADGE { BadgeNameID = GetClientBadgeId(requestedId), Error = 0 });
 
@@ -459,10 +466,14 @@ internal class BadgeService(SessionActor sessionActor) : MessageService(sessionA
     private static uint GetClientBadgeId(uint selectedBadgeId)
         => selectedBadgeId != 0 ? selectedBadgeId : BadgeCatalog.s_noTitleId;
 
+    // The title shown with no badge picked: none, or for a Shadow wizard the Shadow title.
+    private static string NoBadgeTitle(Wizard wizard)
+        => Imlight.CoreLib.Game.Runs.ShadowSchool.Is(wizard) ? Imlight.CoreLib.Game.Runs.ShadowSchool.Title : string.Empty;
+
     private static bool TitleMatchesSelection(Wizard wizard, BadgeCatalog catalog) {
         // A title set by the mod badge command is not a selection, so choosing no title still clears it.
         var selectedId = wizard.BadgeBehavior.SelectedBadgeId;
-        var expected = selectedId != 0 && catalog.TryGet(selectedId, out var selected) ? selected.Title : string.Empty;
+        var expected = selectedId != 0 && catalog.TryGet(selectedId, out var selected) ? selected.Title : NoBadgeTitle(wizard);
 
         return string.Equals((string) wizard.PlayerNameBehavior.BadgeTitle, expected, StringComparison.Ordinal);
     }
