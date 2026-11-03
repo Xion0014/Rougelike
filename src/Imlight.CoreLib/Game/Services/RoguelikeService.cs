@@ -314,7 +314,8 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
         Achievements.Count(wizard, "Kills", mobs.Length);
 
         // The battle's music gave way to the zone's own as it ended; bring the run's track back.
-        if (RoguelikeConfig.RandomMusic || RoguelikeConfig.RandomBattleMusic) {
+        if (RoguelikeConfig.RandomMusic || RoguelikeConfig.RandomBattleMusic
+            || RoguelikeConfig.StreetMusic(run.Tier).Length > 0 || RoguelikeConfig.BossMusic(run.Tier).Length > 0) {
             Timers.StartSingleTimer(MUSIC_TIMER_KEY,
                 new SERVICE_101_PROTOCOL.MSG_ROGUELIKE_COMMAND { Action = "music", Argument = "resume" },
                 TimeSpan.FromSeconds(3));
@@ -619,6 +620,18 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
             return;
         }
 
+        // The track the player chose for this tier's street in the launcher's Music page.
+        if (GetActiveWizard()?.Roguelike is { Phase: RoguelikePhase.Street or RoguelikePhase.Boss } chosenRun
+            && RoguelikeConfig.StreetMusic(chosenRun.Tier) is { Length: > 0 } chosen) {
+            Timers.Cancel(MUSIC_ROTATE_KEY);
+            _runTrack = chosen;
+            SendToSocket(new WIZARD_12_PROTOCOL.MSG_PLAYMUSIC {
+                FadeTime = 1.5f, Flags = (sbyte) RoguelikeConfig.MusicFlags, SoundFilename = chosen, StartDelay = 0.5f,
+            });
+
+            return;
+        }
+
         if (!RoguelikeConfig.RandomMusic) {
             // Only battles are random: after one, the zone's own music, which the game may not bring back itself.
             if (!newTrack && RoguelikeConfig.RandomBattleMusic && !string.IsNullOrEmpty(_zoneMusic)) {
@@ -659,6 +672,16 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
 
     private void PlayBattleMusic() {
         if (MusicOffForMe) {
+            return;
+        }
+
+        // The track the player chose for this tier's boss fight in the launcher's Music page.
+        if (GetActiveWizard()?.Roguelike is { Phase: RoguelikePhase.Boss } bossRun
+            && RoguelikeConfig.BossMusic(bossRun.Tier) is { Length: > 0 } bossTrack) {
+            SendToSocket(new WIZARD_12_PROTOCOL.MSG_PLAYMUSIC {
+                FadeTime = 1.0f, Flags = (sbyte) RoguelikeConfig.MusicFlags, SoundFilename = bossTrack, StartDelay = 0.5f,
+            });
+
             return;
         }
 

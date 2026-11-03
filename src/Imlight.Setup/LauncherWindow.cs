@@ -118,6 +118,7 @@ internal sealed partial class LauncherWindow : Window {
     private readonly Border _noticePill;
     private readonly Border _patchNotesPill;
     private readonly Border _achievementsPill;
+    private readonly Border _musicPill;
 
     // The FAQ and credits, shown over the card.
     private readonly Border _book;
@@ -231,7 +232,12 @@ internal sealed partial class LauncherWindow : Window {
 
             return Task.CompletedTask;
         });
-        _pills.Children.AddRange([_rulesPill, _faqPill, _achievementsPill, _patchNotesPill, _creditsPill, _noticePill, _settingsPill, _updatePill, _sleepPill, _logsPill, _setupLogPill, _gameFolderPill]);
+        _musicPill = Pill("Music", () => {
+            OpenMusic();
+
+            return Task.CompletedTask;
+        });
+        _pills.Children.AddRange([_rulesPill, _faqPill, _achievementsPill, _patchNotesPill, _creditsPill, _noticePill, _settingsPill, _musicPill, _updatePill, _sleepPill, _logsPill, _setupLogPill, _gameFolderPill]);
         BuildSettingsActions();
         _book = Book();
         foreach (var pill in _pills.Children) {
@@ -748,6 +754,7 @@ internal sealed partial class LauncherWindow : Window {
         _playLabel.FontSize = installed ? 26 : 20;
         _updatePill.IsVisible = installed;
         _settingsPill.IsVisible = installed;
+        _musicPill.IsVisible = installed;
         _achievementsPill.IsVisible = installed;
         _sleepPill.IsVisible = installed;
         _logsPill.IsVisible = installed;

@@ -391,6 +391,21 @@ internal static class RoguelikeConfig {
     /// </summary>
     internal static readonly bool RandomBattleMusic = ConfigurationManager.GetValue("Roguelike.RandomBattleMusic", false);
 
+    /// <summary>
+    /// [Music] TierNStreet: the track a tier's street (and its boss zone outside the fight) plays, chosen in the
+    /// launcher's Music page; empty or Random leaves it to the random music (or the zone's own).
+    /// </summary>
+    internal static string StreetMusic(int tier) => ChosenTrack($"Music.Tier{tier}Street");
+
+    /// <summary>[Music] TierNBoss: the track a tier's boss fight plays; empty or Random leaves it to the battle music.</summary>
+    internal static string BossMusic(int tier) => ChosenTrack($"Music.Tier{tier}Boss");
+
+    private static string ChosenTrack(string key) {
+        var track = ConfigurationManager.GetValue(key, "")?.Trim() ?? "";
+
+        return track.Equals("Random", StringComparison.OrdinalIgnoreCase) ? "" : track;
+    }
+
     /// <summary>The combat music a run's battles pick from, as the game's zones name it.</summary>
     internal static readonly string[] BattleMusicTracks = SplitList(ConfigurationManager.GetValue(
         "Roguelike.BattleMusicTracks", "|Music|WorldData|WC/Combat1Test.ogg, |Music|WorldData|WC/WC_HauntedWay_Combat.ogg, |Music|WorldData|MB/MarleyCombatM.mp3, |DragonSpire|WorldData|Sound/Music/DragonSpyreCombat.mp3, |Music|WorldData|MS/SB/GNT_SB_Combat.mp3, |Zafaria|WorldData|Sound/Music/ZF_Combat.mp3, |Music|WorldData|AV/AV_Combat.mp3, |Music|WorldData|AZ/AZ_Combat.mp3, |Music|WorldData|KR/KR_CombatBastion.mp3, |Music|WorldData|KR/KR_CombatArachna.mp3, |Music|WorldData|PL/PL_Walruskberg_Combat.mp3, |Music|WorldData|PL/PL_FrozenCombat.mp3, |Music|WorldData|MR/MR_CityCombat.mp3, |Music|WorldData|MR/MR_CanyonDesert_Combat.mp3, |Music|WorldData|EM/EM_Zanadu_Combat.ogg, |Music|WorldData|EM/EM_FlotsamStorm_Combat.ogg, |Music|WorldData|EM/EM_2/EM_Reverie_Combat.ogg, |Music|WorldData|KM/KM_CityCombat.ogg, |Music|WorldData|KM/KM_RuralCombat.ogg, |Music|WorldData|LM/LM_JunglePulp_Combat.ogg, |Music|WorldData|DM/DM_Graveholm_Combat.ogg, |Music|WorldData|AQ/AQ_Combat.mp3"));

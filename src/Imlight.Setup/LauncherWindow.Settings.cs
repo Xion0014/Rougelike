@@ -44,12 +44,22 @@ internal sealed partial class LauncherWindow {
 
     private void BuildSettingsActions() {
         var defaults = Pill("Restore defaults", () => {
-            RestoreDefaults();
+            if (_musicPage) {
+                RestoreMusic();
+            }
+            else {
+                RestoreDefaults();
+            }
 
             return Task.CompletedTask;
         }, evenWhenBusy: true);
         var save = Pill("Save", () => {
-            SaveSettingsPage();
+            if (_musicPage) {
+                SaveMusicPage();
+            }
+            else {
+                SaveSettingsPage();
+            }
 
             return Task.CompletedTask;
         }, gold: true, evenWhenBusy: true);
@@ -69,6 +79,7 @@ internal sealed partial class LauncherWindow {
             _bookClose.IsVisible = true;
         }
 
+        _musicPage = false;
         _bookTitle.Text = "Settings";
         _bookPages.Children.Clear();
         _settingFields.Clear();
