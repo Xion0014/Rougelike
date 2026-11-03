@@ -271,6 +271,15 @@ public class ServerWizGameStats : IClientTypeProvider<WizGameStats> {
             m_blockRatingAll = m_blockRatingAll,
             m_criticalHitPercentAll = CombatCriticals.RatingToChance(m_criticalHitRatingAll, Level),
             m_blockPercentAll = CombatCriticals.RatingToChance(m_blockRatingAll, Level),
+            // The game decides from these which cards a power pip pays double for (and greys out the rest): mastery
+            // amulets, and a Shadow wizard's mastery of every school. They were left out of the battle copy.
+            m_balanceMastery = m_balanceMastery,
+            m_deathMastery = m_deathMastery,
+            m_fireMastery = m_fireMastery,
+            m_iceMastery = m_iceMastery,
+            m_lifeMastery = m_lifeMastery,
+            m_mythMastery = m_mythMastery,
+            m_stormMastery = m_stormMastery,
         };
     }
 

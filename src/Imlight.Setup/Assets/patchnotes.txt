@@ -33,6 +33,8 @@ Spells that hit several enemies at once (many boss and Shadow spells) are cast i
 Developer one-shot spells (PWN at 1,100,000 damage, Ultra Dark at 99,999) are no longer taught by trainers or after battles: the enchantment and Shadow spells the run's trainers draw from let them through.
 
 Putting on a new deck and copying your cards into it copies all of them. The cards the game sent while the new deck was being put on found no deck and were dropped, so only some came over (a bug from the first versions).
+
+Mastery amulets work in battle: a power pip counts as two for the mastered school's cards, so those cards are no longer greyed out with a power pip in hand. The server never told the game about mastery in battle.
 # v3.1.3 (November 2, 2026) - Damage Fix
 
 Q: Fixed
