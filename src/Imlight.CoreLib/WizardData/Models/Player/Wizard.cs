@@ -646,7 +646,22 @@ public class Wizard {
         return true;
     }
 
+    // Items move between the backpack and the worn gear on the EquipmentService's thread while the SpellbookService
+    // adds and removes the deck's cards on its own. The game asks to copy the old deck's cards into a new one right
+    // as it puts the new deck on: a card that came in while the deck was between the backpack and the slot found no
+    // deck and was dropped, so only some cards came over. Both now wait for each other.
+    private object _deckLock;
+
+    // Made on first use: a wizard loaded from the database may skip field initializers.
+    private object DeckLock => System.Threading.LazyInitializer.EnsureInitialized(ref _deckLock, () => new object());
+
     public bool InventoryToEquipmentTransfer(ulong itemId, out List<GameEffectBase> equipEffects, out List<GameEffectBase> unequipEffects) {
+        lock (DeckLock) {
+            return InventoryToEquipmentTransferLocked(itemId, out equipEffects, out unequipEffects);
+        }
+    }
+
+    private bool InventoryToEquipmentTransferLocked(ulong itemId, out List<GameEffectBase> equipEffects, out List<GameEffectBase> unequipEffects) {
         equipEffects = null;
         unequipEffects = null;
 
@@ -704,6 +719,12 @@ public class Wizard {
     }
 
     public bool EquipmentToInventoryTransfer(ulong itemId, out List<GameEffectBase> unequipEffects) {
+        lock (DeckLock) {
+            return EquipmentToInventoryTransferLocked(itemId, out unequipEffects);
+        }
+    }
+
+    private bool EquipmentToInventoryTransferLocked(ulong itemId, out List<GameEffectBase> unequipEffects) {
         unequipEffects = null;
 
         // Get the actual item. We'll also grab the template to remove the effects from the wizard.
@@ -1114,6 +1135,12 @@ public class Wizard {
     }
 
     public bool AddSpellToDeck(uint spellTemplateId, ulong deckId) {
+        lock (DeckLock) {
+            return AddSpellToDeckLocked(spellTemplateId, deckId);
+        }
+    }
+
+    private bool AddSpellToDeckLocked(uint spellTemplateId, ulong deckId) {
         // Find the actual item in the inventory.
         var item = InventoryBehavior.Items.FirstOrDefault(i => i.m_globalID == deckId);
         if (item is null) {
@@ -1170,6 +1197,12 @@ public class Wizard {
     }
 
     public bool RemoveSpellFromDeck(uint spellTemplateId, ulong deckId) {
+        lock (DeckLock) {
+            return RemoveSpellFromDeckLocked(spellTemplateId, deckId);
+        }
+    }
+
+    private bool RemoveSpellFromDeckLocked(uint spellTemplateId, ulong deckId) {
         // Find the actual item in the inventory.
         var item = InventoryBehavior.Items.FirstOrDefault(i => i.m_globalID == deckId);
         if (item is null) {
