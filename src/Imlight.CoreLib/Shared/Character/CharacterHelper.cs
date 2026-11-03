@@ -101,6 +101,7 @@ internal static class CharacterHelper {
 
         // A Shadow wizard masters every school (power pips count double for any school's cards).
         Imlight.CoreLib.Game.Runs.ShadowSchool.GiveMastery(wizard.GameStats);
+        Imlight.CoreLib.Game.Runs.ShadowSchool.AddMasteryEffects(wizard);
 
         // Check for level/XP mismatches, but don't modify XP on login.
         // Any mismatch will be corrected on the next XP gain.

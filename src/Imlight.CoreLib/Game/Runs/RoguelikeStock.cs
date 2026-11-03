@@ -453,7 +453,9 @@ internal static class RoguelikeStock {
             foreach (var (kind, entries) in Imlight.CoreLib.Game.Zone.Components.InteractTrainerComponent.RetiredTrainerSpells()) {
                 foreach (var entry in entries) {
                     if (entry.TemplateID is > 0 and <= uint.MaxValue
-                        && CoreObjectFactory.GetCoreTemplate(entry.TemplateID) is SpellTemplate spell) {
+                        && CoreObjectFactory.GetCoreTemplate(entry.TemplateID) is SpellTemplate spell
+                        // One-shot spells (PWN, Ultra Dark) are in the test trainers' lists too: never on a run.
+                        && !Imlight.CoreLib.Game.Zone.Components.InteractTrainerComponent.DealsTooMuch(spell)) {
                         pool.Add(new SpellEntry((uint) entry.TemplateID, LevelForPips(spell)));
                     }
                 }

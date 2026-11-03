@@ -173,7 +173,7 @@ internal sealed class InteractTrainerComponent(ZoneEntity entity) : ZoneEntityCo
     /// </summary>
     private static readonly int s_maxSpellDamage = System.Math.Max(1, ConfigurationManager.GetValue("Roguelike.MaxSpellDamage", 3000));
 
-    private static readonly string[] s_bannedSpellNames = ConfigurationManager.GetValue("Roguelike.BannedSpells", "Pwn")
+    private static readonly string[] s_bannedSpellNames = ConfigurationManager.GetValue("Roguelike.BannedSpells", "Pwn, Ultra Dark")
         .Split(',', System.StringSplitOptions.RemoveEmptyEntries | System.StringSplitOptions.TrimEntries);
 
     internal static bool DealsTooMuch(SpellTemplate spell) {
@@ -192,8 +192,14 @@ internal sealed class InteractTrainerComponent(ZoneEntity entity) : ZoneEntityCo
         return spell.m_effects
             .SelectMany(Imlight.CoreLib.Game.Combat.CombatActionResolver.AllEffects)
             .Any(effect => effect is not null
-                           && effect.m_effectType is kSpellEffects.kDamage or kSpellEffects.kDamageNoCrit or kSpellEffects.kDamageOverTime
-                               or kSpellEffects.kHeal or kSpellEffects.kStealHealth
+                           && (effect.m_effectType is kSpellEffects.kHeal or kSpellEffects.kStealHealth or kSpellEffects.kHealOverTime
+                               // Every kind of damage: per pip, divided, deferred (bombs) and the rest. Only plain
+                               // damage was looked at, so PWN (1,100,000) and Ultra Dark (99,999) got through as
+                               // Shadow spells.
+                               || effect.m_effectType is kSpellEffects.kDamage or kSpellEffects.kDamageNoCrit
+                                   or kSpellEffects.kDamageOverTime or kSpellEffects.kDeferredDamage
+                                   or kSpellEffects.kDamagePerTotalPipPower or kSpellEffects.kDivideDamage
+                                   or kSpellEffects.kBacklashDamage or kSpellEffects.kMinionRankDamage)
                            && System.Math.Abs(effect.m_effectParam) > s_maxSpellDamage);
     }
 

@@ -13,7 +13,7 @@ Q: New
 
 Shadow wizards: a new school. Turn on "Next new wizard is Shadow" in Settings (under The run) and the next wizard you make is a Shadow wizard, whatever school you pick on the creation screen; the setting turns itself off once that wizard is made.
 
-A Shadow wizard's power pips count double for every school's cards, not just one school's, since there are far fewer Shadow spells. Their trainers and battles also teach Shadow spells (the boss ones included; "Shadow spells (%)" in Settings sets how often), they start with 2 of them, and they can wear any school's gear, which drops now roll from too (shops sell them gear for any school, since the game won't let them buy another school's). Health and mana follow Balance's.
+A Shadow wizard's power pips count double for every school's cards, not just one school's, since there are far fewer Shadow spells. The game knows it too, so a 2-pip card can be played with one power pip. Their trainers and battles also teach Shadow spells (the boss ones included; "Shadow spells (%)" in Settings sets how often), they start with 2 of them, and they can wear any school's gear, which drops now roll from too (shops sell them gear for any school, since the game won't let them buy another school's). Health and mana follow Balance's.
 
 The game itself won't let a Shadow wizard put on another school's gear (it shows "School Only"), so the server puts it on for them: when such a piece goes into the backpack (bought, dropped, from a chest or a quest) and its slot is empty or it needs a higher level than what's worn there, it goes on by itself, and a message says so. Taking it off works as usual.
 
@@ -29,6 +29,8 @@ The game's tutorial tips no longer pop up while leveling. Their window art is mi
 Shops no longer sell developer and test gear (a level 1 Harmonious Wolfen Helm with +80% power pip for 612,501 gold and the like): gear from the game files priced far above what vendors ask at its level stays out.
 
 Spells that hit several enemies at once (many boss and Shadow spells) are cast instead of passing, and a spell aimed at an empty slot on the enemy side no longer turns on your own side. A pass no longer holds the battle up for a while.
+
+Developer one-shot spells (PWN at 1,100,000 damage, Ultra Dark at 99,999) are no longer taught by trainers or after battles: the enchantment and Shadow spells the run's trainers draw from let them through.
 # v3.1.3 (November 2, 2026) - Damage Fix
 
 Q: Fixed

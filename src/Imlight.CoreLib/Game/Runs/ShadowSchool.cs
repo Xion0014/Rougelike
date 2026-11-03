@@ -148,6 +148,38 @@ internal static class ShadowSchool {
         _ => false,
     };
 
+    /// <summary>
+    /// The game greys out cards by its own count of the wizard's pips, and it counts a power pip double only for a
+    /// school it sees mastered, which it reads from the wizard's effects (a mastery amulet's), not from the server's
+    /// stats. So a Shadow wizard also gets the seven schools' mastery effects, as if from an amulet; they go to the
+    /// game with the gear's effects when the wizard comes into a zone.
+    /// </summary>
+    internal static void AddMasteryEffects(Wizard wizard) {
+        if (!Is(wizard) || wizard.GameEffects is null) {
+            return;
+        }
+
+        var slot = Imcodec.Cryptography.StringHash.Compute("Amulet");
+        foreach (var school in new[] { "Fire", "Ice", "Storm", "Myth", "Life", "Death", "Balance" }) {
+            var effect = new WizStatisticEffect {
+                m_effectNameID = Imcodec.Cryptography.StringHash.Compute($"Canonical{school}Mastery"),
+                m_itemSlotID = slot,
+                m_internalID = wizard.NextEffectId(),
+            };
+            switch (school) {
+                case "Fire": effect.m_fireMastery = 1; break;
+                case "Ice": effect.m_iceMastery = 1; break;
+                case "Storm": effect.m_stormMastery = 1; break;
+                case "Myth": effect.m_mythMastery = 1; break;
+                case "Life": effect.m_lifeMastery = 1; break;
+                case "Death": effect.m_deathMastery = 1; break;
+                case "Balance": effect.m_balanceMastery = 1; break;
+            }
+
+            wizard.GameEffects.Add(effect);
+        }
+    }
+
     private static readonly object s_lock = new();
     private static readonly Regex s_setting = new(@"^(\s*NextWizardShadow\s*=\s*)(\S+)(.*)$", RegexOptions.IgnoreCase);
 
