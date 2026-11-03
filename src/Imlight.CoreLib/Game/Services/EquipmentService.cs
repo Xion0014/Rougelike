@@ -146,16 +146,26 @@ internal class EquipmentService(SessionActor sessionActor) : MessageService(sess
 
                 var level = Imlight.CoreLib.Game.Runs.RoguelikeStock.EquipLevel(template);
                 if (level > wizard.MagicSchoolBehavior.Level) {
+                    Logger.Debug("[Shadow] {0}: not putting on {1}, it needs level {2}.", Logger.Args(wizard.CharId, template.m_templateID, level));
                     continue;
                 }
 
+                // An upgrade: a higher level than what is worn there. A piece of the same level counts too when what is
+                // worn is something they can put back on themselves (no school), such as the tutorial deck.
                 var worn = wizard.EquipmentBehavior.GetItemInSlot(slot.SlotType);
                 var wornTemplate = worn is null ? null : ItemHelper.GetItemTemplate(worn);
-                if (wornTemplate is not null && Imlight.CoreLib.Game.Runs.RoguelikeStock.EquipLevel(wornTemplate) >= level) {
-                    continue;
+                if (wornTemplate is not null) {
+                    var wornLevel = Imlight.CoreLib.Game.Runs.RoguelikeStock.EquipLevel(wornTemplate);
+                    var wornIsServerOnly = Imlight.CoreLib.Game.Runs.ShadowSchool.NeedsServerToWear(wornTemplate);
+                    if (wornLevel > level || (wornLevel == level && wornIsServerOnly)) {
+                        Logger.Debug("[Shadow] {0}: not putting on {1} (level {2}), what is worn there is level {3}.",
+                            Logger.Args(wizard.CharId, template.m_templateID, level, wornLevel));
+                        continue;
+                    }
                 }
 
                 EquipItem(new GAME_5_PROTOCOL.MSG_EQUIPITEM { ItemID = item.m_globalID, SlotName = slot.SlotType.ToString(), IsEquip = 1 });
+                Logger.Information("[Shadow] {0}: put on {1} for them ({2}).", Logger.Args(wizard.CharId, template.m_templateID, slot.SlotType));
                 if (wizard.EquipmentBehavior.HasItemEquipped(item.m_globalID)) {
                     string key = template.m_displayName;
                     var name = string.IsNullOrEmpty(key) ? "your new gear" : Locale.GetEnglishName(key) ?? "your new gear";

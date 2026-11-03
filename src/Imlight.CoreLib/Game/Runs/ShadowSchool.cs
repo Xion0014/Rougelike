@@ -95,9 +95,24 @@ internal static class ShadowSchool {
     /// True for gear only one of the seven schools may wear (the game shows it as "School Only" to a Shadow wizard and
     /// will not put it on), so the server has to put it on for them.
     /// </summary>
-    internal static bool NeedsServerToWear(ItemTemplate template)
-        => template?.m_equipRequirements?.m_requirements?.OfType<ReqSchoolOfFocus>()
-               .Any(r => IsPrimarySchool((string) r.m_magicSchool)) == true;
+    internal static bool NeedsServerToWear(ItemTemplate template) {
+        if (template is null) {
+            return false;
+        }
+
+        // The gear's own school (what the shops go by), or a school requirement anywhere in its equip requirements.
+        if (template is WizItemTemplate item && IsPrimarySchool((string) item.m_school)) {
+            return true;
+        }
+
+        return template.m_equipRequirements is { } requirements && NamesSchool(requirements);
+    }
+
+    private static bool NamesSchool(Requirement requirement) => requirement switch {
+        ReqSchoolOfFocus school => !school.m_applyNOT && IsPrimarySchool((string) school.m_magicSchool),
+        RequirementList list => list.m_requirements?.Any(NamesSchool) == true,
+        _ => false,
+    };
 
     private static readonly object s_lock = new();
     private static readonly Regex s_setting = new(@"^(\s*NextWizardShadow\s*=\s*)(\S+)(.*)$", RegexOptions.IgnoreCase);
