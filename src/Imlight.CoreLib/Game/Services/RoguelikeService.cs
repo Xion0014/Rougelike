@@ -491,16 +491,26 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
                     break;
                 }
 
-                var arg = message.Argument?.Trim();
+                // ".run pet mega healing current" (age, then a talent's name) adds that talent to it, to test one.
+                var words = (message.Argument ?? "").Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                var arg = words.Length > 0 ? words[0] : "";
                 byte? petAge = string.IsNullOrEmpty(arg) ? null
                     : byte.TryParse(arg, out var n) && n is >= 1 and <= 7 ? n
                     : Imlight.CoreLib.Game.Pet.PetProgress.ParseLevel(arg);
                 if (!string.IsNullOrEmpty(arg) && petAge is null) {
-                    InformGameClient("Usage: .run pet [baby|teen|adult|ancient|epic|mega|ultra]");
+                    InformGameClient("Usage: .run pet [baby|teen|adult|ancient|epic|mega|ultra] [talent name]");
                     break;
                 }
 
-                GiveRunPet(wizard, petAge);
+                Imcodec.ObjectProperty.TypeCache.PetTalentBaseTemplate testTalent = null;
+                if (words.Length > 1) {
+                    testTalent = FindPetTalent(string.Join(' ', words.Skip(1)));
+                    if (testTalent is null) {
+                        break;
+                    }
+                }
+
+                GiveRunPet(wizard, petAge, testTalent);
                 break;
             case "cards": {
                 // What each piece of equipped gear's cards really are on this run (their tooltips show the gear's own).
@@ -1067,8 +1077,33 @@ internal sealed class RoguelikeService(SessionActor sessionActor) : MessageServi
     }
 
     /// <summary>Gives the wizard a run pet (RoguelikePets): a random one, or of the given age (1 Baby to 7 Ultra).</summary>
-    private WizClientObjectItem GiveRunPet(Wizard wizard, byte? age = null) {
+    // A pet talent by its name (Talent-Combat-HealingCurrent) or its shown name (Healing Current), for ".run pet".
+    private Imcodec.ObjectProperty.TypeCache.PetTalentBaseTemplate FindPetTalent(string text) {
+        string Shown(Imcodec.ObjectProperty.TypeCache.PetTalentBaseTemplate t)
+            => Imlight.CoreLib.Shared.Resources.Locale.GetEnglishName(t.m_displayName) ?? "";
+        static string Squash(string s) => new((s ?? "").Where(char.IsLetterOrDigit).Select(char.ToLowerInvariant).ToArray());
+
+        var wanted = Squash(text);
+        var talents = Imlight.CoreLib.Game.Pet.PetData.AllTalents.ToList();
+        var talent = talents.FirstOrDefault(t => Squash(t.m_talentName) == wanted)
+            ?? talents.FirstOrDefault(t => Squash(Shown(t)) == wanted)
+            ?? talents.FirstOrDefault(t => Squash(t.m_talentName).EndsWith(wanted, StringComparison.Ordinal));
+        if (talent is null) {
+            var close = talents.Where(t => Squash(t.m_talentName).Contains(wanted) || Squash(Shown(t)).Contains(wanted))
+                .Take(8).Select(t => (string) t.m_talentName).ToList();
+            InformGameClient(close.Count > 0 ? $"Which talent? {string.Join(", ", close)}." : "No pet talent with that name.");
+        }
+
+        return talent;
+    }
+
+    private WizClientObjectItem GiveRunPet(Wizard wizard, byte? age = null,
+                                           Imcodec.ObjectProperty.TypeCache.PetTalentBaseTemplate talent = null) {
         var pet = RoguelikePets.Build(wizard, age);
+        if (pet is not null && talent is not null) {
+            Imlight.CoreLib.Game.Pet.PetProgress.AddTalent(pet, talent);
+        }
+
         if (pet is null || !wizard.AddPetToInventory(pet)) {
             Logger.Warning("[Roguelike] Could not give {0} a pet.", Logger.Args(wizard.CharId));
             if (age is not null) {

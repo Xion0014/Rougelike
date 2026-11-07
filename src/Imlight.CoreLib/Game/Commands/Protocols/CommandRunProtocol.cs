@@ -85,7 +85,7 @@ internal class CommandRunProtocol : CommandProtocol {
 
     [Command("pet")]
     [AuthRequired(AuthLevel.QualityAssurance)]
-    private void PetCommand([Remainder] string age = "") => Send("pet", age);
+    private void PetCommand([Remainder] string ageAndTalent = "") => Send("pet", ageAndTalent);
 
     // TEMPORARY test command: teaches the Pwn developer spell. Remove once testing is done.
     [Command("pwn")]
