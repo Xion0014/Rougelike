@@ -97,6 +97,15 @@ internal static class ShadowSchool {
         return "";
     }
 
+    /// <summary>[Roguelike] ShadowWizardShadowPipChance: a Shadow wizard's shadow pip rating, 100 = a shadow pip every round.</summary>
+    internal static readonly int ShadowPipChance = Math.Clamp(ConfigurationManager.GetValue("Roguelike.ShadowWizardShadowPipChance", 100), 0, 100);
+
+    /// <summary>
+    /// [Roguelike] ShadowWizardMaxShadowPips: the most shadow pips a Shadow wizard holds at once (4: the game draws more
+    /// than that badly).
+    /// </summary>
+    internal static readonly int MaxShadowPips = Math.Clamp(ConfigurationManager.GetValue("Roguelike.ShadowWizardMaxShadowPips", 4), 1, 4);
+
     internal static bool Is(MagicSchool school) => school == MagicSchool.Shadow;
 
     internal static bool Is(Wizard wizard) => wizard?.MagicSchoolBehavior?.MagicSchool == MagicSchool.Shadow;

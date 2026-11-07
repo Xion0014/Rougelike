@@ -451,6 +451,8 @@ public class CombatDuelSubCircle {
     private bool? _creatureRolledShadowMagic;
 
     private int MaxShadowPips => _wizard is null ? s_creatureMaxShadowPips
+        // A Shadow wizard holds up to ShadowWizardMaxShadowPips (4: the game draws more than that badly).
+        : Imlight.CoreLib.Game.Runs.ShadowSchool.Is(_wizard) ? Imlight.CoreLib.Game.Runs.ShadowSchool.MaxShadowPips
         : ParticipantGameStats?.m_shadowPipSlots is int slots and > 0 ? Math.Min(slots, NO_SHADOW_LIMIT)
         : s_randomizeShadowPips ? 1 + Randomization.Randomizer.PickIndex(_wizard, "ShadowPipLimit", 0, RANDOM_SHADOW_LIMIT_MAX)
         : s_playerMaxShadowPips;
@@ -504,6 +506,11 @@ public class CombatDuelSubCircle {
     }
 
     private int ShadowPipChance() {
+        // A Shadow wizard's shadow pip rating is ShadowWizardShadowPipChance (100: a shadow pip every round).
+        if (Imlight.CoreLib.Game.Runs.ShadowSchool.Is(_wizard)) {
+            return Math.Clamp(Imlight.CoreLib.Game.Runs.ShadowSchool.ShadowPipChance, 0, (int) GAUGE_FULL);
+        }
+
         var chance = s_shadowPipChance > 0
             ? s_shadowPipChance
             : (int) Math.Round(ParticipantGameStats.m_shadowPipRating + ParticipantGameStats.m_bonusShadowPipRating);
@@ -690,7 +697,8 @@ public class CombatDuelSubCircle {
     // A wizard who used .intothedarkness has shadow magic of their own, whatever the toggles say.
     private bool HasOwnShadowMagic => _wizard is not null && ParticipantGameStats?.m_shadowMagicUnlocked == true;
 
-    private bool HasShadowMagic => _wizard is null ? s_shadowPips && CreatureHasShadowMagic : s_shadowPips || HasOwnShadowMagic;
+    private bool HasShadowMagic => _wizard is null ? s_shadowPips && CreatureHasShadowMagic
+        : s_shadowPips || HasOwnShadowMagic || Imlight.CoreLib.Game.Runs.ShadowSchool.Is(_wizard);
 
     private static readonly MagicSchool[] s_pipSchools = [
         MagicSchool.Balance, MagicSchool.Death, MagicSchool.Fire, MagicSchool.Ice,
