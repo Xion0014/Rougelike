@@ -140,7 +140,9 @@ internal static class RoguelikeBoosts {
     // One stat potion: a random stat goes up by a random amount, at once and for the rest of the run.
     private static (string Potion, int Amount, string Unit, int Total) DrinkRandom(Wizard wizard) {
         var run = wizard.Roguelike;
-        var boost = s_boosts[Random.Shared.Next(s_boosts.Length)];
+        // A Shadow wizard already gets a shadow pip every round: no Potions of Shadow for them.
+        var pool = ShadowSchool.Is(wizard) ? s_boosts.Where(b => b.Key != ShadowPip).ToArray() : s_boosts;
+        var boost = pool[Random.Shared.Next(pool.Length)];
         var amount = Random.Shared.Next(boost.Min, boost.Max + 1);
 
         run.Boosts ??= [];

@@ -428,8 +428,10 @@ public class CombatDuelSubCircle {
     private static readonly bool s_shadowPips = ConfigurationManager.GetValue("Battle.ShadowPips", true);
     // 0 means no limit (up to NO_SHADOW_LIMIT, which keeps the count inside a byte).
     private const int NO_SHADOW_LIMIT = 50;
+    // A wizard holds at most 4 shadow pips (the game draws more than that badly).
+    private const int PLAYER_SHADOW_PIP_CAP = 4;
     private static readonly int s_playerMaxShadowPips
-        = ShadowLimit(ConfigurationManager.GetValue("Battle.PlayerShadowPipLimit", 0));
+        = Math.Min(ShadowLimit(ConfigurationManager.GetValue("Battle.PlayerShadowPipLimit", PLAYER_SHADOW_PIP_CAP)), PLAYER_SHADOW_PIP_CAP);
     private static readonly int s_creatureMaxShadowPips
         = ShadowLimit(ConfigurationManager.GetValue("Battle.CreatureShadowPipLimit", 0));
 
@@ -453,8 +455,8 @@ public class CombatDuelSubCircle {
     private int MaxShadowPips => _wizard is null ? s_creatureMaxShadowPips
         // A Shadow wizard holds up to ShadowWizardMaxShadowPips (4: the game draws more than that badly).
         : Imlight.CoreLib.Game.Runs.ShadowSchool.Is(_wizard) ? Imlight.CoreLib.Game.Runs.ShadowSchool.MaxShadowPips
-        : ParticipantGameStats?.m_shadowPipSlots is int slots and > 0 ? Math.Min(slots, NO_SHADOW_LIMIT)
-        : s_randomizeShadowPips ? 1 + Randomization.Randomizer.PickIndex(_wizard, "ShadowPipLimit", 0, RANDOM_SHADOW_LIMIT_MAX)
+        : ParticipantGameStats?.m_shadowPipSlots is int slots and > 0 ? Math.Min(slots, PLAYER_SHADOW_PIP_CAP)
+        : s_randomizeShadowPips ? Math.Min(1 + Randomization.Randomizer.PickIndex(_wizard, "ShadowPipLimit", 0, RANDOM_SHADOW_LIMIT_MAX), PLAYER_SHADOW_PIP_CAP)
         : s_playerMaxShadowPips;
 
     private bool CreatureHasShadowMagic {
