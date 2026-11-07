@@ -7,42 +7,48 @@
 ;   anything else     one change (leave a blank line between changes)
 ;   ; comment         not shown
 
-# Next update (in testing)
+# v3.2.0 (November 7, 2026) - Shadow Update
 
 Q: New
 
-Music page in the launcher: pick the track for each tier's street and each tier's boss fight, from the game's own music, or leave it on Random for the run's random music. Your picks are kept through updates.
+Shadow wizards, a new school. Turn on "Next new wizard is Shadow" in Settings (under The run), and the next wizard you make is a Shadow wizard, whatever school you pick on the creation screen. The setting turns itself off once that wizard is made.
 
-Shadow wizards: a new school. Turn on "Next new wizard is Shadow" in Settings (under The run) and the next wizard you make is a Shadow wizard, whatever school you pick on the creation screen; the setting turns itself off once that wizard is made.
+What makes Shadow different: power pips count as two for every school's cards (the game knows it too, so a 2-pip card plays with one power pip), and a shadow pip comes every round in battle (a 100% shadow pip rating, up to 4 held at once). Health and mana follow Balance's.
 
-A Shadow wizard's power pips count double for every school's cards, not just one school's, since there are far fewer Shadow spells. The game knows it too, so a 2-pip card can be played with one power pip. Shadow wizards also get a shadow pip every round in battle (a 100% shadow pip rating), holding up to 4 at once. Potions of Shadow never come up for them. Their trainers and battles also teach Shadow spells (the boss ones included; "Shadow spells (%)" in Settings sets how often), they start with 2 of them, and they can wear any school's gear, which drops now roll from too (shops sell them gear for any school, since the game won't let them buy another school's). Health and mana follow Balance's.
+Shadow spells: trainers and battles teach Shadow-school spells, the boss ones included ("Shadow spells (%)" in Settings sets how often), alongside every other school's, and a new Shadow wizard starts with 2 of them. Shadow spells cost them no training points.
 
-The game itself won't let a Shadow wizard put on another school's gear (it shows "School Only"), so the server puts it on for them: when such a piece goes into the backpack (bought, dropped, from a chest or a quest) and its slot is empty or it needs a higher level than what's worn there, it goes on by itself, and a message says so. Taking it off works as usual.
+Shadow gear: a Shadow wizard can wear any school's gear. The game won't let them equip another school's gear itself (it shows "School Only"), so when such a piece arrives (dropped, from a chest or a quest) and is an upgrade for its slot, the server puts it on for them and says so. Shops sell them gear for any school, since the game won't let them buy another school's.
 
-Shadow wizards carry the title Shadow Weaver on their name tag while no badge is picked, the way the other schools show Pyromancer, Thaumaturge and the rest. Picking a badge shows that badge instead.
+Shadow wizards carry the title Shadow Weaver on their name tag while no badge is picked. For quests they count as Balance, so quests with a reward per school give them the Balance one.
 
-For quests, a Shadow wizard counts as a Balance wizard, so a quest that gives each school something different gives them the Balance reward (once). Counting as every school had Unicorn Way teach Fairy seven times over.
+Music page in the launcher: pick the track for each tier's street and each tier's boss fight from the game's own music, or leave it on Random. Your picks are kept through updates.
 
-
-Q: Fixed
-
-The game's tutorial tips no longer pop up while leveling. Their window art is missing from the game files, and the game kept trying to load it until it lagged out. ([Roguelike] TutorialTips = true brings them back.)
-
-Shops no longer sell developer and test gear (a level 1 Harmonious Wolfen Helm with +80% power pip for 612,501 gold and the like): gear from the game files priced far above what vendors ask at its level stays out.
-
-Spells that hit several enemies at once (many boss and Shadow spells) are cast instead of passing, and a spell aimed at an empty slot on the enemy side no longer turns on your own side. A pass no longer holds the battle up for a while.
-
-Developer one-shot spells (PWN at 1,100,000 damage, Ultra Dark at 99,999) are no longer taught by trainers or after battles: the enchantment and Shadow spells the run's trainers draw from let them through.
-
-Putting on a new deck and copying your cards into it copies all of them. The cards the game sent while the new deck was being put on found no deck and were dropped, so only some came over (a bug from the first versions).
-
-Mastery amulets work in battle: a power pip counts as two for the mastered school's cards, so those cards are no longer greyed out with a power pip in hand. The server never told the game about mastery in battle.
-
-A pet's healing May Casts (Healing Current and the like) heal you, not the enemy.
+Q: Changed
 
 Every wizard holds at most 4 shadow pips at once: the game drew more than that badly.
 
-In Malistaire's lair, every battle calls in all the creatures of the lair (up to four), so none are left standing outside the fight.
+Potions of Shadow never come up for Shadow wizards (they already get a shadow pip every round).
+
+In Malistaire's lair, every battle calls in all the creatures of the lair, up to four, even when you fight alone.
+
+The game's tutorial tips no longer pop up. Their window art is missing from the game files, and the game kept trying to load it until it lagged out. ([Roguelike] TutorialTips = true brings them back.)
+
+Q: Fixed
+
+Malistaire now shows up: the creature whose defeat brings him out was sent away instead of joining the fight.
+
+Mastery amulets work in battle: a power pip counts as two for the mastered school's cards, so those cards are no longer greyed out with one power pip in hand.
+
+Putting on a new deck and copying your cards into it copies all of them (only some came over, a bug from the first versions).
+
+Spells that hit several enemies at once (many boss and Shadow spells) are cast instead of passing, and a spell aimed at an empty enemy slot no longer turns on your own side. A pass no longer holds the battle up.
+
+A pet's healing May Casts (Healing Current and the like) heal you, not the enemy.
+
+Developer spells (PWN at 1,100,000 damage, Ultra Dark at 99,999) are no longer taught by trainers or after battles.
+
+Shops no longer sell developer and test gear (a level 1 Harmonious Wolfen Helm with +80% power pip for 612,501 gold and the like).
+
 # v3.1.3 (November 2, 2026) - Damage Fix
 
 Q: Fixed
