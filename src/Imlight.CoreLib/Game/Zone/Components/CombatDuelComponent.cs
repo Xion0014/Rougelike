@@ -2419,7 +2419,11 @@ internal sealed class CombatDuelComponent(ZoneEntity entity)
         // Newbie sigils (marked in the sigil info) can only have 1 creature as a base.
         // Dangerous zones (like Sunken City) can have 3 creatures as a base.
         // Every player in the duel also allocates 1 more creature slot.
-        var baseCreatureCount = IsNewbieZone ? 1 : IsDangerousZone ? 3 : 2;
+        // A zone that pulls whole rooms in (Malistaire's lair, PullAllZones) fills all four creature circles: with the
+        // usual two for one wizard, a third creature that walked in was sent away, and the one whose defeat brings
+        // Malistaire out never fought.
+        var fullRoom = Imlight.CoreLib.Game.Runs.RoguelikeConfig.PullsWholeZone(Entity.Zone?.ZonePath);
+        var baseCreatureCount = fullRoom ? 4 : IsNewbieZone ? 1 : IsDangerousZone ? 3 : 2;
         var maxCreatures = baseCreatureCount + (PlayerCount - 1);
 
         var slotAvailable = (team == CombatTeam.Player)
