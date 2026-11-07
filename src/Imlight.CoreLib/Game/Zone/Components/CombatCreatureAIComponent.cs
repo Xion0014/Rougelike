@@ -149,6 +149,22 @@ internal sealed class CombatCreatureAIComponent(ZoneEntity entity) : ZoneEntityC
         }
     }
 
+    // A duel in a zone that pulls whole rooms ([Roguelike] PullAllZones) calls every creature in: a monster not yet in
+    // a battle (or dead) joins it.
+    [MessageHandler(typeof(ZONE_102_PROTOCOL.MSG_PULLINTODUEL))]
+    private void ReceivePullIntoDuel(ZONE_102_PROTOCOL.MSG_PULLINTODUEL message) {
+        if (_isInDuel || _sentFinalKill || message.DuelActor is null || Entity.IsCombatOnlyMinion
+            || _npcComponent is null || !_npcComponent.IsMonster) {
+            return;
+        }
+
+        message.DuelActor.Tell(new ZONE_102_PROTOCOL.MSG_JOINPULLEDDUEL {
+            CreatureActor = Entity.SelfRef,
+            CreatureObject = Entity.ActiveGameObject,
+            CreatureEntity = Entity,
+        });
+    }
+
     [MessageHandler(typeof(COMBAT_106_PROTOCOL.MSG_ACTORADDEDTODUEL))]
     private void ReceiveCombatAdded(COMBAT_106_PROTOCOL.MSG_ACTORADDEDTODUEL message) {
         Logger.Debug("Duel {0} | Slot {1} | Creature {2} ({3}) joined{4}.",

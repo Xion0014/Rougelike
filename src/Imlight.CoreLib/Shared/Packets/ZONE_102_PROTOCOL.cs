@@ -771,6 +771,31 @@ public class ZONE_102_PROTOCOL : IServerProtocol {
 
     /// <summary>
     /// Sent by a <see cref="PathMovementComponent"/> to a <see cref="Zone"/> to indicate the creature is moving.
+    /// <summary>
+    /// Sent by a duel to every creature of its zone when the zone pulls whole rooms into its fights
+    /// ([Roguelike] PullAllZones): each monster not yet in a battle answers with MSG_JOINPULLEDDUEL.
+    /// </summary>
+    public sealed class MSG_PULLINTODUEL : IServerMessage {
+
+        public byte MessageOrder { get; } = 91;
+        public byte ServiceID { get; } = 102;
+
+        public IActorRef DuelActor;
+
+    }
+
+    /// <summary>A creature's answer to MSG_PULLINTODUEL: it joins that duel, however far away it is.</summary>
+    public sealed class MSG_JOINPULLEDDUEL : IServerMessage {
+
+        public byte MessageOrder { get; } = 92;
+        public byte ServiceID { get; } = 102;
+
+        public CoreObject CreatureObject;
+        public IActorRef CreatureActor;
+        public ZoneEntity CreatureEntity;
+
+    }
+
     public sealed class MSG_CREATUREMOVE : IServerMessage {
 
         public byte MessageOrder { get; } = 33;

@@ -41,6 +41,8 @@ Mastery amulets work in battle: a power pip counts as two for the mastered schoo
 A pet's healing May Casts (Healing Current and the like) heal you, not the enemy.
 
 Every wizard holds at most 4 shadow pips at once: the game drew more than that badly.
+
+In Malistaire's lair, every battle calls in all the creatures of the lair (up to four), so none are left standing outside the fight.
 # v3.1.3 (November 2, 2026) - Damage Fix
 
 Q: Fixed

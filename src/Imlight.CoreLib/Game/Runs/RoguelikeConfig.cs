@@ -406,6 +406,17 @@ internal static class RoguelikeConfig {
         return track.Equals("Random", StringComparison.OrdinalIgnoreCase) ? "" : track;
     }
 
+    /// <summary>
+    /// [Roguelike] PullAllZones: zones where a battle calls in every creature of the zone, up to the four creature
+    /// circles, instead of only those that walk into it. Malistaire's lair: its creatures stand still in groups.
+    /// </summary>
+    private static readonly HashSet<string> s_pullAllZones = new(
+        SplitList(ConfigurationManager.GetValue("Roguelike.PullAllZones", "DragonSpire/DS_A3_Kings/Interiors/DS_MalistaireLair"))
+            .Select(z => z.Trim().Replace('\\', '/')),
+        StringComparer.OrdinalIgnoreCase);
+
+    internal static bool PullsWholeZone(string zone) => Enabled && !string.IsNullOrEmpty(zone) && s_pullAllZones.Contains(zone);
+
     /// <summary>The combat music a run's battles pick from, as the game's zones name it.</summary>
     internal static readonly string[] BattleMusicTracks = SplitList(ConfigurationManager.GetValue(
         "Roguelike.BattleMusicTracks", "|Music|WorldData|WC/Combat1Test.ogg, |Music|WorldData|WC/WC_HauntedWay_Combat.ogg, |Music|WorldData|MB/MarleyCombatM.mp3, |DragonSpire|WorldData|Sound/Music/DragonSpyreCombat.mp3, |Music|WorldData|MS/SB/GNT_SB_Combat.mp3, |Zafaria|WorldData|Sound/Music/ZF_Combat.mp3, |Music|WorldData|AV/AV_Combat.mp3, |Music|WorldData|AZ/AZ_Combat.mp3, |Music|WorldData|KR/KR_CombatBastion.mp3, |Music|WorldData|KR/KR_CombatArachna.mp3, |Music|WorldData|PL/PL_Walruskberg_Combat.mp3, |Music|WorldData|PL/PL_FrozenCombat.mp3, |Music|WorldData|MR/MR_CityCombat.mp3, |Music|WorldData|MR/MR_CanyonDesert_Combat.mp3, |Music|WorldData|EM/EM_Zanadu_Combat.ogg, |Music|WorldData|EM/EM_FlotsamStorm_Combat.ogg, |Music|WorldData|EM/EM_2/EM_Reverie_Combat.ogg, |Music|WorldData|KM/KM_CityCombat.ogg, |Music|WorldData|KM/KM_RuralCombat.ogg, |Music|WorldData|LM/LM_JunglePulp_Combat.ogg, |Music|WorldData|DM/DM_Graveholm_Combat.ogg, |Music|WorldData|AQ/AQ_Combat.mp3"));

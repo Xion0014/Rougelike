@@ -811,6 +811,26 @@ internal sealed class CombatDuelComponent(ZoneEntity entity)
 
         Logger.Debug("Duel {0} | Created. Grace period over in {1}",
             Logger.Args(Duel.m_duelID.Full, DUEL_GRACE_PERIOD_IN_SECONDS));
+
+        // Rooms whose creatures stand still and would never walk into the fight (Malistaire's lair): every creature in
+        // the zone is called in, up to the four creature circles.
+        if (Imlight.CoreLib.Game.Runs.RoguelikeConfig.PullsWholeZone(Entity.Zone?.ZonePath)) {
+            Entity.ZoneRef.Tell(new ZONE_102_PROTOCOL.MSG_ZONEBROADCAST {
+                Sender = Self,
+                Messages = [new ZONE_102_PROTOCOL.MSG_PULLINTODUEL { DuelActor = Self }],
+                Targets = ZoneBroadcastTarget.Objects | ZoneBroadcastTarget.Paths,
+            });
+        }
+    }
+
+    [MessageHandler(typeof(ZONE_102_PROTOCOL.MSG_JOINPULLEDDUEL))]
+    private void ReceiveJoinPulledDuel(ZONE_102_PROTOCOL.MSG_JOINPULLEDDUEL message) {
+        if (!_isActive || IsPvPDuel || message.CreatureObject is null || !IsSlotAvailable(CombatTeam.Monster)) {
+            return;
+        }
+
+        _entitiesInRange.Add(message.CreatureActor);
+        AddParticipant(message.CreatureObject, message.CreatureActor);
     }
 
     private Duel CreateDuelWithDefaults() => new() {
