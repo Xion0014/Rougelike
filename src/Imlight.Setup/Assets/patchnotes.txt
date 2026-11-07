@@ -37,6 +37,8 @@ Developer one-shot spells (PWN at 1,100,000 damage, Ultra Dark at 99,999) are no
 Putting on a new deck and copying your cards into it copies all of them. The cards the game sent while the new deck was being put on found no deck and were dropped, so only some came over (a bug from the first versions).
 
 Mastery amulets work in battle: a power pip counts as two for the mastered school's cards, so those cards are no longer greyed out with a power pip in hand. The server never told the game about mastery in battle.
+
+A pet's healing May Casts (Healing Current and the like) heal you, not the enemy.
 # v3.1.3 (November 2, 2026) - Damage Fix
 
 Q: Fixed

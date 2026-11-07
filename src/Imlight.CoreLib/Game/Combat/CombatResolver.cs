@@ -452,6 +452,13 @@ public partial class CombatResolver(Duel duel, CombatDuelSubCircle[] actorSubCir
 
     /// <summary>The target of a pet's free cast: the owner, or an enemy (the owner's own pick if it is one) for a card that hits enemies.</summary>
     private CombatDuelSubCircle PickPetTarget(CombatDuelSubCircle owner, SpellTemplate template) {
+        // A card that heals and does no damage is for the owner, whatever its effects' targets say: the healing pet
+        // casts (Healing Current's Defibrillate) carry an enemy-targeted part, and so healed the enemy.
+        var all = (template.m_effects ?? []).Where(e => e is not null).SelectMany(CombatActionResolver.AllEffects).Where(e => e is not null).ToList();
+        if (all.Any(e => s_healEffects.Contains(e.m_effectType)) && !all.Any(e => s_damageEffects.Contains(e.m_effectType))) {
+            return owner;
+        }
+
         if (!(template.m_effects ?? []).Any(effect => effect is not null && s_enemyTargets.Contains(effect.m_effectTarget))) {
             return owner;
         }
