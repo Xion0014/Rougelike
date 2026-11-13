@@ -7,7 +7,7 @@
 ;   anything else     one change (leave a blank line between changes)
 ;   ; comment         not shown
 
-# Next update (in testing)
+# v3.2.6 (November 13, 2026) - Shadow Update
 
 Q: Fixed
 
