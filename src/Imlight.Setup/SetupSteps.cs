@@ -379,6 +379,14 @@ internal sealed class SetupSteps : IDisposable {
             var added = IniFile.AddMissing(lines, File.ReadAllLines(defaults));
             var keep = PlayerSettings.Changed(Path.GetDirectoryName(ConfigFile)!);
             var refreshed = Edition.IS_ROGUELIKE ? IniFile.CopyRunDesign(lines, File.ReadAllLines(defaults), keep) : 0;
+            // The game version the server talks to follows the release: after a Wizard101 update the old value makes
+            // the server turn the updated game away and ask for the wrong game files.
+            var revision = IniFile.GetFrom(File.ReadAllLines(defaults).ToList(), "Global Settings", "GameRevision");
+            if (!string.IsNullOrEmpty(revision) && IniFile.GetFrom(lines, "Global Settings", "GameRevision") != revision) {
+                IniFile.Set(lines, "Global Settings", "GameRevision", revision);
+                SetupLog.Detail($"Game version set to {revision}.");
+                refreshed++;
+            }
             if (Edition.IS_TEST && IniFile.GetFrom(lines, "Login Server", "AccountAuthLevel") != "Administrator") {
                 // The test realm's testers can use every command (an install from before this setting gets it here).
                 IniFile.Set(lines, "Login Server", "AccountAuthLevel", "Administrator");

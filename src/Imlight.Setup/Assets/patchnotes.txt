@@ -15,6 +15,10 @@ The gauntlet works with the Ahmarra version of Wizard101 (the game update of Nov
 
 The Badges page shows your badges again on the updated game: the game now reads the badge list differently and threw the old one away.
 
+The server no longer keeps the old game version after a Wizard101 update. Your settings kept the version from before Ahmarra, so the server asked for the wrong game files and turned the updated game away. Updating now sets the game version from the release.
+
+SpiralDB (the creature, drop and quest data) stopped updating with "object not found" after its history was rewritten for the game update. The server now downloads a fresh copy when that happens, and keeps the old one if the download fails.
+
 # v3.2.0 (November 7, 2026) - Shadow Update
 
 Q: New
