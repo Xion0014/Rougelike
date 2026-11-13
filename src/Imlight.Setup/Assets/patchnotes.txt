@@ -7,6 +7,14 @@
 ;   anything else     one change (leave a blank line between changes)
 ;   ; comment         not shown
 
+# Next update (in testing)
+
+Q: Fixed
+
+The gauntlet works with the Ahmarra version of Wizard101 (the game update of November 12). The update changed how the game stores players, creatures and battles, so the server is now built with the new layout, read from the updated game (from Niduus's fork). Update the gauntlet after Wizard101 has finished patching.
+
+The Badges page shows your badges again on the updated game: the game now reads the badge list differently and threw the old one away.
+
 # v3.2.0 (November 7, 2026) - Shadow Update
 
 Q: New

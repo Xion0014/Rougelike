@@ -86,7 +86,12 @@ jobs:
         run: |
           $typeInput = "submodule/Imcodec/src/Imcodec.ObjectProperty/GeneratorInput"
           New-Item -ItemType Directory -Force $typeInput, release | Out-Null
-          Copy-Item submodule/Imcodec/test/CodeGen/Inputs/*.json $typeInput/
+          # The newest game version's type dump: data/typedump (from each new Wizard101 program), else Imcodec's.
+          $dump = Get-ChildItem data/typedump/*.json, submodule/Imcodec/test/CodeGen/Inputs/*.json -ErrorAction SilentlyContinue |
+            Sort-Object @{ Expression = { if ($_.Name -match '^r(\d+)') { [long]$Matches[1] } else { -1 } } }, Name -Descending |
+            Select-Object -First 1
+          Write-Host "Type dump: $($dump.Name)"
+          Copy-Item $dump.FullName $typeInput/
           dotnet publish src/Imlight.Setup/Imlight.Setup.csproj -c Release -r win-x64 --self-contained true `
             -p:PublishSingleFile=true -p:Version=${{ steps.version.outputs.version }} -p:ImlightEdition=Test `
             -p:ImlightBranch=${{ steps.version.outputs.branch }} -o out/test
@@ -109,7 +114,12 @@ jobs:
         run: |
           $typeInput = "submodule/Imcodec/src/Imcodec.ObjectProperty/GeneratorInput"
           New-Item -ItemType Directory -Force $typeInput | Out-Null
-          Copy-Item submodule/Imcodec/test/CodeGen/Inputs/*.json $typeInput/
+          # The newest game version's type dump: data/typedump (from each new Wizard101 program), else Imcodec's.
+          $dump = Get-ChildItem data/typedump/*.json, submodule/Imcodec/test/CodeGen/Inputs/*.json -ErrorAction SilentlyContinue |
+            Sort-Object @{ Expression = { if ($_.Name -match '^r(\d+)') { [long]$Matches[1] } else { -1 } } }, Name -Descending |
+            Select-Object -First 1
+          Write-Host "Type dump: $($dump.Name)"
+          Copy-Item $dump.FullName $typeInput/
           dotnet publish src/Imlight.Setup/Imlight.Setup.csproj -c Release -r win-x64 --self-contained true `
             -p:PublishSingleFile=true -p:Version=${{ steps.version.outputs.version }} -p:ImlightEdition=Manager `
             -p:ImlightBranch=${{ steps.version.outputs.branch }} -o out/manager
