@@ -36,6 +36,7 @@
  * Last Updated: 09/26/2026
  */
 
+using Imcodec.Cryptography;
 using Imcodec.ObjectProperty.TypeCache;
 using Imlight.Common;
 using Imlight.CoreLib.Game.Spells;
@@ -282,6 +283,11 @@ internal static class CombatActionResolver {
         ConditionalSpellEffect conditional, CombatDuelSubCircle caster, CombatDuelSubCircle selected, CombatDuelSubCircle only) {
         var elements = (conditional.m_elements ?? []).Where(e => e?.m_pEffect is not null).ToList();
         if (elements.Count == 0) {
+            if (conditional is SwitchSchoolSpellEffect) {
+                Logger.Warning("Chromatic spell ({0}) has no element with an effect ({1} element(s) read), so it does nothing.",
+                    Logger.Args(conditional.m_effectTarget, conditional.m_elements?.Count ?? 0));
+            }
+
             return [];
         }
 
@@ -292,14 +298,97 @@ internal static class CombatActionResolver {
             : [conditional.m_effectTarget == kEffectTarget.kSelf ? caster : selected ?? caster];
 
         var chosen = new List<(SpellEffect, CombatDuelSubCircle, CombatDuelSubCircle)>();
+        var switchSchool = conditional is SwitchSchoolSpellEffect;
         foreach (var target in checkedOn) {
-            var element = elements.FirstOrDefault(e => CombatRequirements.Met(e.m_pReqs, caster, target));
+            var element = switchSchool
+                ? PickSchoolElement(elements, caster, target)
+                : elements.FirstOrDefault(e => CombatRequirements.Met(e.m_pReqs, caster, target));
             if (element is not null) {
-                chosen.Add((element.m_pEffect, target, group ? target : only));
+                var effect = element.m_pEffect;
+                // A chromatic element's effect can leave its target to the switch around it.
+                if (switchSchool && effect.m_effectTarget == kEffectTarget.kInvalidTarget) {
+                    effect = effect with { m_effectTarget = conditional.m_effectTarget };
+                }
+
+                chosen.Add((effect, target, group ? target : only));
             }
         }
 
+        if (switchSchool) {
+            LogSchoolSwitch((SwitchSchoolSpellEffect) conditional, elements, caster, checkedOn, chosen.Count);
+        }
+
         return chosen;
+    }
+
+    /// <summary>
+    /// A chromatic spell (Ahmarra, r813697: SwitchSchoolSpellEffect, as Pwn now is): each element names the schools it
+    /// is for (m_magicSchoolNames) and whose school counts (m_schoolTargetType: the caster or the target), so a Death
+    /// enemy takes the Death element's damage. An element naming no school, or "Chromatic", fits any school. When no
+    /// element names the school (a school the spell has no element for), the first element goes off rather than the
+    /// card being thrown away as a pass.
+    /// </summary>
+    private static ConditionalSpellElement PickSchoolElement(List<ConditionalSpellElement> elements, CombatDuelSubCircle caster,
+                                                             CombatDuelSubCircle target) {
+        ConditionalSpellElement anySchool = null;
+        foreach (var element in elements) {
+            if (!CombatRequirements.Met(element.m_pReqs, caster, target)) {
+                continue;
+            }
+
+            if (element is not SchoolSwitchElement school) {
+                anySchool ??= element;
+                continue;
+            }
+
+            var names = SchoolNames(school);
+            var who = (int) school.m_schoolTargetType == 0 ? caster : target ?? caster;
+            if (names.Count == 0 || names.Any(n => n.Equals("Chromatic", StringComparison.OrdinalIgnoreCase))) {
+                anySchool ??= element;
+                continue;
+            }
+
+            var schoolId = CombatRequirements.SchoolOf(who);
+            if (schoolId != 0 && names.Any(n => StringHash.Compute(n) == schoolId
+                                             || StringHash.Compute(Capitalized(n)) == schoolId)) {
+                return element;
+            }
+        }
+
+        return anySchool ?? elements.FirstOrDefault(e => CombatRequirements.Met(e.m_pReqs, caster, target)) ?? elements[0];
+    }
+
+    private static List<string> SchoolNames(SchoolSwitchElement element) {
+        var names = new List<string>();
+        foreach (var name in element.m_magicSchoolNames ?? []) {
+            foreach (var part in ((string) name ?? "").Split([',', ';', '|', ' '], StringSplitOptions.RemoveEmptyEntries)) {
+                names.Add(part.Trim());
+            }
+        }
+
+        return names;
+    }
+
+    private static string Capitalized(string name)
+        => name.Length == 0 ? name : char.ToUpperInvariant(name[0]) + name[1..].ToLowerInvariant();
+
+    private static readonly System.Collections.Concurrent.ConcurrentDictionary<int, bool> s_loggedSwitches = new();
+
+    // Once per spell: what the chromatic spell holds and what it picked, so a spell that still passes can be read from the log.
+    private static void LogSchoolSwitch(SwitchSchoolSpellEffect effect, List<ConditionalSpellElement> elements,
+                                        CombatDuelSubCircle caster, CombatDuelSubCircle[] checkedOn, int chosen) {
+        var key = System.Runtime.CompilerServices.RuntimeHelpers.GetHashCode(effect);
+        if (!s_loggedSwitches.TryAdd(key, true)) {
+            return;
+        }
+
+        var described = string.Join("; ", elements.Select(e => e is SchoolSwitchElement s
+            ? $"{string.Join("/", SchoolNames(s))} ({((int) s.m_schoolTargetType == 0 ? "caster" : "target")}) -> {e.m_pEffect.m_effectType} {e.m_pEffect.m_effectParam} {(string) e.m_pEffect.m_sDamageType} {e.m_pEffect.m_effectTarget}"
+            : $"{e.GetType().Name} -> {e.m_pEffect.m_effectType}"));
+        Logger.Information("Chromatic spell ({0}, {1}): {2} element(s): {3}. Checked on slot(s) {4} (school {5}); {6} picked.",
+            Logger.Args(effect.m_effectTarget, effect.m_effectType, elements.Count, described,
+                string.Join(",", checkedOn.Select(c => c?.SlotIndex)),
+                string.Join(",", checkedOn.Select(c => CombatRequirements.SchoolOf(c))), chosen));
     }
 
     private static bool IsGroupTarget(kEffectTarget target) => target is kEffectTarget.kEnemyTeam

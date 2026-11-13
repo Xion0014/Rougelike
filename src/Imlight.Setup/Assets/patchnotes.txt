@@ -19,6 +19,8 @@ The server no longer keeps the old game version after a Wizard101 update. Your s
 
 SpiralDB (the creature, drop and quest data) stopped updating with "object not found" after its history was rewritten for the game update. The server now downloads a fresh copy when that happens, and keeps the old one if the download fails.
 
+Chromatic spells work. Ahmarra made some spells (Pwn among them) chromatic: they hit with the school of the enemy they are cast on, so a Death enemy takes Death damage. The server didn't know these spells, so casting one made you pass. Now it picks the part of the spell that matches the enemy's school.
+
 # v3.2.0 (November 7, 2026) - Shadow Update
 
 Q: New
