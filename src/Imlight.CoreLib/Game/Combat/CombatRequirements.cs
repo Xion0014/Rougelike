@@ -96,8 +96,14 @@ internal static class CombatRequirements {
         return who?.ParticipantGameStats?.m_schoolID ?? 0;
     }
 
+    // A Shadow wizard (Shadow Update) also counts as its base school ([Roguelike] ShadowBaseSchool), as the quest checks
+    // do: the game's school-picked spells (Pwn after Ahmarra: one element per school, chosen by the caster's school)
+    // have no Shadow element, so a Shadow wizard matched none and passed.
     private static bool IsSchool(CombatDuelSubCircle who, string school)
-        => who is not null && !string.IsNullOrEmpty(school) && SchoolOf(who) == StringHash.Compute(school);
+        => who is not null && !string.IsNullOrEmpty(school)
+           && (SchoolOf(who) == StringHash.Compute(school)
+               || who._wizard is not null && Imlight.CoreLib.Game.Runs.ShadowSchool.Is(who._wizard)
+                  && string.Equals(school.Trim(), Imlight.CoreLib.Game.Runs.ShadowSchool.BaseSchool, StringComparison.OrdinalIgnoreCase));
 
     internal static bool IsWard(SpellEffect e) => e.m_effectType is kSpellEffects.kModifyIncomingDamage
         or kSpellEffects.kAbsorbDamage or kSpellEffects.kModifyIncomingHeal or kSpellEffects.kModifyIncomingDamageType
