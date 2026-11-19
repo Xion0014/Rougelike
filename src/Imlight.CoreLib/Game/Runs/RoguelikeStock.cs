@@ -426,6 +426,10 @@ internal static class RoguelikeStock {
         while (picks.Count < count && (normal.Count > 0 || special.Count > 0 || shadow.Count > 0)) {
             if (shadow.Count > 0 && (normal.Count == 0 && special.Count == 0 || random.Next(100) < ShadowSchool.SpellShare)) {
                 var shadowPick = shadow.Dequeue();
+                if (TooManyLevelOne(picks, shadowPick)) {
+                    continue;
+                }
+
                 if (seen.Add(shadowPick.Id)) {
                     picks.Add(shadowPick);
                 }
@@ -439,6 +443,10 @@ internal static class RoguelikeStock {
 
             var fromSpecial = special.Count > 0 && (normal.Count == 0 || random.Next(100) < s_retiredSpellShare);
             var pick = (fromSpecial ? special : normal).Dequeue();
+            if (TooManyLevelOne(picks, pick)) {
+                continue;
+            }
+
             if (seen.Add(pick.Id)) {
                 picks.Add(pick);
             }
@@ -446,6 +454,13 @@ internal static class RoguelikeStock {
 
         return [.. picks.OrderBy(s => s.Level)];
     }
+
+    /// <summary>[Roguelike] TrainerLevelOneSpells: the most level 1 spells one trainer offers (default 2).</summary>
+    internal static readonly int TrainerLevelOneSpells
+        = Math.Clamp(ConfigurationManager.GetValue("Roguelike.TrainerLevelOneSpells", 2), 0, 50);
+
+    private static bool TooManyLevelOne(List<SpellEntry> picks, SpellEntry pick)
+        => pick.Level <= 1 && picks.Count(p => p.Level <= 1) >= TrainerLevelOneSpells;
 
     private static List<SpellEntry> BuildRetiredSpellPool() {
         var pool = new List<SpellEntry>();
