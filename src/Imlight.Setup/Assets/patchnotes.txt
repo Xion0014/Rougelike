@@ -13,6 +13,10 @@ Q: Changed
 
 A trainer offers at most 2 level 1 spells. The rest of its list is higher level spells to work toward. (TrainerLevelOneSpells in the settings.)
 
+Q: Fixed
+
+The gauntlet works with Wizard101's latest bug-fix patch (r815378). The patch didn't change how the game stores its data, so the Ahmarra layout still fits; the server is rebuilt against the patched game files when you update.
+
 # v3.2.6 (November 13, 2026) - Shadow Update
 
 Q: Fixed
